@@ -1,8 +1,8 @@
 <template>
   <div class='wrap'>
-    <div class='container'>
+    <div class='wrap-container'>
       <h1 class='join-logo'>Welcome</h1>
-      <div class="input-area">
+      <div class="join-input-area">
         <label for="">이메일</label>
         <input @focus="activeInput" @blur='deactiveInput' v-model='input.email' type="text" id='email-join' placeholder="example">
         <span class='email-join-span'> @ </span>
@@ -15,26 +15,26 @@
           <option >한메일</option>
           <option >네이트</option>
         </select>
-        <p v-if="mailErrMsg" class='err-msg'>이미 사용중인 이메일입니다.</p>
-        <p v-if="mailSucMsg" class='suc-msg'>사용가능합니다.</p> 
+        <p v-if="mailErrMsg" class='err-msg join-err-msg'>이미 사용중인 이메일입니다.</p>
+        <p v-if="mailSucMsg" class='suc-msg join-suc-msg'>사용가능합니다.</p> 
       </div>
-      <div class="input-area">
+      <div class="join-input-area">
         <label for="">비밀번호</label>
         <input @focus="activeInput" @blur='deactiveInput' v-model='input.password' type="password" class="common-input-join" placeholder="password">
       </div>
-      <div class="input-area">
+      <div class="join-input-area">
         <label for="">비밀번호 확인</label>
         <input @focus="activeInput" @blur='deactiveInput' v-model='input.passwordConfirm' type="password" class="common-input-join" placeholder="password confirm">
-        <p v-if="pwErrMsg" class='err-msg'>비밀번호가 일치하지 않습니다.</p>
-        <p v-if="pwSucMsg" class='suc-msg'>비밀번호가 일치합니다.</p>
+        <p v-if="pwErrMsg" class='err-msg join-err-msg'>비밀번호가 일치하지 않습니다.</p>
+        <p v-if="pwSucMsg" class='suc-msg join-suc-msg'>비밀번호가 일치합니다.</p>
       </div>
-      <div class="input-area">
+      <div class="join-input-area">
         <label for="">닉네임</label>
         <input @focus="activeInput" @blur='deactiveInput' v-model='input.nickname' type="text" class="common-input-join" placeholder="nickname">
-        <p v-if="nickErrMsg" class='err-msg'>이미 사용중인 닉네임입니다.</p>
-        <p v-if="nickSucMsg" class='suc-msg'>사용가능합니다.</p> 
+        <p v-if="nickErrMsg" class='err-msg join-err-msg'>이미 사용중인 닉네임입니다.</p>
+        <p v-if="nickSucMsg" class='suc-msg join-suc-msg'>사용가능합니다.</p> 
       </div>
-      <div class="input-area birth-area">
+      <div class="join-input-area birth-area">
         <label for="">생년월일</label>
         <input @focus="activeInput" @blur='deactiveInput' v-model='input.birth.year' type="text" class="birth-join" placeholder="year">
         <input @focus="activeInput" @blur='deactiveInput' v-model='input.birth.month' type="text" class="birth-join" placeholder="month">
@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import '../components/css/join.css'
 
 export default {
   name: 'Join',
@@ -86,6 +87,9 @@ export default {
       this.checkSelect();
     },
     'input.passwordConfirm': function() {
+      this.checkPassword();
+    },
+    'input.password': function() {
       this.checkPassword();
     },
     'input.email': function() {
@@ -206,190 +210,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.wrap {
-  padding: 0 30px;
-}
-
-@media (min-width: 1200px) {
-    .wrap {
-    max-width: 580px;
-    width: 100%;
-    margin: 0 auto;
-  }
-}
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.join-logo {
-  margin: 50px 0;
-}
-
-.input-area {
-  width: 100%;
-  margin: 0 0 -1px 0;
-  height: 80px;
-  border-radius: 5px;
-  border: 1px solid #B0B0B0;
-  position: relative;
-}
-.input-area:focus {
-  border: 2px solid black;
-}
-.input-area.birth-area {
-  display: flex;
-  justify-content: space-around;
-}
-.sex-area {
-  width: 100%;
-  height: 150px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-
-.input-area #email-join {
-  width: 30%;
-  margin: 30px 0 0 20px;
-  box-sizing: border-box;
-  border: 0;
-  font-size: 14px;
-  font-family: "Noto Sans KR", sans-serif !important;
-}
-.input-area #email-join:focus {
-  outline: none !important;
-  border: 2px solid #5AAEFF;
-  border-radius: 5px;
-  font-weight: 700;
-}
-
-.input-area #email-join2 {
-  display: inline-block;
-  width: 30%;
-  box-sizing: border-box;
-  border: 0;
-  font-size: 14px;
-  font-family: "Noto Sans KR", sans-serif !important;
-}
-.input-area #email-join2:focus {
-  outline: none !important;
-  border: 2px solid #5AAEFF;
-  border-radius: 5px;
-  font-weight: 700;
-}
-
-.input-area #email-combo{
-  width: 20%;
-  box-sizing: border-box;
-  border: 0;
-  font-family: "Noto Sans KR", sans-serif !important;
-  color: #686868;
-}
-.input-area #email-combo:focus{
-  outline: none;
-}
-
-.input-area .common-input-join {
-  width: 90%;
-  box-sizing: border-box;
-  margin: 30px 0 0 20px;
-  border: 0;
-  font-size: 14px;
-  font-family: "Noto Sans KR", sans-serif !important;
-}
-.input-area .common-input-join:focus {
-  outline: none !important;
-  border: 2px solid #5AAEFF;
-  border-radius: 5px;
-  font-weight: 700;
-}
-
-.input-area .birth-join {
-  box-sizing: border-box;
-  margin: 30px 20px 25px 20px;
-  width: 28%;
-  border: 0;
-  font-size: 14px;
-  font-family: "Noto Sans KR", sans-serif !important;
-}
-.input-area .birth-join:focus {
-  outline: none !important;
-  border: 2px solid #5AAEFF;
-  border-radius: 5px;
-  font-weight: 700;
-}
-
-
-
-
-.input-area label {
-  position: absolute;
-  top: 2px;
-  left: 10px;
-  font-weight: 600;
-}
-
-.email-join-span {
-  color: #B0B0B0;
-}
-
-.btn {
-  font-weight: 500;
-  font-size: 18px;
-  text-align: center;
-  cursor: pointer;
-  height: 50px;
-  line-height: 50px;
-  border-radius: 5px;
-  margin-bottom: 10px;
-}
-
-.btn.join-btn {
-  color: #B0B0B0;
-  border: 2px solid #B0B0B0;
-  background-color: white;
-  width: 100%;
-  font-size: 20px;
-  box-sizing: border-box;
-  cursor:default;
-}
-
-.btn.on-join-btn {
-  color: white;
-  background-color: #5AAEFF;
-  width: 100%;
-  font-size: 20px;
-  box-sizing: border-box;
-}
-
-.err-msg {
-  margin: 0 0 0 20px;
-  font-size: 14px;
-  font-family: "Noto Sans KR", sans-serif !important;
-  color: #FF3636;
-  font-weight: 700;
-}
-.suc-msg {
-  margin: 0 0 0 20px;
-  font-size: 14px;
-  font-family: "Noto Sans KR", sans-serif !important;
-  color: #1DDB16;
-  font-weight: 700;
-}
-
-
-i {
-  font-size: 5rem;
-  margin: 0 80px;
-  cursor: pointer;
-  color: #686868;
-}
-
-.change-color {
-  color: #5AAEFF !important;
-}
-</style>

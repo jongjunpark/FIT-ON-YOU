@@ -1,0 +1,152 @@
+
+.login-checkbox-area {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.login-input-area {
+  width: 100%;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.social-area {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.login-link-area {
+  color: #686868;
+  text-align: left;
+  width: 100%;
+}
+
+.login-input-area .login-email {
+  height: 60px;
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid #D5D5D5;
+  background-color: #D5D5D5;
+  padding: 15px 0 0 15px;
+  box-sizing: border-box;
+  color: #686868;
+  font-family: "Noto Sans KR", sans-serif !important;
+}
+
+.login-input-area .login-password {
+  height: 60px;
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid #D5D5D5;
+  background-color: #D5D5D5;
+  padding: 15px 0 0 15px;
+  box-sizing: border-box;
+  color: #686868;
+  font-family: "Noto Sans KR", sans-serif !important;
+}
+
+.login-input-area label {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  transform: translate(0, -50%);
+  color: #686868;
+}
+
+.login-input-area label.is-email {
+  position: absolute;
+  top: 15px !important;
+  left: 10px !important;
+}
+
+.login-input-area label.is-password {
+  position: absolute;
+  top: 15px !important;
+  left: 10px !important;
+}
+
+.login-input-area .login-email:focus, .login-password:focus {
+  background-color: white;
+  font-weight: 700;
+  color: black;
+}
+
+.login-input-area .login-email.non-text:focus + label{
+  transition: ease 0.3s;
+  position: absolute;
+  top: 15px;
+  left: 10px;
+}
+
+.login-input-area .login-email.non-text:not(:focus) + label{
+  transition: ease 0.3s;
+  position: absolute;
+  top: 50%;
+  left: 20px;
+}
+
+.login-input-area .login-password.non-text:focus + label{
+  transition: ease 0.3s;
+  position: absolute;
+  top: 15px;
+  left: 10px;
+}
+
+.login-input-area .login-password.non-text:not(:focus) + label{
+  transition: ease 0.3s;
+  position: absolute;
+  top: 50%;
+  left: 20px;
+}
+
+.btn.login-btn {
+  color: #B0B0B0;
+  border: 2px solid #B0B0B0;
+  background-color: white;
+  width: 100%;
+  font-size: 20px;
+  box-sizing: border-box;
+  cursor:default;
+}
+
+.btn.on-login-btn {
+  color: white;
+  background-color: #FF3636;
+  width: 100%;
+  font-size: 20px;
+  box-sizing: border-box;
+}
+
+.btn.google-btn {
+  color: #B0B0B0;
+  border: 1px solid #B0B0B0;
+  background-color: white;
+  width: 50%;
+  margin-right: 3px;
+}
+
+.btn.kakao-btn {
+  color: #B0B0B0;
+  border: 1px solid #B0B0B0;
+  background-color: #ffe812;
+  width: 50%;
+  margin-left: 3px;
+}
+
+.btn.google-btn .google-img {
+  height: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.btn.kakao-btn .kakao-img {
+  height: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.go-join, .go-find {
+  cursor: pointer;
+  margin: 16px 0;
+}

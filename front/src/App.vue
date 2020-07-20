@@ -6,6 +6,9 @@
   </div>
 </template>
 
-<style>
-
-</style>
+<script>
+import "./assets/css/common.css";
+export default {
+  
+}
+</script>
