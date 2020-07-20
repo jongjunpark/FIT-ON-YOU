@@ -1,17 +1,17 @@
 <template>
   <div class='wrap'>
     <div class='wrap-container'>
-      <header class="user-data">
-        <div class="user-profile"></div>
-        <div class="article-head">
-          <p class='username'>Username</p>
-          <p class='article-date'>20.00.00 00:00</p>
+      <header class="feed-user-data">
+        <div class="feed-user-profile"></div>
+        <div class="feed-article-head">
+          <p class='feed-username'>Username</p>
+          <p class='feed-article-date'>20.00.00 00:00</p>
         </div>
       </header>
-      <section class="content">
-        <article class="content-img"></article>
-        <header class='content-head'>Text Name</header>
-        <aside class='content-tag'>#ABC #DEF #GHI #JKL</aside>
+      <section class="feed-content">
+        <article class="feed-content-img"></article>
+        <header class='feed-content-head'>Text Name</header>
+        <aside class='feed-content-tag'>#ABC #DEF #GHI #JKL</aside>
       </section>
     </div>
   </div>

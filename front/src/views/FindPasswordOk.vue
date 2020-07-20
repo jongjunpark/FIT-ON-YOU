@@ -1,10 +1,10 @@
 <template>
   <div class='wrap'>
    <div class='wrap-container'>
-      <div class='ok-head'>
+      <div class='findpasswordok-head'>
         <h1>임시 비밀번호를<br>전송했습니다.<br><br>메일을<br>확인해주세요.</h1>
       </div>
-      <div class="ok-btn-area">
+      <div class="findpasswordok-btn-area">
         <div class='btn re-submit-btn'>다시보내기</div>
         <div @click='pushLogin' class='btn go-login-btn'>로그인하기</div>
       </div>

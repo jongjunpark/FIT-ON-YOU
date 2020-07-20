@@ -11,8 +11,8 @@
         <input v-model='email' @keyup="onOkBtn" type="text" id='find-email' placeholder="이메일">
       </div>
       <p v-if='errMsg' class='err-msg'>계정 혹은 비밀번호가 틀렸습니다.</p>
-      <div v-if='okBtn' class='btn ok-btn'>확인</div>
-      <div v-if='!okBtn' @click='checkInput' class='btn on-ok-btn'>확인</div>
+      <div v-if='okBtn' class='btn find-btn'>확인</div>
+      <div v-if='!okBtn' @click='checkInput' class='btn on-find-btn'>확인</div>
     </div>
   </div>
 </template>
