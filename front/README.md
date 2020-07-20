@@ -1,4 +1,4 @@
-# front
+# 1st_front
 
 ## Project setup
 ```
