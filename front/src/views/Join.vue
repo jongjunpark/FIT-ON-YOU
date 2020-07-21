@@ -11,9 +11,16 @@
         <span class='email-join-span'> |</span>
         <select @focus="activeInput" @blur='deactiveInput' v-model='select' name="job" id='email-combo'>
           <option >직접입력</option>
-          <option >네이버</option>
-          <option >한메일</option>
-          <option >네이트</option>
+          <option >gmail.com</option>
+          <option >naver.com</option>
+          <option >hanmail.net</option>
+          <option >lycos.co.kr</option>
+          <option >nate.com</option>
+          <option >yahoo.co.kr</option>
+          <option >yahoo.com</option>
+          <option >empal.com</option>
+          <option >paran.com</option>
+          <option >korea.com</option>
         </select>
         <p v-if="mailErrMsg" class='err-msg join-err-msg'>이미 사용중인 이메일입니다.</p>
         <p v-if="mailSucMsg" class='suc-msg join-suc-msg'>사용가능합니다.</p> 
@@ -119,12 +126,26 @@ export default {
       } else {
         this.onSelect = true
         this.offSelect = false
-        if (this.select === '네이버') {
+        if (this.select === 'naver.com') {
           this.url = 'naver.com'
-        } else if (this.select === '한메일') {
+        } else if (this.select === 'hanmail.net') {
           this.url = 'hanmail.net'
-        } else if (this.select === '네이트') {
+        } else if (this.select === 'nate.com') {
           this.url = 'nate.com'
+        } else if (this.select === 'gmail.com') {
+          this.url = 'gmail.com'
+        } else if (this.select === 'lycos.co.kr') {
+          this.url = 'lycos.co.kr'
+        } else if (this.select === 'yahoo.co.kr') {
+          this.url = 'yahoo.co.kr'
+        } else if (this.select === 'yahoo.com') {
+          this.url = 'yahoo.com'
+        } else if (this.select === 'empal.com') {
+          this.url = 'empal.com'
+        } else if (this.select === 'paran.com') {
+          this.url = 'paran.com'
+        } else if (this.select === 'korea.com') {
+          this.url = 'korea.com'
         }
       }
     },
