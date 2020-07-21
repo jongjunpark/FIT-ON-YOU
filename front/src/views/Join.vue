@@ -45,7 +45,8 @@
         <i @click='clickFeMale' class="fas fa-female"></i>
       </div>
       <div v-if='JoinBtn' class='btn join-btn'>가입하기</div>
-      <div v-if='!JoinBtn' class='btn on-join-btn'>가입하기</div>
+      <div v-if='!JoinBtn && isMale' class='btn on-join-btn'>가입하기</div>
+      <div v-if='!JoinBtn && isFemale' class='btn on-join-btn-woman'>가입하기</div>
     </div>
   </div>
 </template>
@@ -83,28 +84,28 @@ export default {
     }
   },
   watch: {
-    select: function() {
+    select() {
       this.checkSelect();
       this.checkEmail();
       this.checkJoinForm();
     },
-    'input.passwordConfirm': function() {
+    'input.passwordConfirm'() {
       this.checkPassword();
     },
-    'input.password': function() {
+    'input.password'() {
       this.checkPassword();
     },
-    'input.email': function() {
+    'input.email'() {
       this.checkEmail();
     },
-    'input.url': function() {
+    'input.url'() {
       this.checkEmail();
     },
-    'input.nickname': function() {
+    'input.nickname'() {
       this.checkNickname();
     },
     input: {
-      handler: function() {
+      handler() {
         this.checkJoinForm();
       }, deep:true
     },
@@ -114,6 +115,10 @@ export default {
       if (this.select === '직접입력') {
         this.onSelect = false
         this.offSelect = true
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 48d7c0af45b2efe320a4a0e6b71e6bf4ef66b4e5
       } else {
         this.onSelect = true
         this.offSelect = false
@@ -129,12 +134,12 @@ export default {
     clickMale() {
       const male = document.querySelector('.fa-male')
       const female = document.querySelector('.fa-female')
-      if (document.querySelector('.change-color')){
+      if (document.querySelector('.change-color') || document.querySelector('.change-color-woman')){
         male.classList.remove('change-color')
         this.isMale = false
         this.checkJoinForm()
-        if (document.querySelector('.change-color')) {
-          female.classList.remove('change-color')
+        if (document.querySelector('.change-color-woman')) {
+          female.classList.remove('change-color-woman')
           male.classList.add('change-color')
           this.isMale = true
           this.isFemale = false
@@ -149,19 +154,19 @@ export default {
     clickFeMale() {
       const male = document.querySelector('.fa-male')
       const female = document.querySelector('.fa-female')
-      if (document.querySelector('.change-color')){
-        female.classList.remove('change-color')
+      if (document.querySelector('.change-color') || document.querySelector('.change-color-woman')){
+        female.classList.remove('change-color-woman')
         this.isFemale = false
         this.checkJoinForm()
         if (document.querySelector('.change-color')) {
           male.classList.remove('change-color')
-          female.classList.add('change-color')
+          female.classList.add('change-color-woman')
           this.isMale = false
           this.isFemale = true
           this.checkJoinForm()
         }
       } else {
-        female.classList.add('change-color')
+        female.classList.add('change-color-woman')
         this.isFemale = true
         this.checkJoinForm()
       }

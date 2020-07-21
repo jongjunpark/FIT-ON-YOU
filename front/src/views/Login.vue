@@ -50,10 +50,10 @@ export default {
     }
   },
   watch: {
-    email: function() {
+    email() {
       this.setEmailClass();
     },
-    password: function() {
+    password() {
       this.setPasswordClass();
     }
   },

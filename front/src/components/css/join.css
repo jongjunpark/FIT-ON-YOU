@@ -137,6 +137,16 @@
   box-sizing: border-box;
 }
 
+.btn.on-join-btn-woman {
+  color: white;
+  background-color: #D3779D;
+  width: 100%;
+  font-size: 20px;
+  box-sizing: border-box;
+}
+
+
+
 .join-err-msg {
   margin: 0 0 0 20px !important;
   font-size: 14px;
@@ -155,4 +165,8 @@ i {
 
 .change-color {
   color: #5AAEFF !important;
+}
+
+.change-color-woman {
+  color: #D3779D;
 }
