@@ -23,11 +23,13 @@
           <option >korea.com</option>
         </select>
         <p v-if="mailErrMsg" class='err-msg join-err-msg'>이미 사용중인 이메일입니다.</p>
-        <p v-if="mailSucMsg" class='suc-msg join-suc-msg'>사용가능합니다.</p> 
+        <p v-if="mailSucMsg" class='suc-msg join-suc-msg'>사용가능합니다.</p>
       </div>
       <div class="join-input-area">
         <label for="">비밀번호</label>
-        <input @focus="activeInput" @blur='deactiveInput' v-model='input.password' type="password" class="common-input-join" placeholder="password">
+        <input @focus="activeInput" @blur='deactiveInput' v-model='input.password' type="password" class="common-input-join" placeholder="password" >
+        <p v-if="passwordErrorMsg" class='err-msg join-err-msg'>영문,숫자 포함 8 자리이상이어야 합니다.</p>
+        <p v-if="passwordSuccessMsg" class='suc-msg join-suc-msg'>사용 가능한 비밀번호 입니다.</p> 
       </div>
       <div class="join-input-area">
         <label for="">비밀번호 확인</label>
@@ -37,15 +39,19 @@
       </div>
       <div class="join-input-area">
         <label for="">닉네임</label>
-        <input @focus="activeInput" @blur='deactiveInput' v-model='input.nickname' type="text" class="common-input-join" placeholder="nickname">
+        <input @focus="activeInput" @blur='deactiveInput' v-model='input.nickname' type="text" class="common-input-join" placeholder="nickname"  maxlength="128">
         <p v-if="nickErrMsg" class='err-msg join-err-msg'>이미 사용중인 닉네임입니다.</p>
         <p v-if="nickSucMsg" class='suc-msg join-suc-msg'>사용가능합니다.</p> 
       </div>
       <div class="join-input-area birth-area">
         <label for="">생년월일</label>
-        <input @focus="activeInput" @blur='deactiveInput' v-model='input.birth.year' type="text" class="birth-join" placeholder="year">
-        <input @focus="activeInput" @blur='deactiveInput' v-model='input.birth.month' type="text" class="birth-join" placeholder="month">
-        <input @focus="activeInput" @blur='deactiveInput' v-model='input.birth.day' type="text" class="birth-join" placeholder="day">
+        <input @focus="activeInput" @blur='deactiveInput' v-model='input.birth.year' type="text" class="birth-join" placeholder="yyyy" maxlength="4">
+        <input @focus="activeInput" @blur='deactiveInput' v-model='input.birth.month' type="text" class="birth-join" placeholder="mm" maxlength="2">
+        <input @focus="activeInput" @blur='deactiveInput' v-model='input.birth.day' type="text" class="birth-join" placeholder="dd" maxlength="2">
+        <p v-if="birthYearErrMsg" class='err-msg join-err-msg'>년도를 ex)1993 식으로 입력해주세요.</p>
+        <p v-if="birthMonthErrMsg && !birthYearErrMsg" class='err-msg join-err-msg'>월을 ex)06 식으로 입력해주세요.</p>
+        <p v-if="birthDayErrMsg && !birthYearErrMsg && !birthMonthErrMsg" class='err-msg join-err-msg'>일을 ex)05 식으로 입력해주세요.</p>
+        <p v-if="birthSucMsg" class='suc-msg join-suc-msg'>사용가능합니다. </p> 
       </div>
       <div class="sex-area">
         <i @click='clickMale' class="fas fa-male"></i>
@@ -60,11 +66,21 @@
 
 <script>
 import '../components/css/join.css'
+import PasswordValidator from 'password-validator';
+
 
 export default {
   name: 'Join',
   data() {
     return {
+      birthFlag: 0,
+      birthSucMsg: false,
+      birthYearErrMsg: false,
+      birthMonthErrMsg: false,
+      birthDayErrMsg: false,
+      passwordErrorMsg: false,
+      passwordSuccessMsg: false,
+      passwordSchema: new PasswordValidator(),
       select: '직접입력',
       offSelect: true,
       input: {
@@ -90,6 +106,17 @@ export default {
       isEmail: false,
     }
   },
+  created() {
+    this.passwordSchema
+      .is()
+      .min(8)
+      .is()
+      .max(100)
+      .has()
+      .digits()
+      .has()
+      .letters();
+  },
   watch: {
     select() {
       this.checkSelect();
@@ -100,6 +127,7 @@ export default {
       this.checkPassword();
     },
     'input.password'() {
+      this.checkPasswordValidate();
       this.checkPassword();
     },
     'input.email'() {
@@ -110,6 +138,15 @@ export default {
     },
     'input.nickname'() {
       this.checkNickname();
+    },
+    'input.birth.year'() {
+      this.checkYear();
+    },
+    'input.birth.month'() {
+      this.checkMonth();
+    },
+    'input.birth.day'() {
+      this.checkDay();
     },
     input: {
       handler() {
@@ -194,19 +231,22 @@ export default {
       && this.input.passwordConfirm && this.input.nickname
       && this.input.birth.year && this.input.birth.month && this.input.birth.day
       && (this.isMale || this.isFemale)
-      && this.mailSucMsg && this.pwSucMsg && this.nickSucMsg){
+      && this.mailSucMsg && this.pwSucMsg && this.nickSucMsg && this.birthSucMsg){
         this.JoinBtn = false
       } else {
         this.JoinBtn = true
       }
     },
     checkPassword() {
-      if(this.input.password != this.input.passwordConfirm) {
-        this.pwErrMsg = true
-        this.pwSucMsg = false
-      } else if (this.input.password && this.input.passwordConfirm && this.input.password === this.input.passwordConfirm) {
-        this.pwErrMsg = false
-        this.pwSucMsg = true
+      if (this.input.passwordConfirm !== '') {
+
+        if(this.input.password != this.input.passwordConfirm) {
+          this.pwErrMsg = true
+          this.pwSucMsg = false
+        } else if (this.input.password && this.input.passwordConfirm && this.input.password === this.input.passwordConfirm) {
+          this.pwErrMsg = false
+          this.pwSucMsg = true
+        }
       }
     },
     checkEmail() {
@@ -230,7 +270,52 @@ export default {
     deactiveInput() {
       event.path[1].style.border = '1px solid #B0B0B0'
       event.path[1].style.zIndex = 1
+    },
+    checkPasswordValidate() {
+      if (
+        this.input.password.length >= 0 &&
+        !this.passwordSchema.validate(this.input.password)
+      )
+        { this.passwordErrorMsg= true;
+        this.passwordSuccessMsg = false; }
+      else { this.passwordSuccessMsg = true; 
+      this.passwordErrorMsg= false;
+      }
+    },
+    checkYear() {
+      if (!(this.input.birth.year >= 1900 && this.input.birth.year <= 2020)) {
+        this.birthYearErrMsg = true
+        this.birthSucMsg = false
+      } else {
+        this.birthYearErrMsg = false
+      }
+      if (this.birthYearErrMsg === false && this.birthMonthErrMsg === false && this.birthDayErrMsg === false && this.input.birth.year && this.input.birth.month && this.input.birth.day) {
+        this.birthSucMsg = true
+      }
+    },
+    checkMonth() {
+      if (!(this.input.birth.month >= 1 && this.input.birth.month <= 12)) {
+        this.birthMonthErrMsg = true
+        this.birthSucMsg = false
+      } else {
+        this.birthMonthErrMsg = false
+      }
+      if (this.birthYearErrMsg === false && this.birthMonthErrMsg === false && this.birthDayErrMsg === false  && this.input.birth.year && this.input.birth.month && this.input.birth.day) {
+        this.birthSucMsg = true
+      }
+    },
+    checkDay() {
+      if (!(this.input.birth.day >= 1 && this.input.birth.day <= 31)) {
+        this.birthDayErrMsg = true
+        this.birthSucMsg = false
+      } else {
+        this.birthDayErrMsg = false
+      }
+      if (this.birthYearErrMsg === false && this.birthMonthErrMsg === false && this.birthDayErrMsg === false  && this.input.birth.year && this.input.birth.month && this.input.birth.day) {
+      this.birthSucMsg = true
     }
+      
+    },
   }
 }
 </script>
