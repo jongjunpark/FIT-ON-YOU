@@ -1,6 +1,9 @@
 <template>
   <div class='wrap'>
     <div class='wrap-container center-container'>
+      <header class='join-profile-header'>
+        <div class='join-profile-back-btn'>＜뒤로가기</div>
+      </header>
       <section class='join-profile-area'>
         <div class='join-profile-img'>
           <div class="join-profile-img-edit"></div>
