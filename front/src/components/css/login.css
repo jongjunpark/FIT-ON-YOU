@@ -58,12 +58,14 @@
   position: absolute;
   top: 15px !important;
   left: 10px !important;
+  font-size: 12px !important;
 }
 
 .login-input-area label.is-password {
   position: absolute;
   top: 15px !important;
   left: 10px !important;
+  font-size: 12px !important;
 }
 
 .login-input-area .login-email:focus, .login-password:focus {
@@ -77,6 +79,7 @@
   position: absolute;
   top: 15px;
   left: 10px;
+  font-size: 12px !important;
 }
 
 .login-input-area .login-email.non-text:not(:focus) + label{
@@ -91,6 +94,7 @@
   position: absolute;
   top: 15px;
   left: 10px;
+  font-size: 12px !important;
 }
 
 .login-input-area .login-password.non-text:not(:focus) + label{
