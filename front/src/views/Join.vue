@@ -115,10 +115,7 @@ export default {
       if (this.select === '직접입력') {
         this.onSelect = false
         this.offSelect = true
-<<<<<<< HEAD
-=======
         
->>>>>>> 48d7c0af45b2efe320a4a0e6b71e6bf4ef66b4e5
       } else {
         this.onSelect = true
         this.offSelect = false
