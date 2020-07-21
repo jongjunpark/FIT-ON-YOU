@@ -85,6 +85,8 @@ export default {
   watch: {
     select: function() {
       this.checkSelect();
+      this.checkEmail();
+      this.checkJoinForm();
     },
     'input.passwordConfirm': function() {
       this.checkPassword();
@@ -112,7 +114,6 @@ export default {
       if (this.select === '직접입력') {
         this.onSelect = false
         this.offSelect = true
-        this.checkEmail()
       } else {
         this.onSelect = true
         this.offSelect = false
@@ -122,7 +123,7 @@ export default {
           this.url = 'hanmail.net'
         } else if (this.select === '네이트') {
           this.url = 'nate.com'
-        } this.checkEmail()
+        }
       }
     },
     clickMale() {
