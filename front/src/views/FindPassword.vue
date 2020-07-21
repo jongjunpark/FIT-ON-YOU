@@ -31,10 +31,10 @@ export default {
     }
   },
   watch: {
-    email: function() {
+    emai() {
       this.setEmailClass();
     },
-    name: function() {
+    name() {
       this.setNameClass();
     }
   },
