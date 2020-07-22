@@ -28,8 +28,6 @@
       <div class="login-link-area">
         <p @click='pathFind' class='go-find'>비밀번호 찾기</p>
         <p @click='pathJoin' class='go-join'>회원가입</p>
-        <kakaoLogin :component="component" />
-        <GoogleLogin :component="component" />
       </div>
     </div>
   </div>

@@ -8,7 +8,7 @@
         <span class='email-join-span'> @ </span>
         <input @focus="activeInput" @blur='deactiveInput' v-model='input.url' v-if='offSelect' type="text" id='email-join2' placeholder="url">
         <span v-if='!offSelect' id='email-join2'>{{ url }}</span>
-        <span class='email-join-span'> |</span>
+        <span class='email-join-span'> |  </span>
         <select @focus="activeInput" @blur='deactiveInput' v-model='select' name="job" id='email-combo'>
           <option >직접입력</option>
           <option >gmail.com</option>
@@ -58,14 +58,30 @@
         <i @click='clickFeMale' class="fas fa-female"></i>
       </div>
       <div v-if='JoinBtn' class='btn join-btn'>가입하기</div>
-      <div v-if='!JoinBtn && isMale' class='btn on-join-btn'>가입하기</div>
-      <div v-if='!JoinBtn && isFemale' class='btn on-join-btn-woman'>가입하기</div>
+      <div @click='nextJoin' v-if='!JoinBtn && isMale' class='btn on-join-btn'>가입하기</div>
+      <div @click='nextJoin' v-if='!JoinBtn && isFemale' class='btn on-join-btn-woman'>가입하기</div>
+    </div>
+    <div class='wrap-container center-container hidden'>
+      <header class='join-profile-header'>
+        <div @click='goBack' class='join-profile-back-btn'>＜뒤로가기</div>
+      </header>
+      <section class='join-profile-area'>
+        <div class='join-profile-img'>
+          <div class="join-profile-img-edit"></div>
+        </div>
+        <p class='join-profile-username'>Username</p>
+        <textarea class='join-profile-usercontent' name="" id="" cols="50" rows="3" placeholder="자기소개를 작성해 주세요"></textarea>
+      </section>
+      <div class='btn join-profile-btn'>저장하기</div>
+      <div class='btn on-join-profile-btn'>저장하기</div>
+      <div class='btn join-skip-btn'>건너뛰기</div>
     </div>
   </div>
 </template>
 
 <script>
 import '../components/css/join.css'
+import "../components/css/joinprofile.css"
 import PasswordValidator from 'password-validator';
 
 
@@ -316,6 +332,25 @@ export default {
     }
       
     },
+    nextJoin() {
+      const firstPage = document.querySelector('.wrap-container:nth-child(1)')
+      const SecondPage = document.querySelector('.wrap-container:nth-child(2)')
+
+      firstPage.classList.add('goNext-front')
+      SecondPage.classList.remove('hidden')
+      firstPage.classList.remove('return')
+      SecondPage.classList.add('goNext-end')
+    },
+
+    goBack() {
+      const firstPage = document.querySelector('.wrap-container:nth-child(1)')
+      const SecondPage = document.querySelector('.wrap-container:nth-child(2)')
+
+      firstPage.classList.remove('goNext-front')
+      firstPage.classList.add('return')
+      SecondPage.classList.remove('goNext-end')
+      SecondPage.classList.add('hidden')
+    }
   }
 }
 </script>

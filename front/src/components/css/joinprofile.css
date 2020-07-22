@@ -1,11 +1,16 @@
 .wrap-container.center-container{
   height: 640px;
+  width: 100%;
+  padding: 0 30px;
   /* background-color: grey; */
   justify-content: center;
-  position: relative;
+  position: absolute;
+  left: 50%;
+  top: 10%;
 }
 .join-profile-header {
   position: absolute;
+  margin-left: 30px;
   top: 3%;
   left: 0%;
 }
@@ -95,4 +100,29 @@
   font-size: 20px;
   font-weight: 700;
   box-sizing: border-box;
+}
+
+.wrap {
+  overflow: hidden;
+  position: relative;
+}
+
+.goNext-front {
+  transform: translate(-150%, 0);
+  transition: 1s cubic-bezier(1,-0.07, 0.87, 0.9) ;
+}
+
+.goNext-end {
+  transform: translate(-50%, 0);
+  transition: 1s cubic-bezier(1,-0.07, 0.87, 0.9);
+}
+
+.hidden {
+  transform: translate(150%, 0);
+  transition: 1s cubic-bezier(1,-0.07, 0.87, 0.9) ;
+}
+
+.return {
+  transform: translate(0, 0);
+  transition: 1s cubic-bezier(1,-0.07, 0.87, 0.9) ;
 }

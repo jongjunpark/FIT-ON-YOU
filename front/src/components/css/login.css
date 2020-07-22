@@ -154,3 +154,11 @@
   cursor: pointer;
   margin: 16px 0;
 }
+
+.go-join:hover {
+  color: #5AAEFF !important;
+}
+
+.go-find:hover {
+  color: #5AAEFF !important;
+}
