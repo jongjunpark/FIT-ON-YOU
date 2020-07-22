@@ -19,10 +19,15 @@
       <div v-if='onLoginBtn' @click='checkLoginInf' class='btn on-login-btn'>로그인</div>
       <div class="social-area">
         <div class="btn google-btn">
-          <img class='google-img' src="../assets/images/google2.png" alt="google">
+          <GoogleLogin :params="params" :onSuccess="onSuccess" :onFailure="onFailure">login</GoogleLogin>
         </div>
         <div class="btn kakao-btn">
-          <img class="kakao-img" @click="gotoKakao" src="../assets/images/kakao.png" alt="kakao">
+          <KakaoLogin
+            class="kakao-img"
+            api-key="713af847cf1784de91646f5cb2455cbf"
+            :on-success=onSuccess
+            :on-failure=onFailure
+          />
         </div>
       </div>
       <div class="login-link-area">
@@ -35,6 +40,19 @@
 
 <script>
 import "../components/css/login.css"
+import KakaoLogin from 'vue-kakao-login'
+import GoogleLogin from 'vue-google-login'
+
+
+let onSuccess= (data) => {
+  console.log(data)
+  console.log("success")
+}
+let onFailure = (data) => {
+  console.log(data)
+  console.log("failure")
+}
+
 
 export default {
   name: 'Login',
@@ -45,6 +63,14 @@ export default {
       offLoginBtn: true,
       onLoginBtn: false,
       errormsg: false,
+      params: {
+          client_id: "834514064011-bqc7hgss1hil5965mdbgf57420u04lvv.apps.googleusercontent.com"
+      },
+      renderParams: {
+        width: 250,
+        height: 50,
+        longtitle: true
+      }
     }
   },
   watch: {
@@ -54,6 +80,10 @@ export default {
     password() {
       this.setPasswordClass();
     }
+  },
+  components: {
+    KakaoLogin,
+    GoogleLogin
   },
   methods: {
     onLoginButton() {
@@ -82,9 +112,6 @@ export default {
     pathFind() {
       this.$router.push("/find/password")
     },
-    gotoKakao(){
-      this.$router.push("/login/kakao")
-    },
     setEmailClass() {
       const label = document.querySelector('.login-email-label')
       if (this.email) {
@@ -100,7 +127,10 @@ export default {
       } else {
         label.classList.remove('is-password')
       }
-    }
+    },
+    onSuccess,
+    onFailure,
+    
   }
 }
 </script>
