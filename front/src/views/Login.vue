@@ -5,7 +5,7 @@
       <p v-if='errormsg' class='err-msg'>계정 혹은 비밀번호가 틀렸습니다.</p>
       <div class='login-input-area'>
         <input v-model='email' @keyup.enter='checkLoginInf' @keyup="checkLoginBtn" type="text" class='login-email non-text'>
-        <label class='login-email-label' for="login-email">계정이름</label>
+        <label class='login-email-label' for="login-email">이메일</label>
       </div>
       <div class='login-input-area'>
         <input v-model='password' @keyup.enter='checkLoginInf' @keyup="checkLoginBtn" type="password" class='login-password non-text'>
@@ -48,10 +48,10 @@ export default {
     }
   },
   watch: {
-    email: function() {
+    email() {
       this.setEmailClass();
     },
-    password: function() {
+    password() {
       this.setPasswordClass();
     }
   },

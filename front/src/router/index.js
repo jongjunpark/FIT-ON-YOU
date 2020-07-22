@@ -5,7 +5,8 @@ import Join from '../views/Join.vue'
 import Feed from '../views/Feed.vue'
 import FindPassword from '../views/FindPassword.vue'
 import FindPasswordOk from '../views/FindPasswordOk.vue'
-import Kakaologin from '../views/KakaoLogin.vue'
+import JoinProfile from '../views/JoinProfile.vue'
+
 Vue.use(VueRouter)
 
   const routes = [
@@ -35,9 +36,9 @@ Vue.use(VueRouter)
     component: FindPasswordOk
   },
   {
-    path: '/login/kakao',
-    name: 'Kakaologin',
-    component : Kakaologin
+    path: '/test',
+    name: 'JoinProfile',
+    component: JoinProfile
   }
 ]
 
