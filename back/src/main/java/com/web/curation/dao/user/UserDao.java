@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * 제네릭으로 도메인 클래스와 키타입만 적용하면 된다
  * */
 public interface UserDao extends JpaRepository<User, String> {
-    User getUserByEmail(String email);
+	Optional<User> getUserByEmail(String email);
 
     Optional<User> findUserByEmailAndPassword(String email, String password);
     Optional<User> findUserByEmail(String email);
