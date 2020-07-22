@@ -1,6 +1,6 @@
 <template>
   <div class='wrap'>
-    <div class='wrap-container'>
+    <div class='wrap-container wrap-join'>
       <h1 class='join-logo'>Welcome</h1>
       <div class="join-input-area">
         <label for="">이메일</label>
@@ -46,8 +46,8 @@
       <div class="join-input-area birth-area">
         <label for="">생년월일</label>
         <input @focus="activeInput" @blur='deactiveInput' v-model='input.birth.year' type="text" class="birth-join" placeholder="yyyy" maxlength="4">
-        <input @focus="activeInput" @blur='deactiveInput' v-model='input.birth.month' type="text" class="birth-join" placeholder="mm" maxlength="2">
-        <input @focus="activeInput" @blur='deactiveInput' v-model='input.birth.day' type="text" class="birth-join" placeholder="dd" maxlength="2">
+        <input @focus="activeInput" @blur='deactiveInput' v-model='input.birth.month' type="text" class="birth-join" placeholder="mm" maxlength="2" >
+        <input @focus="activeInput" @blur='deactiveInput' v-model='input.birth.day' type="text" class="birth-join" placeholder="dd" maxlength="2" v-on:keydown.tab='notTab'>
         <p v-if="birthYearErrMsg" class='err-msg join-err-msg'>년도를 ex)1993 식으로 입력해주세요.</p>
         <p v-if="birthMonthErrMsg && !birthYearErrMsg" class='err-msg join-err-msg'>월을 ex)06 식으로 입력해주세요.</p>
         <p v-if="birthDayErrMsg && !birthYearErrMsg && !birthMonthErrMsg" class='err-msg join-err-msg'>일을 ex)05 식으로 입력해주세요.</p>
@@ -69,12 +69,11 @@
         <div class='join-profile-img'>
           <div class="join-profile-img-edit"></div>
         </div>
-        <p class='join-profile-username'>Username</p>
-        <textarea class='join-profile-usercontent' name="" id="" cols="50" rows="3" placeholder="자기소개를 작성해 주세요"></textarea>
+        <p class='join-profile-username'>{{ input.nickname }}</p>
+        <textarea class='join-profile-usercontent' name="" id="" cols="50" rows="3" placeholder="자기소개를 작성해 주세요" maxlength="100" v-model="input.textProfile"></textarea>
       </section>
-      <div class='btn join-profile-btn'>저장하기</div>
-      <div class='btn on-join-profile-btn'>저장하기</div>
-      <div class='btn join-skip-btn'>건너뛰기</div>
+      <div @click='signupFinish' v-show='changeProfile' class='btn on-join-profile-btn'>바로 시작할래요!</div>
+      <div @click='changePart' v-show='!changeProfile' class='btn join-skip-btn'>건너뛰기!</div>
     </div>
   </div>
 </template>
@@ -82,8 +81,8 @@
 <script>
 import '../components/css/join.css'
 import "../components/css/joinprofile.css"
-import PasswordValidator from 'password-validator';
-
+import PasswordValidator from 'password-validator'
+import Swal from 'sweetalert2'
 
 export default {
   name: 'Join',
@@ -109,7 +108,9 @@ export default {
           year: '',
           month: '',
           day: '',
-        }
+        },
+        profileImg: '',
+        textProfile: '',
       },
       JoinBtn: true,
       pwErrMsg: false,
@@ -120,6 +121,7 @@ export default {
       nickSucMsg: false,
       isFemale: false,
       isEmail: false,
+      changeProfile: false,
     }
   },
   created() {
@@ -163,6 +165,9 @@ export default {
     },
     'input.birth.day'() {
       this.checkDay();
+    },
+    'input.textProfile'() {
+      this.checkProfile();
     },
     input: {
       handler() {
@@ -350,6 +355,43 @@ export default {
       firstPage.classList.add('return')
       SecondPage.classList.remove('goNext-end')
       SecondPage.classList.add('hidden')
+    },
+    checkProfile() {
+      if (this.input.textProfile !== '') {
+        this.changeProfile = true
+      } else {
+        this.changeProfile = false
+      }
+    },
+    signupFinish() {
+      Swal.fire(
+        '환영해요!',
+        '자신만의 패션을 뽐내보세요!',
+        'success'
+      )
+    },
+    notTab() {
+      window.addEventListener('keydown', event => {
+        const WRAPJOIN = document.querySelector('.wrap-join')
+        if (WRAPJOIN) {
+          
+          if(event.defaultPrevented) {
+            return;
+          }
+          var handled = false;
+        
+          if (event.keyCode === 9) {
+            handled = true;
+          }
+        
+          if (handled) {
+            event.preventDefault();
+          }
+        }
+      })
+    },
+    changePart() {
+      this.changeProfile = true;
     }
   }
 }
