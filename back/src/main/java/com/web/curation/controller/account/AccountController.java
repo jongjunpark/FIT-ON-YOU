@@ -70,21 +70,6 @@ public class AccountController {
 		// 이메일, 닉네임 중복처리 필수
 		String nickname = request.getNickname();
 		String email = request.getEmail();
-//		UserDTO checkUid = new UserDTO(userDao.findUserByNickname(nickname).get());
-//		UserDTO checkEmail = new UserDTO(userDao.findUserByEmail(email).get());
-//		System.out.println(checkEmail.getEmail());
-//		if (checkEmail.getEmail() != null) {
-//			System.out.println("2");
-//			result.status = true;
-//			result.data = "중복된 이메일이 존재 합니다";
-//			return new ResponseEntity<>(result, HttpStatus.OK);
-//		}
-//		if (checkUid != null) {
-//			System.out.println("3");
-//			result.status = true;
-//			result.data = "중복된 닉네임이 존재 합니다";
-//			return new ResponseEntity<>(result, HttpStatus.OK);
-//		}
 		// 저장
 		System.out.println("4");
 		User user = new User();
@@ -100,7 +85,7 @@ public class AccountController {
 		user.setGender(request.getGender());
 		user.setPassword(request.getPassword());
 		user.setSelfintroduce(null);
-		System.out.println("toString------------------->"+user.toString());
+		System.out.println("toString------------------->" + user.toString());
 		userDao.save(user);
 		result.status = true;
 		result.data = "success";
