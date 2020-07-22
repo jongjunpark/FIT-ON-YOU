@@ -83,6 +83,7 @@ export default {
       passwordSchema: new PasswordValidator(),
       select: '직접입력',
       offSelect: true,
+      gender: '',
       input: {
         email: '',
         url: '',
@@ -192,17 +193,20 @@ export default {
       if (document.querySelector('.change-color') || document.querySelector('.change-color-woman')){
         male.classList.remove('change-color')
         this.isMale = false
+        this.gender=''
         this.checkJoinForm()
         if (document.querySelector('.change-color-woman')) {
           female.classList.remove('change-color-woman')
           male.classList.add('change-color')
           this.isMale = true
           this.isFemale = false
+          this.gender = 'Male';
           this.checkJoinForm()
         }
       } else {
         male.classList.add('change-color')
         this.isMale = true
+        this.gender = 'Male'
         this.checkJoinForm()
       }
     },
@@ -212,6 +216,7 @@ export default {
       if (document.querySelector('.change-color') || document.querySelector('.change-color-woman')){
         female.classList.remove('change-color-woman')
         this.isFemale = false
+        this.gender=''
         this.checkJoinForm()
         if (document.querySelector('.change-color')) {
           male.classList.remove('change-color')
@@ -219,10 +224,12 @@ export default {
           this.isMale = false
           this.isFemale = true
           this.checkJoinForm()
+          this.gender = 'Female'
         }
       } else {
         female.classList.add('change-color-woman')
         this.isFemale = true
+        this.gender = 'Female'
         this.checkJoinForm()
       }
     },
