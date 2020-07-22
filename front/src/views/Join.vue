@@ -45,19 +45,20 @@
         <i @click='clickFeMale' class="fas fa-female"></i>
       </div>
       <div v-if='JoinBtn' class='btn join-btn'>가입하기</div>
-      <div v-if='!JoinBtn' class='btn on-join-btn'>가입하기</div>
+      <div v-if='!JoinBtn' class='btn on-join-btn' @click="signUp">가입하기</div>
     </div>
   </div>
 </template>
 
 <script>
-
+import axios from 'axios';
 export default {
   name: 'Join',
   data() {
     return {
       select: '직접입력',
       offSelect: true,
+      gender: '',
       input: {
         email: '',
         url: '',
@@ -127,17 +128,20 @@ export default {
       if (document.querySelector('.change-color')){
         male.classList.remove('change-color')
         this.isMale = false
+        this.gender=''
         this.checkJoinForm()
         if (document.querySelector('.change-color')) {
           female.classList.remove('change-color')
           male.classList.add('change-color')
           this.isMale = true
           this.isFemale = false
+          this.gender = 'Male';
           this.checkJoinForm()
         }
       } else {
         male.classList.add('change-color')
         this.isMale = true
+        this.gender = 'Male'
         this.checkJoinForm()
       }
     },
@@ -147,6 +151,7 @@ export default {
       if (document.querySelector('.change-color')){
         female.classList.remove('change-color')
         this.isFemale = false
+        this.gender=''
         this.checkJoinForm()
         if (document.querySelector('.change-color')) {
           male.classList.remove('change-color')
@@ -154,10 +159,12 @@ export default {
           this.isMale = false
           this.isFemale = true
           this.checkJoinForm()
+          this.gender = 'Female'
         }
       } else {
         female.classList.add('change-color')
         this.isFemale = true
+        this.gender = 'Female'
         this.checkJoinForm()
       }
     },
@@ -202,6 +209,19 @@ export default {
     deactiveInput() {
       event.path[1].style.border = '1px solid #B0B0B0'
       event.path[1].style.zIndex = 1
+    },
+    signUp(){
+      console.log('this.input.nickname');
+
+      axios.post('http://localhost:8080/account/signup',{
+          email: this.input.email+'@'+this.select,
+          password: this.input.password,
+          nickname: this.input.nickname,
+          gender: this.gender,
+          birth: this.input.birth.year+' '+this.input.birth.month+' '+this.input.birth.day,
+      }).then(()=>{
+        console.log('3333')
+      });
     }
   }
 }
