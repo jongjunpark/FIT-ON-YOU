@@ -58,8 +58,8 @@
         <i @click='clickFeMale' class="fas fa-female"></i>
       </div>
       <div v-if='JoinBtn' class='btn join-btn'>가입하기</div>
-      <div v-if='!JoinBtn && isMale' class='btn on-join-btn'>가입하기</div>
-      <div v-if='!JoinBtn && isFemale' class='btn on-join-btn-woman'>가입하기</div>
+      <div v-if='!JoinBtn && isMale' class='btn on-join-btn' @click="signup">가입하기</div>
+      <div v-if='!JoinBtn && isFemale' class='btn on-join-btn-woman' @click="signup">가입하기</div>
     </div>
   </div>
 </template>
@@ -67,7 +67,7 @@
 <script>
 import '../components/css/join.css'
 import PasswordValidator from 'password-validator';
-
+import axios from 'axios';
 
 export default {
   name: 'Join',
@@ -165,25 +165,25 @@ export default {
         this.onSelect = true
         this.offSelect = false
         if (this.select === 'naver.com') {
-          this.url = 'naver.com'
+          this.input.url = 'naver.com'
         } else if (this.select === 'hanmail.net') {
-          this.url = 'hanmail.net'
+          this.input.url = 'hanmail.net'
         } else if (this.select === 'nate.com') {
-          this.url = 'nate.com'
+          this.input.url = 'nate.com'
         } else if (this.select === 'gmail.com') {
-          this.url = 'gmail.com'
+          this.input.url = 'gmail.com'
         } else if (this.select === 'lycos.co.kr') {
-          this.url = 'lycos.co.kr'
+          this.input.url = 'lycos.co.kr'
         } else if (this.select === 'yahoo.co.kr') {
-          this.url = 'yahoo.co.kr'
+          this.input.url = 'yahoo.co.kr'
         } else if (this.select === 'yahoo.com') {
-          this.url = 'yahoo.com'
+          this.input.url = 'yahoo.com'
         } else if (this.select === 'empal.com') {
-          this.url = 'empal.com'
+          this.input.url = 'empal.com'
         } else if (this.select === 'paran.com') {
-          this.url = 'paran.com'
+          this.input.url = 'paran.com'
         } else if (this.select === 'korea.com') {
-          this.url = 'korea.com'
+          this.input.url = 'korea.com'
         }
       }
     },
@@ -288,6 +288,19 @@ export default {
       else { this.passwordSuccessMsg = true; 
       this.passwordErrorMsg= false;
       }
+    },
+    signup(){
+      axios.post('http://localhost:8080/account/signup',{
+
+          email: this.input.email+'@'+this.select,
+          password: this.input.password,
+          nickname: this.input.nickname,
+          gender: this.gender,
+          birth: this.input.birth.year+' '+this.input.birth.month+' '+this.input.birth.day
+
+      }).then(function(data){
+        console.log(data);
+      });
     },
     checkYear() {
       if (!(this.input.birth.year >= 1900 && this.input.birth.year <= 2020)) {
