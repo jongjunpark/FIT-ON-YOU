@@ -1,0 +1,98 @@
+.wrap-container.center-container{
+  height: 640px;
+  /* background-color: grey; */
+  justify-content: center;
+  position: relative;
+}
+.join-profile-header {
+  position: absolute;
+  top: 3%;
+  left: 0%;
+}
+.join-profile-back-btn{
+  background-color: #DBDBDB;
+  width: 90px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  border-radius: 5px;
+}
+.join-profile-area {
+  width: 100%;
+  height: 400px;
+  padding-top:50px;
+  /* background-color: khaki; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.join-profile-img {
+  width: 200px;
+  height: 200px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 50%;
+  border: 2px solid grey;
+  background-image: url("../../assets/images/default-user.png");
+  position: relative;
+}
+.join-profile-img .join-profile-img-edit{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  background-image: url("../../assets/images/edit.png");
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: 60%;
+  cursor: pointer;
+}
+.join-profile-img .join-profile-img-edit:hover{
+  background-color: #DBDBDB;
+}
+.join-default-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.join-profile-username{
+  font-size: 25px;
+  font-weight: 900;
+  margin: 10px 0;
+}
+.join-profile-usercontent {
+  resize: none;
+  width: 50%;
+}
+.join-profile-usercontent::placeholder {
+  font-size: 14px;
+}
+.btn.join-profile-btn {
+  color: #B0B0B0;
+  border: 2px solid #B0B0B0;
+  background-color: white;
+  width: 100%;
+  font-size: 20px;
+  box-sizing: border-box;
+  cursor:default;
+}
+.btn.on-join-profile-btn {
+  color: white;
+  background-color: #5AAEFF;
+  width: 100%;
+  font-size: 20px;
+  box-sizing: border-box;
+}
+.btn.join-skip-btn {
+  background-color: #FFE400;
+  width: 100%;
+  font-size: 20px;
+  font-weight: 700;
+  box-sizing: border-box;
+}
