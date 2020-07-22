@@ -22,14 +22,12 @@
           <img class='google-img' src="../assets/images/google2.png" alt="google">
         </div>
         <div class="btn kakao-btn">
-          <img class="kakao-img" src="../assets/images/kakao.png" alt="kakao">
+          <img class="kakao-img" @click="gotoKakao" src="../assets/images/kakao.png" alt="kakao">
         </div>
       </div>
       <div class="login-link-area">
         <p @click='pathFind' class='go-find'>비밀번호 찾기</p>
         <p @click='pathJoin' class='go-join'>회원가입</p>
-        <kakaoLogin :component="component" />
-        <GoogleLogin :component="component" />
       </div>
     </div>
   </div>
@@ -83,6 +81,9 @@ export default {
     },
     pathFind() {
       this.$router.push("/find/password")
+    },
+    gotoKakao(){
+      this.$router.push("/login/kakao")
     },
     setEmailClass() {
       const label = document.querySelector('.login-email-label')

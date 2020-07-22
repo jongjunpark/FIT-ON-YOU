@@ -38,7 +38,8 @@ public class AccountController {
     @GetMapping("/account/login")
     @ApiOperation(value = "로그인")
     public Object login(@RequestParam(required = true) final String email,
-            @RequestParam(required = true) final String password) {
+        
+    	@RequestParam(required = true) final String password) {
 
         Optional<User> userOpt = userDao.findUserByEmailAndPassword(email, password);
 
