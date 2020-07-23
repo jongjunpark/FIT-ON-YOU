@@ -67,7 +67,10 @@
       </header>
       <section class='join-profile-area'>
         <div class='profile-img'>
-          <div class="join-profile-img-edit"></div>
+          <label for='profile-img-edit' class="join-profile-img-edit">
+            <input type="file" id="profile-img-edit" accept="image/*" @change="setProfileImg($event)">
+          </label>
+          <div id="image_container"></div>
         </div>
         <p class='join-profile-username'>{{ input.nickname }}</p>
         <textarea class='join-profile-usercontent' name="" id="" cols="50" rows="3" placeholder="자기소개를 작성해 주세요" maxlength="100" v-model="input.textProfile"></textarea>
@@ -413,6 +416,20 @@ export default {
         { console.log('올바릅니다.'); this.mailSucMsg = true; }
       else { console.log('올바르지 않습니다.'); this.mailSucMsg = false; }
     },
+    setProfileImg(file) {
+      let reader = new FileReader();
+      // let self = this
+      reader.onload = (event) => {
+        console.log(event)
+        this.product.image = event.target.result
+        // let img = document.createElement("img"); 
+        // img.setAttribute("src", event.target.result); 
+        // document.querySelector("div#image_container").appendChild(img); 
+      }
+      reader.readAsDataURL(file)
+      ;
+
+    }
   }
 }
 </script>

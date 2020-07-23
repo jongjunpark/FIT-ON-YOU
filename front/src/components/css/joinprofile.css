@@ -71,6 +71,18 @@
   cursor: pointer;
 }
 
+.join-profile-img-edit input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+
 .join-profile-img-female .join-profile-img-edit{
   position: absolute;
   bottom: 0;
@@ -92,6 +104,9 @@
 .join-profile-img-female .join-profile-img-edit:hover{
   background-color: #DBDBDB;
 }
+
+
+
 .join-default-img {
   width: 100%;
   height: 100%;
