@@ -128,8 +128,9 @@ public class AccountController {
 		user.setGender(request.getGender());
 		user.setPassword(request.getPassword());
 		user.setSelfintroduce(null);
-		System.out.println("finduserbynickname---------->"+userDao.findUserByNickname(user.getNickname()));
-		if (userDao.findUserByNickname(user.getNickname()) != null){
+		System.out.println("finduserbynickname---------->" + userDao.findUserByNickname(user.getNickname()));
+		if (userDao.findUserByNickname(user.getNickname()) != null
+				|| userDao.findUserByEmail(user.getEmail()) != null) {
 			result.status = true;
 			result.data = "fail";
 		} else {
