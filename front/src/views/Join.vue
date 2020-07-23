@@ -66,7 +66,7 @@
         <div @click='goBack' class='join-profile-back-btn'>＜ 뒤로가기</div>
       </header>
       <section class='join-profile-area'>
-        <div class='join-profile-img'>
+        <div class='profile-img'>
           <div class="join-profile-img-edit"></div>
         </div>
         <p class='join-profile-username'>{{ input.nickname }}</p>
@@ -109,6 +109,7 @@ export default {
           year: '',
           month: '',
           day: '',
+          sex: '',
         },
         profileImg: '',
         textProfile: '',
@@ -255,7 +256,7 @@ export default {
       && this.input.birth.year && this.input.birth.month && this.input.birth.day
       && (this.isMale || this.isFemale)
       && this.mailSucMsg && this.pwSucMsg && this.nickSucMsg && this.birthSucMsg){
-        this.JoinBtn = false
+        this.JoinBtn = false;
       } else {
         this.JoinBtn = true
       }
@@ -347,6 +348,18 @@ export default {
       SecondPage.classList.remove('hidden')
       firstPage.classList.remove('return')
       SecondPage.classList.add('goNext-end')
+      const userProfile = document.querySelector('.profile-img')
+
+      if (this.isMale) {
+        userProfile.classList.remove('join-profile-img-female');
+        userProfile.classList.add('join-profile-img');
+        this.input.sex = 'male';
+      }
+      else {
+        userProfile.classList.add('join-profile-img-female')
+        userProfile.classList.remove('join-profile-img')
+        this.input.sex = 'female';
+      }
     },
 
     goBack() {

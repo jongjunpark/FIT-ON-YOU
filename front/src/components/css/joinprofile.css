@@ -43,6 +43,18 @@
   background-image: url("../../assets/images/default-user.png");
   position: relative;
 }
+
+.join-profile-img-female {
+  width: 200px;
+  height: 200px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 50%;
+  border: 2px solid grey;
+  background-image: url("../../assets/images/defult-user-female.png");
+  position: relative;
+}
+
 .join-profile-img .join-profile-img-edit{
   position: absolute;
   bottom: 0;
@@ -58,7 +70,26 @@
   background-size: 60%;
   cursor: pointer;
 }
+
+.join-profile-img-female .join-profile-img-edit{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  background-image: url("../../assets/images/edit.png");
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: 60%;
+  cursor: pointer;
+}
 .join-profile-img .join-profile-img-edit:hover{
+  background-color: #DBDBDB;
+}
+.join-profile-img-female .join-profile-img-edit:hover{
   background-color: #DBDBDB;
 }
 .join-default-img {
