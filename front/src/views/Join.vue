@@ -7,7 +7,7 @@
         <input @focus="activeInput" @blur='deactiveInput' v-model='input.email' type="text" id='email-join' placeholder="example">
         <span class='email-join-span'> @ </span>
         <input @focus="activeInput" @blur='deactiveInput' v-model='input.url' v-if='offSelect' type="text" id='email-join2' placeholder="url">
-        <span v-if='!offSelect' id='email-join2'>{{ url }}</span>
+        <span v-if='!offSelect' id='email-join2'>{{ input.url }}</span>
         <span class='email-join-span'> |  </span>
         <select @focus="activeInput" @blur='deactiveInput' v-model='select' name="job" id='email-combo'>
           <option >직접입력</option>
@@ -63,7 +63,7 @@
     </div>
     <div class='wrap-container center-container hidden'>
       <header class='join-profile-header'>
-        <div @click='goBack' class='join-profile-back-btn'>＜뒤로가기</div>
+        <div @click='goBack' class='join-profile-back-btn'>＜ 뒤로가기</div>
       </header>
       <section class='join-profile-area'>
         <div class='join-profile-img'>
@@ -82,6 +82,7 @@
 import '../components/css/join.css'
 import "../components/css/joinprofile.css"
 import PasswordValidator from 'password-validator'
+import * as EmailValidator from "email-validator"
 import Swal from 'sweetalert2'
 
 export default {
@@ -122,6 +123,7 @@ export default {
       isFemale: false,
       isEmail: false,
       changeProfile: false,
+      isMale: false,
     }
   },
   created() {
@@ -138,7 +140,7 @@ export default {
   watch: {
     select() {
       this.checkSelect();
-      this.checkEmail();
+      this.checkEmailValidate();
       this.checkJoinForm();
     },
     'input.passwordConfirm'() {
@@ -149,10 +151,10 @@ export default {
       this.checkPassword();
     },
     'input.email'() {
-      this.checkEmail();
+      this.checkEmailValidate();
     },
     'input.url'() {
-      this.checkEmail();
+      this.checkEmailValidate();
     },
     'input.nickname'() {
       this.checkNickname();
@@ -185,25 +187,25 @@ export default {
         this.onSelect = true
         this.offSelect = false
         if (this.select === 'naver.com') {
-          this.url = 'naver.com'
+          this.input.url = 'naver.com'
         } else if (this.select === 'hanmail.net') {
-          this.url = 'hanmail.net'
+          this.input.url = 'hanmail.net'
         } else if (this.select === 'nate.com') {
-          this.url = 'nate.com'
+          this.input.url = 'nate.com'
         } else if (this.select === 'gmail.com') {
-          this.url = 'gmail.com'
+          this.input.url = 'gmail.com'
         } else if (this.select === 'lycos.co.kr') {
-          this.url = 'lycos.co.kr'
+          this.input.url = 'lycos.co.kr'
         } else if (this.select === 'yahoo.co.kr') {
-          this.url = 'yahoo.co.kr'
+          this.input.url = 'yahoo.co.kr'
         } else if (this.select === 'yahoo.com') {
-          this.url = 'yahoo.com'
+          this.input.url = 'yahoo.com'
         } else if (this.select === 'empal.com') {
-          this.url = 'empal.com'
+          this.input.url = 'empal.com'
         } else if (this.select === 'paran.com') {
-          this.url = 'paran.com'
+          this.input.url = 'paran.com'
         } else if (this.select === 'korea.com') {
-          this.url = 'korea.com'
+          this.input.url = 'korea.com'
         }
       }
     },
@@ -392,7 +394,12 @@ export default {
     },
     changePart() {
       this.changeProfile = true;
-    }
+    },
+    checkEmailValidate() {
+      if (this.input.email.length >= 4 && EmailValidator.validate((this.input.email+'@'+this.input.url)))
+        { console.log('올바릅니다.'); this.mailSucMsg = true; }
+      else { console.log('올바르지 않습니다.'); this.mailSucMsg = false; }
+    },
   }
 }
 </script>

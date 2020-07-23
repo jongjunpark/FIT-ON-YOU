@@ -111,22 +111,22 @@
 
 .goNext-front {
   transform: translate(-150%, 0);
-  transition: 1s cubic-bezier(1,-0.07, 0.87, 0.9) ;
+  transition: 0.7s cubic-bezier(0, 0.85, 0.58, 1) ;
 }
 
 .goNext-end {
   transform: translate(-50%, 0);
-  transition: 1s cubic-bezier(1,-0.07, 0.87, 0.9);
+  transition: 0.7s cubic-bezier(0, 0.85, 0.58, 1);
 }
 
 .hidden {
   transform: translate(150%, 0);
-  transition: 1s cubic-bezier(1,-0.07, 0.87, 0.9) ;
+  transition: 0.7s cubic-bezier(0, 0.85, 0.58, 1) ;
 }
 
 .return {
   transform: translate(0, 0);
-  transition: 1s cubic-bezier(1,-0.07, 0.87, 0.9) ;
+  transition: 0.7s cubic-bezier(0, 0.85, 0.58, 1) ;
 }
 
 .join-profile-back-btn:hover {
