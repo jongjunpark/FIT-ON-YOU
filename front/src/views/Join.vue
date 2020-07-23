@@ -299,7 +299,10 @@ export default {
           birth: this.input.birth.year+' '+this.input.birth.month+' '+this.input.birth.day
 
       }).then(function(data){
-        console.log(data);
+        console.log(data.data.data)
+      })
+      .catch(function(data){
+        console.log(data.data.data)
       });
     },
     checkYear() {

@@ -85,7 +85,11 @@
 		    <version>0.9.1</version>
 		</dependency>
 		
-		
+		    <!-- 서버 자동 재시작 -->
+      <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-devtools</artifactId>
+      </dependency>
 		
 	</dependencies>
 
