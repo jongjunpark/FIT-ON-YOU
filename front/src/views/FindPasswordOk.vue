@@ -23,8 +23,8 @@ export default {
     return {
       uuid: '',
       reTime: '',
-      remainMinute: '00',
-      remainSeconds: '00',
+      remainMinute: 0,
+      remainSeconds: 0,
     }
   },
   mounted() {
