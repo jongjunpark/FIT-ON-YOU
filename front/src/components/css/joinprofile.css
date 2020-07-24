@@ -62,6 +62,11 @@
   opacity: 0.4;
 }
 
+.join-profile-img .cancle-img:hover{
+  border-radius: 50%;
+}
+
+
 /* .join-profile-img-female {
   width: 200px;
   height: 200px;
@@ -137,7 +142,11 @@
 }
 .join-profile-usercontent {
   resize: none;
-  width: 50%;
+  width: 100%;
+  cursor: pointer;
+  text-align: center;
+  padding-top: 30px;
+  overflow: hidden;
 }
 .join-profile-usercontent::placeholder {
   font-size: 14px;
@@ -195,9 +204,5 @@
 
 .join-profile-back-btn:hover {
   color: #5AAEFF !important;
-  cursor: pointer;
-}
-
-.join-profile-usercontent {
   cursor: pointer;
 }

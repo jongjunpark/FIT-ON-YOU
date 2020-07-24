@@ -386,6 +386,10 @@ export default {
       firstPage.classList.add('return')
       SecondPage.classList.remove('goNext-end')
       SecondPage.classList.add('hidden')
+      if(!this.input.textProfile && !this.input.profileImg) {
+        this.changeProfile = false
+      }
+
     },
     checkProfile() {
       if (this.input.textProfile !== '' || this.input.profileImg) {
