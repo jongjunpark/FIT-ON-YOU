@@ -42,14 +42,15 @@ export default {
   },
   methods: {
     onOkBtn() {
-      if (this.emailVaild && this.birth.length >= 8) {
+      if (this.emailVaild && this.birth.length >= 8 && (this.birth >= 190000 && this.birth <= 20201231)) {
           this.okBtn = true
       } else {
         this.okBtn = false
       }
     },
     checkInput() {
-      this.errMsg = true
+      // this.errMsg = true
+      this.$router.push("/find/password/ok")
     },
     checkEmailValidate() {
       if (this.email.length >= 0 && !EmailValidator.validate(this.email))
