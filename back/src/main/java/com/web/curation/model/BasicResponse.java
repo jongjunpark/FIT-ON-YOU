@@ -1,5 +1,7 @@
 package com.web.curation.model;
 
+import java.util.List;
+
 import io.swagger.annotations.ApiModelProperty;
 
 
