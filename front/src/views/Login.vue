@@ -25,8 +25,8 @@
           <KakaoLogin
             class="kakao-img"
             api-key="713af847cf1784de91646f5cb2455cbf"
-            :on-success=onSuccess
-            :on-failure=onFailure
+            :on-success="onSuccessKakao"
+            :on-failure="onFailureKakao"
           />
         </div>
       </div>
@@ -46,6 +46,7 @@ import GoogleLogin from 'vue-google-login'
 
 let onSuccess= (data) => {
   console.log(data)
+  
   console.log("success")
 }
 let onFailure = (data) => {
@@ -58,6 +59,9 @@ export default {
   name: 'Login',
   data () {
     return {
+      tokens:{
+        kakaoAcToken:'',
+      },
       email: '',
       password: '',
       offLoginBtn: true,
@@ -86,6 +90,16 @@ export default {
     GoogleLogin
   },
   methods: {
+      onSuccessKakao : (data) => {
+      
+      console.log("success")
+      console.log(data)
+      
+    },
+    onFailureKakao : (data) => {
+      console.log(data)
+      console.log("failure")
+    },
     onLoginButton() {
       if (this.email) {
         if (this.password) {
