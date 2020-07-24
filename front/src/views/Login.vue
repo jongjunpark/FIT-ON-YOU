@@ -76,7 +76,7 @@ export default {
     },
     checkLoginInf() {
       this.errormsg = true;
-      const ERROR = document.querySelector('.on-login-btn')
+      const ERROR = document.querySelector('.btn')
       ERROR.classList.remove('on-login-btn')
       ERROR.classList.add('on-login-btn-error')
     },
