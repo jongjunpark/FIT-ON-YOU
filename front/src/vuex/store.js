@@ -1,18 +1,32 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import getters from './getters'
-import actions from './actions'
-import mutations from './mutations'
 
 Vue.use(Vuex)
 
-const state = {
-    isUser: false,
-}
+// const state = {
+//     isUser: false,
+// }
 
 export default new Vuex.Store({
-    state,
-    mutations,
-    getters,
-    actions
+    state: {
+        user:{},
+    },
+    getters: {
+        user(state) {
+            return state.user;
+        },
+    },
+    mutations:{
+        LOGIN(state,data){
+            state.user=data;
+        },
+        LOGOUT(state){
+            state.user=null;
+        }
+    },
+    actions:{
+        AC_USER:({commit},payload)=>{
+            commit('LOGIN',payload)
+        }
+    }
 })

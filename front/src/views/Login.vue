@@ -16,7 +16,7 @@
         <label for="login-checkbox"> 로그인상태 유지</label>
       </div>
       <div v-if='offLoginBtn' class='btn login-btn'>로그인</div>
-      <div v-if='onLoginBtn' @click='checkLoginInf' class='btn on-login-btn'>로그인</div>
+      <div v-if='onLoginBtn' @click='loginHandler' class='btn on-login-btn'>로그인</div>
       <div class="social-area">
         <div class="btn google-btn">
           <GoogleLogin :params="params" :onSuccess="onSuccess" :onFailure="onFailure">login</GoogleLogin>
@@ -25,8 +25,8 @@
           <KakaoLogin
             class="kakao-img"
             api-key="713af847cf1784de91646f5cb2455cbf"
-            :on-success=onSuccess
-            :on-failure=onFailure
+            :on-success="onSuccessKakao"
+            :on-failure="onFailureKakao"
           />
         </div>
       </div>
@@ -42,10 +42,13 @@
 import "../components/css/login.css"
 import KakaoLogin from 'vue-kakao-login'
 import GoogleLogin from 'vue-google-login'
+import axios from 'axios';
+import { mapActions, mapGetters } from 'vuex'
 
 
 let onSuccess= (data) => {
   console.log(data)
+  
   console.log("success")
 }
 let onFailure = (data) => {
@@ -53,11 +56,18 @@ let onFailure = (data) => {
   console.log("failure")
 }
 
+const Store='Store'
 
 export default {
   name: 'Login',
+  modules:{
+    store:Store
+  },
   data () {
     return {
+      tokens:{
+        kakaoAcToken:'',
+      },
       email: '',
       password: '',
       offLoginBtn: true,
@@ -70,7 +80,7 @@ export default {
         width: 250,
         height: 50,
         longtitle: true
-      }
+      },
     }
   },
   watch: {
@@ -85,7 +95,23 @@ export default {
     KakaoLogin,
     GoogleLogin
   },
+  computed:{
+    ...mapGetters([
+      'user',
+    ]),
+    
+  },
   methods: {
+      onSuccessKakao : (data) => {
+      
+      console.log("success")
+      console.log(data)
+      
+    },
+    onFailureKakao : (data) => {
+      console.log(data)
+      console.log("failure")
+    },
     onLoginButton() {
       if (this.email) {
         if (this.password) {
@@ -127,6 +153,35 @@ export default {
       } else {
         label.classList.remove('is-password')
       }
+    },
+
+    ...mapActions(['AC_USER']),
+
+    loginHandler() { 
+      console.log(this.email);
+      console.log(this.password);
+      axios.get('http://localhost:8080/account/login',{
+         params:{email:this.email,
+                  password:this.password},
+      }).then((response)=>{
+        // 로그인 성공
+        if(response.data.result==1){
+          console.log(response.data);
+          this.AC_USER(response.data);
+
+          console.log(this.$store.state.user);
+        }
+        // 이메일 없음
+        else if(response.data.result==-1){
+          alert("이메일이 존재하지 않습니다.");
+        }
+        
+        // 비밀번호 틀림
+        else if(response.data.result==2){
+          alert("비밀번호가 틀립니다.");
+        }
+
+      });
     },
     onSuccess,
     onFailure,

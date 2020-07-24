@@ -7,7 +7,6 @@ import FindPassword from '../views/FindPassword.vue'
 import FindPasswordOk from '../views/FindPasswordOk.vue'
 import JoinProfile from '../views/JoinProfile.vue'
 
-
 Vue.use(VueRouter)
 
   const routes = [
@@ -42,6 +41,7 @@ Vue.use(VueRouter)
     component: JoinProfile
   },
   
+  
 ]
 
 const router = new VueRouter({
@@ -49,5 +49,6 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
 
 export default router
