@@ -116,6 +116,13 @@
 
 .btn.on-login-btn {
   color: white;
+  background-color: #5AAEFF;
+  width: 100%;
+  font-size: 20px;
+  box-sizing: border-box;
+}
+.btn.on-login-btn-error {
+  color: #D5D5D5;
   background-color: #FF3636;
   width: 100%;
   font-size: 20px;
