@@ -6,13 +6,17 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.StringTokenizer;
 
+import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.UserDTO;
+import com.web.curation.model.user.FindPasswordRequest;
 import com.web.curation.model.user.SignupRequest;
 import com.web.curation.model.user.User;
 import com.web.curation.service.user.JwtService;
@@ -30,6 +35,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import javassist.NotFoundException;
+import lombok.val;
 
 @ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
 		@ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
@@ -39,6 +45,9 @@ import javassist.NotFoundException;
 @CrossOrigin(origins = { "*" })
 @RestController
 public class AccountController {
+
+	@Autowired
+	private JavaMailSender emailSender;
 
 	@Autowired
 	UserDao userDao;
@@ -143,6 +152,52 @@ public class AccountController {
 				result.data = "success";
 			}
 		}
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@GetMapping("/account/findPassword")
+	@ApiOperation(value = "비밀번호 찾기")
+	public Object findPassword(@Valid @RequestParam String email, @Valid @RequestParam String nickname){
+		System.out.println(1);
+		final BasicResponse result = new BasicResponse();
+		
+		Optional<User> optUser = userDao.findUserByEmailAndNickname(email ,nickname);
+		if(optUser == null) {
+			System.out.println(2);
+		}else {
+			System.out.println(3);
+			UserDTO userDto = new UserDTO(optUser.get());
+
+			String to = userDto.getEmail();
+			String subject = "핏온유 비밀번호를 확인해 주세요";
+			StringBuilder text = new StringBuilder();
+			text.append(userDto.getNickname());
+			text.append(" 님의 계정 비밀번호 ");
+			text.append(userDto.getPassword());
+			text.append("를 확인해주세요.\n");
+			text.append("비밀번호를 다른사람이 보지 않게 주의해 주세요.\n");
+			text.append("핏온유 로그인 페이지로 이동하기");
+			text.append("http://localhost:8081/");
+			
+			MimeMessage message = emailSender.createMimeMessage();
+			try {
+				System.out.println(4);
+			MimeMessageHelper helper = new MimeMessageHelper(message,true);
+			helper.setFrom("ouosssssssa@gmail.com");
+			helper.setTo(to);
+			helper.setSubject(subject);
+			helper.setText(text.toString());
+			emailSender.send(message);
+			result.status = true;
+			result.data = "true";
+			}catch (Exception e) {
+				System.out.println(5);
+				e.printStackTrace();
+				result.status = true;
+				result.data = "fail";
+			}
+		}
+		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 

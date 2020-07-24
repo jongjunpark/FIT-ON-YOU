@@ -12,14 +12,14 @@
       </div>
       <p v-if='errMsg' class='err-msg'>계정 혹은 비밀번호가 틀렸습니다.</p>
       <div v-if='okBtn' class='btn find-btn'>확인</div>
-      <div v-if='!okBtn' @click='checkInput' class='btn on-find-btn'>확인</div>
+      <div v-if='!okBtn' @click='findPassword' class='btn on-find-btn'>확인</div>
     </div>
   </div>
 </template>
 
 <script>
 import "../components/css/findpassword.css"
-
+import axios from "axios";
 export default {
   name: 'FindPassword',
   data() {
@@ -52,7 +52,20 @@ export default {
     },
     checkInput() {
       this.errMsg = true
-    }
+    },
+    findPassword(){
+      axios.get('http://localhost:8080/account/findPassword',{
+        params:{
+          email: this.email,
+          nickname: this.name
+        }
+      }).then(function(){
+        console.log("성공")
+      })
+      .catch(function(){
+        console.log("실패")
+      });
+    },
   }
 }
 </script>
