@@ -35,6 +35,7 @@
 
 <script>
 import "../components/css/login.css"
+import * as EmailValidator from "email-validator"
 
 export default {
   name: 'Login',
@@ -49,7 +50,7 @@ export default {
   },
   watch: {
     email() {
-      this.setEmailClass();
+      this.checkEmailValidate();
     },
     password() {
       this.setPasswordClass();
@@ -74,7 +75,10 @@ export default {
       this.onLoginButton()
     },
     checkLoginInf() {
-      this.errormsg = true
+      this.errormsg = true;
+      const ERROR = document.querySelector('.on-login-btn')
+      ERROR.classList.remove('on-login-btn')
+      ERROR.classList.add('on-login-btn-error')
     },
     pathJoin() {
       this.$router.push("/join")
@@ -97,7 +101,14 @@ export default {
       } else {
         label.classList.remove('is-password')
       }
-    }
+    },
+    checkEmailValidate() {
+      if (this.email.length >= 0 && !EmailValidator.validate((this.email)))
+        { console.log('이메일을 정확히 입력해주세요.');
+         this.setEmailClass(); }
+      else { console.log('굿.');
+         this.setEmailClass(); }
+    },
   }
 }
 </script>

@@ -416,20 +416,23 @@ export default {
         { console.log('올바릅니다.'); this.mailSucMsg = true; }
       else { console.log('올바르지 않습니다.'); this.mailSucMsg = false; }
     },
-    setProfileImg(file) {
+    setProfileImg(event) {
       let reader = new FileReader();
+      console.log(event)
       // let self = this
       reader.onload = (event) => {
         console.log(event)
-        this.product.image = event.target.result
+        console.log('13')
+        // console.log(event)
+        // this.product.image = event.target.result
         // let img = document.createElement("img"); 
         // img.setAttribute("src", event.target.result); 
         // document.querySelector("div#image_container").appendChild(img); 
       }
-      reader.readAsDataURL(file)
+      // reader.readAsDataURL(file)
       ;
 
-    }
+    },
   }
 }
 </script>
