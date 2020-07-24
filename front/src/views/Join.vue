@@ -12,15 +12,15 @@
         <select @focus="activeInput" @blur='deactiveInput' v-model='select' name="job" id='email-combo'>
           <option >직접입력</option>
           <option >gmail.com</option>
-          <option >naver.com</option>
-          <option >hanmail.net</option>
-          <option >lycos.co.kr</option>
-          <option >nate.com</option>
-          <option >yahoo.co.kr</option>
-          <option >yahoo.com</option>
-          <option >empal.com</option>
-          <option >paran.com</option>
-          <option >korea.com</option>
+          <option > naver.com</option>
+          <option > hanmail.net</option>
+          <option > lycos.co.kr</option>
+          <option > nate.com</option>
+          <option > yahoo.co.kr</option>
+          <option > yahoo.com</option>
+          <option > empal.com</option>
+          <option > paran.com</option>
+          <option > korea.com</option>
         </select>
         <p v-if="mailErrMsg" class='err-msg join-err-msg'>이미 사용중인 이메일입니다.</p>
         <p v-if="mailSucMsg" class='suc-msg join-suc-msg'>사용가능합니다.</p>
@@ -118,8 +118,8 @@ export default {
           year: '',
           month: '',
           day: '',
-          sex: '',
         },
+        sex: '',
         profileImg: '',
         textProfile: '',
       },
