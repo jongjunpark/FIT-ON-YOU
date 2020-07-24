@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 import java.util.StringTokenizer;
 
 import javax.mail.internet.MimeMessage;
@@ -157,48 +158,48 @@ public class AccountController {
 
 	@GetMapping("/account/findPassword")
 	@ApiOperation(value = "비밀번호 찾기")
-	public Object findPassword(@Valid @RequestParam String email, @Valid @RequestParam String nickname){
+	public Map<String, Object> findPassword(@Valid @RequestParam String email, @Valid @RequestParam String nickname) {
 		System.out.println(1);
-		final BasicResponse result = new BasicResponse();
-		
-		Optional<User> optUser = userDao.findUserByEmailAndNickname(email ,nickname);
-		if(optUser == null) {
+//		final BasicResponse result = new BasicResponse();
+		Map<String, Object> result = new HashMap<>();
+		Optional<User> optUser = userDao.findUserByEmailAndNickname(email, nickname);
+		if (optUser == null) {
 			System.out.println(2);
-		}else {
+		} else {
 			System.out.println(3);
 			UserDTO userDto = new UserDTO(optUser.get());
 
 			String to = userDto.getEmail();
-			String subject = "핏온유 비밀번호를 확인해 주세요";
+			String subject = "핏온유 비밀번호 인증입니다 확인해 주세요";
+			int randomCode = new Random().nextInt(9000) + 1000;
+			String certificationNum = Integer.toString(randomCode);
 			StringBuilder text = new StringBuilder();
 			text.append(userDto.getNickname());
-			text.append(" 님의 계정 비밀번호 ");
-			text.append(userDto.getPassword());
-			text.append("를 확인해주세요.\n");
-			text.append("비밀번호를 다른사람이 보지 않게 주의해 주세요.\n");
-			text.append("핏온유 로그인 페이지로 이동하기");
-			text.append("http://localhost:8081/");
-			
+			text.append(" 님의 비밀번호를 위한 비밀번호 인증 절차입니다 하단의 번호를 핏온유 화면에 입력해 주세요\n");
+			text.append("인증번호:" + certificationNum+'\n');
+			text.append("인증번호를 다른사람이 보지 않게 주의해 주세요.\n");
+//			text.append("핏온유 인증 페이지로 이동하기");
+//			text.append("http://localhost:8081/");
+
 			MimeMessage message = emailSender.createMimeMessage();
 			try {
 				System.out.println(4);
-			MimeMessageHelper helper = new MimeMessageHelper(message,true);
-			helper.setFrom("ouosssssssa@gmail.com");
-			helper.setTo(to);
-			helper.setSubject(subject);
-			helper.setText(text.toString());
-			emailSender.send(message);
-			result.status = true;
-			result.data = "true";
-			}catch (Exception e) {
+				MimeMessageHelper helper = new MimeMessageHelper(message, true);
+				helper.setFrom("ouosssssssa@gmail.com");
+				helper.setTo(to);
+				helper.setSubject(subject);
+				helper.setText(text.toString());
+				emailSender.send(message);
+				result.put("userInfo", userDto);
+				result.put("certifNum", certificationNum);
+				
+			} catch (Exception e) {
 				System.out.println(5);
 				e.printStackTrace();
-				result.status = true;
-				result.data = "fail";
 			}
 		}
-		
-		return new ResponseEntity<>(result, HttpStatus.OK);
+
+		return result;
 	}
 
 }

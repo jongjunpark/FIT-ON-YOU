@@ -59,11 +59,12 @@ export default {
           email: this.email,
           nickname: this.name
         }
-      }).then(function(){
+      }).then(function(data){
         console.log("성공")
+        console.dir(data)
       })
       .catch(function(){
-        console.log("실패")
+        alert("이메일 혹은 닉네임이 존재하지 않거나 틀립니다")
       });
     },
   }
