@@ -41,6 +41,7 @@ Vue.use(VueRouter)
     component: JoinProfile
   },
   
+  
 ]
 
 const router = new VueRouter({
