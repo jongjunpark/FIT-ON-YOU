@@ -36,15 +36,33 @@
 .join-profile-img {
   width: 200px;
   height: 200px;
-  background-repeat: no-repeat;
-  background-size: cover;
   border-radius: 50%;
   border: 2px solid grey;
-  background-image: url("../../assets/images/default-user.png");
-  position: relative;
+  position: relative; 
 }
 
-.join-profile-img-female {
+.join-profile-img .profile-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.join-profile-img .cancle-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+.join-profile-img .select-img:hover {
+  opacity: 0.4;
+}
+
+/* .join-profile-img-female {
   width: 200px;
   height: 200px;
   background-repeat: no-repeat;
@@ -53,7 +71,7 @@
   border: 2px solid grey;
   background-image: url("../../assets/images/defult-user-female.png");
   position: relative;
-}
+} */
 
 .join-profile-img .join-profile-img-edit{
   position: absolute;

@@ -66,11 +66,17 @@
         <div @click='goBack' class='join-profile-back-btn'>＜ 뒤로가기</div>
       </header>
       <section class='join-profile-area'>
-        <div class='profile-img'>
+        <div class='join-profile-img'>
+          <div v-if='!input.profileImg'>
+            <img class='profile-img' :src="require(`../assets/images/${defaultImg}`)" alt="">
+          </div>
+          <div @mouseover="onCancleBtn" @mouseout="offCancleBtn" v-if='input.profileImg'>
+            <img class='profile-img select-img' :src="input.profileImg" alt="">
+            <img @click='setDefaultImg' v-show='isCancle' class='cancle-img' src="../assets/images/X.png" alt="">
+          </div>
           <label for='profile-img-edit' class="join-profile-img-edit">
-            <input type="file" id="profile-img-edit" accept="image/*" @change="setProfileImg($event)">
+            <input type="file" id="profile-img-edit" accept="image/*" @change="setProfileImg">
           </label>
-          <div id="image_container"></div>
         </div>
         <p class='join-profile-username'>{{ input.nickname }}</p>
         <textarea class='join-profile-usercontent' name="" id="" cols="50" rows="3" placeholder="자기소개를 작성해 주세요" maxlength="100" v-model="input.textProfile"></textarea>
@@ -128,6 +134,8 @@ export default {
       isEmail: false,
       changeProfile: false,
       isMale: false,
+      isCancle: false,
+      defaultImg: "default-user.png",
     }
   },
   created() {
@@ -173,6 +181,9 @@ export default {
       this.checkDay();
     },
     'input.textProfile'() {
+      this.checkProfile();
+    },
+    'input.profileImg'() {
       this.checkProfile();
     },
     input: {
@@ -351,16 +362,18 @@ export default {
       SecondPage.classList.remove('hidden')
       firstPage.classList.remove('return')
       SecondPage.classList.add('goNext-end')
-      const userProfile = document.querySelector('.profile-img')
+      // const userProfile = document.querySelector('.profile-img')
 
       if (this.isMale) {
-        userProfile.classList.remove('join-profile-img-female');
-        userProfile.classList.add('join-profile-img');
+        // userProfile.classList.remove('join-profile-img-female');
+        // userProfile.classList.add('join-profile-img');
+        this.defaultImg = 'default-user.png'
         this.input.sex = 'male';
       }
       else {
-        userProfile.classList.add('join-profile-img-female')
-        userProfile.classList.remove('join-profile-img')
+        // userProfile.classList.add('join-profile-img-female')
+        // userProfile.classList.remove('join-profile-img')
+        this.defaultImg = 'default-user-female.png'
         this.input.sex = 'female';
       }
     },
@@ -375,7 +388,7 @@ export default {
       SecondPage.classList.add('hidden')
     },
     checkProfile() {
-      if (this.input.textProfile !== '') {
+      if (this.input.textProfile !== '' || this.input.profileImg) {
         this.changeProfile = true
       } else {
         this.changeProfile = false
@@ -416,19 +429,21 @@ export default {
         { console.log('올바릅니다.'); this.mailSucMsg = true; }
       else { console.log('올바르지 않습니다.'); this.mailSucMsg = false; }
     },
-    setProfileImg(file) {
-      let reader = new FileReader();
-      // let self = this
-      reader.onload = (event) => {
-        console.log(event)
-        this.product.image = event.target.result
-        // let img = document.createElement("img"); 
-        // img.setAttribute("src", event.target.result); 
-        // document.querySelector("div#image_container").appendChild(img); 
-      }
-      reader.readAsDataURL(file)
-      ;
-
+    setProfileImg(event) {
+      console.log(event.target.files)
+      const file = event.target.files[0];
+      this.input.profileImg = URL.createObjectURL(file);
+    },
+    onCancleBtn() {
+      this.isCancle = true
+    },
+    offCancleBtn() {
+      this.isCancle = false
+    },
+    setDefaultImg() {
+      this.input.profileImg = ''
+      this.isCancle = false
+      document.getElementById("profile-img-edit").value = "";
     }
   }
 }
