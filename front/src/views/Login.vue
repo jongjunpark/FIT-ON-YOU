@@ -18,16 +18,11 @@
       <div v-if='offLoginBtn' class='btn login-btn'>로그인</div>
       <div v-if='onLoginBtn' @click='loginHandler' class='btn on-login-btn'>로그인</div>
       <div class="social-area">
-        <div class="btn google-btn">
-          <GoogleLogin :params="params" :onSuccess="onSuccess" :onFailure="onFailure">login</GoogleLogin>
+        <div class="btn google-btn" id="customBtn">
+          <img class="google-img" src="../assets/images/google2.png"/>
         </div>
-        <div class="btn kakao-btn">
-          <KakaoLogin
-            class="kakao-img"
-            api-key="713af847cf1784de91646f5cb2455cbf"
-            :on-success="onSuccessKakao"
-            :on-failure="onFailureKakao"
-          />
+        <div class="btn kakao-btn" @click="loginWithKakao"> 
+          <img class="kakao-img" src="../assets/images/kakao.png"/>
         </div>
       </div>
       <div class="login-link-area">
@@ -39,25 +34,20 @@
 </template>
 
 <script>
+/* eslint-disable */
 import "../components/css/login.css"
-import KakaoLogin from 'vue-kakao-login'
 import GoogleLogin from 'vue-google-login'
 import axios from 'axios';
 import { mapActions, mapGetters } from 'vuex'
 
+Kakao.init('713af847cf1784de91646f5cb2455cbf');
 
-let onSuccess= (data) => {
-  console.log(data)
-  
-  console.log("success")
-}
-let onFailure = (data) => {
-  console.log(data)
-  console.log("failure")
-}
 
 const Store='Store'
-
+ function attachSignin(element) {
+    console.log(element.id);
+    
+  }
 export default {
   name: 'Login',
   modules:{
@@ -65,9 +55,6 @@ export default {
   },
   data () {
     return {
-      tokens:{
-        kakaoAcToken:'',
-      },
       email: '',
       password: '',
       offLoginBtn: true,
@@ -92,8 +79,7 @@ export default {
     }
   },
   components: {
-    KakaoLogin,
-    GoogleLogin
+    GoogleLogin,
   },
   computed:{
     ...mapGetters([
@@ -101,17 +87,75 @@ export default {
     ]),
     
   },
-  methods: {
-      onSuccessKakao : (data) => {
-      
-      console.log("success")
-      console.log(data)
-      
+  mounted() {
+        window.addEventListener("google-loaded", this.startApp);
+  }, 
+  methods:{
+    ...mapActions(['AC_USER']),
+
+    loginWithKakao :()=> {
+      Kakao.Auth.loginForm({
+        success: function(authObj) {
+          Kakao.Auth.setAccessToken(authObj.access_token);
+          let ac_token = authObj.access_token;
+          Kakao.API.request({
+            url: '/v2/user/me',
+            success: function(response) {
+              const userData  = {
+                access_token : ac_token,
+                token_type : 'Bearer',
+                nickname : response.kakao_account.profile.nickname,
+                profile_image : response.kakao_account.profile.profile_image_url,
+                email : response.kakao_account.email,
+                gender : response.kakao_account.gender,
+                age_range : response.kakao_account.age_range
+              }
+              console.log(userData);
+              this.AC_USER(userData);
+              console.log(this.$store.state.user);
+
+            },
+            fail: function(error) {
+                console.log(error);
+            }
+          });
+        },
+        fail: function(err) {
+          alert(JSON.stringify(err))
+        },
+      })
+    },  
+   
+    startApp() {
+      gapi.load('auth2', function(){
+        let auth2 = gapi.auth2.init({
+          client_id: '834514064011-bqc7hgss1hil5965mdbgf57420u04lvv.apps.googleusercontent.com',
+          cookiepolicy: 'single_host_origin',
+          // Request scopes in addition to 'profile' and 'email'
+          //scope: 'additional_scope'
+        });
+        auth2.attachClickHandler('customBtn', {},
+        function(googleUser) {
+          const userData  = {
+                access_token : googleUser.getAuthResponse(true).access_token,
+                idToken : googleUser.getAuthResponse(true).id_token,
+                token_type : 'Bearer',
+                nickname : googleUser.getBasicProfile().Cd,
+                profile_image : googleUser.getBasicProfile().fL,
+                email : googleUser.getBasicProfile().zu,
+          }
+
+          console.log(userData);
+          this.AC_USER(userData);
+          console.log(this.$store.state.user);
+        }, function(error) {
+          alert(JSON.stringify(error, undefined, 2));
+        });
+      });
     },
-    onFailureKakao : (data) => {
-      console.log(data)
-      console.log("failure")
-    },
+    
+
+    
     onLoginButton() {
       if (this.email) {
         if (this.password) {
@@ -155,13 +199,12 @@ export default {
       }
     },
 
-    ...mapActions(['AC_USER']),
 
     loginHandler() { 
       console.log(this.email);
       console.log(this.password);
       axios.get('http://localhost:8080/account/login',{
-         params:{email:this.email,
+        params:{email:this.email,
                   password:this.password},
       }).then((response)=>{
         // 로그인 성공
@@ -183,9 +226,9 @@ export default {
 
       });
     },
-    onSuccess,
-    onFailure,
+
     
   }
+  /* eslint-enable */
 }
 </script>

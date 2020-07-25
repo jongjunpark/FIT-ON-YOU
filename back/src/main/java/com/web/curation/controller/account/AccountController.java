@@ -58,18 +58,7 @@ public class AccountController {
 //      Optional<User> userOpt = userDao.findUserByEmailAndPassword(email, password);
 
 		ResponseEntity response = null;
-//
-//      if (userOpt.isPresent()) {
-//          final BasicResponse result = new BasicResponse();
-//          result.status = true;
-//          result.data = "success";
-//          response = new ResponseEntity<>(result, HttpStatus.OK);
-//      } else {
-//          response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-//      }
 
-//	  	System.out.println(email+"123");
-//	  	System.out.println(password+"123123");
 
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.ACCEPTED;
