@@ -328,22 +328,7 @@ export default {
       this.passwordErrorMsg= false;
       }
     },
-    signup(){
-      axios.post('http://localhost:8080/account/signup',{
-
-          email: this.input.email+'@'+this.select,
-          password: this.input.password,
-          nickname: this.input.nickname,
-          gender: this.gender,
-          birth: this.input.birth.year+' '+this.input.birth.month+' '+this.input.birth.day
-
-      }).then(function(data){
-        console.log(data.data.data)
-      })
-      .catch(function(data){
-        console.log(data.data.data)
-      });
-    },
+   
     checkYear() {
       if (!(this.input.birth.year >= 1900 && this.input.birth.year <= 2020)) {
         this.birthYearErrMsg = true
@@ -428,6 +413,20 @@ export default {
         '자신만의 패션을 뽐내보세요!',
         'success'
       )
+      axios.post('http://localhost:8080/account/signup',{
+
+          email: this.input.email+'@'+this.input.url,
+          password: this.input.password,
+          nickname: this.input.nickname,
+          gender: this.gender,
+          birth: this.input.birth.year+' '+this.input.birth.month+' '+this.input.birth.day
+
+      }).then(function(data){
+        console.log(data.data.data)
+      })
+      .catch(function(data){
+        console.log(data.data.data)
+      });
     },
     notTab() {
       window.addEventListener('keydown', event => {
