@@ -98,5 +98,15 @@ create table `tag` (
     primary key(tagName)
     )Engine = InnoDB default Charset = utf8;
     
+create table `like`(
+	`likeNo` int auto_increment not null,
+    `articleNo` int not null,
+    `likeuser` varchar(20) not null,
+    primary key(likeNo),
+    foreign key(articleNo) references board(articleNo) on delete cascade,
+    foreign key(likeuser) references User(nickname) on delete cascade on update cascade
+    ) engine=InnoDB default charset=utf8;
+    
+    
 
 
