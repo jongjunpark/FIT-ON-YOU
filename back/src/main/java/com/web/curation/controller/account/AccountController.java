@@ -1,6 +1,8 @@
 package com.web.curation.controller.account;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.zone.ZoneOffsetTransitionRule.TimeDefinition;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -9,7 +11,6 @@ import java.util.StringTokenizer;
 
 import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
-import lombok.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.UserDTO;
-import com.web.curation.model.user.FindPasswordRequest;
 import com.web.curation.model.user.SignupRequest;
 import com.web.curation.model.user.User;
 import com.web.curation.service.user.JwtService;
@@ -37,7 +36,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import javassist.NotFoundException;
-import lombok.val;
 
 @ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
 		@ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
@@ -116,21 +114,18 @@ public class AccountController {
 
 		// 저장
 		User user = new User();
-		LocalDateTime currentDateTime = LocalDateTime.now();
 		StringTokenizer st = new StringTokenizer(request.getBirth());
-		LocalDateTime ldt = currentDateTime.withYear(Integer.parseInt(st.nextToken()))
-				.withMonth(Integer.parseInt(st.nextToken())).withDayOfMonth(Integer.parseInt(st.nextToken()));
-
+		LocalDate currentDate = LocalDate.of(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
+		
 		System.out.println(request.getNickname());
 		user.setNickname(request.getNickname());
 		user.setEmail(request.getEmail());
-		user.setBirth(ldt);
+		user.setBirth(currentDate);
 		user.setGender(request.getGender());
 		user.setPassword(request.getPassword());
 		user.setSelfintroduce(null);
-		System.out.println("finduserbynickname---------->" + userDao.findUserByNickname(user.getNickname()));
-		if (userDao.findUserByNickname(user.getNickname()) != null
-				|| userDao.findUserByEmail(user.getEmail()) != null) {
+		if (userDao.findUserByNickname(user.getNickname()).isPresent()
+				|| userDao.findUserByEmail(user.getEmail()).isPresent()) {
 			result.status = true;
 			result.data = "fail";
 		} else {
@@ -148,15 +143,12 @@ public class AccountController {
 
 	@GetMapping("/account/findPassword")
 	@ApiOperation(value = "비밀번호 찾기")
-	public Map<String, Object> findPassword(@Valid @RequestParam String email, @Valid @RequestParam String nickname) {
-		System.out.println(1);
-//		final BasicResponse result = new BasicResponse();
+	public Map<String, Object> findPassword(@Valid @RequestParam String email, @Valid @RequestParam String pTime) {
 		Map<String, Object> result = new HashMap<>();
-		Optional<User> optUser = userDao.findUserByEmailAndNickname(email, nickname);
-		if (optUser == null) {
-			System.out.println(2);
+		LocalDate time  = LocalDate.of(Integer.parseInt(pTime.substring(0,4)), Integer.parseInt(pTime.substring(4,6)), Integer.parseInt(pTime.substring(6,8)));
+		Optional<User> optUser = userDao.findUserByEmailAndBirth(email, time);
+		if (!optUser.isPresent()) {
 		} else {
-			System.out.println(3);
 			UserDTO userDto = new UserDTO(optUser.get());
 
 			String to = userDto.getEmail();
