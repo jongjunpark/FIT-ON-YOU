@@ -22,7 +22,6 @@ import "../components/css/findpassword.css"
 import '../components/css/join.css'
 import * as EmailValidator from "email-validator"
 
-
 export default {
   name: 'FindPassword',
   data() {

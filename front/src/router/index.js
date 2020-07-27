@@ -35,11 +35,6 @@ Vue.use(VueRouter)
     name: 'FindPasswordOk',
     component: FindPasswordOk
   },
-  {
-    path: '/test',
-    name: 'JoinProfile',
-    component: JoinProfile
-  },
   
   
 ]

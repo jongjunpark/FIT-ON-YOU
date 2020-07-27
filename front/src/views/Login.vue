@@ -38,6 +38,7 @@
 import "../components/css/login.css"
 import axios from 'axios';
 import { mapActions, mapGetters } from 'vuex'
+import * as EmailValidator from "email-validator"
 
 Kakao.init('713af847cf1784de91646f5cb2455cbf');
 
@@ -200,8 +201,14 @@ export default {
         label.classList.remove('is-password')
       }
     },
-
-
+    checkEmailValidate() {
+      if (this.email.length >= 0 && !EmailValidator.validate((this.email)))
+        { console.log('이메일을 정확히 입력해주세요.');
+         this.setEmailClass(); }
+      else { console.log('굿.');
+         this.setEmailClass(); 
+        }
+    },
     loginHandler() { 
       console.log(this.email);
       console.log(this.password);

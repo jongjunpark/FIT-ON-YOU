@@ -93,6 +93,7 @@ import "../components/css/joinprofile.css"
 import PasswordValidator from 'password-validator'
 import * as EmailValidator from "email-validator"
 import Swal from 'sweetalert2'
+import axios from 'axios'
 
 export default {
   name: 'Join',
