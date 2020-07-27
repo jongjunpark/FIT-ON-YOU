@@ -122,6 +122,7 @@ public class AccountController {
 				.withMonth(Integer.parseInt(st.nextToken())).withDayOfMonth(Integer.parseInt(st.nextToken()));
 
 		System.out.println(request.getNickname());
+		
 		user.setNickname(request.getNickname());
 		user.setEmail(request.getEmail());
 		user.setBirth(ldt);
@@ -192,4 +193,37 @@ public class AccountController {
 		return result;
 	}
 
+	@GetMapping("/account/checkDoubleEmail")
+	@ApiOperation(value = "이메일 중복검사")
+	public Object findEmail(@Valid @RequestParam String email) {
+		final BasicResponse result = new BasicResponse();
+		
+		Optional<User> optUser = userDao.getUserByEmail(email);
+		if(!optUser.isPresent()) {//없는 경우
+			result.status = true;
+			result.data = "non exist";
+		}else {//있는 경우
+			result.status = true;
+			result.data = "exist";
+			result.object = optUser.get();
+		}
+		return result;
+	}
+	
+	@GetMapping("/account/checkNickname")
+	@ApiOperation(value = "닉네임 중복검사")
+	public Object findNick(@Valid @RequestParam String nickname) {
+		final BasicResponse result = new BasicResponse();
+		
+		Optional<User> optUser = userDao.findUserByNickname(nickname);
+		if(!optUser.isPresent()) {//없는 경우
+			result.status = true;
+			result.data = "non exist";
+		}else {//있는 경우
+			result.status = true;
+			result.data = "exist";
+			result.object = optUser.get();
+		}
+		return result;
+	}
 }
