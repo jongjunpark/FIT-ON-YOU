@@ -12,7 +12,7 @@
       </div>
       <p v-if='errMsg' class='err-msg'>계정 혹은 생년월일이 틀렸습니다.</p>
       <div v-if='!okBtn' class='btn find-btn'>인증메일 발송</div>
-      <div v-if='okBtn' @click='checkInput' class='btn on-find-btn'>인증메일 발송</div>
+      <div v-if='okBtn' @click='findPassword' class='btn on-find-btn'>인증메일 발송</div>
     </div>
   </div>
 </template>
@@ -21,6 +21,7 @@
 import "../components/css/findpassword.css"
 import '../components/css/join.css'
 import * as EmailValidator from "email-validator"
+import axios from 'axios'
 
 export default {
   name: 'FindPassword',
@@ -46,6 +47,20 @@ export default {
       } else {
         this.okBtn = false
       }
+    },
+    findPassword(){
+      axios.get('http://localhost:8080/account/findPassword',{
+        params:{
+          email: this.email,
+          nickname: this.name
+        }
+      }).then(function(data){
+        console.log("성공")
+        console.dir(data)
+      })
+      .catch(function(){
+        alert("이메일 혹은 닉네임이 존재하지 않거나 틀립니다")
+      });
     },
     checkInput() {
       // this.errMsg = true
