@@ -5,7 +5,7 @@ import Join from '../views/Join.vue'
 import Feed from '../views/Feed.vue'
 import FindPassword from '../views/FindPassword.vue'
 import FindPasswordOk from '../views/FindPasswordOk.vue'
-import JoinProfile from '../views/JoinProfile.vue'
+
 
 Vue.use(VueRouter)
 
@@ -35,11 +35,8 @@ Vue.use(VueRouter)
     name: 'FindPasswordOk',
     component: FindPasswordOk
   },
-  {
-    path: '/test',
-    name: 'JoinProfile',
-    component: JoinProfile
-  }
+  
+  
 ]
 
 const router = new VueRouter({
@@ -47,5 +44,6 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
 
 export default router

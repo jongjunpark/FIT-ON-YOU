@@ -38,6 +38,8 @@ public class UserDTO {
 		this.create_Date = user.getCreate_Date();
 		this.email = user.getEmail();
 		this.birth = user.getBirth();
+		this.gender = user.getGender();
+		this.selfintroduce = user.getSelfintroduce();
 	}
 	
 	public UserDTO() {}
@@ -83,3 +85,4 @@ public class UserDTO {
 	}
 
 }
+

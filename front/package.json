@@ -10,7 +10,9 @@
   "dependencies": {
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
+    "email-validator": "^2.0.4",
     "password-validator": "^5.0.3",
+    "sweetalert2": "^9.17.0",
     "vue": "^2.6.11",
     "vue-password-validator": "^0.1.8",
     "vue-router": "^3.2.0",

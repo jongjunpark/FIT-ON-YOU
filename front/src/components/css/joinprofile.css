@@ -1,11 +1,16 @@
 .wrap-container.center-container{
   height: 640px;
+  width: 100%;
+  padding: 0 30px;
   /* background-color: grey; */
   justify-content: center;
-  position: relative;
+  position: absolute;
+  left: 50%;
+  top: 10%;
 }
 .join-profile-header {
   position: absolute;
+  margin-left: 30px;
   top: 3%;
   left: 0%;
 }
@@ -31,14 +36,77 @@
 .join-profile-img {
   width: 200px;
   height: 200px;
+  border-radius: 50%;
+  border: 2px solid grey;
+  position: relative; 
+}
+
+.join-profile-img .profile-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.join-profile-img .cancle-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+.join-profile-img .select-img:hover {
+  opacity: 0.4;
+}
+
+.join-profile-img .cancle-img:hover{
+  border-radius: 50%;
+}
+
+
+/* .join-profile-img-female {
+  width: 200px;
+  height: 200px;
   background-repeat: no-repeat;
   background-size: cover;
   border-radius: 50%;
   border: 2px solid grey;
-  background-image: url("../../assets/images/default-user.png");
+  background-image: url("../../assets/images/defult-user-female.png");
   position: relative;
-}
+} */
+
 .join-profile-img .join-profile-img-edit{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 50px;
+  height: 50px;
+  background-image: url("../../assets/images/edit.png");
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: 60%;
+  cursor: pointer;
+}
+
+.join-profile-img-edit input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+
+.join-profile-img-female .join-profile-img-edit{
   position: absolute;
   bottom: 0;
   right: 0;
@@ -56,6 +124,12 @@
 .join-profile-img .join-profile-img-edit:hover{
   background-color: #DBDBDB;
 }
+.join-profile-img-female .join-profile-img-edit:hover{
+  background-color: #DBDBDB;
+}
+
+
+
 .join-default-img {
   width: 100%;
   height: 100%;
@@ -68,7 +142,11 @@
 }
 .join-profile-usercontent {
   resize: none;
-  width: 50%;
+  width: 100%;
+  cursor: pointer;
+  text-align: center;
+  padding-top: 30px;
+  overflow: hidden;
 }
 .join-profile-usercontent::placeholder {
   font-size: 14px;
@@ -88,6 +166,7 @@
   width: 100%;
   font-size: 20px;
   box-sizing: border-box;
+  margin-top: 20px;
 }
 .btn.join-skip-btn {
   background-color: #FFE400;
@@ -95,4 +174,35 @@
   font-size: 20px;
   font-weight: 700;
   box-sizing: border-box;
+  margin-top: 20px;
+}
+
+.wrap {
+  overflow: hidden;
+  position: relative;
+}
+
+.goNext-front {
+  transform: translate(-150%, 0);
+  transition: 0.7s cubic-bezier(0, 0.85, 0.58, 1) ;
+}
+
+.goNext-end {
+  transform: translate(-50%, 0);
+  transition: 0.7s cubic-bezier(0, 0.85, 0.58, 1);
+}
+
+.hidden {
+  transform: translate(150%, 0);
+  transition: 0.7s cubic-bezier(0, 0.85, 0.58, 1) ;
+}
+
+.return {
+  transform: translate(0, 0);
+  transition: 0.7s cubic-bezier(0, 0.85, 0.58, 1) ;
+}
+
+.join-profile-back-btn:hover {
+  color: #5AAEFF !important;
+  cursor: pointer;
 }

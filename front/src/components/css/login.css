@@ -116,6 +116,13 @@
 
 .btn.on-login-btn {
   color: white;
+  background-color: #5AAEFF;
+  width: 100%;
+  font-size: 20px;
+  box-sizing: border-box;
+}
+.btn.on-login-btn-error {
+  color: #D5D5D5;
   background-color: #FF3636;
   width: 100%;
   font-size: 20px;
@@ -144,6 +151,7 @@
   box-sizing: border-box;
 }
 
+
 .btn.kakao-btn .kakao-img {
   height: 100%;
   padding: 16px;
@@ -153,4 +161,12 @@
 .go-join, .go-find {
   cursor: pointer;
   margin: 16px 0;
+}
+
+.go-join:hover {
+  color: #5AAEFF !important;
+}
+
+.go-find:hover {
+  color: #5AAEFF !important;
 }
