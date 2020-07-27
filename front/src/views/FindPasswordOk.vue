@@ -23,8 +23,7 @@ export default {
     return {
       uuid: '',
       reTime: '',
-      remainMinute: '00',
-      remainSeconds: '00',
+      remaintime: false,
     }
   },
   mounted() {
@@ -49,6 +48,8 @@ export default {
 
       if (--timer < 0) {
         display.textContent = '00' + ":" + '00';
+        this.remaintime = true;
+        clearInterval(this.reTime);
       }
     }, 1000);
     },
