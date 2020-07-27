@@ -7,20 +7,20 @@
         <input @focus="activeInput" @blur='deactiveInput' v-model='input.email' type="text" id='email-join' placeholder="example">
         <span class='email-join-span'> @ </span>
         <input @focus="activeInput" @blur='deactiveInput' v-model='input.url' v-if='offSelect' type="text" id='email-join2' placeholder="url">
-        <span v-if='!offSelect' id='email-join2'>{{ url }}</span>
+        <span v-if='!offSelect' id='email-join2'>{{ input.url }}</span>
         <span class='email-join-span'> |  </span>
         <select @focus="activeInput" @blur='deactiveInput' v-model='select' name="job" id='email-combo'>
           <option >직접입력</option>
           <option >gmail.com</option>
-          <option >naver.com</option>
-          <option >hanmail.net</option>
-          <option >lycos.co.kr</option>
-          <option >nate.com</option>
-          <option >yahoo.co.kr</option>
-          <option >yahoo.com</option>
-          <option >empal.com</option>
-          <option >paran.com</option>
-          <option >korea.com</option>
+          <option > naver.com</option>
+          <option > hanmail.net</option>
+          <option > lycos.co.kr</option>
+          <option > nate.com</option>
+          <option > yahoo.co.kr</option>
+          <option > yahoo.com</option>
+          <option > empal.com</option>
+          <option > paran.com</option>
+          <option > korea.com</option>
         </select>
         <p v-if="mailErrMsg" class='err-msg join-err-msg'>이미 사용중인 이메일입니다.</p>
         <p v-if="mailSucMsg" class='suc-msg join-suc-msg'>사용가능합니다.</p>
@@ -63,11 +63,20 @@
     </div>
     <div class='wrap-container center-container hidden'>
       <header class='join-profile-header'>
-        <div @click='goBack' class='join-profile-back-btn'>＜뒤로가기</div>
+        <div @click='goBack' class='join-profile-back-btn'>＜ 뒤로가기</div>
       </header>
       <section class='join-profile-area'>
         <div class='join-profile-img'>
-          <div class="join-profile-img-edit"></div>
+          <div v-if='!input.profileImg'>
+            <img class='profile-img' :src="require(`../assets/images/${defaultImg}`)" alt="">
+          </div>
+          <div @mouseover="onCancleBtn" @mouseout="offCancleBtn" v-if='input.profileImg'>
+            <img class='profile-img select-img' :src="input.profileImg" alt="">
+            <img @click='setDefaultImg' v-show='isCancle' class='cancle-img' src="../assets/images/X.png" alt="">
+          </div>
+          <label for='profile-img-edit' class="join-profile-img-edit">
+            <input type="file" id="profile-img-edit" accept="image/*" @change="setProfileImg">
+          </label>
         </div>
         <p class='join-profile-username'>{{ input.nickname }}</p>
         <textarea class='join-profile-usercontent' name="" id="" cols="50" rows="3" placeholder="자기소개를 작성해 주세요" maxlength="100" v-model="input.textProfile"></textarea>
@@ -82,6 +91,7 @@
 import '../components/css/join.css'
 import "../components/css/joinprofile.css"
 import PasswordValidator from 'password-validator'
+import * as EmailValidator from "email-validator"
 import Swal from 'sweetalert2'
 
 export default {
@@ -110,6 +120,7 @@ export default {
           month: '',
           day: '',
         },
+        sex: '',
         profileImg: '',
         textProfile: '',
       },
@@ -123,6 +134,9 @@ export default {
       isFemale: false,
       isEmail: false,
       changeProfile: false,
+      isMale: false,
+      isCancle: false,
+      defaultImg: "default-user.png",
     }
   },
   created() {
@@ -139,7 +153,7 @@ export default {
   watch: {
     select() {
       this.checkSelect();
-      this.checkEmail();
+      this.checkEmailValidate();
       this.checkJoinForm();
     },
     'input.passwordConfirm'() {
@@ -150,10 +164,10 @@ export default {
       this.checkPassword();
     },
     'input.email'() {
-      this.checkEmail();
+      this.checkEmailValidate();
     },
     'input.url'() {
-      this.checkEmail();
+      this.checkEmailValidate();
     },
     'input.nickname'() {
       this.checkNickname();
@@ -168,6 +182,9 @@ export default {
       this.checkDay();
     },
     'input.textProfile'() {
+      this.checkProfile();
+    },
+    'input.profileImg'() {
       this.checkProfile();
     },
     input: {
@@ -186,25 +203,25 @@ export default {
         this.onSelect = true
         this.offSelect = false
         if (this.select === 'naver.com') {
-          this.url = 'naver.com'
+          this.input.url = 'naver.com'
         } else if (this.select === 'hanmail.net') {
-          this.url = 'hanmail.net'
+          this.input.url = 'hanmail.net'
         } else if (this.select === 'nate.com') {
-          this.url = 'nate.com'
+          this.input.url = 'nate.com'
         } else if (this.select === 'gmail.com') {
-          this.url = 'gmail.com'
+          this.input.url = 'gmail.com'
         } else if (this.select === 'lycos.co.kr') {
-          this.url = 'lycos.co.kr'
+          this.input.url = 'lycos.co.kr'
         } else if (this.select === 'yahoo.co.kr') {
-          this.url = 'yahoo.co.kr'
+          this.input.url = 'yahoo.co.kr'
         } else if (this.select === 'yahoo.com') {
-          this.url = 'yahoo.com'
+          this.input.url = 'yahoo.com'
         } else if (this.select === 'empal.com') {
-          this.url = 'empal.com'
+          this.input.url = 'empal.com'
         } else if (this.select === 'paran.com') {
-          this.url = 'paran.com'
+          this.input.url = 'paran.com'
         } else if (this.select === 'korea.com') {
-          this.url = 'korea.com'
+          this.input.url = 'korea.com'
         }
       }
     },
@@ -260,7 +277,7 @@ export default {
       && this.input.birth.year && this.input.birth.month && this.input.birth.day
       && (this.isMale || this.isFemale)
       && this.mailSucMsg && this.pwSucMsg && this.nickSucMsg && this.birthSucMsg){
-        this.JoinBtn = false
+        this.JoinBtn = false;
       } else {
         this.JoinBtn = true
       }
@@ -352,6 +369,20 @@ export default {
       SecondPage.classList.remove('hidden')
       firstPage.classList.remove('return')
       SecondPage.classList.add('goNext-end')
+      // const userProfile = document.querySelector('.profile-img')
+
+      if (this.isMale) {
+        // userProfile.classList.remove('join-profile-img-female');
+        // userProfile.classList.add('join-profile-img');
+        this.defaultImg = 'default-user.png'
+        this.input.sex = 'male';
+      }
+      else {
+        // userProfile.classList.add('join-profile-img-female')
+        // userProfile.classList.remove('join-profile-img')
+        this.defaultImg = 'default-user-female.png'
+        this.input.sex = 'female';
+      }
     },
 
     goBack() {
@@ -362,9 +393,13 @@ export default {
       firstPage.classList.add('return')
       SecondPage.classList.remove('goNext-end')
       SecondPage.classList.add('hidden')
+      if(!this.input.textProfile && !this.input.profileImg) {
+        this.changeProfile = false
+      }
+
     },
     checkProfile() {
-      if (this.input.textProfile !== '') {
+      if (this.input.textProfile !== '' || this.input.profileImg) {
         this.changeProfile = true
       } else {
         this.changeProfile = false
@@ -399,6 +434,27 @@ export default {
     },
     changePart() {
       this.changeProfile = true;
+    },
+    checkEmailValidate() {
+      if (this.input.email.length >= 4 && EmailValidator.validate((this.input.email+'@'+this.input.url)))
+        { console.log('올바릅니다.'); this.mailSucMsg = true; }
+      else { console.log('올바르지 않습니다.'); this.mailSucMsg = false; }
+    },
+    setProfileImg(event) {
+      console.log(event.target.files)
+      const file = event.target.files[0];
+      this.input.profileImg = URL.createObjectURL(file);
+    },
+    onCancleBtn() {
+      this.isCancle = true
+    },
+    offCancleBtn() {
+      this.isCancle = false
+    },
+    setDefaultImg() {
+      this.input.profileImg = ''
+      this.isCancle = false
+      document.getElementById("profile-img-edit").value = "";
     }
   }
 }
