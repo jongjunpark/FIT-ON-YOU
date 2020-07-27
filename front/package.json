@@ -12,6 +12,7 @@
     "password-validator": "^5.0.3",
     "sweetalert2": "^9.17.0",
     "vue": "^2.6.11",
+    "vue-kakao-login": "^1.0.5",
     "vue-password-validator": "^0.1.8",
     "vue-router": "^3.2.0",
     "vuetify": "^2.3.4",

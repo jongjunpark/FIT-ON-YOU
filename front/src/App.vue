@@ -5,9 +5,12 @@
       <div class="nav-logo">Logo</div>
       <div class="nav-user">
         <div class="nav-user-icon nav-user-img">img</div>
-        <div class="nav-user-icon nav-go-mypage">mypage</div>
-        <div class="nav-user-icon nav-go-dm">DM</div>
-        <div class="nav-user-icon nav-go-alarm">Alarm</div>
+        <transition name='expand'>
+          <div class="nav-user-icon nav-go-mypage">mypage</div>
+          <div class="nav-user-icon nav-go-dm">DM</div>
+          <div class="nav-user-icon nav-go-alarm">Alarm</div>
+          <div>X</div>
+        </transition>
       </div>
     </div>
     <router-view/>

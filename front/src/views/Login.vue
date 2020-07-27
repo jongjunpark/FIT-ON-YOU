@@ -36,6 +36,7 @@
 <script>
 import "../components/css/login.css"
 
+
 export default {
   name: 'Login',
   data () {
@@ -97,7 +98,9 @@ export default {
       } else {
         label.classList.remove('is-password')
       }
-    }
+    },
+    onSuccess,
+    onFailure,
   }
 }
 </script>
