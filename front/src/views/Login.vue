@@ -36,11 +36,21 @@
 <script>
 /* eslint-disable */
 import "../components/css/login.css"
+<<<<<<< HEAD
+=======
 import GoogleLogin from 'vue-google-login'
+>>>>>>> 699e418346eece8f6e83a27bc04997d2fdfbe3d1
 import axios from 'axios';
 import { mapActions, mapGetters } from 'vuex'
 
 Kakao.init('713af847cf1784de91646f5cb2455cbf');
+
+<<<<<<< HEAD
+var userData={
+  
+}
+=======
+>>>>>>> 699e418346eece8f6e83a27bc04997d2fdfbe3d1
 
 
 const Store='Store'
@@ -78,22 +88,37 @@ export default {
       this.setPasswordClass();
     }
   },
+<<<<<<< HEAD
+  
+=======
   components: {
     GoogleLogin,
   },
+>>>>>>> 699e418346eece8f6e83a27bc04997d2fdfbe3d1
   computed:{
     ...mapGetters([
       'user',
     ]),
     
+    
   },
   mounted() {
+<<<<<<< HEAD
+    window.addEventListener("google-loaded", this.startApp);    
+  }, 
+  methods:{
+    ...mapActions(['AC_USER']),
+    
+    loginWithKakao(){
+      let ref=this;
+=======
         window.addEventListener("google-loaded", this.startApp);
   }, 
   methods:{
     ...mapActions(['AC_USER']),
 
     loginWithKakao :()=> {
+>>>>>>> 699e418346eece8f6e83a27bc04997d2fdfbe3d1
       Kakao.Auth.loginForm({
         success: function(authObj) {
           Kakao.Auth.setAccessToken(authObj.access_token);
@@ -101,7 +126,11 @@ export default {
           Kakao.API.request({
             url: '/v2/user/me',
             success: function(response) {
+<<<<<<< HEAD
+              userData  = {
+=======
               const userData  = {
+>>>>>>> 699e418346eece8f6e83a27bc04997d2fdfbe3d1
                 access_token : ac_token,
                 token_type : 'Bearer',
                 nickname : response.kakao_account.profile.nickname,
@@ -110,10 +139,16 @@ export default {
                 gender : response.kakao_account.gender,
                 age_range : response.kakao_account.age_range
               }
+<<<<<<< HEAD
+              ref.AC_USER(userData);
+              console.log(ref.$store.state.user);
+              // window.AC_USER(userData)
+=======
               console.log(userData);
               this.AC_USER(userData);
               console.log(this.$store.state.user);
 
+>>>>>>> 699e418346eece8f6e83a27bc04997d2fdfbe3d1
             },
             fail: function(error) {
                 console.log(error);
@@ -124,21 +159,40 @@ export default {
           alert(JSON.stringify(err))
         },
       })
+<<<<<<< HEAD
+    },
+   
+    startApp() {
+      let ref = this;
+=======
     },  
    
     startApp() {
+>>>>>>> 699e418346eece8f6e83a27bc04997d2fdfbe3d1
       gapi.load('auth2', function(){
         let auth2 = gapi.auth2.init({
           client_id: '834514064011-bqc7hgss1hil5965mdbgf57420u04lvv.apps.googleusercontent.com',
           cookiepolicy: 'single_host_origin',
+<<<<<<< HEAD
+=======
           // Request scopes in addition to 'profile' and 'email'
           //scope: 'additional_scope'
+>>>>>>> 699e418346eece8f6e83a27bc04997d2fdfbe3d1
         });
         auth2.attachClickHandler('customBtn', {},
         function(googleUser) {
           const userData  = {
                 access_token : googleUser.getAuthResponse(true).access_token,
                 idToken : googleUser.getAuthResponse(true).id_token,
+<<<<<<< HEAD
+                nickname : googleUser.getBasicProfile().Cd,
+                profile_image : googleUser.getBasicProfile().fL,
+                email : googleUser.getBasicProfile().zu,
+                token_type : 'Bearer',
+          }
+          ref.AC_USER(userData);
+          console.log(ref.$store.state.user);
+=======
                 token_type : 'Bearer',
                 nickname : googleUser.getBasicProfile().Cd,
                 profile_image : googleUser.getBasicProfile().fL,
@@ -148,10 +202,15 @@ export default {
           console.log(userData);
           this.AC_USER(userData);
           console.log(this.$store.state.user);
+>>>>>>> 699e418346eece8f6e83a27bc04997d2fdfbe3d1
         }, function(error) {
           alert(JSON.stringify(error, undefined, 2));
         });
       });
+<<<<<<< HEAD
+
+=======
+>>>>>>> 699e418346eece8f6e83a27bc04997d2fdfbe3d1
     },
     
 
