@@ -75,7 +75,7 @@ export default {
   },
   watch: {
     email() {
-      this.setEmailClass();
+      this.checkEmailValidate();
     },
     password() {
       this.setPasswordClass();
@@ -173,7 +173,10 @@ export default {
       this.onLoginButton()
     },
     checkLoginInf() {
-      this.errormsg = true
+      this.errormsg = true;
+      const ERROR = document.querySelector('.btn')
+      ERROR.classList.remove('on-login-btn')
+      ERROR.classList.add('on-login-btn-error')
     },
     pathJoin() {
       this.$router.push("/join")
