@@ -35,6 +35,13 @@ Vue.use(VueRouter)
     name: 'FindPasswordOk',
     component: FindPasswordOk
   },
+  {
+    path: '/test',
+    name: 'JoinProfile',
+    component: JoinProfile
+  },
+  
+  
 ]
 
 const router = new VueRouter({
@@ -42,5 +49,6 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
 
 export default router
