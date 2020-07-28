@@ -425,6 +425,15 @@ export default {
       }
     },
     signupFinish() {
+      
+      var frm = new FormData();
+      var photoFile = document.getElementById("profile-img-edit");
+
+      Swal.fire(
+        '환영해요!',
+        '자신만의 패션을 뽐내보세요!',
+        'success'
+      )
       axios.post('http://localhost:8080/account/signup',{
 
           email: this.input.email+'@'+this.input.url,
@@ -432,6 +441,7 @@ export default {
           nickname: this.input.nickname,
           gender: this.gender,
           birth: this.input.birth.year+' '+this.input.birth.month+' '+this.input.birth.day,
+          profile_img: "C:\\Users\\multicampus\\Desktop\\firstPJT\\PJT\\s03p12b304\\front\\public\\user\\" + photoFile.files[0].name
 
       }).then(function(data){
         console.log(data.data.data);
@@ -444,6 +454,19 @@ export default {
       .catch(function(data){
         console.log(data.data.data)
       });
+
+      frm.append("profile-img-edit", photoFile.files[0]);
+      axios.post('http://localhost:8080/account/addProfileImg',frm,{
+        headers:{
+            'Content-Type': 'multipart/form-data'
+        }
+      }).then(function(){
+        console.log("1");
+      })
+      .catch(function(){
+        console.log("2");
+      });
+
     },
     notTab() {
       window.addEventListener('keydown', event => {
@@ -499,10 +522,12 @@ export default {
       this.mailSucMsg = false;
       this.mailErrMsg = true; }
     },
-    setProfileImg(event) {
-      console.log(event.target.files)
-      const file = event.target.files[0];
-      this.input.profileImg = URL.createObjectURL(file);
+    setProfileImg() {
+      var frm = new FormData();
+      var photoFile = document.getElementById("profile-img-edit");
+      frm.append("profile-img-edit", photoFile.files[0]);
+      console.log(photoFile.files[0].name);
+      this.input.profileImg = URL.createObjectURL(photoFile.files[0]);
     },
     onCancleBtn() {
       this.isCancle = true
