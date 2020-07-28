@@ -33,5 +33,6 @@ public class User {
     private LocalDate birth;
     private String gender;
     private String selfintroduce;
+    private String profile_img;
     
 }

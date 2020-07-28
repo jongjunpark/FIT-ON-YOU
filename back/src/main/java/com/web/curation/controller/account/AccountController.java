@@ -1,5 +1,10 @@
 package com.web.curation.controller.account;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.common.io.Files;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.UserDTO;
@@ -66,7 +73,6 @@ public class AccountController {
 //      Optional<User> userOpt = userDao.findUserByEmailAndPassword(email, password);
 
 		ResponseEntity response = null;
-
 
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.ACCEPTED;
@@ -115,8 +121,9 @@ public class AccountController {
 		// 저장
 		User user = new User();
 		StringTokenizer st = new StringTokenizer(request.getBirth());
-		LocalDate currentDate = LocalDate.of(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
-		
+		LocalDate currentDate = LocalDate.of(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()),
+				Integer.parseInt(st.nextToken()));
+
 		System.out.println(request.getNickname());
 		user.setNickname(request.getNickname());
 		user.setEmail(request.getEmail());
@@ -124,6 +131,7 @@ public class AccountController {
 		user.setGender(request.getGender());
 		user.setPassword(request.getPassword());
 		user.setSelfintroduce(null);
+		user.setProfile_img(request.getProfile_img());
 		if (userDao.findUserByNickname(user.getNickname()).isPresent()
 				|| userDao.findUserByEmail(user.getEmail()).isPresent()) {
 			result.status = true;
@@ -145,7 +153,8 @@ public class AccountController {
 	@ApiOperation(value = "비밀번호 찾기")
 	public Map<String, Object> findPassword(@Valid @RequestParam String email, @Valid @RequestParam String pTime) {
 		Map<String, Object> result = new HashMap<>();
-		LocalDate time  = LocalDate.of(Integer.parseInt(pTime.substring(0,4)), Integer.parseInt(pTime.substring(4,6)), Integer.parseInt(pTime.substring(6,8)));
+		LocalDate time = LocalDate.of(Integer.parseInt(pTime.substring(0, 4)), Integer.parseInt(pTime.substring(4, 6)),
+				Integer.parseInt(pTime.substring(6, 8)));
 		Optional<User> optUser = userDao.findUserByEmailAndBirth(email, time);
 		if (!optUser.isPresent()) {
 		} else {
@@ -158,7 +167,7 @@ public class AccountController {
 			StringBuilder text = new StringBuilder();
 			text.append(userDto.getNickname());
 			text.append(" 님의 비밀번호를 위한 비밀번호 인증 절차입니다 하단의 번호를 핏온유 화면에 입력해 주세요\n");
-			text.append("인증번호:" + certificationNum+'\n');
+			text.append("인증번호:" + certificationNum + '\n');
 			text.append("인증번호를 다른사람이 보지 않게 주의해 주세요.\n");
 //			text.append("핏온유 인증 페이지로 이동하기");
 //			text.append("http://localhost:8081/");
@@ -174,7 +183,7 @@ public class AccountController {
 				emailSender.send(message);
 				result.put("userInfo", userDto);
 				result.put("certifNum", certificationNum);
-				
+
 			} catch (Exception e) {
 				System.out.println(5);
 				e.printStackTrace();
@@ -183,49 +192,55 @@ public class AccountController {
 
 		return result;
 	}
-	
-	@PostMapping(value="/account/addProfileImg", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+
+	@PostMapping(value = "/account/addProfileImg", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
 	@ApiOperation(value = "가입하기")
 
 	public Object addProfileImg(@RequestParam("profile-img-edit") MultipartFile img) {
-		System.out.println(img.getOriginalFilename());
-		final BasicResponse result = new BasicResponse();
 		
+		final BasicResponse result = new BasicResponse();
+		String path = "C:\\Users\\multicampus\\Desktop\\firstPJT\\PJT\\s03p12b304\\front\\public\\user\\";
+		File file = new File(path+img.getOriginalFilename());
+		try {
+		img.transferTo(file);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 		System.out.println(img);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
-	   @GetMapping("/account/checkDoubleEmail")
-	   @ApiOperation(value = "이메일 중복검사")
-	   public Object findEmail(@Valid @RequestParam String email) {
-	      final BasicResponse result = new BasicResponse();
-	      
-	      Optional<User> optUser = userDao.getUserByEmail(email);
-	      if(!optUser.isPresent()) {//없는 경우
-	         result.status = true;
-	         result.data = "non exist";
-	      }else {//있는 경우
-	         result.status = true;
-	         result.data = "exist";
-	         result.object = optUser.get();
-	      }
-	      return result;
-	   }
-	   
-	   @GetMapping("/account/checkNickname")
-	   @ApiOperation(value = "닉네임 중복검사")
-	   public Object findNick(@Valid @RequestParam String nickname) {
-	      final BasicResponse result = new BasicResponse();
-	      
-	      Optional<User> optUser = userDao.findUserByNickname(nickname);
-	      if(!optUser.isPresent()) {//없는 경우
-	         result.status = true;
-	         result.data = "non exist";
-	      }else {//있는 경우
-	         result.status = true;
-	         result.data = "exist";
-	         result.object = optUser.get();
-	      }
-	      return result;
-	   }
+	@GetMapping("/account/checkDoubleEmail")
+	@ApiOperation(value = "이메일 중복검사")
+	public Object findEmail(@Valid @RequestParam String email) {
+		final BasicResponse result = new BasicResponse();
+
+		Optional<User> optUser = userDao.getUserByEmail(email);
+		if (!optUser.isPresent()) {// 없는 경우
+			result.status = true;
+			result.data = "non exist";
+		} else {// 있는 경우
+			result.status = true;
+			result.data = "exist";
+			result.object = optUser.get();
+		}
+		return result;
+	}
+
+	@GetMapping("/account/checkNickname")
+	@ApiOperation(value = "닉네임 중복검사")
+	public Object findNick(@Valid @RequestParam String nickname) {
+		final BasicResponse result = new BasicResponse();
+
+		Optional<User> optUser = userDao.findUserByNickname(nickname);
+		if (!optUser.isPresent()) {// 없는 경우
+			result.status = true;
+			result.data = "non exist";
+		} else {// 있는 경우
+			result.status = true;
+			result.data = "exist";
+			result.object = optUser.get();
+		}
+		return result;
+	}
 }

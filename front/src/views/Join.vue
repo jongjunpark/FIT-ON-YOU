@@ -408,6 +408,10 @@ export default {
       }
     },
     signupFinish() {
+      
+      var frm = new FormData();
+      var photoFile = document.getElementById("profile-img-edit");
+
       Swal.fire(
         '환영해요!',
         '자신만의 패션을 뽐내보세요!',
@@ -419,7 +423,8 @@ export default {
           password: this.input.password,
           nickname: this.input.nickname,
           gender: this.gender,
-          birth: this.input.birth.year+' '+this.input.birth.month+' '+this.input.birth.day
+          birth: this.input.birth.year+' '+this.input.birth.month+' '+this.input.birth.day,
+          profile_img: "C:\\Users\\multicampus\\Desktop\\firstPJT\\PJT\\s03p12b304\\front\\public\\user\\" + photoFile.files[0].name
 
       }).then(function(data){
         console.log(data.data.data)
@@ -427,6 +432,19 @@ export default {
       .catch(function(data){
         console.log(data.data.data)
       });
+
+      frm.append("profile-img-edit", photoFile.files[0]);
+      axios.post('http://localhost:8080/account/addProfileImg',frm,{
+        headers:{
+            'Content-Type': 'multipart/form-data'
+        }
+      }).then(function(){
+        console.log("1");
+      })
+      .catch(function(){
+        console.log("2");
+      });
+
     },
     notTab() {
       window.addEventListener('keydown', event => {
@@ -459,19 +477,9 @@ export default {
     setProfileImg() {
       var frm = new FormData();
       var photoFile = document.getElementById("profile-img-edit");
-      console.log(photoFile.files[0])
       frm.append("profile-img-edit", photoFile.files[0]);
-      console.log(frm);
-      axios.post('http://localhost:8080/account/addProfileImg',frm,{
-        headers:{
-            'Content-Type': 'multipart/form-data'
-        }
-      }).then(function(){
-        console.log("1");
-      })
-      .catch(function(){
-        console.log("2");
-      });
+      console.log(photoFile.files[0].name);
+      this.input.profileImg = URL.createObjectURL(photoFile.files[0]);
     },
     onCancleBtn() {
       this.isCancle = true
