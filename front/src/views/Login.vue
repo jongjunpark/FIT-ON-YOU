@@ -38,13 +38,14 @@
 import "../components/css/login.css"
 import axios from 'axios';
 import { mapActions, mapGetters } from 'vuex'
-import * as EmailValidator from "email-validator"
 
 Kakao.init('713af847cf1784de91646f5cb2455cbf');
+
 
 var userData={
   
 }
+
 
 
 const Store='Store'
@@ -76,16 +77,16 @@ export default {
   },
   watch: {
     email() {
-      this.checkEmailValidate();
+      this.setEmailClass();
     },
     password() {
       this.setPasswordClass();
     }
   },
-  
+
   computed:{
     ...mapGetters([
-      'user',
+      'getUser',
     ]),
     
     
@@ -95,9 +96,10 @@ export default {
   }, 
   methods:{
     ...mapActions(['AC_USER']),
-    
+
     loginWithKakao(){
-      let ref=this;
+      let ref= this;
+      console.log(ref);
       Kakao.Auth.loginForm({
         success: function(authObj) {
           Kakao.Auth.setAccessToken(authObj.access_token);
@@ -105,7 +107,8 @@ export default {
           Kakao.API.request({
             url: '/v2/user/me',
             success: function(response) {
-              userData  = {
+              let userData  = {
+
                 access_token : ac_token,
                 token_type : 'Bearer',
                 nickname : response.kakao_account.profile.nickname,
@@ -113,10 +116,11 @@ export default {
                 email : response.kakao_account.email,
                 gender : response.kakao_account.gender,
                 age_range : response.kakao_account.age_range
-              }
+              };
               ref.AC_USER(userData);
               console.log(ref.$store.state.user);
               // window.AC_USER(userData)
+
             },
             fail: function(error) {
                 console.log(error);
@@ -131,6 +135,7 @@ export default {
    
     startApp() {
       let ref = this;
+
       gapi.load('auth2', function(){
         let auth2 = gapi.auth2.init({
           client_id: '834514064011-bqc7hgss1hil5965mdbgf57420u04lvv.apps.googleusercontent.com',
@@ -148,6 +153,7 @@ export default {
           }
           ref.AC_USER(userData);
           console.log(ref.$store.state.user);
+
         }, function(error) {
           alert(JSON.stringify(error, undefined, 2));
         });
@@ -174,10 +180,7 @@ export default {
       this.onLoginButton()
     },
     checkLoginInf() {
-      this.errormsg = true;
-      const ERROR = document.querySelector('.btn')
-      ERROR.classList.remove('on-login-btn')
-      ERROR.classList.add('on-login-btn-error')
+      this.errormsg = true
     },
     pathJoin() {
       this.$router.push("/join")
@@ -201,14 +204,8 @@ export default {
         label.classList.remove('is-password')
       }
     },
-    checkEmailValidate() {
-      if (this.email.length >= 0 && !EmailValidator.validate((this.email)))
-        { console.log('이메일을 정확히 입력해주세요.');
-         this.setEmailClass(); }
-      else { console.log('굿.');
-         this.setEmailClass(); 
-        }
-    },
+
+
     loginHandler() { 
       console.log(this.email);
       console.log(this.password);
@@ -218,10 +215,9 @@ export default {
       }).then((response)=>{
         // 로그인 성공
         if(response.data.result==1){
-          console.log(response.data);
           this.AC_USER(response.data);
 
-          console.log(this.$store.state.user);
+          console.log(this.getUser);
         }
         // 이메일 없음
         else if(response.data.result==-1){
@@ -237,7 +233,7 @@ export default {
     },
 
     
-  }
+  },
   /* eslint-enable */
-}
+  }
 </script>

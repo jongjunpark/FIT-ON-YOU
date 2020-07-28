@@ -13,6 +13,7 @@ import lombok.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -109,6 +110,7 @@ public class AccountController {
 	@ApiOperation(value = "가입하기")
 
 	public Object signup(@Valid @RequestBody SignupRequest request) {
+		System.out.println("!@#!@#");
 		// 이메일, 닉네임 중복처리 필수
 		// 회원가입단을 생성해 보세요.
 		final BasicResponse result = new BasicResponse();
@@ -191,5 +193,4 @@ public class AccountController {
 
 		return result;
 	}
-
 }

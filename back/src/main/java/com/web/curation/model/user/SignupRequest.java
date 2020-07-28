@@ -27,6 +27,9 @@ public class SignupRequest {
     @ApiModelProperty(required = true)
     @NotNull
     String birth;
+    
+    String profile_img;
+    String selfintroduce;
 
     
 
