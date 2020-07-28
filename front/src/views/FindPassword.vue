@@ -22,6 +22,9 @@ import "../components/css/findpassword.css"
 import '../components/css/join.css'
 import * as EmailValidator from "email-validator"
 import axios from 'axios'
+import { mapState, mapMutations } from 'vuex'
+import Swal from 'sweetalert2'
+
 
 export default {
   name: 'FindPassword',
@@ -40,7 +43,11 @@ export default {
       this.checkEmailValidate();
     },
   },
+  computed: {
+    ...mapState(['certifNum'])
+  },
   methods: {
+    ...mapMutations(['confirmPwd', 'findUserPWd']),
     onOkBtn() {
       if (this.emailVaild && this.birth.length >= 8 && (this.birth >= 190000 && this.birth <= 20201231)) {
           this.okBtn = true
@@ -52,20 +59,31 @@ export default {
       axios.get('http://localhost:8080/account/findPassword',{
         params:{
           email: this.email,
-          nickname: this.name
+          pTime: this.birth
         }
-      }).then(function(data){
+      }).then(data => {
         console.log("성공")
         console.dir(data)
+        if (data.data.certifNum) {
+          this.confirmPwd(data.data.certifNum)
+          this.findUserPWd(data.data.userInfo)
+          this.$router.push("/find/password/ok")
+        } else {
+          Swal.fire({
+          icon: 'error',
+          title: '다시 한번 더 확인해주세요',
+          text: '이메일 혹은 생년월일이 틀렸어요',
+        })
+        }
       })
-      .catch(function(){
-        alert("이메일 혹은 닉네임이 존재하지 않거나 틀립니다")
+      .catch(data => {
+        console.log(data)
       });
     },
-    checkInput() {
-      // this.errMsg = true
-      this.$router.push("/find/password/ok")
-    },
+    // checkInput() {
+    //   // this.errMsg = true
+    //   this.$router.push("/find/password/ok")
+    // },
     checkEmailValidate() {
       if (this.email.length >= 0 && !EmailValidator.validate(this.email))
         { console.log('올바르지 않습니다.'); this.emailVaild = false;}

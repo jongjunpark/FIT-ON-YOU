@@ -2,7 +2,8 @@
   <div class='wrap'>
     <div class='wrap-container'>
       <h1 class='main-logo'>Logo</h1>
-      <p v-if='errormsg' class='err-msg'>계정 혹은 비밀번호가 틀렸습니다.</p>
+      <p v-if='errormsgEmail' class='err-msg'>이메일이 존재하지 않습니다.</p>
+      <p v-if='errormsgPwd' class='err-msg'>비밀번호가 틀렸습니다.</p>
       <div class='login-input-area'>
         <input v-model='email' @keyup.enter='checkLoginInf' @keyup="checkLoginBtn" type="text" class='login-email non-text'>
         <label class='login-email-label' for="login-email">이메일</label>
@@ -64,7 +65,8 @@ export default {
       password: '',
       offLoginBtn: true,
       onLoginBtn: false,
-      errormsg: false,
+      errormsgEmail: false,
+      errormsgPwd: false,
       params: {
           client_id: "834514064011-bqc7hgss1hil5965mdbgf57420u04lvv.apps.googleusercontent.com"
       },
@@ -83,7 +85,6 @@ export default {
       this.setPasswordClass();
     }
   },
-
   computed:{
     ...mapGetters([
       'getUser',
@@ -93,6 +94,9 @@ export default {
   },
   mounted() {
     window.addEventListener("google-loaded", this.startApp);    
+  },
+  computed: {
+    ...mapGetters(['user']),
   }, 
   methods:{
     ...mapActions(['AC_USER']),
@@ -160,8 +164,6 @@ export default {
       });
     },
     
-
-    
     onLoginButton() {
       if (this.email) {
         if (this.password) {
@@ -205,7 +207,6 @@ export default {
       }
     },
 
-
     loginHandler() { 
       console.log(this.email);
       console.log(this.password);
@@ -221,12 +222,34 @@ export default {
         }
         // 이메일 없음
         else if(response.data.result==-1){
-          alert("이메일이 존재하지 않습니다.");
+          this.errormsgEmail = true;
+          this.errormsgPwd = false;
+          const ERROR = document.querySelector('.btn')
+          const ERRORMESSAGE1 = document.querySelector('.login-email-label')
+          const ERRORMESSAGE2 = document.querySelector('.login-password-label')
+          const ERRORMESSAGE3 = document.querySelector('.login-email')
+          const ERRORMESSAGE4 = document.querySelector('.login-password')
+          ERROR.classList.add('on-login-btn-error')
+          ERRORMESSAGE1.classList.add('login-email-label-error')
+          ERRORMESSAGE2.classList.remove('login-password-label-error')
+          ERRORMESSAGE3.classList.add('login-email-error')
+          ERRORMESSAGE4.classList.remove('login-password-error')
         }
         
         // 비밀번호 틀림
         else if(response.data.result==2){
-          alert("비밀번호가 틀립니다.");
+          this.errormsgPwd = true;
+          this.errormsgEmail = false;
+          const ERROR = document.querySelector('.btn')
+          const ERRORMESSAGE1 = document.querySelector('.login-email-label')
+          const ERRORMESSAGE2 = document.querySelector('.login-password-label')
+          const ERRORMESSAGE3 = document.querySelector('.login-email')
+          const ERRORMESSAGE4 = document.querySelector('.login-password')
+          ERROR.classList.add('on-login-btn-error')
+          ERRORMESSAGE1.classList.remove('login-email-label-error')
+          ERRORMESSAGE2.classList.add('login-password-label-error')
+          ERRORMESSAGE3.classList.remove('login-email-error')
+          ERRORMESSAGE4.classList.add('login-password-error')
         }
 
       });

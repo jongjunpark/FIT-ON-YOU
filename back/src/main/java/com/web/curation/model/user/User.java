@@ -1,22 +1,23 @@
 package com.web.curation.model.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,70 +34,52 @@ public class User {
     @Column(insertable = false, updatable = false)
     private LocalDateTime create_Date;
    
-    private LocalDateTime birth;
+    private LocalDate birth;
     private String gender;
     private String selfintroduce;
-    
 	public String getNickname() {
 		return nickname;
 	}
-
-	@Override
-	public String toString() {
-		return "User [nickname=" + nickname + ", password=" + password + ", email=" + email + ", create_Date="
-				+ create_Date + ", birth=" + birth + ", gender=" + gender + ", selfintroduce=" + selfintroduce + "]";
-	}
-
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
-
 	public String getPassword() {
 		return password;
 	}
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
 	public String getEmail() {
 		return email;
 	}
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
 	public LocalDateTime getCreate_Date() {
 		return create_Date;
 	}
-
 	public void setCreate_Date(LocalDateTime create_Date) {
 		this.create_Date = create_Date;
 	}
-
-	public LocalDateTime getBirth() {
+	public LocalDate getBirth() {
 		return birth;
 	}
-
-	public void setBirth(LocalDateTime birth) {
+	public void setBirth(LocalDate birth) {
 		this.birth = birth;
 	}
-
 	public String getGender() {
 		return gender;
 	}
-
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-
 	public String getSelfintroduce() {
 		return selfintroduce;
 	}
-
 	public void setSelfintroduce(String selfintroduce) {
 		this.selfintroduce = selfintroduce;
 	}
+   
+
 
 }

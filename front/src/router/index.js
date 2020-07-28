@@ -5,7 +5,7 @@ import Join from '../views/Join.vue'
 import Feed from '../views/Feed.vue'
 import FindPassword from '../views/FindPassword.vue'
 import FindPasswordOk from '../views/FindPasswordOk.vue'
-
+import PasswordChange from '../views/PasswordChange.vue'
 
 Vue.use(VueRouter)
 
@@ -34,6 +34,11 @@ Vue.use(VueRouter)
     path: '/find/password/ok',
     name: 'FindPasswordOk',
     component: FindPasswordOk
+  },
+  {
+    path: '/find/password/passwordchange',
+    name: 'PasswordChange',
+    component: PasswordChange
   },
   
   
