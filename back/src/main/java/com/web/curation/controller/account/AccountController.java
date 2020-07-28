@@ -216,13 +216,13 @@ public class AccountController {
 	@ApiOperation(value = "가입하기")
 
 	public Object addProfileImg(@RequestParam("profile-img-edit") MultipartFile img) {
-		
+
 		final BasicResponse result = new BasicResponse();
 		String path = "C:\\Users\\multicampus\\Desktop\\firstPJT\\PJT\\s03p12b304\\front\\public\\user\\";
-		File file = new File(path+img.getOriginalFilename());
+		File file = new File(path + img.getOriginalFilename());
 		try {
-		img.transferTo(file);
-		}catch (Exception e) {
+			img.transferTo(file);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		System.out.println(img);
