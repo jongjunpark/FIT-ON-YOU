@@ -11,6 +11,7 @@ import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -219,9 +220,9 @@ public class AccountController {
 		return result;
 	}
 	
-	@GetMapping("/account/changePassword")
+	@PostMapping("/account/changePassword")
 	@ApiOperation(value = "새 비밀번호 설정")
-	public Object changePwd(@Valid @RequestParam String email,@Valid @RequestParam String password) {
+	public Object changePwd(@Valid @RequestParam("email") String email,@Valid @RequestParam("password") String password) {
 		System.out.println(email+ " "+password);
 		final BasicResponse result = new BasicResponse();
 		try{

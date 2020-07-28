@@ -98,12 +98,12 @@ export default {
     },
     changePassword() {
       console.log(this.pwdUser);
-      axios.get('http://localhost:8080/account/changePassword',{
-        params:{
-          email: this.pwdUser.email,
-          password: this.passwordConfirm
-        }
-      }).then(data=>{
+      const formData= new FormData();
+      formData.append('email',this.pwdUser.email);
+      formData.append('password',this.passwordConfirm);
+
+      axios.post('http://localhost:8080/account/changePassword',
+        formData).then(data=>{
         console.log(data)
         if(console.log(data.data.data)==="successs"){
           console.log("성공");
