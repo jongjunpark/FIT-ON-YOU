@@ -52,7 +52,7 @@ export default {
       axios.get('http://localhost:8080/account/findPassword',{
         params:{
           email: this.email,
-          nickname: this.name
+          pTime: this.birth
         }
       }).then(function(data){
         console.log("성공")

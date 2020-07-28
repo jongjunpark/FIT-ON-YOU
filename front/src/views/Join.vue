@@ -280,7 +280,7 @@ export default {
     },
     checkJoinForm() {
       if(this.input.email && (this.input.url || this.select != '직접입력') && this.input.password
-      && this.input.passwordConfirm && this.input.nickname
+      && this.input.passwordConfirm && this.input.nickname && this.passwordSuccessMsg
       && this.input.birth.year && this.input.birth.month && this.input.birth.day
       && (this.isMale || this.isFemale)
       && !this.finalMail && this.pwSucMsg && this.nickSucMsg && this.birthSucMsg){
@@ -432,8 +432,6 @@ export default {
           nickname: this.input.nickname,
           gender: this.gender,
           birth: this.input.birth.year+' '+this.input.birth.month+' '+this.input.birth.day,
-          profile_img: this.input.profileImg,
-          selfintroduce: this.input.textProfile
 
       }).then(function(data){
         console.log(data.data.data);
@@ -475,7 +473,7 @@ export default {
     },
     checkEmailValidate() {
       if (this.input.email.length >= 4 && EmailValidator.validate((this.input.email+'@'+this.input.url)))
-        { console.log('올바릅니다.');
+        { 
          this.mailSucMsg = true;
          this.mailErrMsg = false;
          this.finalMail = false;
@@ -497,7 +495,7 @@ export default {
             .catch(function(){
             })}
         }
-      else { console.log('올바르지 않습니다.'); 
+      else { 
       this.mailSucMsg = false;
       this.mailErrMsg = true; }
     },
