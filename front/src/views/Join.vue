@@ -456,10 +456,22 @@ export default {
         { console.log('올바릅니다.'); this.mailSucMsg = true; }
       else { console.log('올바르지 않습니다.'); this.mailSucMsg = false; }
     },
-    setProfileImg(event) {
-      console.log(event.target.files)
-      const file = event.target.files[0];
-      this.input.profileImg = URL.createObjectURL(file);
+    setProfileImg() {
+      var frm = new FormData();
+      var photoFile = document.getElementById("profile-img-edit");
+      console.log(photoFile.files[0])
+      frm.append("profile-img-edit", photoFile.files[0]);
+      console.log(frm);
+      axios.post('http://localhost:8080/account/addProfileImg',frm,{
+        headers:{
+            'Content-Type': 'multipart/form-data'
+        }
+      }).then(function(){
+        console.log("1");
+      })
+      .catch(function(){
+        console.log("2");
+      });
     },
     onCancleBtn() {
       this.isCancle = true

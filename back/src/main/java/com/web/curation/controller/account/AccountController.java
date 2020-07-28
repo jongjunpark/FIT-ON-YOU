@@ -1,8 +1,6 @@
 package com.web.curation.controller.account;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.zone.ZoneOffsetTransitionRule.TimeDefinition;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -14,6 +12,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
@@ -183,5 +183,49 @@ public class AccountController {
 
 		return result;
 	}
+	
+	@PostMapping(value="/account/addProfileImg", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	@ApiOperation(value = "가입하기")
 
+	public Object addProfileImg(@RequestParam("profile-img-edit") MultipartFile img) {
+		System.out.println(img.getOriginalFilename());
+		final BasicResponse result = new BasicResponse();
+		
+		System.out.println(img);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	   @GetMapping("/account/checkDoubleEmail")
+	   @ApiOperation(value = "이메일 중복검사")
+	   public Object findEmail(@Valid @RequestParam String email) {
+	      final BasicResponse result = new BasicResponse();
+	      
+	      Optional<User> optUser = userDao.getUserByEmail(email);
+	      if(!optUser.isPresent()) {//없는 경우
+	         result.status = true;
+	         result.data = "non exist";
+	      }else {//있는 경우
+	         result.status = true;
+	         result.data = "exist";
+	         result.object = optUser.get();
+	      }
+	      return result;
+	   }
+	   
+	   @GetMapping("/account/checkNickname")
+	   @ApiOperation(value = "닉네임 중복검사")
+	   public Object findNick(@Valid @RequestParam String nickname) {
+	      final BasicResponse result = new BasicResponse();
+	      
+	      Optional<User> optUser = userDao.findUserByNickname(nickname);
+	      if(!optUser.isPresent()) {//없는 경우
+	         result.status = true;
+	         result.data = "non exist";
+	      }else {//있는 경우
+	         result.status = true;
+	         result.data = "exist";
+	         result.object = optUser.get();
+	      }
+	      return result;
+	   }
 }
