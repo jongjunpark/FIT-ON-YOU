@@ -1,4 +1,4 @@
-package com.web.curation.controller.Follw;
+package com.web.curation.controller.Follow;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;

@@ -23,5 +23,14 @@ public class UserDTO {
 
    
    public UserDTO() {}
+   public UserDTO(User user) {
+	      this.birth = user.getBirth();
+	      this.create_Date = user.getCreate_Date();
+	      this.email = user.getEmail();
+	      this.gender = user.getGender();
+	      this.nickname = user.getNickname();
+	      this.password = user.getPassword();
+	      this.selfintroduce = user.getSelfintroduce();
+	   }
 
 }
