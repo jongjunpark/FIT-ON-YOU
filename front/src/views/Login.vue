@@ -99,8 +99,6 @@ export default {
         label.classList.remove('is-password')
       }
     },
-    onSuccess,
-    onFailure,
   }
 }
 </script>
