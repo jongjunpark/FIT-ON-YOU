@@ -38,7 +38,7 @@
 /* eslint-disable */
 import "../components/css/login.css"
 import axios from 'axios';
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters, mapMutations, mapActions  } from 'vuex'
 
 Kakao.init('713af847cf1784de91646f5cb2455cbf');
 
@@ -46,8 +46,6 @@ Kakao.init('713af847cf1784de91646f5cb2455cbf');
 var userData={
   
 }
-
-
 
 const Store='Store'
  function attachSignin(element) {
@@ -85,20 +83,14 @@ export default {
       this.setPasswordClass();
     }
   },
-  computed:{
-    ...mapGetters([
-      'getUser',
-    ]),
-    
-    
-  },
   mounted() {
     window.addEventListener("google-loaded", this.startApp);    
   },
   computed: {
-    ...mapGetters(['user']),
+    ...mapGetters([]),
   }, 
   methods:{
+    ...mapMutations(['setToken', 'setUser']),
     ...mapActions(['AC_USER']),
 
     loginWithKakao(){
@@ -213,12 +205,14 @@ export default {
       axios.get('http://localhost:8080/account/login',{
         params:{email:this.email,
                   password:this.password},
-      }).then((response)=>{
+      }).then( response => {
         // 로그인 성공
         if(response.data.result==1){
           this.AC_USER(response.data);
-
-          console.log(this.getUser);
+          console.log(response.data)
+          this.setUser(response.data)
+          this.$cookies.set('auth-token', response.data.auth_token)
+          this.setToken(response.data.auth_token)
         }
         // 이메일 없음
         else if(response.data.result==-1){

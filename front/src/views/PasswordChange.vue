@@ -29,6 +29,7 @@
 import "../components/css/PasswordChange.css"
 import PasswordValidator from 'password-validator'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 import { mapState } from 'vuex'
 export default {
   name: 'PasswordChange',
@@ -103,11 +104,13 @@ export default {
       formData.append('password',this.passwordConfirm);
 
       axios.post('http://localhost:8080/account/changePassword',
-        formData).then(data=>{
+        formData).then(data => {
         console.log(data)
-        if(console.log(data.data.data)==="successs"){
-          console.log("성공");
-        }
+        Swal.fire(
+          '변경되었습니다.',
+          '',
+          'success'
+        )
       })
       .catch(data => {
         console.log(data)

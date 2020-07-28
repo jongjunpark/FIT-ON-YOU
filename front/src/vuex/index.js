@@ -10,7 +10,7 @@ const store = new Vuex.Store({
   modules: {
     // 키: 값 형태로 저장됩니다.
     Store: Store,
-  }
+  },
 })
 
 export default store

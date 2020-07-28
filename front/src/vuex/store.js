@@ -6,6 +6,7 @@ import getters from './getters'
 import actions from './actions'
 import mutations from './mutations'
 
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -13,6 +14,8 @@ export default new Vuex.Store({
     user: '',
     certifNum: '',
     pwdUser: '',
+    authToken: '',
+    isLoggedIn: false,
   },
   getters,
   mutations,

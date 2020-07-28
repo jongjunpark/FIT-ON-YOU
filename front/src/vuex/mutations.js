@@ -11,5 +11,15 @@ export default {
   findUserPWd(state, data) {
     state.pwdUser = data;
   },
+  setToken(state, token) {
+    state.authToken = token
+  },
+  setLoggedIn(state, data) {
+    state.isLoggedIn = data
+  },
+  setUser(state, data) {
+    state.user = data
+  }
+
 
 }
