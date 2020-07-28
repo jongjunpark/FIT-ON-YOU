@@ -84,20 +84,14 @@ export default {
       this.setPasswordClass();
     }
   },
-  
-  computed:{
-    ...mapGetters([
-      'user',
-    ]),
-    
-    
-  },
   mounted() {
     window.addEventListener("google-loaded", this.startApp);    
+  },
+  computed: {
+    ...mapGetters(['user']),
   }, 
   methods:{
     ...mapActions(['AC_USER']),
-    
     loginWithKakao(){
       let ref=this;
       Kakao.Auth.loginForm({

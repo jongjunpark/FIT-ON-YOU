@@ -17,6 +17,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -100,9 +101,12 @@ public class AccountController {
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
 	}
 
+	@PostMapping("/account/signup")
+	@ApiOperation(value = "가입하기")
 	public Object signup(@Valid @RequestBody SignupRequest request) {
 	      // 이메일, 닉네임 중복처리 필수
 	      // 회원가입단을 생성해 보세요.
+		System.out.println(1);
 	      final BasicResponse result = new BasicResponse();
 	      // 이메일, 닉네임 중복처리 필수
 
@@ -141,8 +145,11 @@ public class AccountController {
 	      Map<String, Object> result = new HashMap<>();
 	      LocalDate time  = LocalDate.of(Integer.parseInt(pTime.substring(0,4)), Integer.parseInt(pTime.substring(4,6)), Integer.parseInt(pTime.substring(6,8)));
 	      Optional<User> optUser = userDao.findUserByEmailAndBirth(email, time);
+	      System.out.println(77);
 	      if (!optUser.isPresent()) {
+	    	  System.out.println(1);
 	      } else {
+	    	  System.out.println(2);
 	         UserDTO userDto = new UserDTO(optUser.get());
 
 	         String to = userDto.getEmail();

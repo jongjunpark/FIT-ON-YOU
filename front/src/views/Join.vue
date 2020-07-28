@@ -441,8 +441,8 @@ export default {
         'success'
       )
       })
-      .catch(function(data){
-        console.log(data.data.data)
+      .catch(function(){
+        // console.log(data.data.data)
       });
     },
     notTab() {
