@@ -24,7 +24,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -109,14 +108,40 @@ public class AccountController {
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
 	}
 
-	@PostMapping("/account/signup")
-	@ApiOperation(value = "가입하기")
-
 	public Object signup(@Valid @RequestBody SignupRequest request) {
-		// 이메일, 닉네임 중복처리 필수
-		// 회원가입단을 생성해 보세요.
-		final BasicResponse result = new BasicResponse();
-		// 이메일, 닉네임 중복처리 필수
+	      // 이메일, 닉네임 중복처리 필수
+	      // 회원가입단을 생성해 보세요.
+	      final BasicResponse result = new BasicResponse();
+	      // 이메일, 닉네임 중복처리 필수
+
+	      // 저장
+	      User user = new User();
+	      StringTokenizer st = new StringTokenizer(request.getBirth());
+	      LocalDate currentDate = LocalDate.of(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
+	      
+	      System.out.println(request.getNickname());
+	      user.setNickname(request.getNickname());
+	      user.setEmail(request.getEmail());
+	      user.setBirth(currentDate);
+	      user.setGender(request.getGender());
+	      user.setPassword(request.getPassword());
+	      user.setSelfintroduce(null);
+	      if (userDao.findUserByNickname(user.getNickname()).isPresent()
+	            || userDao.findUserByEmail(user.getEmail()).isPresent()) {
+	         result.status = true;
+	         result.data = "fail";
+	      } else {
+	         if (userDao.save(user) == null) {
+	            result.status = true;
+	            result.data = "fail";
+
+	         } else {
+	            result.status = true;
+	            result.data = "success";
+	         }
+	      }
+	      return new ResponseEntity<>(result, HttpStatus.OK);
+	   }
 
 		// 저장
 		User user = new User();
@@ -135,18 +160,13 @@ public class AccountController {
 		if (userDao.findUserByNickname(user.getNickname()).isPresent()
 				|| userDao.findUserByEmail(user.getEmail()).isPresent()) {
 			result.status = true;
-			result.data = "fail";
-		} else {
-			if (userDao.save(user) == null) {
-				result.status = true;
-				result.data = "fail";
-
-			} else {
-				result.status = true;
-				result.data = "success";
-			}
+			result.data = "non exist";
+		}else {//있는 경우
+			result.status = true;
+			result.data = "exist";
+			result.object = optUser.get();
 		}
-		return new ResponseEntity<>(result, HttpStatus.OK);
+		return result;
 	}
 
 	@GetMapping("/account/findPassword")
@@ -189,7 +209,6 @@ public class AccountController {
 				e.printStackTrace();
 			}
 		}
-
 		return result;
 	}
 

@@ -15,7 +15,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface UserDao extends JpaRepository<User, String> {
 	
 	Optional<User> getUserByEmail(String email);
-    Optional<User> findUserByEmailAndBirth(String email, LocalDate time);
+    Optional<User> findUserByEmailAndBirth(String email, LocalDate birth);
     Optional<User> findUserByNickname(String nickname);
     Optional<User> findUserByEmail(String email);
  

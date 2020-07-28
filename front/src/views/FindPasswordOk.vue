@@ -5,11 +5,13 @@
         <h1>임시 비밀번호를<br>전송했습니다.<br><br>메일을<br>확인해주세요.</h1>
       </div>
       <div class="findpasswordok-btn-area">
-        <input v-model='uuid' type="text" class="uuid" placeholder="인증번호를 입력해주세요.">
+        <div class="timeParent">
+          <input v-model='uuid' type="text" class="uuid" placeholder="인증번호를 입력해주세요.">
+          <span id="time">03:00</span>
+        </div>
         <div class='btn go-login-btn'>확인</div>
         <div class='btn re-submit-btn' @click="retry">다시보내기</div>
       </div>
-      <div>Registration closes in <span id="time">03:00</span> minutes!</div>
     </div>
   </div>
 </template>

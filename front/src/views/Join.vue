@@ -4,12 +4,12 @@
       <h1 class='join-logo'>Welcome</h1>
       <div class="join-input-area">
         <label for="">이메일</label>
-        <input @focus="activeInput" @blur='deactiveInput' v-model='input.email' type="text" id='email-join' placeholder="example">
+        <input @focus="activeInput" @blur='deactiveInputEmail' v-model='input.email' type="text" id='email-join' placeholder="example">
         <span class='email-join-span'> @ </span>
-        <input @focus="activeInput" @blur='deactiveInput' v-model='input.url' v-if='offSelect' type="text" id='email-join2' placeholder="url">
+        <input @focus="activeInput" @blur='deactiveInputEmail' v-model='input.url' v-if='offSelect' type="text" id='email-join2' placeholder="url">
         <span v-if='!offSelect' id='email-join2'>{{ input.url }}</span>
         <span class='email-join-span'> |  </span>
-        <select @focus="activeInput" @blur='deactiveInput' v-model='select' name="job" id='email-combo'>
+        <select @focus="activeInput" @blur='deactiveInputEmail' v-model='select' name="job" id='email-combo'>
           <option >직접입력</option>
           <option >gmail.com</option>
           <option > naver.com</option>
@@ -22,8 +22,9 @@
           <option > paran.com</option>
           <option > korea.com</option>
         </select>
-        <p v-if="mailErrMsg" class='err-msg join-err-msg'>이미 사용중인 이메일입니다.</p>
-        <p v-if="mailSucMsg" class='suc-msg join-suc-msg'>사용가능합니다.</p>
+        <p v-if="mailErrMsg" class='err-msg join-err-msg'>유효하지 않은 이메일 형식입니다.</p>
+        <p v-if="mailSucMsg && finalMail" class='err-msg join-err-msg'>이미 사용중인 이메일입니다.</p>
+        <p v-if="mailSucMsg && !finalMail && flag" class='suc-msg join-suc-msg'>사용가능합니다.</p>
       </div>
       <div class="join-input-area">
         <label for="">비밀번호</label>
@@ -39,7 +40,7 @@
       </div>
       <div class="join-input-area">
         <label for="">닉네임</label>
-        <input @focus="activeInput" @blur='deactiveInput' v-model='input.nickname' type="text" class="common-input-join" placeholder="nickname"  maxlength="128">
+        <input @focus="activeInput" @blur='deactiveInput' v-on:input="input.nickname = $event.target.value" type="text" class="common-input-join" placeholder="nickname"  maxlength="128">
         <p v-if="nickErrMsg" class='err-msg join-err-msg'>이미 사용중인 닉네임입니다.</p>
         <p v-if="nickSucMsg" class='suc-msg join-suc-msg'>사용가능합니다.</p> 
       </div>
@@ -130,6 +131,7 @@ export default {
       pwSucMsg: false,
       mailErrMsg: false,
       mailSucMsg: false,
+      finalMail: false,
       nickErrMsg: false,
       nickSucMsg: false,
       isFemale: false,
@@ -138,6 +140,7 @@ export default {
       isMale: false,
       isCancle: false,
       defaultImg: "default-user.png",
+      flag: false,
     }
   },
   created() {
@@ -187,6 +190,9 @@ export default {
     },
     'input.profileImg'() {
       this.checkProfile();
+    },
+    'finalMail'() {
+      this.finalMailCheck();
     },
     input: {
       handler() {
@@ -274,10 +280,10 @@ export default {
     },
     checkJoinForm() {
       if(this.input.email && (this.input.url || this.select != '직접입력') && this.input.password
-      && this.input.passwordConfirm && this.input.nickname
+      && this.input.passwordConfirm && this.input.nickname && this.passwordSuccessMsg
       && this.input.birth.year && this.input.birth.month && this.input.birth.day
       && (this.isMale || this.isFemale)
-      && this.mailSucMsg && this.pwSucMsg && this.nickSucMsg && this.birthSucMsg){
+      && !this.finalMail && this.pwSucMsg && this.nickSucMsg && this.birthSucMsg){
         this.JoinBtn = false;
       } else {
         this.JoinBtn = true
@@ -303,17 +309,34 @@ export default {
       }
     },
     checkNickname() {
-      if(this.input.nickname) {
-        this.nickSucMsg = true
-      } else {
-        this.nickSucMsg = false
-      }
+      axios.get('http://localhost:8080/account/checkNickname',{ 
+        params: {
+          nickname: this.input.nickname
+          }
+      }).then(data => {
+        if (data.data.data == "exist") {
+          this.nickErrMsg = true;
+          this.nickSucMsg = false;
+          this.checkJoinForm()
+        } else {
+          this.nickSucMsg = true;
+          this.nickErrMsg = false;
+          this.checkJoinForm()        
+        }
+      })
+      .catch(function(){
+          })
+      
     },
     activeInput() {
       event.path[1].style.border = '2px solid black'
       event.path[1].style.zIndex = 5
     },
     deactiveInput() {
+      event.path[1].style.border = '1px solid #B0B0B0'
+      event.path[1].style.zIndex = 1
+    },
+    deactiveInputEmail() {
       event.path[1].style.border = '1px solid #B0B0B0'
       event.path[1].style.zIndex = 1
     },
@@ -371,17 +394,11 @@ export default {
       SecondPage.classList.remove('hidden')
       firstPage.classList.remove('return')
       SecondPage.classList.add('goNext-end')
-      // const userProfile = document.querySelector('.profile-img')
-
       if (this.isMale) {
-        // userProfile.classList.remove('join-profile-img-female');
-        // userProfile.classList.add('join-profile-img');
         this.defaultImg = 'default-user.png'
         this.input.sex = 'male';
       }
       else {
-        // userProfile.classList.add('join-profile-img-female')
-        // userProfile.classList.remove('join-profile-img')
         this.defaultImg = 'default-user-female.png'
         this.input.sex = 'female';
       }
@@ -427,7 +444,12 @@ export default {
           profile_img: "C:\\Users\\multicampus\\Desktop\\firstPJT\\PJT\\s03p12b304\\front\\public\\user\\" + photoFile.files[0].name
 
       }).then(function(data){
-        console.log(data.data.data)
+        console.log(data.data.data);
+        Swal.fire(
+        '환영해요!',
+        '자신만의 패션을 뽐내보세요!',
+        'success'
+      )
       })
       .catch(function(data){
         console.log(data.data.data)
@@ -469,10 +491,36 @@ export default {
     changePart() {
       this.changeProfile = true;
     },
+    finalMailCheck() {
+      this.checkJoinForm();
+    },
     checkEmailValidate() {
       if (this.input.email.length >= 4 && EmailValidator.validate((this.input.email+'@'+this.input.url)))
-        { console.log('올바릅니다.'); this.mailSucMsg = true; }
-      else { console.log('올바르지 않습니다.'); this.mailSucMsg = false; }
+        { 
+         this.mailSucMsg = true;
+         this.mailErrMsg = false;
+         this.finalMail = false;
+          if (this.mailSucMsg) {
+            axios.get('http://localhost:8080/account/checkDoubleEmail',{ 
+              params: {
+                email: this.input.email+'@'+this.input.url
+                }
+            }).then(data => {
+              if (data.data.data == "exist") {
+                this.finalMail = true;
+                this.flag = false;
+              } else {
+                this.finalMail = false;
+                this.flag = true;
+                
+              }
+            })
+            .catch(function(){
+            })}
+        }
+      else { 
+      this.mailSucMsg = false;
+      this.mailErrMsg = true; }
     },
     setProfileImg() {
       var frm = new FormData();
@@ -491,7 +539,10 @@ export default {
       this.input.profileImg = ''
       this.isCancle = false
       document.getElementById("profile-img-edit").value = "";
-    }
+    },
+    checkcheck() {
+      console.log('hi')
+    },
   }
 }
 </script>
