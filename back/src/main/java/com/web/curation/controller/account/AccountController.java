@@ -1,10 +1,6 @@
 package com.web.curation.controller.account;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.common.io.Files;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.UserDTO;
@@ -111,44 +105,43 @@ public class AccountController {
 	}
 
 	@PostMapping("/account/signup")
-	@ApiOperation(value = "가입하기")
+	@ApiOperation(value = "회원가입")
 	public Object signup(@Valid @RequestBody SignupRequest request) {
-	      // 이메일, 닉네임 중복처리 필수
-	      // 회원가입단을 생성해 보세요.
-		System.out.println(1);
-	      final BasicResponse result = new BasicResponse();
-	      // 이메일, 닉네임 중복처리 필수
+		// 이메일, 닉네임 중복처리 필수
+		// 회원가입단을 생성해 보세요.
+		final BasicResponse result = new BasicResponse();
+		// 이메일, 닉네임 중복처리 필수
 
-	      // 저장
-	      User user = new User();
-	      StringTokenizer st = new StringTokenizer(request.getBirth());
-	      LocalDate currentDate = LocalDate.of(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
-	      
-	      System.out.println(request.getNickname());
-	      user.setNickname(request.getNickname());
-	      user.setEmail(request.getEmail());
-	      user.setBirth(currentDate);
-	      user.setGender(request.getGender());
-	      user.setPassword(request.getPassword());
-	      user.setSelfintroduce(null);
-	      if (userDao.findUserByNickname(user.getNickname()).isPresent()
-	            || userDao.findUserByEmail(user.getEmail()).isPresent()) {
-	         result.status = true;
-	         result.data = "fail";
-	      } else {
-	         if (userDao.save(user) == null) {
-	            result.status = true;
-	            result.data = "fail";
+		// 저장
+		User user = new User();
+		StringTokenizer st = new StringTokenizer(request.getBirth());
+		LocalDate currentDate = LocalDate.of(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()),
+				Integer.parseInt(st.nextToken()));
 
-	         } else {
-	            result.status = true;
-	            result.data = "success";
-	         }
-	      }
-	      return new ResponseEntity<>(result, HttpStatus.OK);
-	   }
+		System.out.println(request.getNickname());
+		user.setNickname(request.getNickname());
+		user.setEmail(request.getEmail());
+		user.setBirth(currentDate);
+		user.setGender(request.getGender());
+		user.setPassword(request.getPassword());
+		user.setSelfintroduce(null);
+		user.setProfile_img(request.getProfile_img());
+		if (userDao.findUserByNickname(user.getNickname()).isPresent()
+				|| userDao.findUserByEmail(user.getEmail()).isPresent()) {
+			result.status = true;
+			result.data = "fail";
+		} else {
+			if (userDao.save(user) == null) {
+				result.status = true;
+				result.data = "fail";
 
-		
+			} else {
+				result.status = true;
+				result.data = "success";
+			}
+		}
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 
 	@GetMapping("/account/findPassword")
 	@ApiOperation(value = "비밀번호 찾기")

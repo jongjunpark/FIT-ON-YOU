@@ -12,13 +12,13 @@ import lombok.ToString;
 @Getter
 @ToString
 public class UserDTO {
-   private String nickname;
-   private String password;
-   private String email;
-   private LocalDateTime create_Date;
-   private LocalDate birth;
-   private String gender;
-    private String selfintroduce;
+	private String nickname;
+	private String password;
+	private String email;
+	private LocalDateTime create_Date;
+	private LocalDate birth;
+	private String gender;
+	private String selfintroduce;
 
 	public UserDTO(User user) {
 		this.nickname = user.getNickname();
@@ -31,4 +31,5 @@ public class UserDTO {
 	}
 	
 	public UserDTO() {}
+
 }
