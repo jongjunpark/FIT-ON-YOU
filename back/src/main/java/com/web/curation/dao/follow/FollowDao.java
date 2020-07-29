@@ -19,4 +19,9 @@ public interface FollowDao extends JpaRepository<Follow, String>{
 	@Transactional
 	int deleteAllByFollowno(@Param("followNo") Integer followNo);
 	
+	List<Follow> getFollowByFolloweduser(String userName);
+	
+	@Query(value="SELECT a.followno, a.followeduser, a.followinguser FROM (select * from follow where followeduser =:userName)as a inner join (select * from follow where followinguser =:userName ) as b on a.followeduser = b.followinguser and a.followinguser = b.followeduser",nativeQuery = true)
+	List<Follow> getFollowByFolloweinguserAndFollweduser(String userName);
+	
 }
