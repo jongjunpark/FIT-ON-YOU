@@ -12,7 +12,7 @@
               <div class="influ-box"></div>
             </div>
           </div>
-          <div class="carousel-item">
+          <!-- <div class="carousel-item">
             <div class="carousel-inner-box">
               <div class="influ-box"></div>
               <div class="influ-box"></div>
@@ -20,7 +20,7 @@
               <div class="influ-box"></div>
               <div class="influ-box"></div>
             </div>
-          </div>
+          </div> -->
         </div>
         <a class="carousel-control-prev carousel-btn" href="#carouselExampleControls" role="button" data-slide="prev">
           <span class="carousel-control-prev-icon carousel-btn-arrow" aria-hidden="true"></span>
