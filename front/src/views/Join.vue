@@ -95,6 +95,8 @@ import PasswordValidator from 'password-validator'
 import * as EmailValidator from "email-validator"
 import Swal from 'sweetalert2'
 import axios from 'axios'
+import { mapMutations } from 'vuex'
+
 
 export default {
   name: 'Join',
@@ -200,7 +202,11 @@ export default {
       }, deep:true
     },
   },
+  computed: {
+    
+  },
   methods: {
+    ...mapMutations(['setToken']),
     checkSelect() {
       if (this.select === '직접입력') {
         this.onSelect = false
@@ -425,6 +431,19 @@ export default {
       }
     },
     signupFinish() {
+      
+      var frm = new FormData();
+      var photoFile = document.getElementById("profile-img-edit");
+      if (photoFile.files[0]) {
+        this.profileImg = "C:\\Users\\multicampus\\Desktop\\picture\\" + photoFile.files[0].name
+      } else {
+        this.profileImg = null
+      }
+      Swal.fire(
+        '환영해요!',
+        '자신만의 패션을 뽐내보세요!',
+        'success'
+      )
       axios.post('http://localhost:8080/account/signup',{
 
           email: this.input.email+'@'+this.input.url,
@@ -432,18 +451,37 @@ export default {
           nickname: this.input.nickname,
           gender: this.gender,
           birth: this.input.birth.year+' '+this.input.birth.month+' '+this.input.birth.day,
+          profile_img: this.profileImg
 
-      }).then(function(data){
-        console.log(data.data.data);
+      }).then(data => {
+        this.$cookies.set('auth-token', data.data.auth_token)
+        // this.setToken(data.data.auth_token)
         Swal.fire(
         '환영해요!',
         '자신만의 패션을 뽐내보세요!',
         'success'
-      )
+        )
+        this.$router.go('/')
       })
-      .catch(function(data){
-        console.log(data.data.data)
+      .catch(function(){
+        // console.log(data.data.data)
       });
+      if (photoFile.files[0]) {
+
+        frm.append("profile-img-edit", photoFile.files[0]);
+        axios.post('http://localhost:8080/account/addProfileImg',frm,{
+          headers:{
+              'Content-Type': 'multipart/form-data'
+          }
+        }).then(function(){
+          console.log("1");
+          
+        })
+        .catch(function(){
+          console.log("2");
+        });
+      }
+
     },
     notTab() {
       window.addEventListener('keydown', event => {
@@ -499,10 +537,12 @@ export default {
       this.mailSucMsg = false;
       this.mailErrMsg = true; }
     },
-    setProfileImg(event) {
-      console.log(event.target.files)
-      const file = event.target.files[0];
-      this.input.profileImg = URL.createObjectURL(file);
+    setProfileImg() {
+      var frm = new FormData();
+      var photoFile = document.getElementById("profile-img-edit");
+      frm.append("profile-img-edit", photoFile.files[0]);
+      console.log(photoFile.files[0].name);
+      this.input.profileImg = URL.createObjectURL(photoFile.files[0]);
     },
     onCancleBtn() {
       this.isCancle = true

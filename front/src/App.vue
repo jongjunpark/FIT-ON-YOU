@@ -49,6 +49,9 @@
 
 <script>
 import "./assets/css/common.css";
+import { mapState, mapGetters, mapMutations } from 'vuex';
+import axios from 'axios';
+
 export default {
   name: 'App',
   data() {
