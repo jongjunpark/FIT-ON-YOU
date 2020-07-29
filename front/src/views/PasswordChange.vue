@@ -28,7 +28,9 @@
 <script>
 import "../components/css/PasswordChange.css"
 import PasswordValidator from 'password-validator'
-
+import axios from 'axios'
+import Swal from 'sweetalert2'
+import { mapState } from 'vuex'
 export default {
   name: 'PasswordChange',
   data() {
@@ -52,6 +54,9 @@ export default {
       this.checkPasswordValidate();
       this.checkPassword();
     },
+  },
+  computed: {
+    ...mapState(['pwdUser'])
   },
   methods: {
     activeInput() {
@@ -93,7 +98,23 @@ export default {
       }
     },
     changePassword() {
+      console.log(this.pwdUser);
+      const formData= new FormData();
+      formData.append('email',this.pwdUser.email);
+      formData.append('password',this.passwordConfirm);
 
+      axios.post('http://localhost:8080/account/changePassword',
+        formData).then(data => {
+        console.log(data)
+        Swal.fire(
+          '변경되었습니다.',
+          '',
+          'success'
+        )
+      })
+      .catch(data => {
+        console.log(data)
+      });
     },
   },
   created() {

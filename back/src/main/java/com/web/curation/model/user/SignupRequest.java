@@ -29,6 +29,9 @@ public class SignupRequest {
     @ApiModelProperty(required = true)
     @NotNull
     String birth;
+    
+    String profile_img;
+    String selfintroduce;
 
     String profile_img;
 	public String getNickname() {

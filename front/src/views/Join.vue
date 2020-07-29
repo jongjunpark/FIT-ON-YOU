@@ -451,8 +451,8 @@ export default {
         'success'
       )
       })
-      .catch(function(data){
-        console.log(data.data.data)
+      .catch(function(){
+        // console.log(data.data.data)
       });
 
       frm.append("profile-img-edit", photoFile.files[0]);

@@ -16,6 +16,7 @@ import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -109,9 +110,12 @@ public class AccountController {
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
 	}
 
+	@PostMapping("/account/signup")
+	@ApiOperation(value = "가입하기")
 	public Object signup(@Valid @RequestBody SignupRequest request) {
 	      // 이메일, 닉네임 중복처리 필수
 	      // 회원가입단을 생성해 보세요.
+		System.out.println(1);
 	      final BasicResponse result = new BasicResponse();
 	      // 이메일, 닉네임 중복처리 필수
 
@@ -234,9 +238,27 @@ public class AccountController {
 			result.data = "non exist";
 		} else {// 있는 경우
 			result.status = true;
-			result.data = "exist";
-			result.object = optUser.get();
+			result.data = "exist"; 
+			result.object = optUser.get(); 
 		}
+		return result;
+	}
+	
+	@PostMapping("/account/changePassword")
+	@ApiOperation(value = "새 비밀번호 설정")
+	public Object changePwd(@Valid @RequestParam("email") String email,@Valid @RequestParam("password") String password) {
+		System.out.println(email+ " "+password);
+		final BasicResponse result = new BasicResponse();
+		try{
+			userDao.updatePassword(password, email);
+			result.status=true;
+			result.data="success";
+		}
+		catch (Exception e){
+			result.status=true;
+			result.data="fail";  
+		}
+		
 		return result;
 	}
 }
