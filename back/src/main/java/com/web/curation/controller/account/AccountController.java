@@ -12,6 +12,7 @@ import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -189,13 +190,13 @@ public class AccountController {
 	@ApiOperation(value = "가입하기")
 
 	public Object addProfileImg(@RequestParam("profile-img-edit") MultipartFile img) {
-		
+
 		final BasicResponse result = new BasicResponse();
 		String path = "C:\\Users\\multicampus\\Desktop\\firstPJT\\PJT\\s03p12b304\\front\\public\\user\\";
-		File file = new File(path+img.getOriginalFilename());
+		File file = new File(path + img.getOriginalFilename());
 		try {
-		img.transferTo(file);
-		}catch (Exception e) {
+			img.transferTo(file);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		System.out.println(img);
@@ -230,9 +231,41 @@ public class AccountController {
 			result.data = "non exist";
 		} else {// 있는 경우
 			result.status = true;
-			result.data = "exist";
-			result.object = optUser.get();
+			result.data = "exist"; 
+			result.object = optUser.get(); 
 		}
 		return result;
 	}
+	
+	@PostMapping("/account/changePassword")
+	@ApiOperation(value = "새 비밀번호 설정")
+	public Object changePwd(@Valid @RequestParam("email") String email,@Valid @RequestParam("password") String password) {
+		System.out.println(email+ " "+password);
+		final BasicResponse result = new BasicResponse();
+		try{
+			userDao.updatePassword(password, email);
+			result.status=true;
+			result.data="success";
+		}
+		catch (Exception e){
+			result.status=true;
+			result.data="fail";  
+		}
+		
+		return result;
+	}
+	@GetMapping("/account/token")
+	public Map<String, Object> getUserByToken(@RequestParam String jwt){
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			jwtService.checkValid(jwt); // 토큰이 유효한지 검사
+			resultMap.put("userInfo",jwtService.get(jwt)); // 토큰에 담긴 정보 담기
+			resultMap.put("result",1);
+			
+		}catch(Exception e){
+			resultMap.put("result",0);
+		}
+		return resultMap;
+	}
+
 }
