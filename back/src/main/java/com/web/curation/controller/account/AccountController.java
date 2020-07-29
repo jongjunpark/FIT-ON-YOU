@@ -1,6 +1,11 @@
 package com.web.curation.controller.account;
 
-import java.time.LocalDateTime;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -9,25 +14,27 @@ import java.util.StringTokenizer;
 
 import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
-import lombok.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.google.common.io.Files;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.UserDTO;
-import com.web.curation.model.user.FindPasswordRequest;
 import com.web.curation.model.user.SignupRequest;
 import com.web.curation.model.user.User;
 import com.web.curation.service.user.JwtService;
@@ -37,7 +44,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import javassist.NotFoundException;
-import lombok.val;
 
 @ApiResponses(value = { @ApiResponse(code = 401, message = "Unauthorized", response = BasicResponse.class),
 		@ApiResponse(code = 403, message = "Forbidden", response = BasicResponse.class),
@@ -68,7 +74,6 @@ public class AccountController {
 //      Optional<User> userOpt = userDao.findUserByEmailAndPassword(email, password);
 
 		ResponseEntity response = null;
-
 
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.ACCEPTED;
@@ -107,56 +112,53 @@ public class AccountController {
 
 	@PostMapping("/account/signup")
 	@ApiOperation(value = "가입하기")
-
 	public Object signup(@Valid @RequestBody SignupRequest request) {
-		// 이메일, 닉네임 중복처리 필수
-		// 회원가입단을 생성해 보세요.
-		final BasicResponse result = new BasicResponse();
-		// 이메일, 닉네임 중복처리 필수
+	      // 이메일, 닉네임 중복처리 필수
+	      // 회원가입단을 생성해 보세요.
+		System.out.println(1);
+	      final BasicResponse result = new BasicResponse();
+	      // 이메일, 닉네임 중복처리 필수
 
-		// 저장
-		User user = new User();
-		LocalDateTime currentDateTime = LocalDateTime.now();
-		StringTokenizer st = new StringTokenizer(request.getBirth());
-		LocalDateTime ldt = currentDateTime.withYear(Integer.parseInt(st.nextToken()))
-				.withMonth(Integer.parseInt(st.nextToken())).withDayOfMonth(Integer.parseInt(st.nextToken()));
+	      // 저장
+	      User user = new User();
+	      StringTokenizer st = new StringTokenizer(request.getBirth());
+	      LocalDate currentDate = LocalDate.of(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
+	      
+	      System.out.println(request.getNickname());
+	      user.setNickname(request.getNickname());
+	      user.setEmail(request.getEmail());
+	      user.setBirth(currentDate);
+	      user.setGender(request.getGender());
+	      user.setPassword(request.getPassword());
+	      user.setSelfintroduce(null);
+	      if (userDao.findUserByNickname(user.getNickname()).isPresent()
+	            || userDao.findUserByEmail(user.getEmail()).isPresent()) {
+	         result.status = true;
+	         result.data = "fail";
+	      } else {
+	         if (userDao.save(user) == null) {
+	            result.status = true;
+	            result.data = "fail";
 
-		System.out.println(request.getNickname());
-		user.setNickname(request.getNickname());
-		user.setEmail(request.getEmail());
-		user.setBirth(ldt);
-		user.setGender(request.getGender());
-		user.setPassword(request.getPassword());
-		user.setSelfintroduce(null);
-		System.out.println("finduserbynickname---------->" + userDao.findUserByNickname(user.getNickname()));
-		if (userDao.findUserByNickname(user.getNickname()) != null
-				|| userDao.findUserByEmail(user.getEmail()) != null) {
-			result.status = true;
-			result.data = "fail";
-		} else {
-			if (userDao.save(user) == null) {
-				result.status = true;
-				result.data = "fail";
+	         } else {
+	            result.status = true;
+	            result.data = "success";
+	         }
+	      }
+	      return new ResponseEntity<>(result, HttpStatus.OK);
+	   }
 
-			} else {
-				result.status = true;
-				result.data = "success";
-			}
-		}
-		return new ResponseEntity<>(result, HttpStatus.OK);
-	}
+		
 
 	@GetMapping("/account/findPassword")
 	@ApiOperation(value = "비밀번호 찾기")
-	public Map<String, Object> findPassword(@Valid @RequestParam String email, @Valid @RequestParam String nickname) {
-		System.out.println(1);
-//		final BasicResponse result = new BasicResponse();
+	public Map<String, Object> findPassword(@Valid @RequestParam String email, @Valid @RequestParam String pTime) {
 		Map<String, Object> result = new HashMap<>();
-		Optional<User> optUser = userDao.findUserByEmailAndNickname(email, nickname);
-		if (optUser == null) {
-			System.out.println(2);
+		LocalDate time = LocalDate.of(Integer.parseInt(pTime.substring(0, 4)), Integer.parseInt(pTime.substring(4, 6)),
+				Integer.parseInt(pTime.substring(6, 8)));
+		Optional<User> optUser = userDao.findUserByEmailAndBirth(email, time);
+		if (!optUser.isPresent()) {
 		} else {
-			System.out.println(3);
 			UserDTO userDto = new UserDTO(optUser.get());
 
 			String to = userDto.getEmail();
@@ -166,7 +168,7 @@ public class AccountController {
 			StringBuilder text = new StringBuilder();
 			text.append(userDto.getNickname());
 			text.append(" 님의 비밀번호를 위한 비밀번호 인증 절차입니다 하단의 번호를 핏온유 화면에 입력해 주세요\n");
-			text.append("인증번호:" + certificationNum+'\n');
+			text.append("인증번호:" + certificationNum + '\n');
 			text.append("인증번호를 다른사람이 보지 않게 주의해 주세요.\n");
 //			text.append("핏온유 인증 페이지로 이동하기");
 //			text.append("http://localhost:8081/");
@@ -182,28 +184,81 @@ public class AccountController {
 				emailSender.send(message);
 				result.put("userInfo", userDto);
 				result.put("certifNum", certificationNum);
-				
+
 			} catch (Exception e) {
 				System.out.println(5);
 				e.printStackTrace();
 			}
 		}
+		return result;
+	}
 
+	@PostMapping(value = "/account/addProfileImg", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+	@ApiOperation(value = "가입하기")
+
+	public Object addProfileImg(@RequestParam("profile-img-edit") MultipartFile img) {
+
+		final BasicResponse result = new BasicResponse();
+		String path = "C:\\Users\\multicampus\\Desktop\\firstPJT\\PJT\\s03p12b304\\front\\public\\user\\";
+		File file = new File(path + img.getOriginalFilename());
+		try {
+			img.transferTo(file);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println(img);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@GetMapping("/account/checkDoubleEmail")
+	@ApiOperation(value = "이메일 중복검사")
+	public Object findEmail(@Valid @RequestParam String email) {
+		final BasicResponse result = new BasicResponse();
+
+		Optional<User> optUser = userDao.getUserByEmail(email);
+		if (!optUser.isPresent()) {// 없는 경우
+			result.status = true;
+			result.data = "non exist";
+		} else {// 있는 경우
+			result.status = true;
+			result.data = "exist";
+			result.object = optUser.get();
+		}
+		return result;
+	}
+
+	@GetMapping("/account/checkNickname")
+	@ApiOperation(value = "닉네임 중복검사")
+	public Object findNick(@Valid @RequestParam String nickname) {
+		final BasicResponse result = new BasicResponse();
+
+		Optional<User> optUser = userDao.findUserByNickname(nickname);
+		if (!optUser.isPresent()) {// 없는 경우
+			result.status = true;
+			result.data = "non exist";
+		} else {// 있는 경우
+			result.status = true;
+			result.data = "exist"; 
+			result.object = optUser.get(); 
+		}
 		return result;
 	}
 	
-	@GetMapping("/account/token")
-	public Map<String, Object> getUserByToken(@RequestParam String jwt){
-		Map<String, Object> resultMap = new HashMap<>();
-		try {
-			jwtService.checkValid(jwt); // 토큰이 유효한지 검사
-			resultMap.put("userInfo",jwtService.get(jwt)); // 토큰에 담긴 정보 담기
-			resultMap.put("result",1);
-			
-		}catch(Exception e){
-			resultMap.put("result",0);
+	@PostMapping("/account/changePassword")
+	@ApiOperation(value = "새 비밀번호 설정")
+	public Object changePwd(@Valid @RequestParam("email") String email,@Valid @RequestParam("password") String password) {
+		System.out.println(email+ " "+password);
+		final BasicResponse result = new BasicResponse();
+		try{
+			userDao.updatePassword(password, email);
+			result.status=true;
+			result.data="success";
 		}
-		return resultMap;
+		catch (Exception e){
+			result.status=true;
+			result.data="fail";  
+		}
+		
+		return result;
 	}
-	
 }

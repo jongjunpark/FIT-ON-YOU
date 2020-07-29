@@ -7,6 +7,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import org.springframework.web.multipart.MultipartFile;
+
 @Valid
 @ToString
 public class SignupRequest {
@@ -27,9 +29,11 @@ public class SignupRequest {
     @ApiModelProperty(required = true)
     @NotNull
     String birth;
-
     
+    String profile_img;
+    String selfintroduce;
 
+    String profile_img;
 	public String getNickname() {
 		return nickname;
 	}
@@ -69,5 +73,13 @@ public class SignupRequest {
     public void setPassword(String password) {
         this.password = password;
     }
+
+	public String getProfile_img() {
+		return profile_img;
+	}
+
+	public void setProfile_img(String profile_img) {
+		this.profile_img = profile_img;
+	}
 
 }

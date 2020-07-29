@@ -9,14 +9,15 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Setter
@@ -37,9 +38,10 @@ public class User {
     @Column(insertable = false, updatable = false)
     private LocalDateTime create_Date;
    
-    private LocalDateTime birth;
+    private LocalDate birth;
     private String gender;
     private String selfintroduce;
+    private String profile_img;
     
 
 

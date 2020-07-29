@@ -12,7 +12,7 @@
       </div>
       <p v-if='errMsg' class='err-msg'>계정 혹은 생년월일이 틀렸습니다.</p>
       <div v-if='!okBtn' class='btn find-btn'>인증메일 발송</div>
-      <div v-if='okBtn' @click='checkInput' class='btn on-find-btn'>인증메일 발송</div>
+      <div v-if='okBtn' @click='findPassword' class='btn on-find-btn'>인증메일 발송</div>
     </div>
   </div>
 </template>
@@ -21,6 +21,10 @@
 import "../components/css/findpassword.css"
 import '../components/css/join.css'
 import * as EmailValidator from "email-validator"
+import axios from 'axios'
+import { mapState, mapMutations } from 'vuex'
+import Swal from 'sweetalert2'
+
 
 export default {
   name: 'FindPassword',
@@ -39,7 +43,11 @@ export default {
       this.checkEmailValidate();
     },
   },
+  computed: {
+    ...mapState(['certifNum'])
+  },
   methods: {
+    ...mapMutations(['confirmPwd', 'findUserPWd']),
     onOkBtn() {
       if (this.emailVaild && this.birth.length >= 8 && (this.birth >= 190000 && this.birth <= 20201231)) {
           this.okBtn = true
@@ -47,10 +55,35 @@ export default {
         this.okBtn = false
       }
     },
-    checkInput() {
-      // this.errMsg = true
-      this.$router.push("/find/password/ok")
+    findPassword(){
+      axios.get('http://localhost:8080/account/findPassword',{
+        params:{
+          email: this.email,
+          pTime: this.birth
+        }
+      }).then(data => {
+        console.log("성공")
+        console.dir(data)
+        if (data.data.certifNum) {
+          this.confirmPwd(data.data.certifNum)
+          this.findUserPWd(data.data.userInfo)
+          this.$router.push("/find/password/ok")
+        } else {
+          Swal.fire({
+          icon: 'error',
+          title: '다시 한번 더 확인해주세요',
+          text: '이메일 혹은 생년월일이 틀렸어요',
+        })
+        }
+      })
+      .catch(data => {
+        console.log(data)
+      });
     },
+    // checkInput() {
+    //   // this.errMsg = true
+    //   this.$router.push("/find/password/ok")
+    // },
     checkEmailValidate() {
       if (this.email.length >= 0 && !EmailValidator.validate(this.email))
         { console.log('올바르지 않습니다.'); this.emailVaild = false;}
