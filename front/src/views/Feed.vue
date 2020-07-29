@@ -43,7 +43,9 @@
           </div>
         </header>
         <section class="feed-content">
-          <article class="feed-content-img"></article>
+          <article id="feed-set-height" class="feed-content-img">
+            <img src="../assets/images/feed-test-img.jpg" alt="#">
+          </article>
           <div class="feed-btn-box">
             <div class='feed-btn-left'>
               <i @click="clickLike" class="fas fa-heart"></i>
@@ -64,8 +66,12 @@
 <script>
 import "../components/css/feed.css"
 
+
 export default {
   name: 'Feed',
+  created() {
+    window.addEventListener("resize", this.setFeedImg);
+  },
   methods: {
     onNewsFeed() {
       const selectBar = document.querySelector('.menu-bar-select')
@@ -79,10 +85,24 @@ export default {
       selectBar.classList.remove('go-second-menu')
       selectBar.classList.remove('go-third-menu')
     },
+    setFeedImg() {
+      const FEEDIMG = document.querySelector('#feed-set-height')
+      let WINDOWHEIGHT = window.innerHeight
+      FEEDIMG.style.height = `${WINDOWHEIGHT-300}px`
+    },
+    clickLike() {
 
+    },
+    clickComment() {
+
+    },
+    clickBookMark() {
+
+    }
   },
   mounted() {
     this.onNewsFeed()
+    // this.setFeedImg()
   }
 }
 </script>
