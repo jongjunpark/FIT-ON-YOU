@@ -12,11 +12,18 @@
       body {
         font-family: "Noto Sans KR", sans-serif !important;
       }
-    </style>
+      </style>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css">
     <script src="//developers.kakao.com/sdk/js/kakao.min.js" language="javascript" type="text/javascript"></script>
-    <script>Kakao.init('9c99bfe77ac3b4f9d69ad9df2afa4325');</script> 
+    <script type="text/javascript">
+      function googleload() {
+        window.dispatchEvent(new Event("google-loaded"));
+      }
+      </script>
+      <meta name="google-signin-client_id" content="834514064011-bqc7hgss1hil5965mdbgf57420u04lvv.apps.googleusercontent.com">
+      <script src="https://apis.google.com/js/platform.js?onload=googleload" async defer></script>
+
   </head>
   <body>
     <noscript>

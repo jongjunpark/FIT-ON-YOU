@@ -2,7 +2,8 @@
   <div class='wrap'>
     <div class='wrap-container'>
       <h1 class='main-logo'>Logo</h1>
-      <p v-if='errormsg' class='err-msg'>계정 혹은 비밀번호가 틀렸습니다.</p>
+      <p v-if='errormsgEmail' class='err-msg'>이메일이 존재하지 않습니다.</p>
+      <p v-if='errormsgPwd' class='err-msg'>비밀번호가 틀렸습니다.</p>
       <div class='login-input-area'>
         <input v-model='email' @keyup.enter='checkLoginInf' @keyup="checkLoginBtn" type="text" class='login-email non-text'>
         <label class='login-email-label' for="login-email">이메일</label>
@@ -16,13 +17,13 @@
         <label for="login-checkbox"> 로그인상태 유지</label>
       </div>
       <div v-if='offLoginBtn' class='btn login-btn'>로그인</div>
-      <div v-if='onLoginBtn' @click='checkLoginInf' class='btn on-login-btn'>로그인</div>
+      <div v-if='onLoginBtn' @click='loginHandler' class='btn on-login-btn'>로그인</div>
       <div class="social-area">
-        <div class="btn google-btn">
-          <img class='google-img' src="../assets/images/google2.png" alt="google">
+        <div class="btn google-btn" id="customBtn">
+          <img class="google-img" src="../assets/images/google2.png"/>
         </div>
-        <div class="btn kakao-btn">
-          <img class="kakao-img" src="../assets/images/kakao.png" alt="kakao">
+        <div class="btn kakao-btn" @click="loginWithKakao"> 
+          <img class="kakao-img" src="../assets/images/kakao.png"/>
         </div>
       </div>
       <div class="login-link-area">
@@ -34,29 +35,127 @@
 </template>
 
 <script>
+/* eslint-disable */
 import "../components/css/login.css"
+import axios from 'axios';
+import { mapActions, mapGetters } from 'vuex'
+import * as EmailValidator from "email-validator"
+
+Kakao.init('713af847cf1784de91646f5cb2455cbf');
+
+var userData={
+  
+}
 
 
+const Store='Store'
+ function attachSignin(element) {
+    console.log(element.id);
+    
+  }
 export default {
   name: 'Login',
+  modules:{
+    store:Store
+  },
   data () {
     return {
       email: '',
       password: '',
       offLoginBtn: true,
       onLoginBtn: false,
-      errormsg: false,
+      errormsgEmail: false,
+      errormsgPwd: false,
+      params: {
+          client_id: "834514064011-bqc7hgss1hil5965mdbgf57420u04lvv.apps.googleusercontent.com"
+      },
+      renderParams: {
+        width: 250,
+        height: 50,
+        longtitle: true
+      },
     }
   },
   watch: {
     email() {
-      this.setEmailClass();
+      this.checkEmailValidate();
     },
     password() {
       this.setPasswordClass();
     }
   },
-  methods: {
+  
+  computed:{
+    ...mapGetters([
+      'user',
+    ]),
+    
+    
+  },
+  mounted() {
+    window.addEventListener("google-loaded", this.startApp);    
+  }, 
+  methods:{
+    ...mapActions(['AC_USER']),
+    
+    loginWithKakao(){
+      let ref=this;
+      Kakao.Auth.loginForm({
+        success: function(authObj) {
+          Kakao.Auth.setAccessToken(authObj.access_token);
+          let ac_token = authObj.access_token;
+          Kakao.API.request({
+            url: '/v2/user/me',
+            success: function(response) {
+              userData  = {
+                access_token : ac_token,
+                token_type : 'Bearer',
+                nickname : response.kakao_account.profile.nickname,
+                profile_image : response.kakao_account.profile.profile_image_url,
+                email : response.kakao_account.email,
+                gender : response.kakao_account.gender,
+                age_range : response.kakao_account.age_range
+              }
+              ref.AC_USER(userData);
+              console.log(ref.$store.state.user);
+              // window.AC_USER(userData)
+            },
+            fail: function(error) {
+                console.log(error);
+            }
+          });
+        },
+        fail: function(err) {
+          alert(JSON.stringify(err))
+        },
+      })
+    },
+   
+    startApp() {
+      let ref = this;
+      gapi.load('auth2', function(){
+        let auth2 = gapi.auth2.init({
+          client_id: '834514064011-bqc7hgss1hil5965mdbgf57420u04lvv.apps.googleusercontent.com',
+          cookiepolicy: 'single_host_origin',
+        });
+        auth2.attachClickHandler('customBtn', {},
+        function(googleUser) {
+          const userData  = {
+                access_token : googleUser.getAuthResponse(true).access_token,
+                idToken : googleUser.getAuthResponse(true).id_token,
+                nickname : googleUser.getBasicProfile().Cd,
+                profile_image : googleUser.getBasicProfile().fL,
+                email : googleUser.getBasicProfile().zu,
+                token_type : 'Bearer',
+          }
+          ref.AC_USER(userData);
+          console.log(ref.$store.state.user);
+        }, function(error) {
+          alert(JSON.stringify(error, undefined, 2));
+        });
+      });
+    },
+    
     onLoginButton() {
       if (this.email) {
         if (this.password) {
@@ -75,7 +174,6 @@ export default {
       this.onLoginButton()
     },
     checkLoginInf() {
-      this.errormsg = true
     },
     pathJoin() {
       this.$router.push("/join")
@@ -99,6 +197,65 @@ export default {
         label.classList.remove('is-password')
       }
     },
+    checkEmailValidate() {
+      if (this.email.length >= 0 && !EmailValidator.validate((this.email)))
+        { this.setEmailClass();
+        this.onLoginButton(); }
+      else {  this.setEmailClass();
+      this.onLoginButton(); 
+        }
+    },
+    loginHandler() { 
+      console.log(this.email);
+      console.log(this.password);
+      axios.get('http://localhost:8080/account/login',{
+        params:{email:this.email,
+                  password:this.password},
+      }).then((response)=>{
+        // 로그인 성공
+        if(response.data.result==1){
+          console.log(response.data);
+          this.AC_USER(response.data);
+
+          console.log(this.$store.state.user);
+        }
+        // 이메일 없음
+        else if(response.data.result==-1){
+          this.errormsgEmail = true;
+          this.errormsgPwd = false;
+          const ERROR = document.querySelector('.btn')
+          const ERRORMESSAGE1 = document.querySelector('.login-email-label')
+          const ERRORMESSAGE2 = document.querySelector('.login-password-label')
+          const ERRORMESSAGE3 = document.querySelector('.login-email')
+          const ERRORMESSAGE4 = document.querySelector('.login-password')
+          ERROR.classList.add('on-login-btn-error')
+          ERRORMESSAGE1.classList.add('login-email-label-error')
+          ERRORMESSAGE2.classList.remove('login-password-label-error')
+          ERRORMESSAGE3.classList.add('login-email-error')
+          ERRORMESSAGE4.classList.remove('login-password-error')
+        }
+        
+        // 비밀번호 틀림
+        else if(response.data.result==2){
+          this.errormsgPwd = true;
+          this.errormsgEmail = false;
+          const ERROR = document.querySelector('.btn')
+          const ERRORMESSAGE1 = document.querySelector('.login-email-label')
+          const ERRORMESSAGE2 = document.querySelector('.login-password-label')
+          const ERRORMESSAGE3 = document.querySelector('.login-email')
+          const ERRORMESSAGE4 = document.querySelector('.login-password')
+          ERROR.classList.add('on-login-btn-error')
+          ERRORMESSAGE1.classList.remove('login-email-label-error')
+          ERRORMESSAGE2.classList.add('login-password-label-error')
+          ERRORMESSAGE3.classList.remove('login-email-error')
+          ERRORMESSAGE4.classList.add('login-password-error')
+        }
+
+      });
+    },
+
+    
   }
+  /* eslint-enable */
 }
 </script>

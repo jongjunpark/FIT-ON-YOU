@@ -1,37 +1,43 @@
-// 하단 DB 설정 부분은 Sub PJT II에서 데이터베이스를 구성한 이후에 주석을 해제하여 사용.
-
 package com.web.curation.model.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String uid;
+    @Id//pk를 지정
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)//자동 증분 칼럼
+    private String nickname;
 
-    @JsonIgnore
     private String password;
+    //어노테이션이 없더라도 테이블 칼럼명과 자동 매핑
     private String email;
 
     @Column(insertable = false, updatable = false)
-    private LocalDateTime createDate;
+    private LocalDateTime create_Date;
+   
+    private LocalDate birth;
+    private String gender;
+    private String selfintroduce;
+   
+
 
 }
