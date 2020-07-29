@@ -1,36 +1,58 @@
 <template>
   <div>
-    <div class='influ-nav'>
-      <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner">
-          <div class="carousel-item active" data-interval="10000">
-            <div class="carousel-inner-box">
-              <div class="influ-box"></div>
-              <div class="influ-box"></div>
-              <div class="influ-box"></div>
-              <div class="influ-box"></div>
-              <div class="influ-box"></div>
-            </div>
+    <div class="influ-nav">
+      <VueSlickCarousel v-bind="settings">
+        <div>
+          <div class="influ-box">
+            <div class="influ-icon"></div>
           </div>
-          <!-- <div class="carousel-item">
-            <div class="carousel-inner-box">
-              <div class="influ-box"></div>
-              <div class="influ-box"></div>
-              <div class="influ-box"></div>
-              <div class="influ-box"></div>
-              <div class="influ-box"></div>
-            </div>
-          </div> -->
         </div>
-        <a class="carousel-control-prev carousel-btn" href="#carouselExampleControls" role="button" data-slide="prev">
-          <span class="carousel-control-prev-icon carousel-btn-arrow" aria-hidden="true"></span>
-          <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next carousel-btn" href="#carouselExampleControls" role="button" data-slide="next">
-          <span class="carousel-control-next-icon carousel-btn-arrow" aria-hidden="true"></span>
-          <span class="sr-only">Next</span>
-        </a>
-      </div>
+        <div>
+          <div class="influ-box">
+            <div class="influ-icon"></div>
+          </div>
+        </div>
+        <div>
+          <div class="influ-box">
+            <div class="influ-icon"></div>
+          </div>
+        </div>
+        <div>
+          <div class="influ-box">
+            <div class="influ-icon"></div>
+          </div>
+        </div>
+        <div>
+          <div class="influ-box">
+            <div class="influ-icon"></div>
+          </div>
+        </div>
+        <div>
+          <div class="influ-box">
+            <div class="influ-icon"></div>
+          </div>
+        </div>
+        <div>
+          <div class="influ-box">
+            <div class="influ-icon"></div>
+          </div>
+        </div>
+        <div>
+          <div class="influ-box">
+            <div class="influ-icon"></div>
+          </div>
+        </div>
+        <div>
+          <div class="influ-box">
+            <div class="influ-icon"></div>
+          </div>
+        </div>
+        <div>
+          <div class="influ-box">
+            <div class="influ-icon"></div>
+          </div>
+        </div>
+      </VueSlickCarousel>
     </div>
 
     <div class='wrap feed-wrap'>
@@ -64,14 +86,30 @@
 </template>
 
 <script>
+import VueSlickCarousel from 'vue-slick-carousel'
+import 'vue-slick-carousel/dist/vue-slick-carousel.css'
+import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 import "../components/css/feed.css"
-
 
 export default {
   name: 'Feed',
-  created() {
-    window.addEventListener("resize", this.setFeedImg);
+  data() {
+    return {
+      settings: {
+        "dots": false,
+        "arrows": true,
+        "infinite": true,
+        "speed": 500,
+        "slidesToShow": 5,
+        "slidesToScroll": 1,
+        "touchThreshold": 1
+      }
+    }
   },
+  components: { VueSlickCarousel },
+  // created() {
+  //   window.addEventListener("resize", this.setFeedImg);
+  // },
   methods: {
     onNewsFeed() {
       const selectBar = document.querySelector('.menu-bar-select')
@@ -85,11 +123,11 @@ export default {
       selectBar.classList.remove('go-second-menu')
       selectBar.classList.remove('go-third-menu')
     },
-    setFeedImg() {
-      const FEEDIMG = document.querySelector('#feed-set-height')
-      let WINDOWHEIGHT = window.innerHeight
-      FEEDIMG.style.height = `${WINDOWHEIGHT-300}px`
-    },
+    // setFeedImg() {
+    //   const FEEDIMG = document.querySelector('#feed-set-height')
+    //   let WINDOWHEIGHT = window.innerHeight
+    //   FEEDIMG.style.height = `${WINDOWHEIGHT-400}px`
+    // },
     clickLike() {
 
     },
@@ -107,17 +145,53 @@ export default {
 }
 </script>
 <style scoped>
-.feed-wrap {
-  margin-top: 130px;
+@media (min-width: 1200px) {
+  .wrap {
+  max-width: 440px !important;
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 70px;
+  }
+}
+@media (max-width: 280px) {
+  .feed-wrap {
+    margin-top: 150px;
+  }
+}
+@media (min-width: 1200px) {
+  .feed-wrap {
+    margin-top: 70px !important;
+  }
+}
+@media (min-height: 700px) {
+  .feed-wrap {
+    margin-top: 150px;
+  }
+}
+@media (min-height: 800px) {
+  .feed-wrap {
+    margin-top: 200px;
+  }
+}
+@media (min-height: 1000px) {
+  .feed-wrap {
+    margin-top: 80px;
+  }
 }
 
+
 .influ-nav {
-  width: 100%;
   position: absolute;
-  top: 50px;
+  top: 70px;
   left: 0;
   right: 0;
+  padding: 10px 30px;
+  background-color: white;
+  box-shadow: 0 6px 12px 0 rgba(0,0,0,0.25);
+  border-radius: 10px;
+  z-index: -1;
 }
+
 @media (min-width: 1200px) {
   .influ-nav {
     max-width: 580px;
@@ -126,7 +200,32 @@ export default {
   }
 }
 
-.carousel-inner-box {
+.influ-nav div {
+  outline: none;
+}
+
+.influ-box {
+  display: flex;
+  justify-content: center;  
+}
+
+.influ-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: black;
+  cursor: pointer;
+}
+@media (max-width: 375px) {
+  .influ-icon {
+  width: 30px;
+  height: 30px;
+  }
+}
+
+
+
+/* .carousel-inner-box {
   padding: 0 30px;
   margin: 20px 0;
   width: 100%;
@@ -151,7 +250,8 @@ export default {
   height: 50px;
   border-radius: 50%;
   background-color: slateblue;
-}
+} */
+
 
 </style>
 
