@@ -13,15 +13,24 @@ import lombok.Setter;
 @Setter
 @Data
 public class UserDTO {
-   private String nickname;
-   private String password;
-   private String email;
-   private LocalDateTime create_Date;
-   private LocalDate birth;
-   private String gender;
-    private String selfintroduce;
+	private String nickname;
+	private String password;
+	private String email;
+	private LocalDateTime create_Date;
+	private LocalDate birth;
+	private String gender;
+	private String selfintroduce;
 
-   
-   public UserDTO() {}
+	public UserDTO(User user) {
+		this.birth = user.getBirth();
+		this.create_Date = user.getCreate_Date();
+		this.email = user.getEmail();
+		this.gender = user.getGender();
+		this.nickname = user.getNickname();
+		this.password = user.getPassword();
+		this.selfintroduce = user.getSelfintroduce();
+	}
+	
+	public UserDTO() {}
 
 }
