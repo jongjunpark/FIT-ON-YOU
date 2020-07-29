@@ -113,9 +113,11 @@ public class AccountController {
 	@PostMapping("/account/signup")
 	@ApiOperation(value = "가입하기")
 	public Object signup(@Valid @RequestBody SignupRequest request) {
+		Map<String, Object> resultMap = new HashMap<>();
 	      // 이메일, 닉네임 중복처리 필수
 	      // 회원가입단을 생성해 보세요.
 		System.out.println(1);
+		System.out.println(request.getProfile_img());
 	      final BasicResponse result = new BasicResponse();
 	      // 이메일, 닉네임 중복처리 필수
 
@@ -131,6 +133,7 @@ public class AccountController {
 	      user.setGender(request.getGender());
 	      user.setPassword(request.getPassword());
 	      user.setSelfintroduce(null);
+	      user.setProfile_img(request.getProfile_img());
 	      if (userDao.findUserByNickname(user.getNickname()).isPresent()
 	            || userDao.findUserByEmail(user.getEmail()).isPresent()) {
 	         result.status = true;
@@ -141,11 +144,16 @@ public class AccountController {
 	            result.data = "fail";
 
 	         } else {
+	        	UserDTO userDTO = new UserDTO(user);
+	        	String Token = jwtService.create(userDTO);
+	        	
 	            result.status = true;
 	            result.data = "success";
+	            resultMap.put("result", result);
+	            resultMap.put("auth_token",Token);
 	         }
 	      }
-	      return new ResponseEntity<>(result, HttpStatus.OK);
+	      return new ResponseEntity<>(resultMap, HttpStatus.OK);
 	   }
 
 		
@@ -199,7 +207,7 @@ public class AccountController {
 	public Object addProfileImg(@RequestParam("profile-img-edit") MultipartFile img) {
 
 		final BasicResponse result = new BasicResponse();
-		String path = "C:\\Users\\multicampus\\Desktop\\firstPJT\\PJT\\s03p12b304\\front\\public\\user\\";
+		String path = "C:\\Users\\multicampus\\Desktop\\picture\\";
 		File file = new File(path + img.getOriginalFilename());
 		try {
 			img.transferTo(file);
@@ -230,6 +238,7 @@ public class AccountController {
 	@GetMapping("/account/checkNickname")
 	@ApiOperation(value = "닉네임 중복검사")
 	public Object findNick(@Valid @RequestParam String nickname) {
+		
 		final BasicResponse result = new BasicResponse();
 
 		Optional<User> optUser = userDao.findUserByNickname(nickname);
@@ -247,18 +256,40 @@ public class AccountController {
 	@PostMapping("/account/changePassword")
 	@ApiOperation(value = "새 비밀번호 설정")
 	public Object changePwd(@Valid @RequestParam("email") String email,@Valid @RequestParam("password") String password) {
+		Map<String, Object> resultMap = new HashMap<>();
+		
 		System.out.println(email+ " "+password);
 		final BasicResponse result = new BasicResponse();
 		try{
 			userDao.updatePassword(password, email);
 			result.status=true;
 			result.data="success";
+			UserDTO userDTO = new UserDTO(userDao.findUserByEmail(email).get());
+			String Token = jwtService.create(userDTO);
+			resultMap.put("auth_token",Token);
+			
 		}
 		catch (Exception e){
 			result.status=true;
-			result.data="fail";  
+			result.data="fail";
+			resultMap.put("result",result);
 		}
 		
-		return result;
+		return resultMap;
 	}
+	// user 정보 받기
+	@GetMapping("/account/token")
+	   public Map<String, Object> getUserByToken(@RequestParam String jwt){
+	      Map<String, Object> resultMap = new HashMap<>();
+	      try {
+	         jwtService.checkValid(jwt); // 토큰이 유효한지 검사
+	         resultMap.put("userInfo",jwtService.get(jwt)); // 토큰에 담긴 정보 담기
+	         resultMap.put("result",1);
+	         
+	      }catch(Exception e){
+	         resultMap.put("result",0);
+	      }
+	      return resultMap;
+	   }
+	
 }
