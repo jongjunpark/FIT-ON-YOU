@@ -261,4 +261,18 @@ public class AccountController {
 		
 		return result;
 	}
+	@GetMapping("/account/token")
+	public Map<String, Object> getUserByToken(@RequestParam String jwt){
+		Map<String, Object> resultMap = new HashMap<>();
+		try {
+			jwtService.checkValid(jwt); // 토큰이 유효한지 검사
+			resultMap.put("userInfo",jwtService.get(jwt)); // 토큰에 담긴 정보 담기
+			resultMap.put("result",1);
+			
+		}catch(Exception e){
+			resultMap.put("result",0);
+		}
+		return resultMap;
+	}
+
 }

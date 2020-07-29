@@ -33,7 +33,6 @@ public class SignupRequest {
     String profile_img;
     String selfintroduce;
 
-    String profile_img;
 	public String getNickname() {
 		return nickname;
 	}
