@@ -36,12 +36,12 @@
         </div>
       <p v-if="isChange && isChange2" class="nickname" @click="changeNickName">{{ user.nickname }} <img src="../assets/images/edit.png" alt="" class="edit-img"></p>
       <div v-if="isChange2 && isChange" class="edit-content" @click="changeContent">
-        <h3>이 칸은 나의 자기소개 입니다. <img src="../assets/images/edit.png" alt="" class="edit-img"></h3>
+        <h3>자기소개 입니다. <img src="../assets/images/edit.png" alt="" class="edit-img"></h3>
       </div>
       </section>
     </div>
     <div v-if="isChange && isChange2" class="user-change">
-        <span><i class="fas fa-user-cog fa-2x"></i> 계정설정</span>
+        <span><i class="fas fa-user-cog fa-2x settings"></i> 계정설정</span>
       </div>
   </div>
 </template>

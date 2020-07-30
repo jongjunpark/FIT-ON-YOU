@@ -263,7 +263,6 @@
       </div>
       <div class="margin-box"></div>
     </div>
-    <div>{{user.nickname}}</div>
   </div>
 </template>
 
@@ -273,6 +272,8 @@ import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 import "../components/css/feed.css"
 import CommentModal from '../components/CommentModal.vue'
+import axios from 'axios'
+
 
 export default {
   name: 'Feed',
@@ -310,7 +311,7 @@ export default {
   //   window.addEventListener("resize", this.setFeedImg);
   // },
   methods: {
-    ...mapActions(['']),
+    // ...mapActions(['']),
     onNewsFeed() {
       const selectBar = document.querySelector('.menu-bar-select')
       const newsFeed = document.querySelector('.fa-newspaper')
