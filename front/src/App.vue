@@ -49,6 +49,7 @@
 
 <script>
 import "./assets/css/common.css";
+import axios from 'axios'
 import { mapState, mapGetters, mapMutations } from 'vuex';
 import axios from 'axios';
 
@@ -60,11 +61,14 @@ export default {
     }
   },
   computed: {
-    ...mapState(['authToken', 'user', 'isLoggedIn']),
+    ...mapState(['authToken', 'isLoggedIn', 'user']),
     ...mapGetters([])
   },
-   mounted() {
-    if (this.$cookies.isKey('auth-token')) {
+  methods: {
+    ...mapMutations(['setLoggedIn', 'setToken', 'setUser']),
+  },
+  mounted() {
+     if (this.$cookies.isKey('auth-token')) {
       this.setLoggedIn(true);
       this.setToken(this.$cookies.get('auth-token'));
       axios.get('http://localhost:8080/account/token',{

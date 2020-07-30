@@ -1,19 +1,23 @@
 package com.web.curation.model.user;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Data
@@ -85,4 +89,6 @@ public class User {
 		this.profile_img = profile_img;
 	}
     
+
+
 }
