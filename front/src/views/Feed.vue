@@ -176,9 +176,7 @@ export default {
     VueSlickCarousel,
     CommentModal
   },
-  // created() {
-  //   window.addEventListener("resize", this.setFeedImg);
-  // },
+
   methods: {
     ...mapActions(['']),
     onNewsFeed() {
@@ -193,11 +191,7 @@ export default {
       selectBar.classList.remove('go-second-menu')
       selectBar.classList.remove('go-third-menu')
     },
-    // setFeedImg() {
-    //   const FEEDIMG = document.querySelector('#feed-set-height')
-    //   let WINDOWHEIGHT = window.innerHeight
-    //   FEEDIMG.style.height = `${WINDOWHEIGHT-400}px`
-    // },
+  
     clickLike() {
       this.modal = true
     },

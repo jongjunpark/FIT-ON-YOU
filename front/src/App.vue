@@ -61,11 +61,14 @@ export default {
     }
   },
   computed: {
-    ...mapState(['authToken', 'user', 'isLoggedIn']),
+    ...mapState(['authToken', 'isLoggedIn', 'user']),
     ...mapGetters([])
   },
-   mounted() {
-    if (this.$cookies.isKey('auth-token')) {
+  methods: {
+    ...mapMutations(['setLoggedIn', 'setToken', 'setUser']),
+  },
+  mounted() {
+     if (this.$cookies.isKey('auth-token')) {
       this.setLoggedIn(true);
       this.setToken(this.$cookies.get('auth-token'));
       this.sendUserInfo();
