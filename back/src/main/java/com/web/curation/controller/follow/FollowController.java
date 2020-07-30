@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.web.curation.dao.alarm.AlarmDao;
 import com.web.curation.dao.follow.FollowDao;
+import com.web.curation.model.Alarm;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.FollowDTO;
 import com.web.curation.model.follow.AddFollowRequest;
@@ -29,9 +31,12 @@ public class FollowController {
 
 	@Autowired
 	FollowDao followDao;
+	@Autowired
+	private AlarmDao alarmDao;
 
 	@GetMapping("/follow/add")
 	@ApiOperation(value = "팔로우 추가")
+	// following 팔로우 하는 사람  , followed 팔로우 당한 사람
 	public void addFollow(@Valid @RequestParam String followingUser, @Valid @RequestParam String followedUser) {
 		Follow follow = new Follow();
 		follow.setFolloweduser(followedUser);
@@ -39,6 +44,13 @@ public class FollowController {
 		if (followDao.save(follow) == null) {
 			System.out.println("안됨");
 		} else {
+			Alarm alarm = new Alarm();
+			alarm.setType("2");
+			alarm.setRecevier(followedUser);
+			alarm.setFollower(followingUser);
+			alarm.setIsRead(0);
+			alarmDao.save(alarm);
+			
 			System.out.println("됨");
 
 		}
@@ -94,10 +106,15 @@ public class FollowController {
 	public Object deleteFollow(@Valid @RequestParam int followNo) {
 
 		final BasicResponse result = new BasicResponse();
-
+		Follow follow = followDao.findByFollowno(followNo);
+		
+		
 		if (followDao.deleteAllByFollowno(followNo) == 1) {// 성공
 			result.status = true;
 			result.data = "삭제 성공";
+			
+			alarmDao.deleteByRecevierAndFollower(follow.getFolloweduser(), follow.getFollowinguser());
+			
 		} else {// 실패
 			result.status = true;
 			result.data = "삭제 실패";
