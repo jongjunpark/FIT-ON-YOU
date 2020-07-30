@@ -106,11 +106,13 @@ export default {
       axios.post('http://localhost:8080/account/changePassword',
         formData).then(data => {
         console.log(data)
+        this.$cookies.set('auth-token', data.data.auth_token)
         Swal.fire(
           '변경되었습니다.',
           '',
           'success'
         )
+        this.$router.go('/')
       })
       .catch(data => {
         console.log(data)

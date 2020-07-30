@@ -192,7 +192,7 @@ public class AccountController {
 	public Object addProfileImg(@RequestParam("profile-img-edit") MultipartFile img) {
 
 		final BasicResponse result = new BasicResponse();
-		String path = "C:\\Users\\multicampus\\Desktop\\firstPJT\\PJT\\s03p12b304\\front\\public\\user\\";
+		String path = "C:\\Users\\multicampus\\Desktop\\picture\\";
 		File file = new File(path + img.getOriginalFilename());
 		try {
 			img.transferTo(file);
@@ -223,6 +223,7 @@ public class AccountController {
 	@GetMapping("/account/checkNickname")
 	@ApiOperation(value = "닉네임 중복검사")
 	public Object findNick(@Valid @RequestParam String nickname) {
+		
 		final BasicResponse result = new BasicResponse();
 
 		Optional<User> optUser = userDao.findUserByNickname(nickname);
@@ -240,19 +241,26 @@ public class AccountController {
 	@PostMapping("/account/changePassword")
 	@ApiOperation(value = "새 비밀번호 설정")
 	public Object changePwd(@Valid @RequestParam("email") String email,@Valid @RequestParam("password") String password) {
+		Map<String, Object> resultMap = new HashMap<>();
+		
 		System.out.println(email+ " "+password);
 		final BasicResponse result = new BasicResponse();
 		try{
 			userDao.updatePassword(password, email);
 			result.status=true;
 			result.data="success";
+			UserDTO userDTO = new UserDTO(userDao.findUserByEmail(email).get());
+			String Token = jwtService.create(userDTO);
+			resultMap.put("auth_token",Token);
+			
 		}
 		catch (Exception e){
 			result.status=true;
-			result.data="fail";  
+			result.data="fail";
+			resultMap.put("result",result);
 		}
 		
-		return result;
+		return resultMap;
 	}
 	@GetMapping("/account/token")
 	public Map<String, Object> getUserByToken(@RequestParam String jwt){
