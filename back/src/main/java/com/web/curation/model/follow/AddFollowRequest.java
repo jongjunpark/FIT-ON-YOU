@@ -16,6 +16,22 @@ public class AddFollowRequest {
 	@NotNull
 	String followedUser;
 	
+	public String getFollowedUser() {
+		return followedUser;
+	}
+
+	public void setFollowedUser(String followedUser) {
+		this.followedUser = followedUser;
+	}
+
+	public String getFollowingUser() {
+		return followingUser;
+	}
+
+	public void setFollowingUser(String followingUser) {
+		this.followingUser = followingUser;
+	}
+
 	@ApiModelProperty(required = true)
 	@NotNull
 	String followingUser;

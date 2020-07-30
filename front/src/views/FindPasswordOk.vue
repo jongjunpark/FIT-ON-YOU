@@ -55,7 +55,7 @@ export default {
 
       display.textContent = minutes + ":" + seconds;
 
-      if (--timer < 0) {
+      if (--timer <= 0) {
         display.textContent = '00' + ":" + '00';
         this.remaintime = true;
         clearInterval(this.reTime);
@@ -68,6 +68,7 @@ export default {
       var fiveMinutes = 60 * 3,
       display = document.querySelector('#time');
       this.startTimer(fiveMinutes, display);
+      this.remaintime = false;
       axios.get('http://localhost:8080/account/findPassword',{
         params:{
           email: this.pwdUser.email,
@@ -85,7 +86,7 @@ export default {
     },
     changePwd() {
       console.log(1)
-      if (this.uuid == this.certifNum) {
+      if (this.uuid == this.certifNum && !this.remaintime) {
         console.log(2)
         this.$router.push("/find/password/passwordchange")
       } else {
