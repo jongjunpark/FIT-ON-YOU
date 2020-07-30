@@ -1,0 +1,181 @@
+.wrap-container.profile-wrap {
+  margin-top: 20px;
+}
+
+.edit-profile-area {
+  width: 100%;
+  height: 400px;
+  padding-top:50px;
+  /* background-color: khaki; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative; 
+}
+
+.edit-profile-img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 2px solid grey;
+  position: absolute;
+  top: 0;
+  left: 0; 
+}
+
+.edit-profile-img .profile-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.edit-profile-img .edit-profile-img-edit{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  background-image: url("../../assets/images/edit.png");
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: 60%;
+  cursor: pointer;
+}
+
+.edit-profile-img-edit input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.edit-profile-img .edit-profile-img-edit:hover{
+  background-color: #DBDBDB;
+}
+
+.follow {
+  position: absolute;
+  right: 10%;
+  top: 3%;
+}
+
+.follower {
+  position: absolute;
+  right: 10%;
+  top: 20%;
+}
+
+.nickname {
+  font-size: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  top: 40%;
+  position: absolute;
+  
+}
+
+.opacity-wrap {
+  opacity: 0.5;
+}
+
+.nickInput {
+  font-size: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  top: 35%;
+  position: absolute;
+  width: 50%;
+}
+.contentInput {
+  font-size: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  top: 50%;
+  position: absolute;
+  width: 50%;
+}
+
+.nickname:hover {
+  color: #5AAEFF !important;
+
+}
+
+.nickInput > input {
+  text-align: center;
+  width: 100%;
+  border-bottom: 2px solid black;
+  
+}
+.contentInput > input {
+  text-align: center;
+  width: 100%;
+  border-bottom: 2px solid black;
+  
+}
+
+.nick-cancel {
+  position: absolute;
+  top: 50%;
+
+}
+
+.content-cancel {
+  position: absolute;
+  top: 60%;
+
+}
+
+.nick-cancel:hover {
+  cursor: pointer;
+}
+
+.content-cancel:hover {
+  cursor: pointer;
+}
+
+
+.hidden-box {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1000;  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.edit-content {
+  position: absolute;
+  top: 55%;
+  left: 0; 
+  width: 200px;
+  height: 100px;
+  cursor: pointer;
+}
+.edit-content:hover {
+  color: #5AAEFF !important;
+
+}
+
+.edit-img-parent {
+  display: inline-block;
+}
+
+.edit-img {
+  width: 20px;
+  height: 20px;
+}

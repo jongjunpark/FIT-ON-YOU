@@ -8,6 +8,7 @@ import Community from '../views/Community.vue'
 import FindPassword from '../views/FindPassword.vue'
 import FindPasswordOk from '../views/FindPasswordOk.vue'
 import PasswordChange from '../views/PasswordChange.vue'
+import ProfileEdit from '../views/ProfileEdit.vue'
 
 Vue.use(VueRouter)
 
@@ -51,6 +52,11 @@ Vue.use(VueRouter)
     path: '/find/password/passwordchange',
     name: 'PasswordChange',
     component: PasswordChange
+  },
+  {
+    path: '/profileedit',
+    name: 'ProfileEdit',
+    component: ProfileEdit
   },
   
   

@@ -1,13 +1,10 @@
 package com.web.curation.model.user;
 
-import io.swagger.annotations.ApiModelProperty;
-import lombok.ToString;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
-import org.springframework.web.multipart.MultipartFile;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.ToString;
 
 @Valid
 @ToString
