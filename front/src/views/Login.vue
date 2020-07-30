@@ -27,8 +27,8 @@
         </div>
       </div>
       <div class="login-link-area">
-        <p @click='pathFind' class='go-find'>비밀번호 찾기</p>
-        <p @click='pathJoin' class='go-join'>회원가입</p>
+        <p class='go-find'><span @click='pathFind' class="go-find-in">비밀번호 찾기</span></p>
+        <p class='go-join'><span @click='pathJoin' class="go-join-in">회원가입</span></p>
       </div>
     </div>
   </div>
@@ -91,7 +91,7 @@ export default {
   }, 
   methods:{
     ...mapMutations(['setToken', 'setUser']),
-    ...mapActions(['AC_USER']),
+    ...mapActions(['AC_USER', 'sendUserInfo']),
 
     loginWithKakao(){
       let ref= this;
@@ -210,9 +210,10 @@ export default {
         if(response.data.result==1){
           this.AC_USER(response.data);
           console.log(response.data)
-          this.setUser(response.data)
           this.$cookies.set('auth-token', response.data.auth_token)
           this.setToken(response.data.auth_token)
+          this.sendUserInfo();
+          this.$router.push('/feed')
         }
         // 이메일 없음
         else if(response.data.result==-1){
