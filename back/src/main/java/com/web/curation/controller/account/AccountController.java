@@ -264,6 +264,7 @@ public class AccountController {
 	}
 	@GetMapping("/account/token")
 	public Map<String, Object> getUserByToken(@RequestParam String jwt){
+		System.out.println(jwt);
 		Map<String, Object> resultMap = new HashMap<>();
 		try {
 			jwtService.checkValid(jwt); // 토큰이 유효한지 검사
@@ -275,5 +276,23 @@ public class AccountController {
 		}
 		return resultMap;
 	}
-
+	
+	
+	@PostMapping("/account/nickchange")
+	@ApiOperation(value = "닉네임 변경")
+	public Object changeNick(@Valid @RequestParam("prev") String prev,@Valid @RequestParam("cur") String cur) {
+		System.out.println(prev+ " "+cur);
+		final BasicResponse result = new BasicResponse();
+		try{
+			userDao.updateNickname(prev, cur);
+			result.status=true;
+			result.data="success";
+		}
+		catch (Exception e){
+			result.status=true;
+			result.data="fail";  
+		}
+		
+		return result;
+	}
 }

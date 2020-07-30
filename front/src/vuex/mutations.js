@@ -20,6 +20,10 @@ export default {
   setUser(state, data) {
     state.user = data
   },
+  setAuthUser(state, data) {
+    console.log(state)
+    window.$cookies.set('auth-nickname', data)
+  }
 
 
 }

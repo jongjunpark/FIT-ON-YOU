@@ -11,6 +11,7 @@ export default {
       }).then((res)=>{
         console.log(res);
         context.commit('setUser', res.data.userInfo.User)
+        context.commit('setAuthUser', res.data.userInfo.User.nickname)
       })
       .catch(()=>{
 

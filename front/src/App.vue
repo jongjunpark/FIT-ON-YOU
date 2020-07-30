@@ -2,9 +2,13 @@
   <div id="app">
     <div class="nav-base"></div>
     <div id="nav">
-      <div class="nav-logo">Logo</div>
+      <div class="nav-logo">
+        <i @click='goHome' class="fas fa-hat-cowboy"></i>
+      </div>
       <div class="nav-user">
-        <div @click='setUserBar' class="nav-user-icon nav-user-img">img</div>
+        <div @click='setUserBar' class="nav-user-img">
+          <i class="fas fa-bars"></i>
+        </div>
         <transition name='slide-user-bar'>
           <div v-if="isUserIcon" class="user-bar">
             <ul class='user-bar-list'>
@@ -135,6 +139,21 @@ export default {
         this.$router.push("/community")
       }
     },
+    goHome() {
+      if(this.isLoggedIn) {
+        if(this.$route.name === 'Feed') {
+          this.$router.go(this.$router.currentRoute)
+        } else {
+          this.$router.push("/community")
+        }
+      } else {
+        if(this.$route.name === 'Login') {
+          this.$router.go(this.$router.currentRoute)
+        } else {
+          this.$router.push("/")
+        }
+      }
+    }
   }
 }
 </script>
