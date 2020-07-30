@@ -34,6 +34,14 @@ create table `board` (
 	FOREIGN KEY(influeUser) REFERENCES influencer(nickname) on delete cascade on update cascade
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+create table `likes`(
+	`likeNo` int auto_increment not null,
+	`nickname` varchar(20),
+    `articleNo` int,
+	primary key(likeNo),
+    foreign key (nickname) references User(nickname) on delete cascade  on update cascade,
+    foreign key (articleNo) references board(articleNo) on delete cascade
+)Engine=InnoDB Default Charset = utf8mb4;
 
 create table `imageStore`(
 	`imageNo` int auto_increment not null,
@@ -58,9 +66,10 @@ create table `follow`(
 	`followNo` int auto_increment not null,
     `followingUser` varchar(20) not null,
     `followedUser` varchar(20) not null,
+     `check` boolean,
     primary key(followNo),
     foreign key (followingUser) references User(nickname) on delete cascade on update cascade,
-    foreign key (followedUser) references User(nickname) on delete cascade on update cascade
+     foreign key (followedUser) references User(nickname) on delete cascade on update cascade
     )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 create table `recellboard`(
@@ -85,11 +94,17 @@ create table `directMessage`(
     )ENGINE=InnoDB default Charset =utf8mb4;
 
 create table `alarm` (
-	`alramNo` int auto_increment not null,
-    `content` varchar(100),
+   `alramNo` int auto_increment not null,
+    `type` varchar(30),
     `recevier` varchar(20) not null,
+    `follower` varchar(20) ,
+    `articleNo` int,
+    `isRead` tinyint(1),
+    `createAt` datetime default current_timestamp(),
     primary key(alramNo),
-    foreign key (recevier) references User(nickname)  on delete cascade on update cascade
+    foreign key (recevier) references User(nickname)  on delete cascade on update cascade,
+    foreign key (follower) references User(nickname) on delete cascade on update cascade,
+    foreign key (articleNo) references board(ArticleNo) on delete cascade
     )engine=InnoDB default Charset = utf8mb4;
     
 create table `comment` (
@@ -98,7 +113,8 @@ create table `comment` (
     `articleNo` int not null,
     `content` varchar(100),
 	primary key(commentNo),
-    foreign key (writer) references User(nickname) on delete cascade on update cascade
+    foreign key (writer) references User(nickname) on delete cascade on update cascade,
+    foreign key (articleNo) references Board(articleNo) on delete cascade
     ) Engine=InnoDB default Charset = utf8mb4;
 
 create table `tag` (
@@ -107,4 +123,12 @@ create table `tag` (
     )Engine = InnoDB default Charset = utf8mb4;
     
 
+create table `articleTag`(
+	`tagNo` int auto_increment not null,
+    `tagName` varchar(100),
+    `articleNo` int,
+    primary key(tagNo),
+    foreign key(tagName) references Tag(tagName),
+    foreign key(articleNo) references board(articleNo)
+    )Engine = InnoDB default charset = utf8mb4
 
