@@ -22,7 +22,7 @@ import com.web.curation.dao.follow.FollowDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Board;
-import com.web.curation.model.Imagestore;
+import com.web.curation.model.ImageStore;
 import com.web.curation.model.follow.Follow;
 
 import io.swagger.annotations.ApiResponse;
@@ -85,8 +85,8 @@ public class BoardController {
 		return result;
 	}
 	@PostMapping("/images")
-	public List<Imagestore> getImageArticle(@RequestParam int articleNo){
-		List<Imagestore> urllist = new ArrayList<Imagestore>();
+	public List<ImageStore> getImageArticle(@RequestParam int articleNo){
+		List<ImageStore> urllist = new ArrayList<ImageStore>();
 		urllist= imageStoreDao.findImagestoreByArticleNoOrderByArticleNoDesc(articleNo);
 		return urllist;
 	}

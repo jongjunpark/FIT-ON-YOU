@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.web.curation.model.Imagestore;
+import com.web.curation.model.ImageStore;
 
-public interface ImageStoreDao extends JpaRepository<Imagestore, String>{
+public interface ImageStoreDao extends JpaRepository<ImageStore, String>{
 	
-	List<Imagestore> findImagestoreByArticleNoOrderByArticleNoDesc(int num);
+	List<ImageStore> findImagestoreByArticleNoOrderByArticleNoDesc(int num);
 		
 }
