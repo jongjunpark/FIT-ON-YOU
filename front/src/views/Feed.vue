@@ -65,8 +65,8 @@
 
 <script>
 import "../components/css/feed.css"
-import axios from 'axios'
-import { mapState, mapGetters, mapMutations } from 'vuex'
+// import axios from 'axios'
+// import { mapState, mapGetters, mapMutations } from 'vuex'
 
 
 export default {

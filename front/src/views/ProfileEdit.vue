@@ -40,6 +40,9 @@
       </div>
       </section>
     </div>
+    <div v-if="isChange && isChange2" class="user-change">
+        <span><i class="fas fa-user-cog fa-2x"></i> 계정설정</span>
+      </div>
   </div>
 </template>
 
@@ -61,9 +64,6 @@ export default {
   computed: {
     ...mapState(['isLoggedIn', 'user'])
   },
-  updated() {
-    console.log(this.user)
-  },
   methods: {
     setProfileImg() {
       var frm = new FormData();
@@ -76,7 +76,6 @@ export default {
       const wrapContainer = document.querySelector('.wrap-container')
       const wrapNav = document.querySelector('#nav')
       const wrapBottom = document.querySelector('#nav2')
-
       const hidden = document.querySelector('.hidden-box')
       wrapContainer.classList.add('opacity-wrap')
       wrapNav.classList.add('opacity-wrap')
