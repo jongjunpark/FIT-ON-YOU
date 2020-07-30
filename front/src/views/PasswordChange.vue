@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import "../components/css/PasswordChange.css"
+import "../components/css/passwordchange.css"
 import PasswordValidator from 'password-validator'
 import axios from 'axios'
 import Swal from 'sweetalert2'
@@ -106,11 +106,13 @@ export default {
       axios.post('http://localhost:8080/account/changePassword',
         formData).then(data => {
         console.log(data)
+        this.$cookies.set('auth-token', data.data.auth_token)
         Swal.fire(
           '변경되었습니다.',
           '',
           'success'
         )
+        this.$router.push('/feed')
       })
       .catch(data => {
         console.log(data)
