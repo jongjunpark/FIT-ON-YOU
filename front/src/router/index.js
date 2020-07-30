@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
 import Join from '../views/Join.vue'
 import Feed from '../views/Feed.vue'
+import Search from '../views/Search.vue'
+import Community from '../views/Community.vue'
 import FindPassword from '../views/FindPassword.vue'
 import FindPasswordOk from '../views/FindPasswordOk.vue'
 import PasswordChange from '../views/PasswordChange.vue'
@@ -25,6 +27,16 @@ Vue.use(VueRouter)
     path: '/feed',
     name: 'Feed',
     component: Feed
+  },
+  {
+    path: '/search',
+    name: 'Search',
+    component: Search
+  },
+  {
+    path: '/community',
+    name: 'Community',
+    component: Community
   },
   {
     path: '/find/password',
