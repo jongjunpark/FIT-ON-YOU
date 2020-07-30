@@ -289,3 +289,7 @@ align-items: center;
   width: 100%;
   font-weight: 700 !important;
 }
+
+i {
+  z-index: 100;
+}
