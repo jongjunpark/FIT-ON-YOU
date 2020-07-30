@@ -100,6 +100,11 @@ export default {
       selectBar.classList.add('go-first-menu')
       selectBar.classList.remove('go-second-menu')
       selectBar.classList.remove('go-third-menu')
+      if (this.$route.name === 'Feed') {
+        this.$router.go(this.$router.currentRoute)
+      } else {
+        this.$router.push("/feed")
+      }
     },
     goSearch() {
       const selectBar = document.querySelector('.menu-bar-select')
@@ -112,6 +117,11 @@ export default {
       selectBar.classList.add('go-second-menu')
       selectBar.classList.remove('go-first-menu')
       selectBar.classList.remove('go-third-menu')
+      if (this.$route.name === 'Search') {
+        this.$router.go(this.$router.currentRoute)
+      } else {
+        this.$router.push("/search")
+      }
     },
     goCommunity() {
       const selectBar = document.querySelector('.menu-bar-select')
@@ -124,6 +134,11 @@ export default {
       selectBar.classList.add('go-third-menu')
       selectBar.classList.remove('go-second-menu')
       selectBar.classList.remove('go-first-menu')
+      if (this.$route.name === 'Community') {
+        this.$router.go(this.$router.currentRoute)
+      } else {
+        this.$router.push("/community")
+      }
     },
   }
 }

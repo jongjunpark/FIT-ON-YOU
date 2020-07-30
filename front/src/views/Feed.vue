@@ -278,6 +278,10 @@ export default {
   cursor: pointer;
 }
 
+.open-influ-nav:hover {
+  background-color: silver;
+}
+
 .influ-nav-box {
   position: fixed;
   top: 70px;
