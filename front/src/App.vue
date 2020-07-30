@@ -64,9 +64,7 @@ export default {
     ...mapState(['authToken', 'isLoggedIn', 'user']),
     ...mapGetters([])
   },
-  methods: {
-    ...mapMutations(['setLoggedIn', 'setToken', 'setUser']),
-  },
+ 
   mounted() {
      if (this.$cookies.isKey('auth-token')) {
       this.setLoggedIn(true);

@@ -67,8 +67,8 @@
         <header class="feed-user-data">
           <div class="feed-user-profile"></div>
           <div class="feed-article-head">
-            <p class='feed-username'>Username</p>
-            <p class='feed-article-date'>20.00.00 00:00</p>
+            <p class='feed-username'></p>
+            <p class='feed-article-date'></p>
           </div>
         </header>
         <section class="feed-content">
@@ -129,11 +129,12 @@
             </div>
           </div>
           <header class='feed-content-head'>Text Name</header>
+          <div>{{user.nickname}}</div>
           <aside class='feed-content-tag'>#ABC #DEF #GHI #JKL</aside>
         </section>
       </div>
     </div>
-    <div>{{user.nickname}}</div>
+    
   </div>
 </template>
 
@@ -142,7 +143,9 @@ import VueSlickCarousel from 'vue-slick-carousel'
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 import "../components/css/feed.css"
+import axios from 'axios'
 import CommentModal from '../components/CommentModal.vue'
+import { mapState, mapActions  } from 'vuex'
 
 export default {
   name: 'Feed',
@@ -151,6 +154,7 @@ export default {
       showModal: false,
       isInfluNav: false,
       modal: false,
+      mainfeed:[],
       settings: {
         "dots": false,
         "arrows": true,
@@ -176,9 +180,12 @@ export default {
     VueSlickCarousel,
     CommentModal
   },
+  computed:{
+    ...mapState(['user']),
+  },
 
   methods: {
-    ...mapActions(['']),
+    ...mapActions(['sendUserInfo']),
     onNewsFeed() {
       const selectBar = document.querySelector('.menu-bar-select')
       const newsFeed = document.querySelector('.fa-newspaper')
@@ -217,19 +224,29 @@ export default {
     formData.append('nickname',this.user.nickname);
     axios.post("http://localhost:8080/board/newsfeed",formData).then((data)=>{
       console.log("success")
-      console.log(data)
       this.feedlist=data.data;
       for (let index = 0; index < this.feedlist.length; index++) {
         const el = this.feedlist[index];
         const articleNo = new FormData();
-          articleNo.append('articleNo',el.articleNo);
-          axios.post("http://localhost:8080/board/images",articleNo).then((img)=>{
-            console.log(img)
-          });
-      }
-    });
+        articleNo.append('articleNo',el.articleNo);
+        axios.post("http://localhost:8080/board/images",articleNo).then((img)=>{
+          const temp = img.data;``
+          const templist = [];
+          for (let i = 0; i < temp.length; i++) {
+            const el2= temp[i];
+            templist.push({src:el2.imageUrl});  
+          }
+          if(this.feedlist[index].articleUser!=null){
+            this.mainfeed.push({url:templist,content:this.feedlist[index].content,articleDate: this.feedlist[index].articleDate,articleUser: this.feedlist[index].articleUser});
+          }else{
+            this.mainfeed.push({url:templist,content:this.feedlist[index].content,articleDate: this.feedlist[index].articleDate,articleUser: this.feedlist[index].influeUser});
+        }
+      });
+  }
+  console.log(this.mainfeed)});
   }
 }
+
 </script>
 <style scoped>
 @media (min-width: 1200px) {
