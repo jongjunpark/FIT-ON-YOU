@@ -213,6 +213,7 @@ export default {
           this.setUser(response.data)
           this.$cookies.set('auth-token', response.data.auth_token)
           this.setToken(response.data.auth_token)
+          this.$router.push('/feed')
         }
         // 이메일 없음
         else if(response.data.result==-1){
