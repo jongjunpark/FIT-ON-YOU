@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dao.board.BoardDao;
+import com.web.curation.dao.board.ImageStoreDao;
 import com.web.curation.dao.follow.FollowDao;
 import com.web.curation.dao.user.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Board;
+import com.web.curation.model.Imagestore;
 import com.web.curation.model.follow.Follow;
 
 import io.swagger.annotations.ApiResponse;
@@ -40,6 +42,8 @@ public class BoardController {
 	BoardDao boardDao; 
 	@Autowired
 	FollowDao followDao;
+	@Autowired
+	ImageStoreDao imageStoreDao;
 	@PostMapping
 	public Object writeBoard(@Valid @RequestBody Board board) {
 		
@@ -70,10 +74,9 @@ public class BoardController {
 		
 		for (Follow follow : searchFollow) {
 			List<Board>temp = boardDao.findBoardByArticleUserOrderByArticleNoDesc(follow.getFolloweduser());
-			System.out.println(follow.getFolloweduser());
 			for (Board board : temp) {
 				result.add(board);
-				System.out.println(board);
+				//System.out.println(board);
 			}
 			
 		}
@@ -81,7 +84,11 @@ public class BoardController {
 		
 		return result;
 	}
-//	@PostMapping("/influencer")
-//	public List<>
+	@PostMapping("/images")
+	public List<Imagestore> getImageArticle(@RequestParam int articleNo){
+		List<Imagestore> urllist = new ArrayList<Imagestore>();
+		urllist= imageStoreDao.findImagestoreByArticleNoOrderByArticleNoDesc(articleNo);
+		return urllist;
+	}
 
 }
