@@ -25,7 +25,7 @@
     
     <router-view/>
     
-    <div id="nav2">
+    <div v-show="isLoggedIn" id="nav2">
       <div class="bottom-nav">
         <div class='menu-bar-list'>
           <div class="menu-bar-select"></div>
@@ -49,9 +49,9 @@
 
 <script>
 import "./assets/css/common.css";
-import axios from 'axios'
-import { mapState, mapGetters, mapMutations } from 'vuex';
-import axios from 'axios';
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
+// import axios from 'axios';
+
 
 export default {
   name: 'App',
@@ -71,15 +71,7 @@ export default {
      if (this.$cookies.isKey('auth-token')) {
       this.setLoggedIn(true);
       this.setToken(this.$cookies.get('auth-token'));
-      axios.get('http://localhost:8080/account/token',{
-        params:{jwt : this.authToken}
-      }).then((res)=>{
-        console.log(res);
-        this.setUser(res.data.userInfo.User)
-      })
-      .catch(()=>{
-
-      });
+      this.sendUserInfo();
     }
     else {
       this.setLoggedIn(false);
@@ -89,6 +81,7 @@ export default {
   },
   methods: {
     ...mapMutations(['setLoggedIn', 'setToken', 'setUser']),
+    ...mapActions(['sendUserInfo']),
 
     setUserBar() {
       this.isUserIcon = !this.isUserIcon

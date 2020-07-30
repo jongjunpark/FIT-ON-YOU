@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import "../components/css/PasswordChange.css"
+import "../components/css/passwordchange.css"
 import PasswordValidator from 'password-validator'
 import axios from 'axios'
 import Swal from 'sweetalert2'
@@ -112,7 +112,7 @@ export default {
           '',
           'success'
         )
-        this.$router.go('/')
+        this.$router.push('/feed')
       })
       .catch(data => {
         console.log(data)

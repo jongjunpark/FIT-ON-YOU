@@ -6,17 +6,18 @@ import getters from './getters'
 import actions from './actions'
 import mutations from './mutations'
 
+const state = {
+  user: '',
+  certifNum: '',
+  pwdUser: '',
+  authToken: '',
+  isLoggedIn: false,
+}
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {
-    user: '',
-    certifNum: '',
-    pwdUser: '',
-    authToken: '',
-    isLoggedIn: false,
-  },
+  state,
   getters,
   mutations,
   actions
