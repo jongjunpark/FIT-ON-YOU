@@ -12,9 +12,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dao.board.BoardDao;
+import com.web.curation.dao.board.ImageDao;
+import com.web.curation.dao.follow.FollowDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Board;
+import com.web.curation.model.ImageStore;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
@@ -31,40 +36,80 @@ public class MyPageController {
 	@Autowired
 	private BoardDao boardDao;
 	
-	@GetMapping("/myboard")
-	public Map<String,Object> getMyBoard(@RequestParam String nickname){
-		Map<String,Object> result=new HashMap<>();
-		
-		List<Board> boards = boardDao.findBoardByArticleUserOrderByArticleNoDesc(nickname);
+	@Autowired
+	private ImageDao imageDao;
 	
-		if(boards.size()==0) {
-			result.put("result",0);
-		}
-		else{
-			result.put("boards", boards);
-			result.put("result", 1);
-		}
+	@Autowired
+	private FollowDao followDao;
+	
+
+	@ApiOperation(value="마이페이지 누를 시 팔로우 숫자")
+	@GetMapping("/")
+	public Map<String,Object> followCount(@RequestParam String nickname){
+		Map<String,Object> resultMap=new HashMap<>();
+		final BasicResponse result = new BasicResponse();
 		
-		return result;
+		result.data="1";
+		result.status=true;
+		resultMap.put("result",result);
+		//나를 팔로우 한사람
+		Long followedCnt = followDao.countByFolloweduser(nickname);
+		
+		//내가 팔로우 한사람
+		Long followingCnt= followDao.countByFollowinguser(nickname);
+		
+		resultMap.put("followedCnt",followedCnt);
+		resultMap.put("followingCnt",followingCnt);
+		
+		return resultMap;
 		
 	}
 	
+	
+
+	@ApiOperation(value="내 글 보기 탭 누를시")
+	@GetMapping("/myboard")
+	public Map<String,Object> getMyBoard(@RequestParam String nickname){
+		Map<String,Object> resultMap=new HashMap<>();
+		final BasicResponse result = new BasicResponse();
+		List<ImageStore> myBoards = imageDao.myBoardList(nickname);
+	
+		if(myBoards.size()==0) {
+			result.data="0";
+			result.status=true;
+			resultMap.put("result",result);
+		}
+		else{
+			result.data="1";
+			result.status=true;
+			resultMap.put("result",result);
+			resultMap.put("myBoards",myBoards);
+		}
+		
+		return resultMap;
+		
+	}
+	
+	@ApiOperation(value="북마크 탭 누를시")
 	@GetMapping("/bookmark")
 	public Map<String,Object> getBookmark(@RequestParam String nickname){
-		Map<String,Object> result=new HashMap<>();
+		Map<String,Object> resultMap=new HashMap<>();
+		final BasicResponse result = new BasicResponse();
+		List<ImageStore> bmImgList= imageDao.bookMarkImgList(nickname);
 		
-		List<Board> boards= boardDao.bookmarkList(nickname);
-		
-		if(boards.size()==0) {
-			result.put("result",0);
+		if(bmImgList.size()==0) {
+			result.data="0";
+			result.status=true;
+			resultMap.put("result",result);
 		}
 		else {
-			result.put("boards",boards);
-			result.put("result",1);
+			result.data="1";
+			result.status=true;
+			resultMap.put("bmImgList",bmImgList);
+			resultMap.put("result",result);
 		}
 		
 		
-		
-		return result;
+		return resultMap;
 	}
 }
