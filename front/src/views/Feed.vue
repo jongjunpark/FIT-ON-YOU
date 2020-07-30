@@ -60,13 +60,14 @@
         </section>
       </div>
     </div>
+    <div>{{user.nickname}}</div>
   </div>
 </template>
 
 <script>
 import "../components/css/feed.css"
 import axios from 'axios'
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 
 export default {
@@ -74,7 +75,16 @@ export default {
   created() {
     window.addEventListener("resize", this.setFeedImg);
   },
+  computed: {
+    ...mapState(['user'])
+  },
+  data(){
+    return{
+      feedlist:{},
+    }
+  },
   methods: {
+    ...mapActions(['']),
     onNewsFeed() {
       const selectBar = document.querySelector('.menu-bar-select')
       const newsFeed = document.querySelector('.fa-newspaper')
@@ -102,9 +112,23 @@ export default {
 
     }
   },
-  mounted() {
+  updated() {
     this.onNewsFeed()
-    // this.setFeedImg()
+    const formData = new FormData();
+    formData.append('nickname',this.user.nickname);
+    axios.post("http://localhost:8080/board/newsfeed",formData).then((data)=>{
+      console.log("success")
+      console.log(data)
+      this.feedlist=data.data;
+      for (let index = 0; index < this.feedlist.length; index++) {
+        const el = this.feedlist[index];
+        const articleNo = new FormData();
+          articleNo.append('articleNo',el.articleNo);
+          axios.post("http://localhost:8080/board/images",articleNo).then((img)=>{
+            console.log(img)
+          });
+      }
+    });
   }
 }
 </script>
