@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+
 // 작성한 모듈을 가져옵니다.
 import Store from '@/vuex/store.js'
 

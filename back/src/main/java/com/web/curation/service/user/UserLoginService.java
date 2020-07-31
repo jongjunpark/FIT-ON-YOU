@@ -6,9 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.web.curation.dao.user.UserDao;
+import com.web.curation.dao.UserDao;
+import com.web.curation.model.User;
 import com.web.curation.model.UserDTO;
-import com.web.curation.model.user.User;
 
 import javassist.NotFoundException;
 
