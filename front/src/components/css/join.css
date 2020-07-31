@@ -1,5 +1,5 @@
 .join-logo {
-  margin: 50px 0;
+  margin: 10px 0;
 }
 
 .join-input-area {
@@ -16,7 +16,8 @@
 
 .sex-area {
   width: 100%;
-  height: 150px;
+  height: 100px;
+  margin-top: 30px;
   display: flex;
   align-items: center;
   justify-content: center;

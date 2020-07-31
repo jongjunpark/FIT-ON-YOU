@@ -1,8 +1,9 @@
 <template>
   <div class='wrap'>
     <div class='wrap-container'>
-      <h1 class='main-logo'>Logo</h1>
-      <p v-if='errormsg' class='err-msg'>계정 혹은 비밀번호가 틀렸습니다.</p>
+      <h1 class='main-logo'>FIT ON U</h1>
+      <p v-if='errormsgEmail' class='err-msg'>이메일이 존재하지 않습니다.</p>
+      <p v-if='errormsgPwd' class='err-msg'>비밀번호가 틀렸습니다.</p>
       <div class='login-input-area'>
         <input v-model='email' @keyup.enter='checkLoginInf' @keyup="checkLoginBtn" type="text" class='login-email non-text'>
         <label class='login-email-label' for="login-email">이메일</label>
@@ -26,8 +27,8 @@
         </div>
       </div>
       <div class="login-link-area">
-        <p @click='pathFind' class='go-find'>비밀번호 찾기</p>
-        <p @click='pathJoin' class='go-join'>회원가입</p>
+        <p class='go-find'><span @click='pathFind' class="go-find-in">비밀번호 찾기</span></p>
+        <p class='go-join'><span @click='pathJoin' class="go-join-in">회원가입</span></p>
       </div>
     </div>
   </div>
@@ -37,15 +38,14 @@
 /* eslint-disable */
 import "../components/css/login.css"
 import axios from 'axios';
-import { mapActions, mapGetters } from 'vuex'
-import * as EmailValidator from "email-validator"
+import { mapGetters, mapMutations, mapActions  } from 'vuex'
 
 Kakao.init('713af847cf1784de91646f5cb2455cbf');
+
 
 var userData={
   
 }
-
 
 const Store='Store'
  function attachSignin(element) {
@@ -63,7 +63,8 @@ export default {
       password: '',
       offLoginBtn: true,
       onLoginBtn: false,
-      errormsg: false,
+      errormsgEmail: false,
+      errormsgPwd: false,
       params: {
           client_id: "834514064011-bqc7hgss1hil5965mdbgf57420u04lvv.apps.googleusercontent.com"
       },
@@ -76,28 +77,25 @@ export default {
   },
   watch: {
     email() {
-      this.checkEmailValidate();
+      this.setEmailClass();
     },
     password() {
       this.setPasswordClass();
     }
   },
-  
-  computed:{
-    ...mapGetters([
-      'user',
-    ]),
-    
-    
-  },
   mounted() {
     window.addEventListener("google-loaded", this.startApp);    
+  },
+  computed: {
+    ...mapGetters([]),
   }, 
   methods:{
-    ...mapActions(['AC_USER']),
-    
+    ...mapMutations(['setToken', 'setUser']),
+    ...mapActions(['AC_USER', 'sendUserInfo']),
+
     loginWithKakao(){
-      let ref=this;
+      let ref= this;
+      console.log(ref);
       Kakao.Auth.loginForm({
         success: function(authObj) {
           Kakao.Auth.setAccessToken(authObj.access_token);
@@ -105,7 +103,8 @@ export default {
           Kakao.API.request({
             url: '/v2/user/me',
             success: function(response) {
-              userData  = {
+              let userData  = {
+
                 access_token : ac_token,
                 token_type : 'Bearer',
                 nickname : response.kakao_account.profile.nickname,
@@ -113,10 +112,11 @@ export default {
                 email : response.kakao_account.email,
                 gender : response.kakao_account.gender,
                 age_range : response.kakao_account.age_range
-              }
+              };
               ref.AC_USER(userData);
               console.log(ref.$store.state.user);
               // window.AC_USER(userData)
+
             },
             fail: function(error) {
                 console.log(error);
@@ -131,6 +131,7 @@ export default {
    
     startApp() {
       let ref = this;
+
       gapi.load('auth2', function(){
         let auth2 = gapi.auth2.init({
           client_id: '834514064011-bqc7hgss1hil5965mdbgf57420u04lvv.apps.googleusercontent.com',
@@ -148,13 +149,12 @@ export default {
           }
           ref.AC_USER(userData);
           console.log(ref.$store.state.user);
+
         }, function(error) {
           alert(JSON.stringify(error, undefined, 2));
         });
       });
     },
-    
-
     
     onLoginButton() {
       if (this.email) {
@@ -174,10 +174,7 @@ export default {
       this.onLoginButton()
     },
     checkLoginInf() {
-      this.errormsg = true;
-      const ERROR = document.querySelector('.btn')
-      ERROR.classList.remove('on-login-btn')
-      ERROR.classList.add('on-login-btn-error')
+      this.errormsg = true
     },
     pathJoin() {
       this.$router.push("/join")
@@ -201,43 +198,60 @@ export default {
         label.classList.remove('is-password')
       }
     },
-    checkEmailValidate() {
-      if (this.email.length >= 0 && !EmailValidator.validate((this.email)))
-        { console.log('이메일을 정확히 입력해주세요.');
-         this.setEmailClass(); }
-      else { console.log('굿.');
-         this.setEmailClass(); 
-        }
-    },
+
     loginHandler() { 
       console.log(this.email);
       console.log(this.password);
       axios.get('http://localhost:8080/account/login',{
         params:{email:this.email,
                   password:this.password},
-      }).then((response)=>{
+      }).then( response => {
         // 로그인 성공
         if(response.data.result==1){
-          console.log(response.data);
           this.AC_USER(response.data);
-
-          console.log(this.$store.state.user);
+          console.log(response.data)
+          this.$cookies.set('auth-token', response.data.auth_token)
+          this.setToken(response.data.auth_token)
+          this.sendUserInfo();
+          this.$router.push('/feed')
         }
         // 이메일 없음
         else if(response.data.result==-1){
-          alert("이메일이 존재하지 않습니다.");
+          this.errormsgEmail = true;
+          this.errormsgPwd = false;
+          const ERROR = document.querySelector('.btn')
+          const ERRORMESSAGE1 = document.querySelector('.login-email-label')
+          const ERRORMESSAGE2 = document.querySelector('.login-password-label')
+          const ERRORMESSAGE3 = document.querySelector('.login-email')
+          const ERRORMESSAGE4 = document.querySelector('.login-password')
+          ERROR.classList.add('on-login-btn-error')
+          ERRORMESSAGE1.classList.add('login-email-label-error')
+          ERRORMESSAGE2.classList.remove('login-password-label-error')
+          ERRORMESSAGE3.classList.add('login-email-error')
+          ERRORMESSAGE4.classList.remove('login-password-error')
         }
         
         // 비밀번호 틀림
         else if(response.data.result==2){
-          alert("비밀번호가 틀립니다.");
+          this.errormsgPwd = true;
+          this.errormsgEmail = false;
+          const ERROR = document.querySelector('.btn')
+          const ERRORMESSAGE1 = document.querySelector('.login-email-label')
+          const ERRORMESSAGE2 = document.querySelector('.login-password-label')
+          const ERRORMESSAGE3 = document.querySelector('.login-email')
+          const ERRORMESSAGE4 = document.querySelector('.login-password')
+          ERROR.classList.add('on-login-btn-error')
+          ERRORMESSAGE1.classList.remove('login-email-label-error')
+          ERRORMESSAGE2.classList.add('login-password-label-error')
+          ERRORMESSAGE3.classList.remove('login-email-error')
+          ERRORMESSAGE4.classList.add('login-password-error')
         }
 
       });
     },
 
     
-  }
+  },
   /* eslint-enable */
-}
+  }
 </script>

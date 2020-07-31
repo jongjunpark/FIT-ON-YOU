@@ -1,32 +1,25 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+// import axios from 'axios'
+// import cookies from 'vue-cookies'
+import getters from './getters'
+import actions from './actions'
+import mutations from './mutations'
+
+const state = {
+  user: '',
+  certifNum: '',
+  pwdUser: '',
+  authToken: '',
+  isLoggedIn: false,
+}
 
 Vue.use(Vuex)
 
-// const state = {
-//     isUser: false,
-// }
-
 export default new Vuex.Store({
-    state: {
-        user:{},
-    },
-    getters: {
-        user(state) {
-            return state.user;
-        },
-    },
-    mutations:{
-        LOGIN(state,data){
-            state.user=data;
-        },
-        LOGOUT(state){
-            state.user=null;
-        }
-    },
-    actions:{
-        AC_USER:({commit},payload)=>{
-            commit('LOGIN',payload)
-        }
-    }
+  state,
+  getters,
+  mutations,
+  actions
 })
+

@@ -159,14 +159,50 @@
 }
 
 .go-join, .go-find {
-  cursor: pointer;
+  
   margin: 16px 0;
 }
 
-.go-join:hover {
+.go-join-in:hover {
   color: #5AAEFF !important;
+  cursor: pointer;
 }
 
-.go-find:hover {
+.go-find-in:hover {
   color: #5AAEFF !important;
+  cursor: pointer;
+}
+
+.login-email-label-error {
+  color: #FF3636 !important;
+  font-weight: 700;
+}
+
+.login-password-label-error {
+  color: #FF3636 !important;
+  font-weight: 700; 
+}
+
+.login-input-area .login-email-error {
+  height: 60px;
+  width: 100%;
+  border-radius: 5px;
+  border: 1.5px solid #FF3636 !important;
+  background-color: #D5D5D5;
+  padding: 15px 0 0 15px;
+  box-sizing: border-box;
+  color: #686868;
+  font-family: "Noto Sans KR", sans-serif !important;
+}
+
+.login-input-area .login-password-error {
+  height: 60px;
+  width: 100%;
+  border-radius: 5px;
+  border: 1.5px solid #FF3636 !important;
+  background-color: #D5D5D5;
+  padding: 15px 0 0 15px;
+  box-sizing: border-box;
+  color: #686868;
+  font-family: "Noto Sans KR", sans-serif !important;
 }
