@@ -103,7 +103,7 @@ export default {
       formData.append('email',this.pwdUser.email);
       formData.append('password',this.passwordConfirm);
 
-      axios.post('http://localhost:8080/account/changePassword',
+      axios.post('http://localhost:8080/api/account/changePassword',
         formData).then(data => {
         console.log(data)
         this.$cookies.set('auth-token', data.data.auth_token)

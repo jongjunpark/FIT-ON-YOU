@@ -315,7 +315,7 @@ export default {
       }
     },
     checkNickname() {
-      axios.get('http://localhost:8080/account/checkNickname',{ 
+      axios.get('http://localhost:8080/api/account/checkNickname',{ 
         params: {
           nickname: this.input.nickname
           }
@@ -444,7 +444,7 @@ export default {
         '자신만의 패션을 뽐내보세요!',
         'success'
       )
-      axios.post('http://localhost:8080/account/signup',{
+      axios.post('http://localhost:8080/api/account/signup',{
 
           email: this.input.email+'@'+this.input.url,
           password: this.input.password,
@@ -469,7 +469,7 @@ export default {
       if (photoFile.files[0]) {
 
         frm.append("profile-img-edit", photoFile.files[0]);
-        axios.post('http://localhost:8080/account/addProfileImg',frm,{
+        axios.post('http://localhost:8080/api/account/addProfileImg',frm,{
           headers:{
               'Content-Type': 'multipart/form-data'
           }
@@ -516,7 +516,7 @@ export default {
          this.mailErrMsg = false;
          this.finalMail = false;
           if (this.mailSucMsg) {
-            axios.get('http://localhost:8080/account/checkDoubleEmail',{ 
+            axios.get('http://localhost:8080/api/account/checkDoubleEmail',{ 
               params: {
                 email: this.input.email+'@'+this.input.url
                 }
