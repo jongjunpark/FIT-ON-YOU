@@ -273,7 +273,8 @@ import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 import "../components/css/feed.css"
 import axios from 'axios'
 import CommentModal from '../components/CommentModal.vue'
-import axios from 'axios'
+import { mapState, mapActions  } from 'vuex'
+
 
 
 export default {
@@ -314,7 +315,7 @@ export default {
   },
 
   methods: {
-    // ...mapActions(['']),
+    ...mapActions(['sendUserInfo']),
     onNewsFeed() {
       const selectBar = document.querySelector('.menu-bar-select')
       const newsFeed = document.querySelector('.fa-newspaper')
