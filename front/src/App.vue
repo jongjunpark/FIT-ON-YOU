@@ -12,7 +12,7 @@
         <transition name='slide-user-bar'>
           <div v-if="isUserIcon" class="user-bar">
             <ul class='user-bar-list'>
-              <li class="nav-user-icon user-bar-menu">
+              <li class="nav-user-icon user-bar-menu"  @click="goProfile">
                 <i class="user-bar-img fas fa-user"></i>
               </li>
               <li class="nav-user-icon user-bar-menu">
@@ -144,7 +144,7 @@ export default {
         if(this.$route.name === 'Feed') {
           this.$router.go(this.$router.currentRoute)
         } else {
-          this.$router.push("/community")
+          this.$router.push("/feed")
         }
       } else {
         if(this.$route.name === 'Login') {
@@ -153,7 +153,11 @@ export default {
           this.$router.push("/")
         }
       }
-    }
+    },
+    goProfile() {
+      this.isUserIcon = false;
+      this.$router.push('/profileedit')
+    },
   }
 }
 </script>

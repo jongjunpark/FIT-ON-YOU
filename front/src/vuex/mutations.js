@@ -22,6 +22,10 @@ export default {
   },
   setAuthUser(state, data) {
     console.log(state)
+    // var uri = data;
+    // var uri_enc = encodeURIComponent(uri);
+    // var uri_dec = decodeURIComponent(uri_enc);
+    // var res = uri_dec;
     window.$cookies.set('auth-nickname', data)
   }
 

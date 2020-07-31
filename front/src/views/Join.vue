@@ -461,7 +461,7 @@ export default {
         '자신만의 패션을 뽐내보세요!',
         'success'
         )
-        this.$router.go('/')
+        this.$router.push('/feed')
       })
       .catch(function(){
         // console.log(data.data.data)

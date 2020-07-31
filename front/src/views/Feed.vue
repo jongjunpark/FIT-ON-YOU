@@ -263,7 +263,6 @@
       </div>
       <div class="margin-box"></div>
     </div>
-    
   </div>
 </template>
 
@@ -274,7 +273,8 @@ import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 import "../components/css/feed.css"
 import axios from 'axios'
 import CommentModal from '../components/CommentModal.vue'
-import { mapState, mapActions  } from 'vuex'
+import axios from 'axios'
+
 
 export default {
   name: 'Feed',
@@ -314,7 +314,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['sendUserInfo']),
+    // ...mapActions(['']),
     onNewsFeed() {
       const selectBar = document.querySelector('.menu-bar-select')
       const newsFeed = document.querySelector('.fa-newspaper')
