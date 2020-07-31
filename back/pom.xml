@@ -107,11 +107,13 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.19.1</version>
 				<configuration>
-					<testFailureIgnore>true</testFailureIgnore>
+					<archive>
+						<manifest>
+							<mainclass>com.web.curation.WebCurationApplication</mainclass>
+						</manifest>
+					</archive>
 				</configuration>
 			</plugin>
-
 		</plugins>
 	</build>
-
 </project>
