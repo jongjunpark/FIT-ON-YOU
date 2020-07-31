@@ -41,7 +41,6 @@ public class SearchController {
 		if (size == 1) {
 			String name1 = list.get(0);
 			result = searchDao.getSearchByTagnameOne(name1);
-
 		} else if (size == 2) {
 			String name1 = list.get(0);
 			String name2 = list.get(1);
