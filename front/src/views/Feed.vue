@@ -352,14 +352,14 @@ export default {
     this.onNewsFeed()
     const formData = new FormData();
     formData.append('nickname',this.user.nickname);
-    axios.post("http://localhost:8080/board/newsfeed",formData).then((data)=>{
+    axios.post("http://localhost:8080/api/board/newsfeed",formData).then((data)=>{
       console.log("success")
       this.feedlist=data.data;
       for (let index = 0; index < this.feedlist.length; index++) {
         const el = this.feedlist[index];
         const articleNo = new FormData();
         articleNo.append('articleNo',el.articleNo);
-        axios.post("http://localhost:8080/board/images",articleNo).then((img)=>{
+        axios.post("http://localhost:8080/api/board/images",articleNo).then((img)=>{
           const temp = img.data;``
           const templist = [];
           for (let i = 0; i < temp.length; i++) {

@@ -56,7 +56,7 @@ export default {
       }
     },
     findPassword(){
-      axios.get('http://localhost:8080/account/findPassword',{
+      axios.get('http://localhost:8080/api/account/findPassword',{
         params:{
           email: this.email,
           pTime: this.birth
