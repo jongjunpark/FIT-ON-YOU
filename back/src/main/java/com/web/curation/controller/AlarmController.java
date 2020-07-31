@@ -1,8 +1,10 @@
-package com.web.curation.controller.mypage;
+package com.web.curation.controller;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -11,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.web.curation.dao.board.BoardDao;
+import com.web.curation.dao.AlarmDao;
+import com.web.curation.model.Alarm;
 import com.web.curation.model.BasicResponse;
-import com.web.curation.model.Board;
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -25,46 +27,39 @@ import io.swagger.annotations.ApiResponses;
 
 @CrossOrigin(origins = { "*" })
 @RestController
-@RequestMapping("/mypage")
-public class MyPageController {
+@RequestMapping("/alarm")
+public class AlarmController {
+	/*
+	 * 댓글 추가  type 1
+	팔로우 했을때 type 2
+	팔로우 해지 했을때 type 3
+	좋아요 눌렀을때 type 4
+	좋아요 해지 했을때 type 5(?)
+	 */
 	
 	@Autowired
-	private BoardDao boardDao;
+	private AlarmDao alarmDao;
 	
-	@GetMapping("/myboard")
-	public Map<String,Object> getMyBoard(@RequestParam String nickname){
-		Map<String,Object> result=new HashMap<>();
+	@GetMapping("/")
+	public Map<String,Object> alarmList(@Valid @RequestParam String nickname){
+		Map<String,Object> resultMap= new HashMap<>();
 		
-		List<Board> boards = boardDao.findBoardByArticleUserOrderByArticleNoDesc(nickname);
-	
-		if(boards.size()==0) {
-			result.put("result",0);
-		}
-		else{
-			result.put("boards", boards);
-			result.put("result", 1);
-		}
-		
-		return result;
-		
-	}
-	
-	@GetMapping("/bookmark")
-	public Map<String,Object> getBookmark(@RequestParam String nickname){
-		Map<String,Object> result=new HashMap<>();
-		
-		List<Board> boards= boardDao.bookmarkList(nickname);
-		
-		if(boards.size()==0) {
-			result.put("result",0);
+		List<Alarm> list=alarmDao.findByRecevierAndIsReadOrderByAlarmNoDesc(nickname, 0);
+		int cnt=list.size();
+		if(cnt!=0) {
+			resultMap.put("result",1);
+			resultMap.put("alist",list);
+			resultMap.put("acnt",cnt);
 		}
 		else {
-			result.put("boards",boards);
-			result.put("result",1);
+			resultMap.put("result",0);
 		}
-		
-		
-		
-		return result;
+		return resultMap;
 	}
+
+	
+	
+	
+	
+	
 }

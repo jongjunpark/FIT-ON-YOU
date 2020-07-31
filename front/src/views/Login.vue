@@ -202,7 +202,7 @@ export default {
     loginHandler() { 
       console.log(this.email);
       console.log(this.password);
-      axios.get('http://localhost:8080/account/login',{
+      axios.get('http://localhost:8080/api/account/login',{
         params:{email:this.email,
                   password:this.password},
       }).then( response => {

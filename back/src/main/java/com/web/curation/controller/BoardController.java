@@ -1,4 +1,4 @@
-package com.web.curation.controller.mypage;
+package com.web.curation.controller;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -16,14 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.web.curation.dao.board.BoardDao;
-import com.web.curation.dao.board.ImageStoreDao;
-import com.web.curation.dao.follow.FollowDao;
-import com.web.curation.dao.user.UserDao;
+import com.web.curation.dao.BoardDao;
+import com.web.curation.dao.FollowDao;
+import com.web.curation.dao.ImageDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Board;
-import com.web.curation.model.Imagestore;
-import com.web.curation.model.follow.Follow;
+import com.web.curation.model.Follow;
+import com.web.curation.model.ImageStore;
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -43,7 +42,7 @@ public class BoardController {
 	@Autowired
 	FollowDao followDao;
 	@Autowired
-	ImageStoreDao imageStoreDao;
+	ImageDao imageDao;
 	@PostMapping
 	public Object writeBoard(@Valid @RequestBody Board board) {
 		
@@ -85,9 +84,9 @@ public class BoardController {
 		return result;
 	}
 	@PostMapping("/images")
-	public List<Imagestore> getImageArticle(@RequestParam int articleNo){
-		List<Imagestore> urllist = new ArrayList<Imagestore>();
-		urllist= imageStoreDao.findImagestoreByArticleNoOrderByArticleNoDesc(articleNo);
+	public List<ImageStore> getImageArticle(@RequestParam int articleNo){
+		List<ImageStore> urllist = new ArrayList<ImageStore>();
+		urllist= imageDao.findImagestoreByArticleNoOrderByArticleNoDesc(articleNo);
 		return urllist;
 	}
 

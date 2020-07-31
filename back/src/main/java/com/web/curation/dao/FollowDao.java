@@ -1,4 +1,4 @@
-package com.web.curation.dao.follow;
+package com.web.curation.dao;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.web.curation.model.follow.Follow;
+import com.web.curation.model.Follow;
 
 public interface FollowDao extends JpaRepository<Follow, String>{
 	
@@ -23,5 +23,10 @@ public interface FollowDao extends JpaRepository<Follow, String>{
 	
 	@Query(value="SELECT a.followno, a.followeduser, a.followinguser FROM (select * from follow where followeduser =:userName)as a inner join (select * from follow where followinguser =:userName ) as b on a.followeduser = b.followinguser and a.followinguser = b.followeduser",nativeQuery = true)
 	List<Follow> getFollowByFolloweinguserAndFollweduser(String userName);
+	
+	Follow findByFollowno(Integer followNo);
+	
+	Long countByFolloweduser(String followeduser);
+	Long countByFollowinguser(String followinguser);
 	
 }

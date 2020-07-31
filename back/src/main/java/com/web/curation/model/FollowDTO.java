@@ -1,7 +1,5 @@
 package com.web.curation.model;
 
-import com.web.curation.model.follow.Follow;
-
 import lombok.Data;
 
 @Data

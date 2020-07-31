@@ -1,15 +1,16 @@
 
-package com.web.curation.dao.user;
+package com.web.curation.dao;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
-import com.web.curation.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.web.curation.model.User;
 
 /*
  * JpaRepository에는 기본적인 CRUD(findAll, findOne, save, deleteAll)메소드가 
@@ -27,4 +28,9 @@ public interface UserDao extends JpaRepository<User, String> {
     @Transactional
     @Query(value="UPDATE user set password=:password where email=:email", nativeQuery=true)
     void updatePassword(@Param("password")String password,@Param("email") String email);
+    
+    @Modifying
+    @Transactional
+    @Query(value="UPDATE user set nickname=:cur where nickname=:prev", nativeQuery=true)
+    void updateNickname(@Param("prev")String prev,@Param("cur") String cur);
 }
