@@ -1,4 +1,4 @@
-package com.web.curation.controller.account;
+package com.web.curation.controller;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -12,7 +12,6 @@ import javax.mail.internet.MimeMessage;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,11 +25,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.web.curation.dao.user.UserDao;
+import com.web.curation.dao.UserDao;
 import com.web.curation.model.BasicResponse;
+import com.web.curation.model.User;
 import com.web.curation.model.UserDTO;
-import com.web.curation.model.user.SignupRequest;
-import com.web.curation.model.user.User;
+import com.web.curation.request.SignupRequest;
 import com.web.curation.service.user.JwtService;
 import com.web.curation.service.user.UserLoginService;
 

@@ -1,4 +1,4 @@
-package com.web.curation.controller.follow;
+package com.web.curation.controller;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,17 +11,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.web.curation.dao.alarm.AlarmDao;
-import com.web.curation.dao.follow.FollowDao;
+import com.web.curation.dao.AlarmDao;
+import com.web.curation.dao.FollowDao;
 import com.web.curation.model.Alarm;
 import com.web.curation.model.BasicResponse;
+import com.web.curation.model.Follow;
 import com.web.curation.model.FollowDTO;
-import com.web.curation.model.follow.AddFollowRequest;
-import com.web.curation.model.follow.Follow;
 
 import io.swagger.annotations.ApiOperation;
 

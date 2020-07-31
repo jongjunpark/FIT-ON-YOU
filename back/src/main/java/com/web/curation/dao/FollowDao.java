@@ -1,4 +1,4 @@
-package com.web.curation.dao.follow;
+package com.web.curation.dao;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.web.curation.model.follow.Follow;
+import com.web.curation.model.Follow;
 
 public interface FollowDao extends JpaRepository<Follow, String>{
 	

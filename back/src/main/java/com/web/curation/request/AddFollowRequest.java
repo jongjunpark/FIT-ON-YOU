@@ -1,4 +1,4 @@
-package com.web.curation.model.follow;
+package com.web.curation.request;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

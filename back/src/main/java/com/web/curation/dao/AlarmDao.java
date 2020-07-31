@@ -1,4 +1,4 @@
-package com.web.curation.dao.alarm;
+package com.web.curation.dao;
 
 import java.util.List;
 

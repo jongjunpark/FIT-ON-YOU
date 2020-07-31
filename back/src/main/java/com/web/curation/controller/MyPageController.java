@@ -1,4 +1,4 @@
-package com.web.curation.controller.mypage;
+package com.web.curation.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,14 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.web.curation.dao.board.BoardDao;
-import com.web.curation.dao.board.ImageDao;
-import com.web.curation.dao.follow.FollowDao;
+import com.web.curation.dao.BoardDao;
+import com.web.curation.dao.FollowDao;
+import com.web.curation.dao.ImageDao;
 import com.web.curation.model.BasicResponse;
-import com.web.curation.model.Board;
 import com.web.curation.model.ImageStore;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;

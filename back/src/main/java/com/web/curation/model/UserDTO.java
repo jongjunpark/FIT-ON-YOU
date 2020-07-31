@@ -2,8 +2,7 @@ package com.web.curation.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import com.web.curation.model.user.User;
-import lombok.Data;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

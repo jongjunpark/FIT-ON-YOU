@@ -1,4 +1,4 @@
-package com.web.curation.dao.board;
+package com.web.curation.dao;
 
 import java.util.List;
 
@@ -26,4 +26,6 @@ public interface ImageDao extends JpaRepository<ImageStore, String>{
 			+" order by i.articleno desc", nativeQuery=true)
 	List<ImageStore> bookMarkImgList(@Param("nickname") String nickname);
 	
+	
+	List<ImageStore> findImagestoreByArticleNoOrderByArticleNoDesc(int num);
 }

@@ -1,15 +1,16 @@
 
-package com.web.curation.dao.user;
+package com.web.curation.dao;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
-import com.web.curation.model.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.web.curation.model.User;
 
 /*
  * JpaRepository에는 기본적인 CRUD(findAll, findOne, save, deleteAll)메소드가 
