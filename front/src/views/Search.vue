@@ -7,9 +7,24 @@
         <i key=2 v-else class="fas fa-user"></i>
       </transition>
       <i v-if='isUserSearch' @click='setUser' class="fas fa-user"></i>
-      <input @input="hashContent = $event.target.value" v-model='hashContent' v-if='isHashInput' type="text" class="search-input" placeholder="'#'은 필수입니다.">
-      <input @input="userContent = $event.target.value" v-model='userContent' v-if='isUserInput' type="text" class="search-input" placeholder="유저이름을 입력하세요">
+      <input @input="hashContent = $event.target.value" v-model='hashContent' 
+        v-if='isHashInput' @keyup.188="addHash" type="text" class="search-input" placeholder="'#'은 필수입니다.">
+      <span v-if='isHashInput'>
+        <i class="fab inner-search-btn fa-sistrix"></i>
+      </span>
+      <input @input="userContent = $event.target.value" v-model='userContent' 
+        v-if='isUserInput' type="text" class="search-input" placeholder="유저이름을 입력하세요">
+      <span v-if='isUserInput'>
+        <i class="fab inner-search-btn fa-sistrix"></i>
+      </span>
+      <transition-group name='fade' tag="div" class="hash-group" mode="in-out">
+        <div class='hash-item' v-for='(hash, index) in hashList' :key='`hash-${index}`'>
+          <div @click='delHashItem(index)' class="hash-item-close-btn"><i class="fas fa-times"></i></div>
+          {{ hash }}
+        </div>
+      </transition-group>
     </div>
+
     <div class='wrap-container'>
 
       <div class="search-box">
@@ -71,6 +86,7 @@ export default {
       isHashInput: false,
       isUserInput: false,
       hashContent: '',
+      hashList: [],
       userContent: '',
     }
   },
@@ -109,6 +125,7 @@ export default {
     },
     setReturn() {
       this.isHashSearch = !this.isHashSearch
+      this.hashList = []
       if(this.isUserInput) {
         this.isUserInput = false
         this.isHashInput = true
@@ -121,6 +138,13 @@ export default {
     },
     checkHashTag() {
       
+    },
+    addHash() {
+      this.hashList.push(this.hashContent.slice(0,-1))
+      this.hashContent = ''
+    },
+    delHashItem(index) {
+      this.hashList.splice(index, 1)
     }
   },
   mounted() {
@@ -153,16 +177,23 @@ export default {
   }
 }
 
+.search-bar .fas {
+  transition: ease 0.3s;
+}
 
-.search-bar .fas{
+.search-bar .fa-hashtag, .fa-user{
   font-size: 150%;
   margin: 0 10px;
   color: black;
   transition: ease 0.3s;
 }
 
-.search-bar .fas:hover {
+.search-bar .fas:hover{
   color: #5AAEFF;
+}
+
+.search-bar .fa-user:hover {
+  color: #5AAEFF; 
 }
 
 .search-bar .fa-undo-alt {
@@ -189,6 +220,22 @@ export default {
   outline: none;
 }
 
+.search-input::placeholder {
+  font-size: 1vw;
+}
+
+.search-bar .inner-search-btn {
+  font-size: 100%;
+  margin: 0;
+  color: #050505;
+}
+
+.search-bar .inner-search-btn:hover {
+  color: #5AAEFF;
+}
+
+
+
 .search-box {
   display: flex;
   justify-content: center;
@@ -212,16 +259,63 @@ export default {
   height: 100%;
 }
 
-.fade-enter-active,
-.fade-leave-active {
+.fade-enter-active, .fade-leave-active {
   transition: opacity 0.2s !important;
 }
 
-.fade-enter,
-.fade-leave-to
-/* .fade-leave-active below version 2.1.8 */
-
-{
+.fade-enter, .fade-leave-to {
   opacity: 0;
 }
+
+.hash-group {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 120%;
+  border-radius: 5px;
+  background-color: white;
+  box-shadow: 0 6px 12px 0 rgba(0,0,0,0.25);
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hash-group .hash-item {
+  padding: 1px 5px;
+  background-color: #050505;
+  color: #fff;
+  border-radius: 10px;
+  margin: 5px;
+  font-size: 80%;
+  padding-left: 3%;
+  font-weight: 700;
+}
+
+.hash-item .hash-item-close-btn {
+  display: inline-block;
+  cursor: pointer;
+  /* margin-right: 5px; */
+}
+
+.hash-item-close-btn .fa-times {
+  font-size: 80%;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+  margin-bottom: 5px;
+}
+
+.hash-item-close-btn .fa-times:hover{
+  color: #fc0303;
+}
+
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
 </style>
