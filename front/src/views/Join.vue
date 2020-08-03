@@ -95,7 +95,7 @@ import PasswordValidator from 'password-validator'
 import * as EmailValidator from "email-validator"
 import Swal from 'sweetalert2'
 import axios from 'axios'
-import { mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 
 export default {
@@ -203,7 +203,8 @@ export default {
     },
   },
   computed: {
-    
+    ...mapState(['setLoggedIn']),
+    ...mapActions(['sendUserInfo'])
   },
   methods: {
     ...mapMutations(['setToken']),
@@ -439,11 +440,6 @@ export default {
       } else {
         this.profileImg = null
       }
-      Swal.fire(
-        '환영해요!',
-        '자신만의 패션을 뽐내보세요!',
-        'success'
-      )
       axios.post('http://localhost:8080/account/signup',{
 
           email: this.input.email+'@'+this.input.url,
@@ -454,14 +450,16 @@ export default {
           profile_img: this.profileImg
 
       }).then(data => {
+        console.log(data)
         this.$cookies.set('auth-token', data.data.auth_token)
-        // this.setToken(data.data.auth_token)
+        this.setToken(data.data.auth_token)
         Swal.fire(
         '환영해요!',
         '자신만의 패션을 뽐내보세요!',
         'success'
         )
-        this.$router.push('/feed')
+        this.setLoggedIn(true);
+        this.sendUserInfo();
       })
       .catch(function(){
         // console.log(data.data.data)
@@ -473,14 +471,15 @@ export default {
           headers:{
               'Content-Type': 'multipart/form-data'
           }
-        }).then(function(){
+        }).then( () =>{
           console.log("1");
+          this.$router.push('/feed')
           
         })
         .catch(function(){
           console.log("2");
         });
-      }
+      } else {this.$router.push('/feed')}
 
     },
     notTab() {

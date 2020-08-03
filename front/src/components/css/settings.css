@@ -1,0 +1,52 @@
+.btn.change-password-btn {
+  color: white;
+  background-color: #B0B0B0;
+  width: 100%;
+  font-size: 20px;
+  box-sizing: border-box;
+}
+
+.btn.logout-btn {
+  color: white;
+  background-color: #B0B0B0;
+  width: 100%;
+  font-size: 20px;
+  box-sizing: border-box;
+}
+
+.btn.change-search-btn {
+  color: white;
+  background-color: #B0B0B0;
+  width: 100%;
+  font-size: 20px;
+  box-sizing: border-box;
+}
+
+.settings-name {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.btn.signout-btn {
+  color: white;
+  background-color: #B0B0B0;
+  width: 100%;
+  font-size: 20px;
+  box-sizing: border-box;
+}
+
+.btn.change-password-btn:hover {
+  opacity: 0.6;
+}
+
+.btn.logout-btn:hover {
+  opacity: 0.6;
+}
+
+.btn.change-search-btn:hover {
+  opacity: 0.6;
+}
+
+.btn.signout-btn:hover {
+  opacity: 0.6;
+}

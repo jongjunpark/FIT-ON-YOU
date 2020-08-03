@@ -1,11 +1,13 @@
 <template>
   <div class='wrap'>
+  <h1 class='newpassword-head'>새로운 비밀번호로 <br> 변경해주세요.</h1>
    <div class='wrap-container'>
-     <div class='passwordchange-head'>
-      <h1>새로운 비밀번호로 <br> 변경해주세요.</h1>
-    </div>
     <div class='lock-profile-img'>
       <img class='profile-img' src="../assets/images/pngflow.com.png" alt="">
+    </div>
+    <div class="passwordchange-input-area">
+      <label for="">현재 비밀번호</label>
+      <input @focus="activeInput" @blur='deactiveInput' v-model='nowPassword' type="password" class="common-input-join" placeholder="password" >
     </div>
     <div class="passwordchange-input-area">
       <label for="">새 비밀번호</label>
@@ -27,14 +29,16 @@
 
 <script>
 import "../components/css/passwordchange.css"
+import "../components/css/newpassword.css"
 import PasswordValidator from 'password-validator'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
-  name: 'PasswordChange',
+  name: 'NewPassword',
   data() {
     return {
+      nowPassword:'',
       password: '',
       passwordConfirm: '',
       passwordErrorMsg: false,
@@ -54,9 +58,13 @@ export default {
       this.checkPasswordValidate();
       this.checkPassword();
     },
+    'nowPassword'() {
+      this.checkPassword();
+    },
+    
   },
   computed: {
-    ...mapState(['pwdUser'])
+    ...mapState(['user'])
   },
   methods: {
     ...mapMutations(['setToken', 'setLoggedIn']),
@@ -91,7 +99,7 @@ export default {
           this.pwErrMsg = false
           this.pwSucMsg = true
           this.pwdFlag = false;
-          if (this.passwordSuccessMsg) {
+          if (this.passwordSuccessMsg && this.nowPassword) {
             this.pwdFlag = true;
           }
         }
@@ -100,28 +108,36 @@ export default {
       }
     },
     changePassword() {
-      console.log(this.pwdUser);
+      console.log(this.user);
       const formData= new FormData();
-      formData.append('email',this.pwdUser.email);
+      formData.append('email',this.user.email);
       formData.append('password',this.passwordConfirm);
 
-      axios.post('http://localhost:8080/account/changePassword',
-        formData).then(data => {
-        console.log(data)
-        this.$cookies.set('auth-token', data.data.auth_token)
-        this.setToken(data.data.auth_token)
-        this.setLoggedIn(true);
-        this.sendUserInfo();
-        Swal.fire(
-          '변경되었습니다.',
-          '',
-          'success'
-        )
-        this.$router.push('/feed')
-      })
-      .catch(data => {
-        console.log(data)
-      });
+      if (this.user.password === this.nowPassword) {
+        axios.post('http://localhost:8080/account/changePassword',
+          formData).then(data => {
+          console.log(data)
+          this.$cookies.set('auth-token', data.data.auth_token)
+          this.setToken(data.data.auth_token)
+          this.setLoggedIn(true);
+          this.sendUserInfo();
+          Swal.fire(
+            '변경되었습니다.',
+            '',
+            'success'
+          )
+          this.$router.push('/feed')
+        })
+        .catch(data => {
+          console.log(data)
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: '비밀번호가 틀렸습니다.',
+          text: '한번 더 확인해주세요',
+        })
+      }
     },
   },
   created() {
