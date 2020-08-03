@@ -9,5 +9,5 @@ import com.web.curation.model.Board;
 public interface BoardDao extends JpaRepository<Board, String>{
 	
 	List<Board> findBoardByArticleUserOrderByArticleNoDesc(String articleUser);
-	
+	Board findByArticleNo(int articleNo);
 }

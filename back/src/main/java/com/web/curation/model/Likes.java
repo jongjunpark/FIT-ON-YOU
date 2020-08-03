@@ -14,18 +14,14 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class Bookmark {
-	
-	
+public class Likes {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // 기본키 매핑 db에서 자동증분으로 설정
-	private int bookmarkNo;
+	private int likeNo;
 	
 	@NotNull
-	private int bookedArticle;
+	private int articleNo;
 	
 	@NotNull
-	private String bookUser;
-	
-	
+	private String nickname;
 }
