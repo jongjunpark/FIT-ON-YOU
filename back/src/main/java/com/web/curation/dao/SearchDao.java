@@ -24,4 +24,6 @@ public interface SearchDao extends JpaRepository<Search, String> {
 //
 	@Query(value = "select * from articletag where tagname in (?1,?2,?3,?4,?5) group by articleno having count(articleno) >= 5", nativeQuery = true)
 	List<Search> getSearchByTagnameFive(String name1, String name2, String name3, String name4, String name5);
+	
+	
 }
