@@ -9,6 +9,7 @@ import FindPassword from '../views/FindPassword.vue'
 import FindPasswordOk from '../views/FindPasswordOk.vue'
 import PasswordChange from '../views/PasswordChange.vue'
 import ProfileEdit from '../views/ProfileEdit.vue'
+import ProfileInform from '../views/ProfileInform.vue'
 
 Vue.use(VueRouter)
 
@@ -58,7 +59,11 @@ Vue.use(VueRouter)
     name: 'ProfileEdit',
     component: ProfileEdit
   },
-  
+  {
+    path: '/profileinform',
+    name: 'ProfileInform',
+    component: ProfileInform
+  }
   
 ]
 
