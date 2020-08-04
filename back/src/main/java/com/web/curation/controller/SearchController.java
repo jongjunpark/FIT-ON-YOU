@@ -96,5 +96,6 @@ public class SearchController {
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+	
 
 }
