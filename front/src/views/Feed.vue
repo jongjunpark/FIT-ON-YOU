@@ -348,12 +348,14 @@ export default {
       }
     }
   },
-  updated() {
+  mounted() {
     this.onNewsFeed()
     const formData = new FormData();
     formData.append('nickname',this.user.nickname);
+    console.log(this.user.nickname)
     axios.post("http://localhost:8080/api/board/newsfeed",formData).then((data)=>{
       console.log("success")
+      console.log(data)
       this.feedlist=data.data;
       for (let index = 0; index < this.feedlist.length; index++) {
         const el = this.feedlist[index];
