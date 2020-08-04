@@ -129,7 +129,7 @@ export default {
   justify-content: space-between;
   width: 100%;
   height: 50%;
-  margin: 5px 0;
+  margin: 5px 0 30px 0;
   position: relative;
   /* background-color: gray; */
 }
