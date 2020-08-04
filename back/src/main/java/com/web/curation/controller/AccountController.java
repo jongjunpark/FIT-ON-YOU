@@ -20,6 +20,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -106,6 +107,7 @@ public class AccountController {
 	@PostMapping("/account/signup")
 	@ApiOperation(value = "회원가입")
 	public Object signup(@Valid @RequestBody SignupRequest request) {
+		Map<String,Object> resultMap=new HashMap<>();
 		// 이메일, 닉네임 중복처리 필수
 		// 회원가입단을 생성해 보세요.
 		final BasicResponse result = new BasicResponse();
@@ -137,9 +139,14 @@ public class AccountController {
 			} else {
 				result.status = true;
 				result.data = "success";
+				resultMap.put("result",result);
+				String token = jwtService.create(new UserDTO(user));
+				resultMap.put("auth_token",token);
+				resultMap.put("data",user);
+				
 			}
 		}
-		return new ResponseEntity<>(result, HttpStatus.OK);
+		return new ResponseEntity<>(resultMap, HttpStatus.OK);
 	}
 
 	@GetMapping("/account/findPassword")
@@ -294,4 +301,47 @@ public class AccountController {
 		
 		return result;
 	}
+	@GetMapping("/account/social")
+	@ApiOperation(value="소셜 로그인시 회원가입 처리 여부")
+	public Object checkKakao(@RequestParam("email") String email) {
+		final BasicResponse result = new BasicResponse();
+		Map<String,Object> resultMap=new HashMap<>();
+		
+		Optional<User> user=userDao.findUserByEmail(email);
+		if(user.isPresent()) {
+			result.status=true;
+			result.data="exist";
+			//토큰이 필요하면 이걸 사용.
+			/*
+			String token = jwtService.create(new UserDTO(user.get()));
+			System.out.println(token);
+			resultMap.put("auth_token", token);
+			resultMap.put("data", user.get());
+			*/
+			
+			
+		}else {
+			result.status=true;
+			result.data="none";
+		}
+		
+		resultMap.put("result", result);
+		
+		return result;
+	}
+	
+	@PutMapping("/account/selfintro")
+	@ApiOperation(value="한줄 자기소개 수정")
+	public Object selfintro(@RequestParam String nickname, @RequestParam String selfintroduce) {
+		final BasicResponse result = new BasicResponse();
+		if(userDao.updateSelfintro(selfintroduce, nickname)==1) {
+			result.data="success";
+		}
+		else {
+			result.data="false";
+		}
+		result.status=true;
+		return result;
+	}
+	
 }

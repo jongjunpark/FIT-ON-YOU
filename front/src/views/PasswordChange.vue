@@ -30,7 +30,7 @@ import "../components/css/passwordchange.css"
 import PasswordValidator from 'password-validator'
 import axios from 'axios'
 import Swal from 'sweetalert2'
-import { mapState } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   name: 'PasswordChange',
   data() {
@@ -59,6 +59,8 @@ export default {
     ...mapState(['pwdUser'])
   },
   methods: {
+    ...mapMutations(['setToken', 'setLoggedIn']),
+    ...mapActions(['sendUserInfo']),
     activeInput() {
       event.path[1].style.border = '2px solid black'
       event.path[1].style.zIndex = 5
@@ -107,6 +109,9 @@ export default {
         formData).then(data => {
         console.log(data)
         this.$cookies.set('auth-token', data.data.auth_token)
+        this.setToken(data.data.auth_token)
+        this.setLoggedIn(true);
+        this.sendUserInfo();
         Swal.fire(
           '변경되었습니다.',
           '',

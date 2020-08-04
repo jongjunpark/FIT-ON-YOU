@@ -90,7 +90,7 @@ export default {
     ...mapGetters([]),
   }, 
   methods:{
-    ...mapMutations(['setToken', 'setUser']),
+    ...mapMutations(['setToken', 'setUser', 'setLoggedIn']),
     ...mapActions(['AC_USER', 'sendUserInfo']),
 
     loginWithKakao(){
@@ -151,7 +151,6 @@ export default {
           console.log(ref.$store.state.user);
 
         }, function(error) {
-          alert(JSON.stringify(error, undefined, 2));
         });
       });
     },
@@ -213,6 +212,7 @@ export default {
           this.$cookies.set('auth-token', response.data.auth_token)
           this.setToken(response.data.auth_token)
           this.sendUserInfo();
+          this.setLoggedIn(true);
           this.$router.push('/feed')
         }
         // 이메일 없음
