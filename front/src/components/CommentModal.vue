@@ -62,7 +62,7 @@
 
 <script>
 export default {
-  ame: 'CommentModal',
+  name: 'CommentModal',
   data() {
     return {
       comment_content: ''
