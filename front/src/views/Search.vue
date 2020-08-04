@@ -196,9 +196,9 @@ export default {
 }
 
 .search-inner-box {
-  width: 30%;
+  width: 33%;
   padding-top: 30%;
-  margin: 5px;
+  margin: 1px;
   background-color: grey;
   position: relative
 }
