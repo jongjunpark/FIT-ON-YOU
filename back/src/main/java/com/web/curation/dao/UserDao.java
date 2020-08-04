@@ -37,6 +37,6 @@ public interface UserDao extends JpaRepository<User, String> {
     
     @Modifying
     @Transactional
-    @Query(value="select * from user where nickname like %:word%", nativeQuery=true)
-    List<User> findUsersByWord(String word);
-}
+    @Query(value="UPDATE user set selfintroduce=:selfintroduce where nickname=:nickname", nativeQuery=true)
+    int updateSelfintro(String selfintroduce, String nickname);
+}	

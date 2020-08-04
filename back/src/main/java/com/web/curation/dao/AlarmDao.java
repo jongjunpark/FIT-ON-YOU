@@ -45,5 +45,7 @@ public interface AlarmDao extends JpaRepository<Alarm, String>{
 	int isReadByAlarmNo(int alramNo);
 	
 	
+	Alarm findByTypeAndArticleNoAndFollower(String type, int articleNo, String Follower);
+	
 
 }
