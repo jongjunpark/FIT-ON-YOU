@@ -40,10 +40,17 @@
         </div>
       </div>
       <div class="write-content-box">
-        <textarea cols="30" rows="3" placeholder="내용"></textarea>
-        <input type="text" placeholder="태그">
+        <textarea @input="writeContent = $event.target.value" cols="30" rows="3" placeholder="내용"></textarea>
+        <input @input="writeHashContent = $event.target.value" v-model='writeHashContent' @keyup.188="addWriteHash" type="text" placeholder="태그">
+        <transition-group name='fade' tag="div" class="write-hash-group" mode="in-out">
+          <div class='write-hash-item' v-for='(hash, index) in writeHashList' :key='`hash-${index}`'>
+            <div @click='delWriteHashItem(index)' class="write-hash-item-close-btn"><i class="fas fa-times"></i></div>
+            {{ hash }}
+          </div>
+        </transition-group>
       </div>
-      <div class="btn write-btn">작성하기</div>
+      <div v-if="!isWriteBtn" class="btn write-btn">작성하기</div>
+      <div v-if="isWriteBtn" class="btn write-btn on-write-btn">작성하기</div>
     </div>
   </div>
 </template>
@@ -57,7 +64,25 @@ export default {
       isCancle1: false,
       isCancle2: false,
       isCancle3: false,
+      writeHashContent: '',
+      writeHashList: [],
+      writeContent: '',
+      isWriteBtn: false,
     }
+  },
+  watch: {
+    feedImg() {
+      this.checkWriteForm();
+    },
+    writeContent() {
+      this.checkWriteForm();
+    },
+    writeHashContent() {
+      this.checkWriteForm();
+    },
+    writeHashList() {
+      this.checkWriteForm();
+    },
   },
   methods: {
     setFeedImg(num) {
@@ -107,6 +132,20 @@ export default {
     delFeedImg(num) {
       let idx = num-1
       this.feedImg.splice(idx, 1)
+    },
+    addWriteHash() {
+      this.writeHashList.push(this.writeHashContent.slice(0,-1))
+      this.writeHashContent = ''
+    },
+    delWriteHashItem(index) {
+      this.writeHashList.splice(index, 1)
+    },
+    checkWriteForm() {
+      if (this.feedImg[0] && (this.writeHashContent || this.writeHashList[0]) && this.writeContent) {
+        this.isWriteBtn = true
+      } else {
+        this.isWriteBtn = false
+      }
     }
   }
 }
@@ -304,5 +343,60 @@ export default {
   bottom: 0;
 }
 
+.btn.on-write-btn {
+  color: white;
+  background-color: #5AAEFF;
+  width: 100%;
+  font-size: 20px;
+  box-sizing: border-box;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.2s !important;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.write-hash-group {
+  width: 100%;
+  border-radius: 5px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.write-hash-group .write-hash-item {
+  padding: 1px 5px;
+  background-color: #050505;
+  color: #fff;
+  border-radius: 10px;
+  margin: 5px;
+  font-size: 80%;
+  padding: 0 3vw;
+  font-weight: 700;
+}
+@media (min-width: 1200px) {
+  .write-hash-group .write-hash-item {
+  padding: 0 2%;
+  }
+}
+
+.write-hash-item .write-hash-item-close-btn {
+  display: inline-block;
+  cursor: pointer;
+  /* margin-right: 5px; */
+}
+
+.write-hash-item-close-btn .fa-times {
+  font-size: 80%;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 5px 5px 0;
+}
+
+.write-hash-item-close-btn .fa-times:hover{
+  color: #fc0303;
+}
 
 </style>
