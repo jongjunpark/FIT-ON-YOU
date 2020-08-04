@@ -107,6 +107,7 @@ public class AccountController {
 	@PostMapping("/account/signup")
 	@ApiOperation(value = "회원가입")
 	public Object signup(@Valid @RequestBody SignupRequest request) {
+		Map<String,Object> resultMap=new HashMap<>();
 		// 이메일, 닉네임 중복처리 필수
 		// 회원가입단을 생성해 보세요.
 		final BasicResponse result = new BasicResponse();
@@ -138,9 +139,14 @@ public class AccountController {
 			} else {
 				result.status = true;
 				result.data = "success";
+				resultMap.put("result",result);
+				String token = jwtService.create(new UserDTO(user));
+				resultMap.put("auth_token",token);
+				resultMap.put("data",user);
+				
 			}
 		}
-		return new ResponseEntity<>(result, HttpStatus.OK);
+		return new ResponseEntity<>(resultMap, HttpStatus.OK);
 	}
 
 	@GetMapping("/account/findPassword")
