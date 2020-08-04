@@ -12,7 +12,7 @@ import ProfileEdit from '../views/ProfileEdit.vue'
 import Settings from '../views/Settings.vue'
 import NewPassword from '../views/NewPassword.vue'
 import DirectMessage from '../views/DirectMessage.vue'
-
+import ProfileInform from '../views/ProfileInform.vue'
 
 Vue.use(VueRouter)
 
@@ -150,6 +150,12 @@ Vue.use(VueRouter)
         next()
       }    }
   },
+  {
+    path: '/profileinform',
+    name: 'ProfileInform',
+    component: ProfileInform
+  }
+
 ]
 
 const router = new VueRouter({
