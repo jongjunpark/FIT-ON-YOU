@@ -35,23 +35,30 @@ public class FollowController {
 	@GetMapping("/follow/add")
 	@ApiOperation(value = "팔로우 추가")
 	// following 팔로우 하는 사람  , followed 팔로우 당한 사람
-	public void addFollow(@Valid @RequestParam String followingUser, @Valid @RequestParam String followedUser) {
+	public Object addFollow(@Valid @RequestParam String followingUser, @Valid @RequestParam String followedUser) {
 		Follow follow = new Follow();
-		follow.setFolloweduser(followedUser);
-		follow.setFollowinguser(followingUser);
-		if (followDao.save(follow) == null) {
-			System.out.println("안됨");
-		} else {
-			Alarm alarm = new Alarm();
-			alarm.setType("2");
-			alarm.setRecevier(followedUser);
-			alarm.setFollower(followingUser);
-			alarm.setIsRead(0);
-			alarmDao.save(alarm);
-			
-			System.out.println("됨");
-
+		final BasicResponse result = new BasicResponse();
+		result.status=true;
+		
+		if(followDao.countByFolloweduserAndFollowinguser(followedUser, followingUser)==0) {
+			follow.setFolloweduser(followedUser);
+			follow.setFollowinguser(followingUser);
+			if (followDao.save(follow) == null) {
+				System.out.println("안됨");
+				result.data="fail";
+			} else {
+				alarmDao.addFollowAlarm("2", followedUser, followingUser, 0);
+				
+				System.out.println("됨");
+				result.data="success";
+				
+	
+			}
+		}else {
+			result.data="fail";
+			result.object="이미 팔로우한 유저입니다.";
 		}
+		return result;
 	}
 
 	@GetMapping("/follow/forFollowing")
@@ -110,8 +117,8 @@ public class FollowController {
 		if (followDao.deleteAllByFollowno(followNo) == 1) {// 성공
 			result.status = true;
 			result.data = "삭제 성공";
-			
-			alarmDao.deleteByRecevierAndFollower(follow.getFolloweduser(), follow.getFollowinguser());
+			String type="2";
+			alarmDao.deleteByTypeAndRecevierAndFollower(type,follow.getFolloweduser(), follow.getFollowinguser());
 			
 		} else {// 실패
 			result.status = true;
