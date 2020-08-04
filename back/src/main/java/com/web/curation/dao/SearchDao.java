@@ -10,20 +10,10 @@ import com.web.curation.model.Search;
 
 public interface SearchDao extends JpaRepository<Search, String> {
 
-	@Query(value = "select * from articletag where tagname = :name1", nativeQuery = true)
-	List<Search> getSearchByTagnameOne(String name1);
+	@Query(value = "select * from articletag where tagname in (:tagname) group by articleno having count(articleno) >= :size", nativeQuery = true)
+	List<Search> getSearchByTagname(List<String> tagname, int size);
 
-	@Query(value = "select * from articletag where tagname in (:name1,:name2) group by articleno having count(articleno) >= 2", nativeQuery = true)
-	List<Search> getSearchByTagnameTwo(@Param("name1")String name1,@Param("name2") String name2);
-//
-	@Query(value = "select * from articletag where tagname in (?1,?2,?3) group by articleno having count(articleno) >= 3", nativeQuery = true)
-	List<Search> getSearchByTagnameThree(String name1, String name2, String name3);
-//
-	@Query(value = "select * from articletag where tagname in (?1,?2,?3,?4) group by articleno having count(articleno) >= 4", nativeQuery = true)
-	List<Search> getSearchByTagnameFour(String name1, String name2, String name3, String name4);
-//
-	@Query(value = "select * from articletag where tagname in (?1,?2,?3,?4,?5) group by articleno having count(articleno) >= 5", nativeQuery = true)
-	List<Search> getSearchByTagnameFive(String name1, String name2, String name3, String name4, String name5);
-	
-	
+	@Query(value = "select * from articletag where tagname in (:input) group by articleno", nativeQuery = true)
+	List<Search> getContentsNoByTagname(@Param("input") List<String> input);
+
 }
