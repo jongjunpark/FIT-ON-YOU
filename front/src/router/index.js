@@ -11,6 +11,8 @@ import PasswordChange from '../views/PasswordChange.vue'
 import ProfileEdit from '../views/ProfileEdit.vue'
 import Settings from '../views/Settings.vue'
 import NewPassword from '../views/NewPassword.vue'
+import DirectMessage from '../views/DirectMessage.vue'
+
 
 Vue.use(VueRouter)
 
@@ -137,8 +139,17 @@ Vue.use(VueRouter)
         next()
       }    }
   },
-  
-  
+  {
+    path: '/directmessage',
+    name: 'DirectMessage',
+    component: DirectMessage,
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/')
+      } else {
+        next()
+      }    }
+  },
 ]
 
 const router = new VueRouter({
