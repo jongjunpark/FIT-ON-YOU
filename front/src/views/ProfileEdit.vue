@@ -28,11 +28,11 @@
         </div>
         <div class="follow">
           <h3>팔로우</h3>
-          <h4>123,456</h4>
+          <h4>{{followingCnt}}</h4>
         </div>
         <div class="follower">
           <h3>팔로워</h3>
-          <h4>123,456</h4>
+          <h4>{{followedCnt}}</h4>
         </div>
       <p v-if="isChange && isChange2" class="nickname" @click="changeNickName">{{ user.nickname }} <img src="../assets/images/edit.png" alt="" class="edit-img"></p>
       <div v-if="isChange2 && isChange" class="edit-content" @click="changeContent">
@@ -48,6 +48,7 @@
 
 <script>
 import "../components/css/profileedit.css"
+import axios from 'axios'
 import { mapState } from 'vuex'
 
 export default {
@@ -59,7 +60,25 @@ export default {
       isChange: true,
       content:'',
       isChange2: true,
+      followingCnt :'',
+      followedCnt :''
     }
+  },
+  mounted(){
+      let ref=this;
+      let data = this.$cookies.get('auth-nickname');
+      let uri = data;
+      let uri_enc = encodeURIComponent(uri);
+      let uri_dec = decodeURIComponent(uri_enc);
+      let res = uri_dec;
+      axios.get('http://localhost:8080/api/mypage/',{
+      params:{nickname:res}
+    })
+    .then((data)=>{
+      ref.followedCnt=data.data.followedCnt;
+      ref.followingCnt=data.data.followingCnt;
+    })
+    .catch()
   },
   computed: {
     ...mapState(['isLoggedIn', 'user'])
@@ -69,7 +88,7 @@ export default {
       var frm = new FormData();
       var photoFile = document.getElementById("profile-img-edit");
       frm.append("profile-img-edit", photoFile.files[0]);
-      console.log(photoFile.files[0].name);
+      console.log(photoFile.files[0]);
       this.profileImg = URL.createObjectURL(photoFile.files[0]);
     },
     changeNickName() {
