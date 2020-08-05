@@ -13,6 +13,7 @@ import Settings from '../views/Settings.vue'
 import NewPassword from '../views/NewPassword.vue'
 import DirectMessage from '../views/DirectMessage.vue'
 import ProfileInform from '../views/ProfileInform.vue'
+import FeedWrite from '../views/FeedWrite.vue'
 
 Vue.use(VueRouter)
 
@@ -154,8 +155,12 @@ Vue.use(VueRouter)
     path: '/profileinform',
     name: 'ProfileInform',
     component: ProfileInform
+  },
+  {
+    path: '/write',
+    name: 'FeedWrite',
+    component: FeedWrite
   }
-
 ]
 
 const router = new VueRouter({
