@@ -15,7 +15,7 @@ import DirectMessage from '../views/DirectMessage.vue'
 import ProfileInform from '../views/ProfileInform.vue'
 import Alarm from '../views/Alarm.vue'
 import DM from '../views/DM.vue'
-
+import FeedWrite from '../views/FeedWrite.vue'
 
 Vue.use(VueRouter)
 
@@ -179,6 +179,17 @@ Vue.use(VueRouter)
     path: '/dm',
     name: 'DM',
     component: DM,
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/')
+      } else {
+        next()
+      }    }
+  },
+  {
+    path: '/write',
+    name: 'FeedWrite',
+    component: FeedWrite,
     beforeEnter(to, from, next) {
       if (!Vue.$cookies.isKey('auth-token')) {
         next('/')
