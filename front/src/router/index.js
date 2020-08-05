@@ -13,7 +13,9 @@ import Settings from '../views/Settings.vue'
 import NewPassword from '../views/NewPassword.vue'
 import DirectMessage from '../views/DirectMessage.vue'
 import ProfileInform from '../views/ProfileInform.vue'
-import FeedWrite from '../views/FeedWrite.vue'
+import Alarm from '../views/Alarm.vue'
+import DM from '../views/DM.vue'
+
 
 Vue.use(VueRouter)
 
@@ -154,12 +156,35 @@ Vue.use(VueRouter)
   {
     path: '/profileinform',
     name: 'ProfileInform',
-    component: ProfileInform
+    component: ProfileInform,
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/')
+      } else {
+        next()
+      }    }
   },
   {
-    path: '/write',
-    name: 'FeedWrite',
-    component: FeedWrite
+    path: '/alarm',
+    name: 'Alarm',
+    component: Alarm,
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/')
+      } else {
+        next()
+      }    }
+  },
+  {
+    path: '/dm',
+    name: 'DM',
+    component: DM,
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/')
+      } else {
+        next()
+      }    }
   }
 ]
 
