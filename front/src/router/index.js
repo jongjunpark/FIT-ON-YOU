@@ -16,6 +16,7 @@ import ProfileInform from '../views/ProfileInform.vue'
 import Alarm from '../views/Alarm.vue'
 import DM from '../views/DM.vue'
 import FeedWrite from '../views/FeedWrite.vue'
+import OtherUser from '../views/OtherUser.vue'
 
 Vue.use(VueRouter)
 
@@ -184,7 +185,8 @@ Vue.use(VueRouter)
         next('/')
       } else {
         next()
-      }    }
+      }    
+    }
   },
   {
     path: '/write',
@@ -195,8 +197,21 @@ Vue.use(VueRouter)
         next('/')
       } else {
         next()
-      }    }
-  }
+      }
+    }
+  }, 
+  {
+    path: '/otheruser',
+    name: 'OtherUser',
+    component: OtherUser,
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/')
+      } else {
+        next()
+      }   
+     }
+  },
 ]
 
 const router = new VueRouter({
