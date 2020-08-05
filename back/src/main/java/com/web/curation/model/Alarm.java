@@ -28,6 +28,48 @@ public class Alarm {
 	private String recevier;
 	
 	
+	public int getAlarmNo() {
+		return alarmNo;
+	}
+	public void setAlarmNo(int alarmNo) {
+		this.alarmNo = alarmNo;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public String getRecevier() {
+		return recevier;
+	}
+	public void setRecevier(String recevier) {
+		this.recevier = recevier;
+	}
+	public String getFollower() {
+		return follower;
+	}
+	public void setFollower(String follower) {
+		this.follower = follower;
+	}
+	public int getArticleNo() {
+		return articleNo;
+	}
+	public void setArticleNo(int articleNo) {
+		this.articleNo = articleNo;
+	}
+	public int getIsRead() {
+		return isRead;
+	}
+	public void setIsRead(int isRead) {
+		this.isRead = isRead;
+	}
+	public LocalDateTime getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(LocalDateTime createTime) {
+		this.createTime = createTime;
+	}
 	private String follower;
 	private int articleNo;
 	private int isRead;  // 안읽음 0 , 읽음 1
