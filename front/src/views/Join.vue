@@ -478,13 +478,13 @@ export default {
           }
         }).then( () =>{
           console.log("1");
-          this.$router.push('/feed')
+          this.$router.go('/feed')
           
         })
         .catch(function(){
           console.log("2");
         });
-      } else {this.$router.push('/feed')}
+      } else {this.$router.go('/feed')}
 
     },
     notTab() {
