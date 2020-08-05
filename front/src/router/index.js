@@ -15,8 +15,7 @@ import DirectMessage from '../views/DirectMessage.vue'
 import ProfileInform from '../views/ProfileInform.vue'
 import Alarm from '../views/Alarm.vue'
 import DM from '../views/DM.vue'
-import OtherUser from '../views/OtherUser.vue'
-
+import FeedWrite from '../views/FeedWrite.vue'
 
 Vue.use(VueRouter)
 
@@ -58,12 +57,12 @@ Vue.use(VueRouter)
     path: '/search',
     name: 'Search',
     component: Search,
-    beforeEnter(to, from, next) {
-      if (!Vue.$cookies.isKey('auth-token')) {
-        next('/')
-      } else {
-        next()
-      }    }
+    // beforeEnter(to, from, next) {
+    //   if (!Vue.$cookies.isKey('auth-token')) {
+    //     next('/')
+    //   } else {
+    //     next()
+    //   }    }
     
   },
   {
@@ -188,9 +187,9 @@ Vue.use(VueRouter)
       }    }
   },
   {
-    path: '/otheruser',
-    name: 'OtherUser',
-    component: OtherUser,
+    path: '/write',
+    name: 'FeedWrite',
+    component: FeedWrite,
     beforeEnter(to, from, next) {
       if (!Vue.$cookies.isKey('auth-token')) {
         next('/')

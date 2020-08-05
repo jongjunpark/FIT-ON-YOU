@@ -49,7 +49,7 @@
 
 <script>
 export default {
-name: 'BookMark'
+  name: 'BookMark'
 }
 </script>
 
@@ -67,7 +67,7 @@ name: 'BookMark'
 .bookmark-search-inner-box {
   width: 30%;
   padding-top: 30%;
-  margin: 5px;
+  margin: 1px;
   background-color: grey;
   position: relative
 }
