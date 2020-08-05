@@ -350,41 +350,73 @@ export default {
   },
   mounted() {
     this.onNewsFeed()
+    let nickdata = this.$cookies.get('auth-nickname')
+    let uri = nickdata;
+    let uri_enc = encodeURIComponent(uri);
+    let uri_dec = decodeURIComponent(uri_enc);
+    let res = uri_dec;
+    
     const formData = new FormData();
-    formData.append('nickname',this.user.nickname);
-    console.log(this.user.nickname)
+    
+    formData.append('nickname',res);
+
     axios.post("http://localhost:8080/api/board/newsfeed",formData).then((data)=>{
       console.log("success")
-      console.log(data)
       this.feedlist=data.data;
       for (let index = 0; index < this.feedlist.length; index++) {
+        let feeddata={tags:[],
+                      images:[],
+                      content:"",
+                      articleUser:"",
+                      userProfile:""}
+
         const el = this.feedlist[index];
+
+        let follow = new FormData();
+
+        follow.append('follow',el.articleUser);
+
+        axios.post("http://localhost:8080/api/board/profileimg",follow).then((proff)=>{
+          feeddata.userProfile=proff.data.profile_img;
+        });
+
         const articleNo = new FormData();
         articleNo.append('articleNo',el.articleNo);
+
         axios.post("http://localhost:8080/api/board/images",articleNo).then((img)=>{
-          const imgs = img.data;``
+          const imgs = img.data;
           const imglist = [];
           for (let i = 0; i < imgs.length; i++) {
             const el2= imgs[i];
             imglist.push({src:el2.imageUrl});  
           }
           if(this.feedlist[index].articleUser!=null){
-            this.mainfeed.push({url:imglist,content:this.feedlist[index].content,articleDate: this.feedlist[index].articleDate,articleUser: this.feedlist[index].articleUser});
+            feeddata.images=imglist;
+            feeddata.content=this.feedlist[index].content;
+            feeddata.articleDate= this.feedlist[index].articleDate;
+            feeddata.articleUser= this.feedlist[index].articleUser;
           }else{
-            this.mainfeed.push({url:imglist,content:this.feedlist[index].content,articleDate: this.feedlist[index].articleDate,articleUser: this.feedlist[index].influeUser});
+            feeddata.url=imglist;
+            feeddata.content=this.feedlist[index].content;
+            feeddata.articleDate= this.feedlist[index].articleDate;
+            feeddata.articleUser= this.feedlist[index].influeUser;
         }
+        
       });
         axios.post("http://localhost:8080/api/board/tags",articleNo).then((tag)=>{
         const tags = tag.data;
         const taglist = [];
         for (let i = 0; i < tags.length; i++) {
             const el2= tags[i];
-            taglist.push({src:el2.tagName});  
+            taglist.push({tagname:el2.tagName});  
           }
-            this.mainfeed.push({tags:taglist})
+            feeddata.tags=taglist;
         });
+       
+        this.mainfeed.push(feeddata)
   }
-  console.log(this.mainfeed)});
+  });
+  console.log(this.mainfeed)
   }
 }
 
