@@ -8,14 +8,14 @@
       </transition>
       <i v-if='isUserSearch' @click='setUser' class="fas fa-user"></i>
       <input @input="hashContent = $event.target.value" v-model='hashContent' 
-        v-if='isHashInput' @keyup.188="addHash" type="text" class="search-input" placeholder="'#'은 필수입니다.">
+        v-if='isHashInput' @keypress.enter='onHashResult' @keyup.188="addHash" type="text" class="search-input" placeholder=" , 를 통해 구분해주세요">
       <span v-if='isHashInput'>
-        <i class="fab inner-search-btn fa-sistrix"></i>
+        <i @click='onHashResult' class="fab inner-search-btn fa-sistrix"></i>
       </span>
       <input @input="userContent = $event.target.value" v-model='userContent' 
-        v-if='isUserInput' type="text" class="search-input" placeholder="유저이름을 입력하세요">
+        v-if='isUserInput' @keypress.enter='onUserResult' type="text" class="search-input" placeholder="유저이름을 입력하세요">
       <span v-if='isUserInput'>
-        <i class="fab inner-search-btn fa-sistrix"></i>
+        <i @click='onUserResult' class="fab inner-search-btn fa-sistrix"></i>
       </span>
       <transition-group name='fade' tag="div" class="hash-group" mode="in-out">
         <div class='hash-item' v-for='(hash, index) in hashList' :key='`hash-${index}`'>
@@ -25,7 +25,7 @@
       </transition-group>
     </div>
 
-    <div class='wrap-container'>
+    <div v-if="isDefault" class='wrap-container'>
 
       <div class="search-box">
         <div class="search-inner-box">
@@ -72,12 +72,21 @@
         </div>
       </div>
     </div>
+    <HashSearch v-if="isHashResult"></HashSearch>
+    <UserSearch v-if="isUserResult"></UserSearch>
   </div>
 </template>
 
 <script>
+import HashSearch from '../components/HashSearch.vue'
+import UserSearch from '../components/UserSearch.vue'
+
 export default {
   name: 'Search',
+  components: {
+    HashSearch,
+    UserSearch,
+  },
   data() {
     return {
       isHashSearch: true,
@@ -88,6 +97,9 @@ export default {
       hashContent: '',
       hashList: [],
       userContent: '',
+      isDefault: true,
+      isHashResult: false,
+      isUserResult: false,
     }
   },
   watch: {
@@ -145,6 +157,16 @@ export default {
     },
     delHashItem(index) {
       this.hashList.splice(index, 1)
+    },
+    onHashResult() {
+      this.isDefault = false
+      this.isUserResult = false
+      this.isHashResult = true
+    },
+    onUserResult() {
+      this.isDefault = false
+      this.isHashResult = false
+      this.isUserResult = true
     }
   },
   mounted() {
@@ -304,6 +326,7 @@ export default {
   color: #fff;
   margin: 0;
   margin-bottom: 5px;
+  margin-right: 5px;
 }
 
 .hash-item-close-btn .fa-times:hover{
