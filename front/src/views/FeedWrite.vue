@@ -40,7 +40,9 @@
         </div>
       </div>
       <div class="write-content-box">
+        <p class='write-content-head'>내용</p>
         <textarea @input="writeContent = $event.target.value" cols="30" rows="3" placeholder="내용"></textarea>
+        <p class='write-hash-head'>태그</p>
         <input @input="writeHashContent = $event.target.value" v-model='writeHashContent' @keyup.188="addWriteHash" type="text" placeholder="태그">
         <transition-group name='fade' tag="div" class="write-hash-group" mode="in-out">
           <div class='write-hash-item' v-for='(hash, index) in writeHashList' :key='`hash-${index}`'>
@@ -156,6 +158,7 @@ export default {
   position: relative;
   width: 100%;
   padding-top: 58%;
+  margin-top: 1vh;
 }
 
 .write-img-box .write-hanger-img {
@@ -311,7 +314,17 @@ export default {
 
 .write-content-box {
   width: 100%;
-  margin: 20px 0;
+  margin: 2vh 0 2vh 0;
+}
+
+.write-content-box .write-content-head {
+  font-size: 2.5vh;
+  font-weight: 700;
+}
+
+.write-content-box .write-hash-head {
+  font-size: 2.5vh;
+  font-weight: 700;
 }
 
 .write-content-box textarea {
@@ -341,11 +354,13 @@ export default {
   cursor:default;
   position: sticky;
   bottom: 0;
+  margin-top: 0;
 }
 
 .btn.on-write-btn {
   color: white;
   background-color: #5AAEFF;
+  border: 0;
   width: 100%;
   font-size: 20px;
   box-sizing: border-box;
@@ -371,7 +386,7 @@ export default {
   background-color: #050505;
   color: #fff;
   border-radius: 10px;
-  margin: 5px;
+  margin: 0.5vh 5px 0 0;
   font-size: 80%;
   padding: 0 3vw;
   font-weight: 700;
