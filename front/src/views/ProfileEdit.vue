@@ -33,16 +33,33 @@
         <div class="follower">
           <h3>팔로워</h3>
           <h4>{{followedCnt}}</h4>
+
         </div>
       <p v-if="isChange && isChange2" class="nickname" @click="changeNickName">{{ user.nickname }} <img src="../assets/images/edit.png" alt="" class="edit-img"></p>
       <div v-if="isChange2 && isChange" class="edit-content" @click="changeContent">
         <h3>자기소개 입니다. <img src="../assets/images/edit.png" alt="" class="edit-img"></h3>
       </div>
+      <div class="user-change-parent">
+        <div v-if="isChange && isChange2" class="user-change" @click="goSettings">
+          <span><i class="fas fa-user-cog fa-2x settings"></i> 계정설정</span>
+        </div>
+      </div>
       </section>
     </div>
-    <div v-if="isChange && isChange2" class="user-change">
-        <span><i class="fas fa-user-cog fa-2x settings"></i> 계정설정</span>
+    <div class="List-parent" v-if="isChange2 && isChange">
+      <div class="List">
+        <i class="far fa-file-alt fa-3x mylist"></i>
       </div>
+      <div class="List2">
+        <i class="far fa-file-alt fa-3x mylist"></i>
+      </div>
+      <div class="List3">
+        <i class="far fa-address-book fa-3x mylist"></i>
+      </div>
+      <div class="List4">
+        <i class="fas fa-bookmark fa-3x mylist"></i>
+      </div>     
+    </div>
   </div>
 </template>
 
@@ -99,7 +116,7 @@ export default {
       wrapContainer.classList.add('opacity-wrap')
       wrapNav.classList.add('opacity-wrap')
       wrapBottom.classList.add('opacity-wrap')
-      hidden.style.zIndex = 1000
+      hidden.style.zIndex = 6000
       this.isChange = false;
     },
     cancel() {
@@ -133,7 +150,7 @@ export default {
       wrapContainer.classList.add('opacity-wrap')
       wrapNav.classList.add('opacity-wrap')
       wrapBottom.classList.add('opacity-wrap')
-      hidden.style.zIndex = 1000
+      hidden.style.zIndex = 6000
       this.isChange2 = false;
     },
     cancelInput() {
@@ -158,7 +175,9 @@ export default {
       hidden.style.zIndex = -1000
       this.isChange2 = true;
     },
-
+    goSettings() {
+      this.$router.push('/settings')
+    },
   },
 }
 </script>

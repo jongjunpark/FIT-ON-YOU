@@ -13,7 +13,6 @@
 .social-area {
   display: flex;
   width: 100%;
-  justify-content: space-between;
 }
 
 .login-link-area {
@@ -130,34 +129,66 @@
 }
 
 .btn.google-btn {
-  color: #B0B0B0;
   border: 1px solid #B0B0B0;
   background-color: white;
-  width: 50%;
-  margin-right: 3px;
+  width: 13vw;
+  padding-top: 13vw;
+  height: 0;
+  border-radius: 50%;
+  margin-right: 10px;
+  margin-top: 10px;
+  position: relative;
+}
+@media (min-width: 1200px) {
+  .btn.google-btn {
+  width: 10%;
+  padding-top: 10%;
+  }
 }
 
 .btn.kakao-btn {
-  color: #B0B0B0;
-  border: 1px solid #B0B0B0;
-  background-color: #ffe812;
-  width: 50%;
-  margin-left: 3px;
+  background-color: #ffeb00;
+  width: 13vw;
+  padding-top: 13vw;
+  height: 0;
+  border-radius: 50%;
+  margin-left: 10px;
+  margin-top: 10px;
+  position: relative;
 }
+@media (min-width: 1200px) {
+  .btn.kakao-btn {
+  width: 10%;
+  padding-top: 10%;
+  }
+}
+
 
 .btn.google-btn .google-img {
-  height: 100%;
-  padding: 10px;
-  box-sizing: border-box;
+  position: absolute;
+  top: 0; bottom: 0; left: 0; right: 0;
+  width: 100%;
+  padding: 3.5vw 3vw 3vw 3.5vw;
 }
-
+@media (min-width: 1200px) {
+  .btn.google-btn .google-img {
+  height: 100%;
+  padding: 25% 23% 23% 25%;
+  }
+}
 
 .btn.kakao-btn .kakao-img {
+  position: absolute;
+  top: 0; bottom: 0; left: 0; right: 0;
   height: 100%;
-  padding: 16px;
-  box-sizing: border-box;
+  padding: 4vw 4.5vw 4vw 4vw;
 }
-
+@media (min-width: 1200px) {
+  .btn.kakao-btn .kakao-img {
+  height: 100%;
+  padding: 33% 30% 30% 30%;
+  }
+}
 .go-join, .go-find {
   
   margin: 16px 0;
