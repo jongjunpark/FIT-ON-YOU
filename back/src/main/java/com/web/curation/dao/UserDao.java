@@ -2,6 +2,7 @@
 package com.web.curation.dao;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -38,4 +39,8 @@ public interface UserDao extends JpaRepository<User, String> {
     @Transactional
     @Query(value="UPDATE user set selfintroduce=:selfintroduce where nickname=:nickname", nativeQuery=true)
     int updateSelfintro(String selfintroduce, String nickname);
+    
+    @Query(value="select * from user where nickname like %:word%", nativeQuery=true)
+    List<User> findUsersByWord(String word);
+
 }	
