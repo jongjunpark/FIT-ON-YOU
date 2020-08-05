@@ -186,7 +186,6 @@ Vue.use(VueRouter)
         next()
       }    }
   }
-
 ]
 
 const router = new VueRouter({
