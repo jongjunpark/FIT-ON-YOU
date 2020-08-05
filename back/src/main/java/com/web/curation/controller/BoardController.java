@@ -3,6 +3,7 @@ package com.web.curation.controller;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
@@ -20,12 +21,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dao.AlarmDao;
+import com.web.curation.dao.ArticletagDao;
 import com.web.curation.dao.BoardDao;
 import com.web.curation.dao.BookmarkDao;
 import com.web.curation.dao.FollowDao;
 import com.web.curation.dao.ImageDao;
 import com.web.curation.dao.LikesDao;
 import com.web.curation.model.Alarm;
+import com.web.curation.model.Articletag;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Board;
 import com.web.curation.model.Bookmark;
@@ -36,12 +39,14 @@ import com.web.curation.dao.CurationDao;
 import com.web.curation.dao.FollowDao;
 import com.web.curation.dao.ImageDao;
 import com.web.curation.dao.SearchDao;
+import com.web.curation.dao.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Board;
 import com.web.curation.model.Curation;
 import com.web.curation.model.Follow;
 import com.web.curation.model.ImageStore;
 import com.web.curation.model.Search;
+import com.web.curation.model.User;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -73,6 +78,10 @@ public class BoardController {
 	LikesDao likesDao;
 	@Autowired
 	AlarmDao alarmDao;
+	@Autowired
+	ArticletagDao articletagDao;
+	@Autowired
+	UserDao userDao;
 
 	@GetMapping("/api/board/curation")
 	@ApiOperation(value = "큐레이션 기능")
@@ -146,10 +155,9 @@ public class BoardController {
 			List<Board> temp = boardDao.findBoardByArticleUserOrderByArticleNoDesc(follow.getFolloweduser());
 			for (Board board : temp) {
 				result.add(board);
-				// System.out.println(board);
 			}
-
 		}
+
 		result.sort(boardComp);
 
 		return result;
@@ -248,6 +256,21 @@ public class BoardController {
 		}
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@PostMapping("/tags")
+	public List<Articletag> gettagArticle(@RequestParam int articleNo) {
+		List<Articletag> taglist = new ArrayList<Articletag>();
+		taglist = articletagDao.findArticletagByArticleNoOrderByArticleNo(articleNo);
+		return taglist;
+	}
+
+	@PostMapping("/profileimg")
+	public Object getUserProfile(@RequestParam String follow) {
+		String nickname = follow;
+		System.out.println(nickname);
+		User user = userDao.findUserByNickname(nickname).get();
+		return user;
 	}
 
 }
