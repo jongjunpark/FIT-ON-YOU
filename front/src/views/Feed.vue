@@ -123,9 +123,12 @@ export default {
   computed:{
     ...mapState(['user']),
   },
-
+  mounted() {
+    // this.sendUserInfo(),
+    // this.setLoggedIn(true)
+  },
   methods: {
-    ...mapActions(['sendUserInfo']),
+    ...mapActions(['sendUserInfo', 'setLoggedIn', 'setToken']),
     onNewsFeed() {
       const selectBar = document.querySelector('.menu-bar-select')
       const newsFeed = document.querySelector('.fa-newspaper')
