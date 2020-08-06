@@ -6,15 +6,15 @@
         <i key=1 v-if='isHashSearch' @click='setHash' class="fas fa-hashtag"></i>
         <i key=2 v-else class="fas fa-user"></i>
       </transition>
-      <i v-if='isUserSearch' @click='setUser' class="fas fa-user"></i>
+      <i v-show='isUserSearch' @click='setUser' class="fas fa-user"></i>
       <input @input="hashContent = $event.target.value" v-model='hashContent' 
-        v-if='isHashInput' @keypress.enter='onHashResult' @keyup.188="addHash" type="text" class="search-input" placeholder=" , 를 통해 구분해주세요">
-      <span v-if='isHashInput'>
+        v-show='isHashInput' @keypress.enter='onHashResult' @keyup.188="addHash" type="text" class="search-input" placeholder=" , 를 통해 구분해주세요">
+      <span v-show='isHashInput'>
         <i @click='onHashResult' class="fab inner-search-btn fa-sistrix"></i>
       </span>
       <input @input="userContent = $event.target.value" v-model='userContent' 
-        v-if='isUserInput' @keypress.enter='onUserResult' type="text" class="search-input" placeholder="유저이름을 입력하세요">
-      <span v-if='isUserInput'>
+        v-show='isUserInput' @keypress.enter='onUserResult' type="text" class="search-input" placeholder="유저이름을 입력하세요">
+      <span v-show='isUserInput'>
         <i @click='onUserResult' class="fab inner-search-btn fa-sistrix"></i>
       </span>
       <transition-group name='fade' tag="div" class="hash-group" mode="in-out">
@@ -78,11 +78,15 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import HashSearch from '../components/HashSearch.vue'
 import UserSearch from '../components/UserSearch.vue'
 
 export default {
   name: 'Search',
+  computed: {
+    ...mapState(['flag'])
+  },
   components: {
     HashSearch,
     UserSearch,
@@ -106,6 +110,9 @@ export default {
     hashContent() {
       this.checkHashTag();
     },
+    flag() {
+      this.defaultDark()
+    }
   },
   methods: {
     goSearch() {
@@ -175,6 +182,11 @@ export default {
       const NAV = document.querySelector('#nav')
       const NAVBASE = document.querySelector('.nav-base')
       const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+      const INPUT = document.querySelectorAll('.search-input')
+      const TEXTAREA = document.querySelectorAll('textarea')
+      const HASHICON = document.querySelector('.fa-hashtag')
+      const USERICON = document.querySelector('.fa-user')
+      const SEARCH_ICON = document.querySelectorAll('.fa-sistrix')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -186,14 +198,34 @@ export default {
         NAV.classList.add('nav-dark')
         NAVBASE.classList.add('nav-dark')
         NAVLOGO.classList.add('nav-logo-dark')
-        this.checked = true
+        HASHICON.classList.add('search-icon-black')
+        USERICON.classList.add('search-icon-black')
+        for (let i=0; i<INPUT.length ; i++) {
+          SEARCH_ICON[i].classList.add('search-icon-black')
+        }
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('search-input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.add('textarea-dark')
+        }
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
         NAV.classList.remove('nav-dark')
         NAVBASE.classList.remove('nav-dark')
         NAVLOGO.classList.remove('nav-logo-dark')
-        this.checked = false
+        HASHICON.classList.remove('search-icon-black')
+        USERICON.classList.remove('search-icon-black')
+        for (let i=0; i<INPUT.length ; i++) {
+          SEARCH_ICON[i].classList.remove('search-icon-black')
+        }
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('search-input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.remove('textarea-dark')
+        }
       }
     },
   },
@@ -370,4 +402,16 @@ export default {
   opacity: 0;
 }
 
+.search-input-dark {
+  background-color: transparent !important;
+  border-bottom: 1px solid !important;
+}
+
+.search-icon-black {
+  color: #ebebeb !important;
+}
+
+.search-icon-black:hover {
+  color: #5AAEFF !important;
+}
 </style>

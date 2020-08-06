@@ -332,8 +332,7 @@ i {
 }
 
 .wrap-dark {
-  background-color: #202020;
-  filter: invert(3%);
+  background-color: #272727;
   border: 0;
 }
 
@@ -355,6 +354,7 @@ i {
   border-color: #ebebeb !important;
 }
 
-.fa-bars-dark {
-  color: #ebebeb !important;
+.textarea-dark {
+  color: #ebebeb;
+  border-color: #ebebeb !important; 
 }
