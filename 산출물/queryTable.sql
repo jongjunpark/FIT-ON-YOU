@@ -6,10 +6,10 @@ use snsdb;
 CREATE TABLE `user` (
   `nickname` varchar(20) not null,
   `email` varchar(128) NOT NULL,
-  `password` varchar(128) NOT NULL,
+  `password` varchar(128),
   `create_date` datetime DEFAULT current_timestamp(),
   `birth` datetime DEFAULT NULL,
-  `gender` varchar(8) NOT NULL,
+  `gender` varchar(8),
   `profile_img` varchar(1000) default Null,
   `selfintroduce` varchar(100) default Null,
   PRIMARY KEY (`nickname`),
