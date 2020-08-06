@@ -9,45 +9,17 @@
           <div class='modal-category'>댓글</div>
         </div>
         <div class="modal-container">
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-            <div class="comment-article">
-              <div class="comment-article-head">
-                <div class="comment-username comment-text">Username</div>
-                <div class="comment-update-time comment-text">10시간 전</div>
+          <div class="" v-for="comment in commentList" :key="comment.commentNo">
+            <div class="comment-box">
+              <div class="comment-user-icon"></div>
+              <div class="comment-article">
+                <div class="comment-article-head">
+                  <div class="comment-username comment-text">{{comment.writer}}</div>
+                  <div class="comment-update-time comment-text">10시간전</div>
+                </div>
+                <div class="comment-content comment-text">{{comment.content}}</div>
               </div>
-              <div class="comment-content comment-text">안녕하세요 옷 정말 잘입네요.....</div>
             </div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
           </div>
         </div>
         <div class="modal-footer">
@@ -61,12 +33,29 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'CommentModal',
+  props:['modalArticleNo'],
   data() {
     return {
-      comment_content: ''
+      comment_content: '',
+      commentList: [],
+
     }
+  },
+  mounted(){
+    let ref=this;
+    axios.get('http://localhost:8080/api/comment',{
+      params:{
+        articleNo:this.modalArticleNo,
+      }
+    })
+    .then((res)=>{
+      ref.commentList=res.data.object;
+    })
+    .catch()
+
   },
   watch: {
     comment_content() {

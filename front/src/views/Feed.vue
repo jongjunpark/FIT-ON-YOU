@@ -19,6 +19,7 @@
       </div>
     </transition>
     
+    <CommentModal v-if="showModal" @close="showModal= false" v-bind:modalArticleNo="modalArticleNo"/>
 
     <div class='wrap feed-wrap' v-for="feed in mainfeed" :key="feed.articleUser">
       <div class='wrap-container'>
@@ -40,10 +41,8 @@
           <div class="feed-btn-box">
             <div class='feed-btn-left'>
               <i class="fas fa-heart"></i>
-              <i id="show-modal" @click="showModal = true" class="fas fa-comment-alt"></i>
-              <CommentModal v-if="showModal" @close="showModal = false">
+              <i :id="'show-modal'+ feed.articleNo" @click="clickComment(feed.articleNo)" class="fas fa-comment-alt"></i>
 
-              </CommentModal>
             </div>
             <div class='feed-btn-right'>
               <i @click="clickBookMark" class="fas fa-bookmark"></i>
@@ -113,7 +112,8 @@ export default {
         "speed": 500,
         "slidesToShow": 1,
         "slidesToScroll": 1
-      }
+      },
+      modalArticleNo : '',
     }
   },
   components: { 
@@ -142,8 +142,10 @@ export default {
     clickLike() {
       this.modal = true
     },
-    clickComment() {
-
+    clickComment(articleNo) {
+      this.modalArticleNo=articleNo;
+      console.log(articleNo,12312);
+      this.showModal = true
     },
     clickBookMark() {
 
@@ -185,7 +187,7 @@ export default {
                       images:[],
                       content:"",
                       articleUser:"",
-                      userProfile:""}
+                      userProfile:"",}
 
         const el = this.feedlist[index];
 
@@ -212,11 +214,13 @@ export default {
             feeddata.content=this.feedlist[index].content;
             feeddata.articleDate= timeForToday(this.feedlist[index].articleDate);
             feeddata.articleUser= this.feedlist[index].articleUser;
+            feeddata.articleNo=this.feedlist[index].articleNo;
           }else{
             feeddata.url=imglist;
             feeddata.content=this.feedlist[index].content;
             feeddata.articleDate= timeForToday(this.feedlist[index].articleDate);
             feeddata.articleUser= this.feedlist[index].influeUser;
+            feeddata.articleNo=this.feedlist[index].articleNo;
         }
         
       });

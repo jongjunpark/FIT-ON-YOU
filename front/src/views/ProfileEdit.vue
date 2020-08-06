@@ -105,7 +105,6 @@ export default {
   },
   beforeUpdate(){
     this.profileImg=this.user.profile_img;
-    console.log(this.profileImg,2)
   },
   computed: {
     ...mapState(['isLoggedIn', 'user'])
