@@ -16,7 +16,8 @@ import ProfileInform from '../views/ProfileInform.vue'
 import Alarm from '../views/Alarm.vue'
 import DM from '../views/DM.vue'
 import FeedWrite from '../views/FeedWrite.vue'
-import SocialJoin from '../views/SocialJoin.vue'
+// import SocialJoin from '../views/SocialJoin.vue'
+import JoinConfirm from '../views/JoinConfirm.vue'
 
 Vue.use(VueRouter)
 
@@ -198,10 +199,15 @@ Vue.use(VueRouter)
         next()
       }    }
   },
+  // {
+  //   path: '/socialjoin',
+  //   name: 'SocialJoin',
+  //   component: SocialJoin,
+  // },
   {
-    path: '/socialjoin',
-    name: 'SocialJoin',
-    component: SocialJoin,
+    path: '/joinconfirm',
+    name: 'JoinConfirm',
+    component: JoinConfirm,
   }
 ]
 
