@@ -35,8 +35,6 @@
 	width: 50px;
 	height: 50px;
 	margin-right: 20px;
-	
-	
 }
 
 .in-text {
@@ -92,4 +90,8 @@
 	border: 2px solid #BFE1F9;
 	border-radius: 20px;
 	padding: .5rem;
+}
+
+.alarm-container-message-read-dark {
+	color: #202020;
 }

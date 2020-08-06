@@ -321,7 +321,7 @@ i {
 .darkmode {
   position: absolute;
   left: 30px;
-  bottom: 0;
+  bottom: 3%;
   cursor: pointer;
 
 }
@@ -352,4 +352,9 @@ i {
 
 .input-dark {
   color: #ebebeb;
+  border-color: #ebebeb !important;
+}
+
+.fa-bars-dark {
+  color: #ebebeb !important;
 }
