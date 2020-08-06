@@ -133,7 +133,8 @@ export default {
       const NAV = document.querySelector('#nav')
       const NAVBASE = document.querySelector('.nav-base')
       const NAVLOGO = document.querySelector('.fa-hat-cowboy')
-
+      const INPUT = document.querySelectorAll('input')
+      
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
       }
@@ -145,6 +146,10 @@ export default {
         NAVBASE.classList.add('nav-dark')
         NAVLOGO.classList.add('nav-logo-dark')
         this.checked = true
+        for (var i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('input-dark')
+        }
+
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
@@ -152,6 +157,9 @@ export default {
         NAVBASE.classList.remove('nav-dark')
         NAVLOGO.classList.remove('nav-logo-dark')
         this.checked = false
+        for (var j=0; j<INPUT.length ; j++) {
+          INPUT[j].classList.remove('input-dark')
+        }
       }
     },
   },

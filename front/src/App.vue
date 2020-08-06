@@ -209,6 +209,8 @@ export default {
       const NAVBASE = document.querySelector('.nav-base')
       const NAVLOGO = document.querySelector('.fa-hat-cowboy')
       const INPUT = document.querySelectorAll('input')
+      const HAMBURGER = document.querySelector('.fa-bars')
+
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -223,6 +225,7 @@ export default {
         for (var i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.add('input-dark')
         }
+        HAMBURGER.classList.add('fa-bars-dark')
         this.checked = true
       } else {
         HTML.classList.remove('black')
@@ -233,6 +236,7 @@ export default {
         for (var j=0; j<INPUT.length ; j++) {
           INPUT[j].classList.remove('input-dark')
         }
+        HAMBURGER.classList.remove('fa-bars-dark')
         this.checked = false
       }
     }, 
