@@ -1,9 +1,14 @@
 package com.web.curation.controller;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+import java.util.StringTokenizer;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
@@ -26,6 +31,7 @@ import com.web.curation.dao.BoardDao;
 import com.web.curation.dao.BookmarkDao;
 import com.web.curation.dao.FollowDao;
 import com.web.curation.dao.ImageDao;
+import com.web.curation.dao.InfluencerDao;
 import com.web.curation.dao.LikesDao;
 import com.web.curation.model.Alarm;
 import com.web.curation.model.Articletag;
@@ -34,6 +40,7 @@ import com.web.curation.model.Board;
 import com.web.curation.model.Bookmark;
 import com.web.curation.model.Follow;
 import com.web.curation.model.ImageStore;
+import com.web.curation.model.Influencer;
 import com.web.curation.model.Likes;
 import com.web.curation.dao.CurationDao;
 import com.web.curation.dao.FollowDao;
@@ -82,6 +89,8 @@ public class BoardController {
 	ArticletagDao articletagDao;
 	@Autowired
 	UserDao userDao;
+	@Autowired
+	InfluencerDao influencerDao;
 
 	@GetMapping("/api/board/curation")
 	@ApiOperation(value = "큐레이션 기능")
@@ -271,6 +280,26 @@ public class BoardController {
 		System.out.println(nickname);
 		User user = userDao.findUserByNickname(nickname).get();
 		return user;
+	}
+
+	@PostMapping("/influencer")
+	public List<Influencer> getInfluencer() {
+		Random random = new Random();
+		List<Influencer> temp = influencerDao.AllInfluencers();
+		List<Influencer> result = new ArrayList<Influencer>();
+		int size = temp.size();
+		boolean[] check = new boolean[size];
+		int idx = 0;
+		for (int i = 0; i < 5; i++) {
+			idx = random.nextInt(size);
+			while (check[idx])
+				idx = random.nextInt(size);
+			check[idx] = true;
+			result.add(temp.get(idx));
+		}
+
+		return result;
+
 	}
 
 }
