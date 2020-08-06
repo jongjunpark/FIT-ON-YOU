@@ -61,8 +61,13 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'CommentModal',
+  computed: {
+    ...mapState(['flag'])
+  },
   data() {
     return {
       comment_content: ''
@@ -71,6 +76,9 @@ export default {
   watch: {
     comment_content() {
       this.checkCommentInput();
+    },
+    flag() {
+      this.defaultDark()
     }
   },
   mounted() {
@@ -92,6 +100,12 @@ export default {
       const NAV = document.querySelector('#nav')
       const NAVBASE = document.querySelector('.nav-base')
       const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+      const INPUT = document.querySelectorAll('input')
+      const TEXTAREA = document.querySelectorAll('textarea')
+      const COMMENT_HEAD = document.querySelector('.modal-head')
+      const ARROW_ICON = document.querySelector('.fa-arrow-left')
+      const COMMENT_BODY = document.querySelector('.modal-container')
+      const COMMENT_FOOTER = document.querySelector('.modal-footer')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -103,14 +117,33 @@ export default {
         NAV.classList.add('nav-dark')
         NAVBASE.classList.add('nav-dark')
         NAVLOGO.classList.add('nav-logo-dark')
-        this.checked = true
+        COMMENT_HEAD.classList.add('comment-head-dark')
+        ARROW_ICON.classList.add('comment-back-dark')
+        COMMENT_BODY.classList.add('comment-head-dark')
+        COMMENT_FOOTER.classList.add('comment-head-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('comment-input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.add('textarea-dark')
+        }
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
         NAV.classList.remove('nav-dark')
         NAVBASE.classList.remove('nav-dark')
         NAVLOGO.classList.remove('nav-logo-dark')
-        this.checked = false
+        COMMENT_HEAD.classList.remove('comment-head-dark')
+        ARROW_ICON.classList.remove('comment-back-dark')
+        COMMENT_BODY.classList.remove('comment-head-dark')
+        COMMENT_FOOTER.classList.remove('comment-head-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('comment-input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.remove('textarea-dark')
+        }
+        
       }
     },
   }
@@ -148,6 +181,7 @@ export default {
   padding: 0 30px;
   height: 100%;
   margin-top: 30%;
+  transition: all .3s ease;
 }
 @media (min-width: 1200px) {
   .modal-wrapper {
@@ -167,6 +201,7 @@ export default {
   border-bottom: 0.5px solid rgb(175, 175, 175);
   display: flex;
   align-items: center;
+  transition: all .3s ease;
 }
 
 .modal-footer {
@@ -178,6 +213,7 @@ export default {
   background-color: white;
   display: flex;
   align-items: center;
+  transition: all .3s ease;
 }
 
 
@@ -247,8 +283,8 @@ export default {
   opacity: 0;
 }
 
-.modal-enter .modal-container,
-.modal-leave-active .modal-container {
+.modal-enter .modal-wrapper,
+.modal-leave-active .modal-wrapper {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
@@ -320,5 +356,18 @@ export default {
 .comment-update-time {
   color: rgb(99, 99, 99);
   font-size: 70% !important;
+}
+
+.comment-head-dark {
+  background-color: #202020;
+}
+
+.comment-back-dark {
+  color: #ebebeb !important;
+}
+
+.comment-input-dark {
+  color: #ebebeb;
+  border-color: #ebebeb !important;
 }
 </style>

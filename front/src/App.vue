@@ -30,7 +30,7 @@
     
     <router-view/>
     
-    <div v-show="isLoggedIn" id="nav2">
+    <div  id="nav2">
       <div class="bottom-nav">
         <div class='menu-bar-list'>
           <div class="menu-bar-select"></div>
@@ -73,8 +73,13 @@ export default {
     }
   },
   computed: {
-    ...mapState(['authToken', 'isLoggedIn', 'user']),
+    ...mapState(['authToken', 'isLoggedIn', 'user', 'flag']),
     ...mapGetters([])
+  },
+  watch: {
+    checked() {
+      this.setFlag(this.checked)
+    }
   },
  
   mounted() {
@@ -91,7 +96,7 @@ export default {
 
   },
   methods: {
-    ...mapMutations(['setLoggedIn', 'setToken', 'setUser']),
+    ...mapMutations(['setLoggedIn', 'setToken', 'setUser', 'setFlag']),
     ...mapActions(['sendUserInfo']),
 
     setUserBar() {
@@ -188,6 +193,8 @@ export default {
       const INPUT = document.querySelectorAll('input')
       const HAMBURGER = document.querySelector('.fa-bars')
       
+      const TEXTAREA = document.querySelectorAll('textarea')
+
 
       if (Dark === 'on') {
         HTML.classList.add('black')
@@ -195,19 +202,26 @@ export default {
         NAV.classList.add('nav-dark')
         NAVBASE.classList.add('nav-dark')
         NAVLOGO.classList.add('nav-logo-dark')
-        for (var i=0; i<INPUT.length ; i++) {
+        for (let i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.add('input-dark')
         }
         HAMBURGER.classList.add('fa-bars-dark')
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.add('textarea-dark')
+        }
         this.$cookies.set('dark', 'off')
+
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
         NAV.classList.remove('nav-dark')
         NAVBASE.classList.remove('nav-dark')
         NAVLOGO.classList.remove('nav-logo-dark')
-        for (var j=0; j<INPUT.length ; j++) {
-          INPUT[j].classList.remove('input-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.remove('textarea-dark')
         }
         HAMBURGER.classList.remove('fa-bars-dark')
         this.$cookies.set('dark', 'on')
@@ -221,8 +235,7 @@ export default {
       const NAVBASE = document.querySelector('.nav-base')
       const NAVLOGO = document.querySelector('.fa-hat-cowboy')
       const INPUT = document.querySelectorAll('input')
-      const HAMBURGER = document.querySelector('.fa-bars')
-
+      const TEXTAREA = document.querySelectorAll('textarea')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -234,10 +247,12 @@ export default {
         NAV.classList.add('nav-dark')
         NAVBASE.classList.add('nav-dark')
         NAVLOGO.classList.add('nav-logo-dark')
-        for (var i=0; i<INPUT.length ; i++) {
+        for (let i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.add('input-dark')
         }
-        HAMBURGER.classList.add('fa-bars-dark')
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.add('textarea-dark')
+        }
         this.checked = true
       } else {
         HTML.classList.remove('black')
@@ -245,8 +260,11 @@ export default {
         NAV.classList.remove('nav-dark')
         NAVBASE.classList.remove('nav-dark')
         NAVLOGO.classList.remove('nav-logo-dark')
-        for (var j=0; j<INPUT.length ; j++) {
-          INPUT[j].classList.remove('input-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.remove('textarea-dark')
         }
         HAMBURGER.classList.remove('fa-bars-dark')
         this.checked = false

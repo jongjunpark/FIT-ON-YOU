@@ -27,6 +27,9 @@ export default {
     // var uri_dec = decodeURIComponent(uri_enc);
     // var res = uri_dec;
     window.$cookies.set('auth-nickname', data)
+  },
+  setFlag(state, data) {
+    state.flag = data
   }
 
 

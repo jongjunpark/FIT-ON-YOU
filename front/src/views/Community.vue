@@ -34,8 +34,18 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'Community',
+  computed: {
+    ...mapState(['flag'])
+  },
+  watch: {
+    flag() {
+      this.defaultDark()
+    }
+  },
   methods: {
     goCommunity() {
       const selectBar = document.querySelector('.menu-bar-select')
@@ -56,6 +66,7 @@ export default {
       const NAV = document.querySelector('#nav')
       const NAVBASE = document.querySelector('.nav-base')
       const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+      const INPUT = document.querySelectorAll('input')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -67,14 +78,18 @@ export default {
         NAV.classList.add('nav-dark')
         NAVBASE.classList.add('nav-dark')
         NAVLOGO.classList.add('nav-logo-dark')
-        this.checked = true
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('input-dark')
+        }
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
         NAV.classList.remove('nav-dark')
         NAVBASE.classList.remove('nav-dark')
         NAVLOGO.classList.remove('nav-logo-dark')
-        this.checked = false
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('input-dark')
+        }
       }
     },
   },
