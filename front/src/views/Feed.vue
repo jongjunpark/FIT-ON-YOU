@@ -123,10 +123,7 @@ export default {
   computed:{
     ...mapState(['user']),
   },
-  mounted() {
-    // this.sendUserInfo(),
-    // this.setLoggedIn(true)
-  },
+  
   methods: {
     ...mapActions(['sendUserInfo', 'setLoggedIn', 'setToken']),
     onNewsFeed() {
