@@ -319,7 +319,7 @@ i {
 
 
 .darkmode {
-  position: absolute;
+  position: fixed;
   left: 30px;
   bottom: 3%;
   cursor: pointer;

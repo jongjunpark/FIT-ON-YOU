@@ -15,11 +15,11 @@
               <li class="nav-user-icon user-bar-menu"  @click="goProfile">
                 <i class="user-bar-img fas fa-user"></i>
               </li>
-              <li class="nav-user-icon user-bar-menu">
+              <li class="nav-user-icon user-bar-menu" @click="goDM">
                 <!-- <i class="user-bar-img fas fa-comment-alt"></i> -->
                 <i class="user-bar-img far fa-paper-plane"></i>
               </li>
-              <li class="nav-user-icon user-bar-menu">
+              <li class="nav-user-icon user-bar-menu" @click="goAlarm">
                 <i class="user-bar-img fas fa-bell"></i>
               </li>
             </ul>
@@ -170,6 +170,14 @@ export default {
     goWrite() {
       this.$router.push('/write')
     },
+    goDM() {
+      this.isUserIcon = false;
+      this.$router.push('/dm')
+    },
+    goAlarm() {
+      this.isUserIcon = false;
+      this.$router.push('/alarm')
+    },
     darkOn() {
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.wrap')
@@ -178,6 +186,8 @@ export default {
       const NAVLOGO = document.querySelector('.fa-hat-cowboy')
       const Dark = this.$cookies.get('dark')
       const INPUT = document.querySelectorAll('input')
+      const HAMBURGER = document.querySelector('.fa-bars')
+      
 
       if (Dark === 'on') {
         HTML.classList.add('black')
@@ -188,6 +198,7 @@ export default {
         for (var i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.add('input-dark')
         }
+        HAMBURGER.classList.add('fa-bars-dark')
         this.$cookies.set('dark', 'off')
       } else {
         HTML.classList.remove('black')
@@ -198,6 +209,7 @@ export default {
         for (var j=0; j<INPUT.length ; j++) {
           INPUT[j].classList.remove('input-dark')
         }
+        HAMBURGER.classList.remove('fa-bars-dark')
         this.$cookies.set('dark', 'on')
       }
     },
