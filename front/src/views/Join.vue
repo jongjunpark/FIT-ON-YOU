@@ -196,6 +196,9 @@ export default {
     'finalMail'() {
       this.finalMailCheck();
     },
+    flag() {
+      this.defaultDark()
+    },
     input: {
       handler() {
         this.checkJoinForm();
@@ -203,14 +206,14 @@ export default {
     },
   },
   computed: {
-    ...mapState(['setLoggedIn']),
-    ...mapActions(['sendUserInfo'])
+    ...mapState(['setLoggedIn', 'flag']),
   },
   mounted() {
     this.defaultDark()
   },
   methods: {
     ...mapMutations(['setToken']),
+    ...mapActions(['sendUserInfo']),
     checkSelect() {
       if (this.select === '직접입력') {
         this.onSelect = false
@@ -573,6 +576,7 @@ export default {
       const NAVBASE = document.querySelector('.nav-base')
       const NAVLOGO = document.querySelector('.fa-hat-cowboy')
       const INPUT = document.querySelectorAll('input')
+      const TEXTAREA = document.querySelectorAll('textarea')
 
       const BACKBTN = document.querySelector('.join-profile-back-btn')
       const SKIP = document.querySelector('.join-skip-btn')
@@ -591,6 +595,9 @@ export default {
         for (var i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.add('input-dark')
         }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.add('textarea-dark')
+        }
 
         BACKBTN.classList.add('join-profile-back-btn-dark')
         SKIP.classList.add('join-skip-btn-dark')
@@ -604,6 +611,9 @@ export default {
         this.checked = false
         for (var j=0; j<INPUT.length ; j++) {
           INPUT[j].classList.remove('input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.remove('textarea-dark')
         }
         
         BACKBTN.classList.remove('join-profile-back-btn-dark')

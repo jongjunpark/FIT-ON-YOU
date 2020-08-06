@@ -1,17 +1,17 @@
 <template>
   <div class='wrap'>
     <div class="hidden-box">
-      <p v-if="!isChange" class="nickInput">
+      <p v-show="!isChange" class="nickInput">
         <input type="text" :placeholder="user.nickname" v-model="nickname" maxlength="20">
       </p>
-      <img v-if="!isChange && !nickname" class='nick-cancel' src="../assets/images/X.png" alt="" @click="cancel">
-      <img v-if="!isChange && nickname" class='nick-cancel' src="../assets/images/pngguru.com (1).png" alt="" @click="change">
+      <img v-show="!isChange && !nickname" class='nick-cancel' src="../assets/images/X.png" alt="" @click="cancel">
+      <img v-show="!isChange && nickname" class='nick-cancel' src="../assets/images/pngguru.com (1).png" alt="" @click="change">
       
-      <p v-if="!isChange2" class="contentInput">
+      <p v-show="!isChange2" class="contentInput">
         <input type="text" :placeholder="user.selfintroduce" v-model="content" maxlength="100">
       </p>
-      <img v-if="!isChange2 && !content" class='content-cancel' src="../assets/images/X.png" alt="" @click="cancelInput">
-      <img v-if="!isChange2 && content" class='content-cancel' src="../assets/images/pngguru.com (1).png" alt="" @click="changeInput">
+      <img v-show="!isChange2 && !content" class='content-cancel' src="../assets/images/X.png" alt="" @click="cancelInput">
+      <img v-show="!isChange2 && content" class='content-cancel' src="../assets/images/pngguru.com (1).png" alt="" @click="changeInput">
     </div>
     <div class="wrap-container profile-wrap">
       <section class='edit-profile-area'>
@@ -77,8 +77,13 @@ export default {
       isChange2: true,
     }
   },
+  watch: {
+    flag() {
+      this.defaultDark()
+    },
+  },
   computed: {
-    ...mapState(['isLoggedIn', 'user'])
+    ...mapState(['isLoggedIn', 'user', 'flag'])
   },
   mounted() {
     this.defaultDark()
@@ -169,6 +174,8 @@ export default {
       const NAVBASE = document.querySelector('.nav-base')
       const NAVLOGO = document.querySelector('.fa-hat-cowboy')
       const INPUT = document.querySelectorAll('input')
+      const changeinput = document.querySelectorAll('nick-cancel')
+      const changecontent = document.querySelectorAll('content-cancel')
 
       const EDITPROFILEIMG = document.querySelectorAll('.edit-img')
       
@@ -184,11 +191,17 @@ export default {
         NAVLOGO.classList.add('nav-logo-dark')
         this.checked = true
         for (var i=0; i<INPUT.length ; i++) {
-          INPUT[i].classList.add('input-dark')
+          INPUT[i].classList.add('profile-dark-content')
         }
 
         for (let i=0; i<EDITPROFILEIMG.length ; i++) {
           EDITPROFILEIMG[i].classList.add('edit-img-dark')
+        }
+        for (let i=0; i<changeinput.length ; i++) {
+          changeinput[i].classList.add('img-change-dark')
+        }
+        for (let i=0; i<changecontent.length ; i++) {
+          changecontent[i].classList.add('img-change-dark')
         }
 
       } else {
@@ -199,11 +212,17 @@ export default {
         NAVLOGO.classList.remove('nav-logo-dark')
         this.checked = false
         for (var j=0; j<INPUT.length ; j++) {
-          INPUT[j].classList.remove('input-dark')
+          INPUT[j].classList.remove('profile-dark-content')
         }
 
         for (let i=0; i<EDITPROFILEIMG.length ; i++) {
           EDITPROFILEIMG[i].classList.remove('edit-img-dark')
+        }
+        for (let i=0; i<changeinput.length ; i++) {
+          changeinput[i].classList.remove('img-change-dark')
+        }
+        for (let i=0; i<changecontent.length ; i++) {
+          changecontent[i].classList.remove('img-change-dark')
         }
       }
     },

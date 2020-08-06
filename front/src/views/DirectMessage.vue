@@ -35,7 +35,7 @@
 
 <script>
 import "../components/css/directmessage.css"
-
+import { mapState } from 'vuex'
 export default {
   name: 'DirectMessage',
   data() {
@@ -46,6 +46,14 @@ export default {
   mounted() {
     this.getInfiniteChat()
     this.defaultDark()
+  },
+  computed: {
+    ...mapState(['flag'])
+  },
+  watch: {
+    flag() {
+      this.defaultDark()
+    }
   },
   methods: {
     sendMessage() {

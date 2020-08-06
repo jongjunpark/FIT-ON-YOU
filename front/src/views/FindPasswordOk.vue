@@ -31,6 +31,11 @@ export default {
       remaintime: false,
     }
   },
+  watch: {
+    flag() {
+      this.defaultDark()
+    }
+  },
   mounted() {
     var fiveMinutes = 60 * 3,
     display = document.querySelector('#time');
@@ -39,7 +44,7 @@ export default {
 
   },
   computed: {
-    ...mapState(['pwdUser', 'certifNum']),
+    ...mapState(['pwdUser', 'certifNum', 'flag']),
   },
   methods: {
     ...mapMutations(['confirmPwd', 'findUserPWd']),

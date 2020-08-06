@@ -38,7 +38,7 @@
 /* eslint-disable */
 import "../components/css/login.css"
 import axios from 'axios';
-import { mapGetters, mapMutations, mapActions  } from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions  } from 'vuex'
 
 Kakao.init('713af847cf1784de91646f5cb2455cbf');
 
@@ -81,13 +81,17 @@ export default {
     },
     password() {
       this.setPasswordClass();
-    }
+    },
+    flag() {
+      this.defaultDark()
+    },
   },
   mounted() {
     window.addEventListener("google-loaded", this.startApp);
     this.defaultDark()    
   },
   computed: {
+    ...mapState(['flag']),
     ...mapGetters([]),
   }, 
   methods:{

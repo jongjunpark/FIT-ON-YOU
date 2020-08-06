@@ -42,9 +42,12 @@ export default {
     email() {
       this.checkEmailValidate();
     },
+    flag() {
+      this.defaultDark()
+    },
   },
   computed: {
-    ...mapState(['certifNum'])
+    ...mapState(['certifNum', 'flag'])
   },
   mounted() {
     this.defaultDark()

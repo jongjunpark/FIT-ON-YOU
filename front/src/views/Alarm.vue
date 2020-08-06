@@ -35,11 +35,21 @@
 
 <script>
 import "../components/css/alarm.css"
+import { mapState } from 'vuex'
+
 
 export default {
   name: 'Alarm',
   data() {
     return {}
+  },
+  computed: {
+    ...mapState(['flag'])
+  },
+  watch: {
+    flag() {
+      this.defaultDark()
+    }
   },
   mounted() {
     this.defaultDark()

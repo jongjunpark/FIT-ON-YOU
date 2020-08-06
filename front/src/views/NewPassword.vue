@@ -61,10 +61,13 @@ export default {
     'nowPassword'() {
       this.checkPassword();
     },
+    flag() {
+      this.defaultDark()
+    },
     
   },
   computed: {
-    ...mapState(['user'])
+    ...mapState(['user', 'flag'])
   },
   mounted() {
     this.defaultDark()

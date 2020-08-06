@@ -54,9 +54,12 @@ export default {
       this.checkPasswordValidate();
       this.checkPassword();
     },
+    flag() {
+      this.defaultDark()
+    },
   },
   computed: {
-    ...mapState(['pwdUser'])
+    ...mapState(['pwdUser', 'flag'])
   },
   mounted() {
     this.defaultDark()

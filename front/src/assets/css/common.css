@@ -356,5 +356,9 @@ i {
 
 .textarea-dark {
   color: #ebebeb;
-  border-color: #ebebeb !important; 
+  border-color: #ebebeb !important;
+}
+
+.fa-bars-dark {
+  color: #ebebeb !important;
 }

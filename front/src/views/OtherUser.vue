@@ -53,7 +53,7 @@
 <script>
 import "../components/css/otheruser.css"
 import "../components/css/profileedit.css"
-
+import { mapState } from 'vuex'
 
 export default {
  name: 'OtherUser',
@@ -62,6 +62,14 @@ export default {
 		profileImg: '',
 	}
  },
+ computed: {
+    ...mapState(['flag'])
+  },
+  watch: {
+    flag() {
+      this.defaultDark()
+    }
+  },
  mounted() {
    this.defaultDark()
  },

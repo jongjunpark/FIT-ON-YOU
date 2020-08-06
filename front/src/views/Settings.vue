@@ -20,7 +20,12 @@ export default {
     return {}
   },
   computed: {
-    ...mapState(['isLoggedIn', 'authToken', 'user'])
+    ...mapState(['isLoggedIn', 'authToken', 'user', 'flag'])
+  },
+  watch: {
+    flag() {
+      this.defaultDark()
+    }
   },
   mounted() {
     this.defaultDark()

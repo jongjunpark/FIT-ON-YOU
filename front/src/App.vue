@@ -30,7 +30,7 @@
     
     <router-view/>
     
-    <div  id="nav2">
+    <div  id="nav2" v-if="isLoggedIn">
       <div class="bottom-nav">
         <div class='menu-bar-list'>
           <div class="menu-bar-select"></div>
@@ -236,6 +236,7 @@ export default {
       const NAVLOGO = document.querySelector('.fa-hat-cowboy')
       const INPUT = document.querySelectorAll('input')
       const TEXTAREA = document.querySelectorAll('textarea')
+      const HAMBURGER = document.querySelector('.fa-bars')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -253,6 +254,7 @@ export default {
         for (let i=0; i<TEXTAREA.length ; i++) {
           TEXTAREA[i].classList.add('textarea-dark')
         }
+        HAMBURGER.classList.add('fa-bars-dark')
         this.checked = true
       } else {
         HTML.classList.remove('black')

@@ -34,6 +34,7 @@
 
 <script>
 import "../components/css/dm.css"
+import { mapState } from 'vuex'
 
 export default {
   name: 'DM',
@@ -42,6 +43,14 @@ export default {
   },
   mounted() {
     this.defaultDark()
+  },
+  computed: {
+    ...mapState(['flag'])
+  },
+  watch: {
+    flag() {
+      this.defaultDark()
+    }
   },
   methods: {
     defaultDark() {
