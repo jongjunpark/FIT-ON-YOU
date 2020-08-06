@@ -265,6 +265,7 @@ table {
 .wrap {
   padding: 0 30px;
   margin-top: 60px;
+  height: 100%;
 }
 
 @media (min-width: 1200px) {
@@ -347,4 +348,8 @@ i {
 
 #app {
   height: 100%;
+}
+
+.input-dark {
+  color: #ebebeb;
 }
