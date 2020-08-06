@@ -19,7 +19,7 @@
       </div>
     </transition>
     
-    <CommentModal v-if="showModal" @close="showModal= false" v-bind:modalArticleNo="modalArticleNo"/>
+    <CommentModal v-if="showModal" @close="showModal= false" :modalArticleNo="modalArticleNo" :modalArticleUser="modalArticleUser"/>
 
     <div class='wrap feed-wrap' v-for="feed in mainfeed" :key="feed.articleUser">
       <div class='wrap-container'>
@@ -41,7 +41,7 @@
           <div class="feed-btn-box">
             <div class='feed-btn-left'>
               <i class="fas fa-heart"></i>
-              <i :id="'show-modal'+ feed.articleNo" @click="clickComment(feed.articleNo)" class="fas fa-comment-alt"></i>
+              <i :id="'show-modal'+ feed.articleNo" @click="clickComment(feed.articleNo,feed.articleUser)" class="fas fa-comment-alt"></i>
 
             </div>
             <div class='feed-btn-right'>
@@ -114,6 +114,7 @@ export default {
         "slidesToScroll": 1
       },
       modalArticleNo : '',
+      modalArticleUser:'',
     }
   },
   components: { 
@@ -142,8 +143,10 @@ export default {
     clickLike() {
       this.modal = true
     },
-    clickComment(articleNo) {
+    clickComment(articleNo,articleUser) {
+      console.log(articleUser,1)
       this.modalArticleNo=articleNo;
+      this.modalArticleUser=articleUser;
       console.log(articleNo,12312);
       this.showModal = true
     },

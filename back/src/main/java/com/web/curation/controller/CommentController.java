@@ -1,7 +1,9 @@
 package com.web.curation.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dao.AlarmDao;
 import com.web.curation.dao.CommentDao;
+import com.web.curation.dao.UserDao;
 import com.web.curation.model.Alarm;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Comment;
@@ -39,30 +42,48 @@ public class CommentController {
 	@Autowired
 	private AlarmDao alarmDao;
 	
+	@Autowired
+	private UserDao userDao;
+	
 	@GetMapping
 	public Object getAllComment(@RequestParam int articleNo) {
+		Map<String,Object> resultMap=new HashMap<>();
 		final BasicResponse result = new BasicResponse();
-		List<Comment> li = new ArrayList<>();
+		List<Comment> commentli = new ArrayList<>();
+		List<String> profile=new ArrayList<>();
+		commentli=commentDao.findAllByArticleNoOrderByCommentNoAsc(articleNo);
+		for(Comment comment : commentli) {
+			profile.add(userDao.findProfileImgByNickname(comment.getWriter()));
+		}
 		
-		li=commentDao.findAllByArticleNoOrderByCommentNoDesc(articleNo);
 		result.status=true;
 		result.data="success";
-		result.object=li;
 		
-		return result;
+		
+		resultMap.put("result",result);		
+		resultMap.put("commentli",commentli);		
+		resultMap.put("result",result);		
+		resultMap.put("profileli",profile);
+		
+		return resultMap;
 		
 	}
 	
 	// 글 작성자도 같이 전달 받기
 	@PostMapping
 	public Object addComment(@RequestParam String writer, @RequestParam int articleNo, @RequestParam String content, @RequestParam String articleUser ) {
+		System.out.println(articleUser+" "+writer);
+		
 		final BasicResponse result = new BasicResponse();
+		Map<String ,Object> resultMap=new HashMap<>();
 		Comment comment = new Comment();
 		comment.setArticleNo(articleNo);
 		comment.setWriter(writer);
 		comment.setContent(content);
 		
-		if(commentDao.save(comment)==null) {
+		Comment rescmt = new Comment();
+		rescmt=commentDao.save(comment);
+		if(rescmt==null) {
 			result.data="fail";
 			
 		}else {		
@@ -81,11 +102,12 @@ public class CommentController {
 					result.object="하나의 글에 같은사람이 댓글 두번 단 경우";
 				}
 			}
+			resultMap.put("rescmt",rescmt);
 		}
 		result.status=true;
+		resultMap.put("result",result);
 		
-		
-		return result;
+		return resultMap;
 	}
 	
 	@DeleteMapping
