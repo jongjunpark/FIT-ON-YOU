@@ -254,6 +254,7 @@ export default {
         for (let i=0; i<TEXTAREA.length ; i++) {
           TEXTAREA[i].classList.remove('textarea-dark')
         }
+        HAMBURGER.classList.remove('fa-bars-dark')
         this.checked = false
       }
     }, 

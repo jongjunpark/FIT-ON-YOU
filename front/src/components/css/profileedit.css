@@ -284,3 +284,7 @@
 .follower:hover {
   color: #5AAEFF;
 }
+
+.edit-img-dark {
+  filter: invert(70%);
+}
