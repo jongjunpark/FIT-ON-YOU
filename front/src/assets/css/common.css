@@ -332,8 +332,7 @@ i {
 }
 
 .wrap-dark {
-  background-color: #202020;
-  filter: invert(3%);
+  background-color: #272727;
   border: 0;
 }
 
@@ -352,4 +351,10 @@ i {
 
 .input-dark {
   color: #ebebeb;
+  border-color: #ebebeb !important;
+}
+
+.textarea-dark {
+  color: #ebebeb;
+  border-color: #ebebeb !important; 
 }

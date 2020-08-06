@@ -4,7 +4,7 @@
       ∨
     </div>
     <transition name='slide-influ-nav'>
-      <div v-if="isInfluNav" class="influ-nav-box">
+      <div v-show="isInfluNav" class="influ-nav-box">
         <div class="influ-nav">
           <VueSlickCarousel v-bind="settings">
             <div>
@@ -311,7 +311,12 @@ export default {
     CommentModal
   },
   computed:{
-    ...mapState(['user']),
+    ...mapState(['user', 'flag']),
+  },
+  watch: {
+    flag() {
+      this.defaultDark()
+    }
   },
   mounted() {
     // this.sendUserInfo(),
@@ -344,6 +349,7 @@ export default {
     },
     setInfluNav() {
       this.isInfluNav = !this.isInfluNav
+      
       const INFLUBTN = document.querySelector('.open-influ-nav')
       if(INFLUBTN.innerHTML === '∧'){
         INFLUBTN.innerHTML = '∨'
@@ -358,6 +364,9 @@ export default {
       const NAV = document.querySelector('#nav')
       const NAVBASE = document.querySelector('.nav-base')
       const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+      const INPUT = document.querySelectorAll('input')
+      const INFLUNAVBTN = document.querySelector('.open-influ-nav')
+      const INFLUNAV = document.querySelector('.influ-nav')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -369,14 +378,22 @@ export default {
         NAV.classList.add('nav-dark')
         NAVBASE.classList.add('nav-dark')
         NAVLOGO.classList.add('nav-logo-dark')
-        this.checked = true
+        INFLUNAVBTN.classList.add('nav-influ-btn-dark')
+        INFLUNAV.classList.add('nav-influ-dark')
+        for (var i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('input-dark')
+        }
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
         NAV.classList.remove('nav-dark')
         NAVBASE.classList.remove('nav-dark')
         NAVLOGO.classList.remove('nav-logo-dark')
-        this.checked = false
+        INFLUNAVBTN.classList.remove('nav-influ-btn-dark')
+        INFLUNAV.classList.remove('nav-influ-dark')
+        for (var j=0; j<INPUT.length ; j++) {
+          INPUT[j].classList.remove('input-dark')
+        }
       }
     },
   },
@@ -423,18 +440,21 @@ export default {
 .wrap-container {
   margin-bottom: 50px;
 }
-
-@media (max-width: 280px) {
+.feed-wrap {
+    padding-top: 20px;
+  }
+/* @media (max-width: 280px) {
   .feed-wrap {
     margin-top: 150px;
   }
-}
+} */
 @media (min-width: 1200px) {
   .feed-wrap {
     margin-top: 60px !important;
+    padding-top: 20px;
   }
 }
-@media (min-height: 700px) {
+/* @media (min-height: 700px) {
   .feed-wrap {
     margin-top: 150px;
   }
@@ -448,7 +468,7 @@ export default {
   .feed-wrap {
     margin-top: 80px;
   }
-}
+} */
 .open-influ-nav {
   position: fixed;
   top: 60px;
@@ -627,6 +647,18 @@ export default {
 }
 .margin-box {
   height: 20px;
+}
+
+.nav-influ-btn-dark {
+  background-color: rgb(109, 108, 108);
+}
+
+.nav-influ-btn-dark:hover {
+  color: #202020;
+}
+
+.nav-influ-dark {
+  background-color: rgb(77, 76, 76);
 }
 </style>
 

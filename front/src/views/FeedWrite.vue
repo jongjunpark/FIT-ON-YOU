@@ -21,7 +21,7 @@
               <i @click='delFeedImg(2)' v-show='feedImg[1]&&isCancle2' class="far fa-times-circle cancle-img"></i>
               <img v-if="feedImg[1]" class='feed-img' :src="feedImg[1]" alt="">
               <label for="feed-img-edit2" class='feed-more-label'>
-                <i v-if="feedImg[0] && !feedImg[1]" class="fas fa-plus"></i>
+                <i v-show="feedImg[0] && !feedImg[1]" class="fas fa-plus write-plus"></i>
                 <input multiple="multiple" type="file" id="feed-img-edit2" accept="image/*" @change="setFeedImg(2)">
               </label>
             </div>
@@ -32,7 +32,7 @@
               <i @click='delFeedImg(3)' v-show='feedImg[2]&&isCancle3' class="far fa-times-circle cancle-img"></i>
               <img v-if="feedImg[2]" class='feed-img' :src="feedImg[2]" alt="">
               <label for="feed-img-edit3" class='feed-more-label'>
-                <i v-if="feedImg[0] && !feedImg[2]" class="fas fa-plus"></i>
+                <i v-show="feedImg[0] && !feedImg[2]" class="fas fa-plus write-plus"></i>
                 <input multiple="multiple" type="file" id="feed-img-edit3" accept="image/*" @change="setFeedImg(3)">
               </label>
             </div>
@@ -58,8 +58,13 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'FeedWrite',
+  computed: {
+    ...mapState(['flag'])
+  },
   data() {
     return {
       feedImg : [],
@@ -85,6 +90,9 @@ export default {
     writeHashList() {
       this.checkWriteForm();
     },
+    flag() {
+      this.defaultDark()
+    }
   },
   mounted() {
     this.defaultDark()
@@ -159,6 +167,13 @@ export default {
       const NAV = document.querySelector('#nav')
       const NAVBASE = document.querySelector('.nav-base')
       const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+      const HANGER = document.querySelector('.write-hanger-img')
+      const CLOTH_HANGER = document.querySelectorAll('.write-cloth-hanger-img')
+      const WRITE_PLUS = document.querySelectorAll('.write-plus')
+      const CANCLE_IMG = document.querySelectorAll('.cancle-img')
+      const INPUT = document.querySelectorAll('input')
+      const TEXTAREA = document.querySelectorAll('textarea')
+      const HASHTAG = document.querySelectorAll('.write-hash-item')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -170,14 +185,50 @@ export default {
         NAV.classList.add('nav-dark')
         NAVBASE.classList.add('nav-dark')
         NAVLOGO.classList.add('nav-logo-dark')
-        this.checked = true
+        HANGER.classList.add('hanger-dark')
+        for (let i=0; i<CLOTH_HANGER.length; i++) {
+          CLOTH_HANGER[i].classList.add('hanger-dark')
+        }
+        for (let i=0; i<WRITE_PLUS.length; i++) {
+          WRITE_PLUS[i].classList.add('write-plus-dark')
+        }
+        for (let i=0; i<CANCLE_IMG.length; i++) {
+          CANCLE_IMG[i].classList.add('write-cancle-dark')
+        }
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.add('textarea-dark')
+        }
+        for (let i=0; i<HASHTAG.length ; i++) {
+          HASHTAG[i].classList.add('write-plus-dark')
+        }
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
         NAV.classList.remove('nav-dark')
         NAVBASE.classList.remove('nav-dark')
         NAVLOGO.classList.remove('nav-logo-dark')
-        this.checked = false
+        HANGER.classList.remove('hanger-dark')
+        for (let i=0; i<CLOTH_HANGER.length; i++) {
+          CLOTH_HANGER[i].classList.remove('hanger-dark')
+        }
+        for (let i=0; i<WRITE_PLUS.length; i++) {
+          WRITE_PLUS[i].classList.remove('write-plus-dark')
+        }
+        for (let i=0; i<CANCLE_IMG.length; i++) {
+          CANCLE_IMG[i].classList.remove('write-cancle-dark')
+        }
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.remove('textarea-dark')
+        }
+        for (let i=0; i<HASHTAG.length ; i++) {
+          HASHTAG[i].classList.remove('write-plus-dark')
+        }
       }
     },
   }
@@ -444,5 +495,22 @@ export default {
 .write-hash-item-close-btn .fa-times:hover{
   color: #fc0303;
 }
+
+.hanger-dark {
+  filter: invert(70%);
+}
+
+.write-plus-dark {
+  color: #ebebeb !important;
+}
+.write-plus-dark:hover {
+  background-color: #ebebeb !important;
+  color: #202020 !important;
+}
+
+.write-cancle-dark {
+  color: #ebebeb !important;
+}
+
 
 </style>
