@@ -46,6 +46,9 @@ export default {
   computed: {
     ...mapState(['certifNum'])
   },
+  mounted() {
+    this.defaultDark()
+  },
   methods: {
     ...mapMutations(['confirmPwd', 'findUserPWd']),
     onOkBtn() {
@@ -96,6 +99,34 @@ export default {
     deactiveInput() {
       event.path[1].style.border = '1px solid #B0B0B0'
       event.path[1].style.zIndex = 1
+    },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const NAV = document.querySelector('#nav')
+      const NAVBASE = document.querySelector('.nav-base')
+      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        NAV.classList.add('nav-dark')
+        NAVBASE.classList.add('nav-dark')
+        NAVLOGO.classList.add('nav-logo-dark')
+        this.checked = true
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        NAV.classList.remove('nav-dark')
+        NAVBASE.classList.remove('nav-dark')
+        NAVLOGO.classList.remove('nav-logo-dark')
+        this.checked = false
+      }
     }, 
   }
 }
