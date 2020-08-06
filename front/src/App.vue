@@ -5,7 +5,7 @@
       <div class="nav-logo">
         <i @click='goHome' class="fas fa-hat-cowboy"></i>
       </div>
-      <div class="nav-user">
+      <div class="nav-user" v-show="isLoggedIn">
         <div @click='setUserBar' class="nav-user-img">
           <i class="fas fa-bars"></i>
         </div>
@@ -16,7 +16,8 @@
                 <i class="user-bar-img fas fa-user"></i>
               </li>
               <li class="nav-user-icon user-bar-menu">
-                <i class="user-bar-img fas fa-comment-alt"></i>
+                <!-- <i class="user-bar-img fas fa-comment-alt"></i> -->
+                <i class="user-bar-img far fa-paper-plane"></i>
               </li>
               <li class="nav-user-icon user-bar-menu">
                 <i class="user-bar-img fas fa-bell"></i>
@@ -44,7 +45,7 @@
           </div>
         </div>
       </div>
-      <div class="write-icon">
+      <div @click='goWrite' class="write-icon">
         <i class="write-icon-img fas fa-pen"></i>
       </div>
     </div>
@@ -158,6 +159,9 @@ export default {
       this.isUserIcon = false;
       this.$router.push('/profileedit')
     },
+    goWrite() {
+      this.$router.push('/write')
+    }
   }
 }
 </script>
