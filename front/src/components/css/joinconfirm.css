@@ -55,9 +55,24 @@ ul.join_box {
   right: 5vw;
   margin-top: -12px;
 }
+@media (min-width: 768px) {
+  .checkBox>ul>li:nth-child(2) {
+    margin-top: -20px;
+  }
+}
 @media (min-width: 1200px) {
   .checkBox>ul>li:nth-child(2) {
     right: 40px;
+    margin-top: -12px;
+  }
+}
+.checkBox>ul>li:nth-child(2) .fa-check-circle {
+  margin: 0;
+  font-size: 5vw;
+}
+@media (min-width: 1200px) {
+  .checkBox>ul>li:nth-child(2) .fa-check-circle {
+    font-size: 120%;
   }
 }
 
@@ -112,6 +127,12 @@ ul.join_box {
   color: #fff
 }
 
+.join-confirm-btn-area .join-confirm-agree-off {
+  background-color: #888;
+  color: #fff;
+  cursor: default;
+}
+
 .join-confirm-btn-area .join-confirm-disagree {
   background-color: #fff;
   border: 1px solid #888;
@@ -119,3 +140,12 @@ ul.join_box {
   line-height: 6.5vh;
 }
 
+.on-check-btn {
+  color: #5AAEFF;
+  animation-name: check;
+	animation-duration: 0.5s;
+}
+@keyframes check {
+	50% {transform: scale(1.2)}
+	100% {transform: scale(1)}
+}
