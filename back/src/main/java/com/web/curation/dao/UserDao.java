@@ -23,7 +23,7 @@ public interface UserDao extends JpaRepository<User, String> {
 	Optional<User> getUserByEmail(String email);
     Optional<User> findUserByEmailAndBirth(String email, LocalDate birth);
     Optional<User> findUserByNickname(String nickname);
-    Optional<User> findUserByEmail(String email);
+    Optional<User> findUserByEmail(Object object);
     
     @Modifying
     @Transactional
@@ -33,7 +33,7 @@ public interface UserDao extends JpaRepository<User, String> {
     @Modifying
     @Transactional
     @Query(value="UPDATE user set nickname=:cur where nickname=:prev", nativeQuery=true)
-    void updateNickname(@Param("prev")String prev,@Param("cur") String cur);
+    int updateNickname(@Param("prev")String prev,@Param("cur") String cur);
     
     @Modifying
     @Transactional
@@ -42,5 +42,14 @@ public interface UserDao extends JpaRepository<User, String> {
     
     @Query(value="select * from user where nickname like %:word%", nativeQuery=true)
     List<User> findUsersByWord(String word);
-
+    
+    @Modifying
+    @Transactional
+    @Query(value="UPDATE user set profile_img=:profile_img where nickname=:nickname", nativeQuery=true)
+    int updateProfileImg(String profile_img, String nickname);
+    
+    @Modifying
+    @Transactional
+    @Query(value="delete from user where nickname=:nickname", nativeQuery=true)
+    int deleteUser(String nickname);
 }	

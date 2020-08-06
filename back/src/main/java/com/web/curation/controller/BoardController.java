@@ -160,6 +160,7 @@ public class BoardController {
 		List<Follow> searchFollow = new ArrayList<Follow>();
 		searchFollow = followDao.getFollowByFollowinguser(nickname);
 		List<Board> result = new ArrayList<>();
+
 		for (Follow follow : searchFollow) {
 			List<Board> temp = boardDao.findBoardByArticleUserOrderByArticleNoDesc(follow.getFolloweduser());
 			for (Board board : temp) {

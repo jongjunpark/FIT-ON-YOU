@@ -45,7 +45,7 @@
           </div>
         </div>
       </div>
-      <div class="write-icon">
+      <div @click='goWrite' class="write-icon">
         <i class="write-icon-img fas fa-pen"></i>
       </div>
     </div>
@@ -159,6 +159,9 @@ export default {
       this.isUserIcon = false;
       this.$router.push('/profileedit')
     },
+    goWrite() {
+      this.$router.push('/write')
+    }
   }
 }
 </script>

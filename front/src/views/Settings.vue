@@ -5,14 +5,14 @@
     <button class="btn change-search-btn">검색내역 지우기</button>
     <button class="btn change-search-btn">알림내역 지우기</button>
     <button class="btn logout-btn" @click="goLogout">로그아웃</button>
-    <button class="btn signout-btn">회원 탈퇴</button>
+    <button class="btn signout-btn" @click="leave">회원 탈퇴</button>
   </div>
 </template>
 
 <script>
 import "../components/css/settings.css"
 import { mapState, mapMutations, mapActions  } from 'vuex' 
-
+import axios from 'axios'
 
 export default {
   name: 'Settings',
@@ -35,6 +35,34 @@ export default {
     },
     goPassword() {
       this.$router.push('/newpassword')
+    },
+
+    leave(){
+      let ref=this;
+
+      const formData=new FormData();
+      let nickname=this.user.nickname;
+      console.log(nickname);
+      formData.append('nickname',nickname);
+      axios.delete('http://localhost:8080/api/account/delete',{
+        data:formData,
+        
+      })
+      .then((data)=>{
+        console.log(data)
+        if(data.data.data=="success"){
+          ref.$cookies.remove('auth-token')
+          ref.$cookies.remove('auth-nickname')
+          ref.setToken(null)
+          ref.setLoggedIn(false)
+          ref.setUser(null)
+          ref.$router.push('/')
+        }
+        else{
+          console.log("fail..");
+        }
+      })
+      .catch()
     },
   },
 }

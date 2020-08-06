@@ -10,6 +10,7 @@ import com.web.curation.model.ImageStore;
 
 public interface ArticletagDao extends JpaRepository<Articletag, String>{
 	
+	
 	List<Articletag> findArticletagByArticleNoOrderByArticleNo(int articleNo);
 
 }

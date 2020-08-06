@@ -1,3 +1,5 @@
+
+
 export default {
   LOGIN(state, data) {
     state.user = data;
@@ -15,7 +17,7 @@ export default {
     state.authToken = token
   },
   setLoggedIn(state, data) {
-    state.isLoggedIn = data
+    state.isLoggedIn = data 
   },
   setUser(state, data) {
     state.user = data
@@ -27,6 +29,12 @@ export default {
     // var uri_dec = decodeURIComponent(uri_enc);
     // var res = uri_dec;
     window.$cookies.set('auth-nickname', data)
+  },
+  setUserIntro(state, data){
+    state.user.selfintroduce=data
+  },
+  setUserNick(state,data){
+    state.user.nickname=data;
   }
 
 

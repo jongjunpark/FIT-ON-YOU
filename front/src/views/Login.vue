@@ -20,10 +20,10 @@
       <div v-if='onLoginBtn' @click='loginHandler' class='btn on-login-btn'>로그인</div>
       <div class="social-area">
         <div class="btn google-btn" id="customBtn">
-          <img class="google-img" src="../assets/images/google2.png"/>
+          <img class="google-img" src="../assets/images/google-mini.png"/>
         </div>
         <div class="btn kakao-btn" @click="loginWithKakao"> 
-          <img class="kakao-img" src="../assets/images/kakao.png"/>
+          <img class="kakao-img" src="../assets/images/kakao-mini.png"/>
         </div>
       </div>
       <div class="login-link-area">
