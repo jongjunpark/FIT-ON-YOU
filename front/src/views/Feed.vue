@@ -387,7 +387,7 @@ export default {
   max-width: 440px !important;
   width: 100%;
   margin: 0 auto;
-  margin-top: 70px;
+  margin-top: 60px;
   }
 }
 
@@ -402,7 +402,7 @@ export default {
 }
 @media (min-width: 1200px) {
   .feed-wrap {
-    margin-top: 70px !important;
+    margin-top: 60px !important;
   }
 }
 @media (min-height: 700px) {

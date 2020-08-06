@@ -264,7 +264,7 @@ table {
 
 .wrap {
   padding: 0 30px;
-  margin-top: 70px;
+  margin-top: 60px;
 }
 
 @media (min-width: 1200px) {
@@ -272,7 +272,7 @@ table {
   max-width: 580px;
   width: 100%;
   margin: 0 auto;
-  margin-top: 70px;
+  margin-top: 60px;
   }
 }
 .wrap-container {
@@ -314,4 +314,37 @@ align-items: center;
 
 i {
   z-index: 100;
+}
+
+
+.darkmode {
+  position: absolute;
+  left: 30px;
+  bottom: 0;
+  cursor: pointer;
+
+}
+
+.black {
+  background-color: #202020;
+  color: #ebebeb;
+}
+
+.wrap-dark {
+  background-color: #202020;
+  filter: invert(3%);
+  border: 0;
+}
+
+.nav-dark {
+  background-color: #202020 !important;
+  border-bottom: 0.5px solid #444444 !important;
+}
+
+.nav-logo-dark {
+  color: #ebebeb !important;
+}
+
+#app {
+  height: 100%;
 }
