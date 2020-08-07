@@ -105,7 +105,6 @@ export default {
   },
   beforeUpdate(){
     this.profileImg=this.user.profile_img;
-    console.log(this.profileImg,2)
   },
   computed: {
     ...mapState(['isLoggedIn', 'user'])
@@ -115,9 +114,9 @@ export default {
     ...mapActions(['sendUserInfo']),
     setProfileImg() {
       let ref=this;
-
       var frm = new FormData();
       var photoFile = document.getElementById("profile-img-edit");
+      console.log(photoFile)
       frm.append("profile-img-edit", photoFile.files[0]);
       frm.append("nickname",this.nickname);
       axios.post('http://localhost:8080/api/account/addProfileImg',frm)
