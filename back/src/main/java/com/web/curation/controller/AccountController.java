@@ -217,8 +217,6 @@ public class AccountController {
 				String Token = jwtService.create(userDTO);
 				resultMap.put("auth_token",Token);
 				
-				userDao.updateProfileImg(storePath, nickname);
-				
 			}
 			else {
 				result.data="fail";

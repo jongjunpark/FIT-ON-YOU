@@ -472,7 +472,7 @@ export default {
       if (photoFile.files[0]) {
 
         frm.append("profile-img-edit", photoFile.files[0]);
-        frm.append("nicknem",this.nickname);
+        frm.append("nickname",this.nickname);
         axios.post('http://localhost:8080/api/account/addProfileImg',frm,
         ).then( () =>{
           console.log("1");

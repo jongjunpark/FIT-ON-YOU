@@ -9,51 +9,25 @@
           <div class='modal-category'>댓글</div>
         </div>
         <div class="modal-container">
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-            <div class="comment-article">
-              <div class="comment-article-head">
-                <div class="comment-username comment-text">Username</div>
-                <div class="comment-update-time comment-text">10시간 전</div>
+          <div class="" v-for="(comment,index) in commentList" :key="index">
+            <div class="comment-box">
+              <div class="comment-user-icon">
+                <img class="comment-user-icon" :src="profileList[index]">
               </div>
-              <div class="comment-content comment-text">안녕하세요 옷 정말 잘입네요.....</div>
+              <div class="comment-article">
+                <div class="comment-article-head">
+                  <div class="comment-username comment-text">{{comment.writer}}</div>
+                  <div class="comment-update-time comment-text">10시간전</div>
+                </div>
+                <div class="comment-content comment-text">{{comment.content}}</div>
+              </div>
             </div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
           </div>
         </div>
         <div class="modal-footer">
           <div class="comment-my-icon"></div>
           <input @input="comment_content = $event.target.value" class='comment-input' type="text" placeholder="댓글을 입력해 주세요.">
-          <i class="fas fa-check-circle"></i>
+          <i class="fas fa-check-circle" @click="addComment"></i>
         </div>
       </div>
     </div>
@@ -61,12 +35,32 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'CommentModal',
+  props:['modalArticleNo','modalArticleUser'],
   data() {
     return {
-      comment_content: ''
+      comment_content: '',
+      commentList: [],
+      profileList:[],
     }
+  },
+  mounted(){
+    let ref=this;
+    axios.get('http://localhost:8080/api/comment',{
+      params:{
+        articleNo:this.modalArticleNo,
+      }
+    })
+    .then((res)=>{
+      console.log(res,2)
+      ref.commentList=res.data.commentli;
+      ref.profileList=res.data.profileli;
+
+    })
+    .catch()
+
   },
   watch: {
     comment_content() {
@@ -81,6 +75,38 @@ export default {
       } else {
         INPUTBTN.classList.remove('on-comment-input')
       }
+    },
+    addComment(){
+      let ref=this;
+
+      let data = this.$cookies.get('auth-nickname');
+      let uri = data;
+      let uri_enc = encodeURIComponent(uri);
+      let uri_dec = decodeURIComponent(uri_enc);
+      let res = uri_dec;
+
+      const frm = new FormData();
+      frm.append("articleNo", this.modalArticleNo);
+      frm.append("writer", res);
+      frm.append("content", this.comment_content);
+      frm.append("articleUser",this.modalArticleUser);
+
+      axios.post('http://localhost:8080/api/comment',frm
+      )
+      .then((data)=>{
+        let tmp={
+          commentNo:data.data.rescmt.commentNo,
+          writer:data.data.rescmt.writer,
+          articleNo:data.data.rescmt.articleNo,
+          content:data.data.rescmt.content
+        }
+        ref.commentList.push(tmp)
+        ref.comment_content=''
+
+      })
+      .catch(()=>{
+        console.log("fail");
+      })
     }
   }
 }
