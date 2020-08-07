@@ -95,6 +95,7 @@ export default {
       modal: false,
       mainfeed:[],
       influencer:[],
+      feedlist:[],
       settings: {
         "dots": false,
         "arrows": true,
@@ -123,9 +124,9 @@ export default {
   computed:{
     ...mapState(['user']),
   },
-
+  
   methods: {
-    ...mapActions(['sendUserInfo']),
+    ...mapActions(['sendUserInfo', 'setLoggedIn', 'setToken']),
     onNewsFeed() {
       const selectBar = document.querySelector('.menu-bar-select')
       const newsFeed = document.querySelector('.fa-newspaper')
@@ -163,15 +164,13 @@ export default {
   },
   mounted() {
     this.onNewsFeed()
+    
     let nickdata = this.$cookies.get('auth-nickname')
     let uri = nickdata;
     let uri_enc = encodeURIComponent(uri);
     let uri_dec = decodeURIComponent(uri_enc);
     let res = uri_dec;
-    axios.post("http://localhost:8080/api/board/influencer").then((data)=>{
-      this.influencer=data.data;
-      console.log(this.influencer)
-    });
+    
     
     const formData = new FormData();
     
@@ -179,7 +178,9 @@ export default {
 
     axios.post("http://localhost:8080/api/board/newsfeed",formData).then((data)=>{
       console.log("success")
+      console.log(data)
       this.feedlist=data.data;
+      console.log(typeof(this.feedlist))
       for (let index = 0; index < this.feedlist.length; index++) {
         let feeddata={tags:[],
                       images:[],
@@ -234,7 +235,12 @@ export default {
   }
   });
   console.log(this.mainfeed)
+  axios.post("http://localhost:8080/api/board/influencer").then((data)=>{
+      this.influencer=data.data;
+      console.log(this.influencer)
+    });
   }
+  
 }
 
 </script>

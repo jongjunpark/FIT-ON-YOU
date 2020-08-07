@@ -3,16 +3,19 @@
     <div class='wrap-container'>
       <div class="write-img-box">
         <img class="write-hanger-img" src="../assets/images/hanger.png" alt="">
-        <label v-if="!feedImg[0]" class="write-upload-btn" for='feed-img-edit1'>
+        <label v-if="!feedImg[0]" class="write-upload-btn" for='feed-img-edit0'>
           <i class="far fa-images"><i class="fas fa-plus"></i></i>
-          <input multiple="multiple" type="file" id="feed-img-edit1" accept="image/*" @change="setFeedImg(1)">
+          <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit0" accept="image/*" @change="setFeedImg(0)">
         </label>
         <div class="write-cloth-box">
           <div class="write-cloth-hanger">
-            <img class="write-cloth-hanger-img" src="../assets/images/cloth-hanger.png" alt="">
+            <img class="write-cloth-hanger-img first-feed-img" src="../assets/images/cloth-hanger.png" alt="">
             <div @mouseover="onCancelBtn(1)" @mouseout="offCancleBtn" class="write-uploaded-img first-feed-img">
               <i @click='delFeedImg(1)' v-show='feedImg[0]&&isCancle1' class="far fa-times-circle cancle-img"></i>
               <img v-if="feedImg[0]" class='feed-img' :src="feedImg[0]" alt="">
+              <label for="feed-img-edit1" class='feed-more-label'>
+                <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit1" accept="image/*" @change="setFeedImg(1)">
+              </label>
             </div>
           </div>
           <div class="write-cloth-hanger">
@@ -22,7 +25,7 @@
               <img v-if="feedImg[1]" class='feed-img' :src="feedImg[1]" alt="">
               <label for="feed-img-edit2" class='feed-more-label'>
                 <i v-if="feedImg[0] && !feedImg[1]" class="fas fa-plus"></i>
-                <input multiple="multiple" type="file" id="feed-img-edit2" accept="image/*" @change="setFeedImg(2)">
+                <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit2" accept="image/*" @change="setFeedImg(2)">
               </label>
             </div>
           </div>
@@ -33,7 +36,7 @@
               <img v-if="feedImg[2]" class='feed-img' :src="feedImg[2]" alt="">
               <label for="feed-img-edit3" class='feed-more-label'>
                 <i v-if="feedImg[0] && !feedImg[2]" class="fas fa-plus"></i>
-                <input multiple="multiple" type="file" id="feed-img-edit3" accept="image/*" @change="setFeedImg(3)">
+                <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit3" accept="image/*" @change="setFeedImg(3)">
               </label>
             </div>
           </div>
@@ -52,16 +55,20 @@
         </transition-group>
       </div>
       <div v-if="!isWriteBtn" class="btn write-btn">작성하기</div>
-      <div v-if="isWriteBtn" class="btn write-btn on-write-btn">작성하기</div>
+      <div v-if="isWriteBtn" class="btn write-btn on-write-btn" @click="sendBoardData">작성하기</div>
     </div>
   </div>
 </template>
 
 <script>
+
+import axios from 'axios';
 export default {
+  
   name: 'FeedWrite',
   data() {
     return {
+      photo :[],
       feedImg : [],
       isCancle1: false,
       isCancle2: false,
@@ -88,8 +95,8 @@ export default {
   },
   methods: {
     setFeedImg(num) {
-      // var frm = new FormData();
       var photoFile = document.getElementById(`feed-img-edit${num}`);
+      
       if (num === 1) {
         if (photoFile.files.length > 3) {
           alert("이미지는 최대 3개까지 업로드 가능합니다.");
@@ -103,6 +110,7 @@ export default {
           alert("이미지는 최대 3개까지 업로드 가능합니다.");
         }
       }
+
       for(var i=0; i<photoFile.files.length; i++) {
         if (num === 1 && i >= 3) {
           break;
@@ -112,10 +120,10 @@ export default {
           break;
         } else {
           this.feedImg.push(URL.createObjectURL(photoFile.files[i]))
-          // frm.append("feed-img-edit", photoFile.files[i]);
+          this.photo.push(photoFile.files[i]);
+
         }
       }
-      // console.log(this.feedImg)
     },
     onCancelBtn(num) {
       if (num === 1){
@@ -148,6 +156,19 @@ export default {
       } else {
         this.isWriteBtn = false
       }
+    },
+    sendBoardData(){
+      let dataforms = new FormData();
+      console.log(this.photo)
+      for (let index = 0; index < this.photo.length; index++) {
+        dataforms.append("imgdata",this.photo[index]);
+      }
+      dataforms.append("nickname",this.$cookies.get('auth-nickname'));
+      dataforms.append("content", this.writeContent);
+      dataforms.append("tags",this.writeHashList);
+     
+      axios.post("http://localhost:8080/api/board/upload",dataforms).then(
+        console.log('success'))
     }
   }
 }

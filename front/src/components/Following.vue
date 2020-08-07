@@ -8,97 +8,115 @@
         <div class="following-username">Username</div>
         <div class="following-btn-area">
           <div class="following-follow-btn">팔로우하기</div>
-          <biv class="following-dm-btn">DM보내기</biv>
+          <div class="following-dm-btn">DM보내기</div>
         </div>
       </div>
     </div>
     <div class="following-box">
-      <div class="following-icon-area"></div>
+      <div class="following-icon-area">
+        <img src="#" alt="#">
+      </div>
       <div class="following-text-area">
         <div class="following-username"></div>
         <div class="following-btn-area">
           <div class="following-follow-btn"></div>
-          <biv class="following-dm-btn"></biv>
+          <div class="following-dm-btn"></div>
         </div>
       </div>
     </div>
     <div class="following-box">
-      <div class="following-icon-area"></div>
+      <div class="following-icon-area">
+        <img src="#" alt="#">
+      </div>
       <div class="following-text-area">
         <div class="following-username"></div>
         <div class="following-btn-area">
           <div class="following-follow-btn"></div>
-          <biv class="following-dm-btn"></biv>
+          <div class="following-dm-btn"></div>
         </div>
       </div>
     </div>
     <div class="following-box">
-      <div class="following-icon-area"></div>
+      <div class="following-icon-area">
+        <img src="#" alt="#">
+      </div>
       <div class="following-text-area">
         <div class="following-username"></div>
         <div class="following-btn-area">
           <div class="following-follow-btn"></div>
-          <biv class="following-dm-btn"></biv>
+          <div class="following-dm-btn"></div>
         </div>
       </div>
     </div>
     <div class="following-box">
-      <div class="following-icon-area"></div>
+      <div class="following-icon-area">
+        <img src="#" alt="#">
+      </div>
       <div class="following-text-area">
         <div class="following-username"></div>
         <div class="following-btn-area">
           <div class="following-follow-btn"></div>
-          <biv class="following-dm-btn"></biv>
+          <div class="following-dm-btn"></div>
         </div>
       </div>
     </div>
     <div class="following-box">
-      <div class="following-icon-area"></div>
+      <div class="following-icon-area">
+        <img src="#" alt="#">
+      </div>
       <div class="following-text-area">
         <div class="following-username"></div>
         <div class="following-btn-area">
           <div class="following-follow-btn"></div>
-          <biv class="following-dm-btn"></biv>
+          <div class="following-dm-btn"></div>
         </div>
       </div>
     </div>
     <div class="following-box">
-      <div class="following-icon-area"></div>
+      <div class="following-icon-area">
+        <img src="#" alt="#">
+      </div>
       <div class="following-text-area">
         <div class="following-username"></div>
         <div class="following-btn-area">
           <div class="following-follow-btn"></div>
-          <biv class="following-dm-btn"></biv>
+          <div class="following-dm-btn"></div>
         </div>
       </div>
     </div>
     <div class="following-box">
-      <div class="following-icon-area"></div>
+      <div class="following-icon-area">
+        <img src="#" alt="#">
+      </div>
       <div class="following-text-area">
         <div class="following-username"></div>
         <div class="following-btn-area">
           <div class="following-follow-btn"></div>
-          <biv class="following-dm-btn"></biv>
+          <div class="following-dm-btn"></div>
         </div>
       </div>
     </div>
     <div class="following-box">
-      <div class="following-icon-area"></div>
+      <div class="following-icon-area">
+        <img src="#" alt="#">
+      </div>
       <div class="following-text-area">
         <div class="following-username"></div>
         <div class="following-btn-area">
           <div class="following-follow-btn"></div>
-          <biv class="following-dm-btn"></biv>
+          <div class="following-dm-btn"></div>
         </div>
       </div>
     </div>
     <div class="following-box">
-      <div class="following-icon-area"></div>
+      <div class="following-icon-area">
+        <img src="#" alt="#">
+      </div>
       <div class="following-text-area">
         <div class="following-username"></div>
         <div class="following-btn-area">
           <div class="following-follow-btn"></div>
-          <biv class="following-dm-btn"></biv>
+          <div class="following-dm-btn"></div>
         </div>
       </div>
     </div>
@@ -107,7 +125,7 @@
 
 <script>
 export default {
-name: 'Following'
+  name: 'Following'
 }
 </script>
 
@@ -123,6 +141,7 @@ name: 'Following'
   border-bottom: 1px solid red;
   padding-top: 13vw;
   position: relative;
+  margin: 2vh 0;
 }
 @media (min-width: 1200px) {
   .following-container .following-box {
