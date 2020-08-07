@@ -52,6 +52,7 @@ export default {
     }
   },
   mounted(){
+    this.defaultDark()
     let ref=this;
     axios.get('http://localhost:8080/api/comment',{
       params:{
@@ -75,9 +76,7 @@ export default {
       this.defaultDark()
     }
   },
-  mounted() {
-    this.defaultDark()
-  },
+
   methods: {
     defaultDark() {
       const Dark = this.$cookies.get('dark')

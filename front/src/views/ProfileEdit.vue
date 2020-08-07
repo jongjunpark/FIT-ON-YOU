@@ -89,7 +89,7 @@ export default {
     },
   },
   mounted(){
-
+    this.defaultDark()
     let ref=this;
     let data = this.$cookies.get('auth-nickname');
     let uri = data;
@@ -114,9 +114,7 @@ export default {
   computed: {
     ...mapState(['isLoggedIn', 'user', 'flag'])
   },
-  mounted() {
-    this.defaultDark()
-  },
+
   methods: {
     ...mapMutations(['setUserIntro','setUserNick','setToken']),
     ...mapActions(['sendUserInfo']),
