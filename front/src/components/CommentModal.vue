@@ -54,7 +54,7 @@ export default {
   mounted(){
     this.defaultDark()
     let ref=this;
-    axios.get('http://localhost:8080/api/comment',{
+    axios.get('http://i3b304.p.ssafy.io:8080/api/comment',{
       params:{
         articleNo:this.modalArticleNo,
       }
@@ -154,7 +154,7 @@ export default {
       frm.append("content", this.comment_content);
       frm.append("articleUser",this.modalArticleUser);
 
-      axios.post('http://localhost:8080/api/comment',frm
+      axios.post('http://i3b304.p.ssafy.io:8080/api/comment',frm
       )
       .then((data)=>{
         let tmp={

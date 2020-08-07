@@ -21,8 +21,8 @@
     
     <CommentModal v-if="showModal" @close="showModal= false" :modalArticleNo="modalArticleNo" :modalArticleUser="modalArticleUser"/>
 
-    <div class='wrap feed-wrap' v-for="feed in mainfeed" :key="feed.articleUser">
-      <div class='wrap-container'>
+    <div class='wrap feed-wrap'>
+      <div class='wrap-container' v-for="feed in mainfeed" :key="feed.articleUser">
         <header class="feed-user-data">
           <div class="feed-user-profile" @click="goUserProfile(feed.articleUser)">
             <img :src="feed.userProfile">
@@ -150,10 +150,8 @@ export default {
       this.modal = true
     },
     clickComment(articleNo,articleUser) {
-      console.log(articleUser,1)
       this.modalArticleNo=articleNo;
       this.modalArticleUser=articleUser;
-      console.log(articleNo,12312);
       this.showModal = true
     },
     clickBookMark() {
@@ -192,10 +190,10 @@ export default {
         NAVLOGO.classList.add('nav-logo-dark')
         INFLUNAVBTN.classList.add('nav-influ-btn-dark')
         INFLUNAV.classList.add('nav-influ-dark')
-        for (var i=0; i<INPUT.length ; i++) {
+        for (let i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.add('input-dark')
         }
-      } else {
+      } else if(Dark ==='on' ) {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
         NAV.classList.remove('nav-dark')
@@ -203,7 +201,7 @@ export default {
         NAVLOGO.classList.remove('nav-logo-dark')
         INFLUNAVBTN.classList.remove('nav-influ-btn-dark')
         INFLUNAV.classList.remove('nav-influ-dark')
-        for (var j=0; j<INPUT.length ; j++) {
+        for (let j=0; j<INPUT.length ; j++) {
           INPUT[j].classList.remove('input-dark')
         }
       }
@@ -223,7 +221,7 @@ export default {
     
     formData.append('nickname',res);
 
-    axios.post("http://localhost:8080/api/board/newsfeed",formData).then((data)=>{
+    axios.post("http://i3b304.p.ssafy.io:8080/api/board/newsfeed",formData).then((data)=>{
       console.log("success")
       console.log(data)
       this.feedlist=data.data;
@@ -241,14 +239,14 @@ export default {
 
         follow.append('follow',el.articleUser);
 
-        axios.post("http://localhost:8080/api/board/profileimg",follow).then((proff)=>{
+        axios.post("http://i3b304.p.ssafy.io:8080/api/board/profileimg",follow).then((proff)=>{
           feeddata.userProfile=proff.data.profile_img;
         });
 
         const articleNo = new FormData();
         articleNo.append('articleNo',el.articleNo);
 
-        axios.post("http://localhost:8080/api/board/images",articleNo).then((img)=>{
+        axios.post("http://i3b304.p.ssafy.io:8080/api/board/images",articleNo).then((img)=>{
           const imgs = img.data;
           const imglist = [];
           for (let i = 0; i < imgs.length; i++) {
@@ -270,7 +268,7 @@ export default {
         }
         
       });
-        axios.post("http://localhost:8080/api/board/tags",articleNo).then((tag)=>{
+        axios.post("http://i3b304.p.ssafy.io:8080/api/board/tags",articleNo).then((tag)=>{
         const tags = tag.data;
         const taglist = [];
         for (let i = 0; i < tags.length; i++) {
@@ -284,7 +282,7 @@ export default {
   }
   });
   console.log(this.mainfeed)
-  axios.post("http://localhost:8080/api/board/influencer").then((data)=>{
+  axios.post("http://i3b304.p.ssafy.io:8080/api/board/influencer").then((data)=>{
       this.influencer=data.data;
       console.log(this.influencer)
     });

@@ -249,7 +249,7 @@ export default {
       dataforms.append("content", this.writeContent);
       dataforms.append("tags",this.writeHashList);
      
-      axios.post("http://localhost:8080/api/board/upload",dataforms).then(
+      axios.post("http://i3b304.p.ssafy.io:8080/api/board/upload",dataforms).then(
         console.log('success'))
     }
   }
