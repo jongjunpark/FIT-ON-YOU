@@ -40,12 +40,12 @@
           </VueSlickCarousel>
           <div class="feed-btn-box">
             <div class='feed-btn-left'>
-              <i class="fas fa-heart"></i>
+              <i class="fas fa-heart" @click="clickLike(feed.articleNo, false, $event)"></i>
               <i :id="'show-modal'+ feed.articleNo" @click="clickComment(feed.articleNo,feed.articleUser)" class="fas fa-comment-alt"></i>
 
             </div>
             <div class='feed-btn-right'>
-              <i @click="clickBookMark" class="fas fa-bookmark"></i>
+              <i @click="clickBookMark(feed.articleNo)" class="fas fa-bookmark"></i>
             </div>
           </div>
           <header class='feed-content-head'>{{feed.content}}</header>
@@ -95,6 +95,8 @@ export default {
       mainfeed:[],
       influencer:[],
       feedlist:[],
+      likesState:[],
+      bookmarkState:[],
       settings: {
         "dots": false,
         "arrows": true,
@@ -146,16 +148,34 @@ export default {
       selectBar.classList.remove('go-third-menu')
     },
   
-    clickLike() {
-      this.modal = true
+    clickLike(articleNo,flag,e) {
+      if(flag){
+        e.target.classList.remove('heart');
+      }
+      else{
+        e.target.classList.add('heart');
+        this.modal = true
+        axios.post('http://localhost:8080/api/board/likes',{
+          articleNo:articleNo,
+          nickname:this.user.nickname
+        })
+        .then(console.log("좋아요"))
+        .catch()
+      }
     },
     clickComment(articleNo,articleUser) {
       this.modalArticleNo=articleNo;
       this.modalArticleUser=articleUser;
       this.showModal = true
     },
-    clickBookMark() {
-
+    clickBookMark(articleNo) {
+      alert("북마크 추가 됨");
+      axios.post('http://localhost:8080/api/board/bookmark',{
+        bookedArticle:articleNo,
+        bookUser:this.user.nickname
+      })
+      .then(console.log("북마크 추가"))
+      .catch()
     },
     setInfluNav() {
       this.isInfluNav = !this.isInfluNav
@@ -221,7 +241,7 @@ export default {
     
     formData.append('nickname',res);
 
-    axios.post("http://i3b304.p.ssafy.io:8080/api/board/newsfeed",formData).then((data)=>{
+    axios.post("http://localhost:8080/api/board/newsfeed",formData).then((data)=>{
       console.log("success")
       console.log(data)
       this.feedlist=data.data;
@@ -239,14 +259,14 @@ export default {
 
         follow.append('follow',el.articleUser);
 
-        axios.post("http://i3b304.p.ssafy.io:8080/api/board/profileimg",follow).then((proff)=>{
+        axios.post("http://localhost:8080/api/board/profileimg",follow).then((proff)=>{
           feeddata.userProfile=proff.data.profile_img;
         });
 
         const articleNo = new FormData();
         articleNo.append('articleNo',el.articleNo);
 
-        axios.post("http://i3b304.p.ssafy.io:8080/api/board/images",articleNo).then((img)=>{
+        axios.post("http://localhost:8080/api/board/images",articleNo).then((img)=>{
           const imgs = img.data;
           const imglist = [];
           for (let i = 0; i < imgs.length; i++) {
@@ -268,7 +288,7 @@ export default {
         }
         
       });
-        axios.post("http://i3b304.p.ssafy.io:8080/api/board/tags",articleNo).then((tag)=>{
+        axios.post("http://localhost:8080/api/board/tags",articleNo).then((tag)=>{
         const tags = tag.data;
         const taglist = [];
         for (let i = 0; i < tags.length; i++) {
@@ -282,7 +302,7 @@ export default {
   }
   });
   console.log(this.mainfeed)
-  axios.post("http://i3b304.p.ssafy.io:8080/api/board/influencer").then((data)=>{
+  axios.post("http://localhost:8080/api/board/influencer").then((data)=>{
       this.influencer=data.data;
       console.log(this.influencer)
     });
@@ -523,6 +543,10 @@ export default {
 
 .nav-influ-dark {
   background-color: rgb(77, 76, 76);
+}
+
+.heart{
+  color:crimson;
 }
 </style>
 

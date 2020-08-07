@@ -12,15 +12,15 @@
         </div>
         <div class="follow">
           <h2>팔로우</h2>
-          <h3>123,456</h3>
+          <h3>{{followingCnt}}</h3>
         </div>
         <div class="follower">
           <h2>팔로워</h2>
-          <h3>123,456</h3>
+          <h3>{{followedCnt}}</h3>
         </div>
-      <p class="other-nickname">UserName</p>
+      <p class="other-nickname">{{nickname}}</p>
       <div class="other-content">
-        <h3>자기소개 입니다.</h3>
+        <h3>{{selfintro}}</h3>
       </div>
 			<div class="parent-other">
 				<div class="other-user-follow">
@@ -54,12 +54,19 @@
 import "../components/css/otheruser.css"
 import "../components/css/profileedit.css"
 import { mapState } from 'vuex'
+import axios from 'axios'
 
 export default {
  name: 'OtherUser',
  data() {
 	return {
-		profileImg: '',
+    profileImg:false,
+    nickname:'',
+    selfintro:'자기소개 입니다.',
+    followingCnt:'',
+    followedCnt:'',
+
+
 	}
  },
  computed: {
@@ -72,6 +79,26 @@ export default {
   },
  mounted() {
    this.defaultDark()
+   let ref=this;
+   let uNick=this.$route.params.nickname;
+   axios.get('http://localhost:8080/api/mypage/otheruser',{
+     params:{
+      nickname:uNick,
+    }
+   }).then((data)=>{
+     console.log(data);
+     ref.nickname=data.data.userinfo.nickname;
+     ref.profileImg=data.data.userinfo.profile_img;
+     if(data.data.userinfo.selfointroduce!=null){
+       ref.selfintro=data.data.userinfo.selfointroduce
+     }
+     ref.followedCnt=data.data.followedCnt
+     ref.followingCnt=data.data.followingCnt
+    
+   })
+   .catch(
+   )
+
  },
  methods: {
    defaultDark() {

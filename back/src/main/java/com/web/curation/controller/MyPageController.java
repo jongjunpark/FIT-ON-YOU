@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.web.curation.dao.BoardDao;
 import com.web.curation.dao.FollowDao;
 import com.web.curation.dao.ImageDao;
+import com.web.curation.dao.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.ImageStore;
+import com.web.curation.model.User;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -39,6 +41,8 @@ public class MyPageController {
 	
 	@Autowired
 	private FollowDao followDao;
+	@Autowired
+	private UserDao userDao;
 	
 
 	@ApiOperation(value="마이페이지 누를 시 팔로우 숫자")
@@ -58,6 +62,32 @@ public class MyPageController {
 		
 		resultMap.put("followedCnt",followedCnt);
 		resultMap.put("followingCnt",followingCnt);
+		
+		return resultMap;
+		
+	}
+	
+	@ApiOperation(value="다른 유저 프로필 페이지")
+	@GetMapping("/otheruser")
+	public Map<String,Object> getUserinfo(@RequestParam String nickname){
+		Map<String,Object> resultMap=new HashMap<>();
+		final BasicResponse result = new BasicResponse();
+		
+		result.data="1";
+		result.status=true;
+		resultMap.put("result",result);
+		//나를 팔로우 한사람
+		Long followedCnt = followDao.countByFolloweduser(nickname);
+		
+		//내가 팔로우 한사람
+		Long followingCnt= followDao.countByFollowinguser(nickname);
+		
+		resultMap.put("followedCnt",followedCnt);
+		resultMap.put("followingCnt",followingCnt);
+		
+		User user=userDao.findUserByNickname(nickname).get();
+		user.setPassword("");
+		resultMap.put("userinfo",user);
 		
 		return resultMap;
 		

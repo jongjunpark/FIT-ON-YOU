@@ -256,7 +256,6 @@ public class BoardController {
 		final BasicResponse result = new BasicResponse();
 		if (likesDao.deleteByArticleNoAndNickname(likes.getArticleNo(), likes.getNickname()) == 1) {
 			// 좋아요 취소시 알람에서 삭제
-			System.out.println(likes.getArticleNo() + " " + likes.getNickname());
 			try {
 				alarmDao.deleteLikesAlarm("2", likes.getArticleNo(), likes.getNickname());
 				result.status = true;
@@ -284,7 +283,6 @@ public class BoardController {
 	@PostMapping("/profileimg")
 	public Object getUserProfile(@RequestParam String follow) {
 		String nickname = follow;
-		System.out.println(nickname);
 		User user = userDao.findUserByNickname(nickname).get();
 		return user;
 	}
@@ -310,7 +308,7 @@ public class BoardController {
 	}
 	@PostMapping(value="/upload")
 	public void addArticle(@RequestParam("imgdata") MultipartFile[] imgs, @RequestParam("nickname") String nickname, @RequestParam("content") String content, @RequestParam("tags") String[] tags) {
-		String path ="C:/Users/multicampus/Documents/images/profile/";
+		String path ="C:\\ssafy\\pjt1\\s03p13b304\\front\\public\\images\\board\\";
 		UUID uuid = UUID.randomUUID();
 		
 		String[] names = new String[3];
@@ -339,7 +337,7 @@ public class BoardController {
 			File file = new File(path + names[idx]);
 			try {
 				multipartFile.transferTo(file);
-				String storePath="../images/board/"+names[0];
+				String storePath="../images/board/"+names[idx];
 				img.setImageUrl(storePath);
 				System.out.println(storePath);
 				imageDao.save(img);

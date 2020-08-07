@@ -72,7 +72,7 @@ public class CommentController {
 	// 글 작성자도 같이 전달 받기
 	@PostMapping
 	public Object addComment(@RequestParam String writer, @RequestParam int articleNo, @RequestParam String content, @RequestParam String articleUser ) {
-		System.out.println(articleUser+" "+writer);
+		System.out.println(articleNo + " "+ articleUser+" "+writer+ " "+content);
 		
 		final BasicResponse result = new BasicResponse();
 		Map<String ,Object> resultMap=new HashMap<>();

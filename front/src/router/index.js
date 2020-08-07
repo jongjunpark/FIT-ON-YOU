@@ -201,7 +201,7 @@ Vue.use(VueRouter)
     }
   }, 
   {
-    path: '/otheruser',
+    path: '/otheruser/:nickname',
     name: 'OtherUser',
     component: OtherUser,
     beforeEnter(to, from, next) {
