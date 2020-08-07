@@ -211,7 +211,7 @@ export default {
   },
   mounted() {
     this.onNewsFeed()
-    
+    this.defaultDark()
     let nickdata = this.$cookies.get('auth-nickname')
     let uri = nickdata;
     let uri_enc = encodeURIComponent(uri);
