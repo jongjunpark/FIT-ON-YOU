@@ -256,7 +256,7 @@ export default {
 }
 
 .search-bar .fas:hover{
-  color: #5AAEFF;
+  color: #5AAEFF !important;
 }
 
 .search-bar .fa-user:hover {
@@ -270,7 +270,7 @@ export default {
 }
 
 .search-bar .fa-undo-alt:hover {
-  color: tomato;
+  color: tomato !important;
   transform: rotate(480deg);
   transition: ease 0.8s;
 }
@@ -378,7 +378,7 @@ export default {
 }
 
 .hash-item-close-btn .fa-times:hover{
-  color: #fc0303;
+  color: #fc0303 !important;
 }
 
 
@@ -397,6 +397,7 @@ export default {
 
 .search-icon-black {
   color: #ebebeb !important;
+  
 }
 
 .search-icon-black:hover {

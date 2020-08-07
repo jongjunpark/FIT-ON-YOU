@@ -48,10 +48,19 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'HashSearch',
   mounted() {
     this.defaultDark()
+  },
+  computed: {
+    ...mapState(['flag'])
+  },
+  watch: {
+    flag() {
+      this.defaultDark()
+    }
   },
   methods: {
     defaultDark() {

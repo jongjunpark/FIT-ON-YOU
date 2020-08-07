@@ -35,7 +35,6 @@ export default {
       emailVaild: false,
       okBtn: false,
       errMsg: false,
-      flag: false,
     }
   },
   watch: {

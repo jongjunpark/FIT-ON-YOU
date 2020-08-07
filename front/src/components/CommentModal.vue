@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import axios from 'axios'
 export default {
   name: 'CommentModal',
@@ -47,6 +48,7 @@ export default {
     }
   },
   mounted(){
+    this.defaultDark()
     let ref=this;
     axios.get('http://localhost:8080/api/comment',{
       params:{
@@ -62,6 +64,9 @@ export default {
     .catch()
 
   },
+  computed: {
+    ...mapState(['flag'])
+  },
   watch: {
     comment_content() {
       this.checkCommentInput();
@@ -69,9 +74,6 @@ export default {
     flag() {
       this.defaultDark()
     }
-  },
-  mounted() {
-    this.defaultDark()
   },
   methods: {
     checkCommentInput() {
@@ -113,7 +115,40 @@ export default {
       .catch(()=>{
         console.log("fail");
       })
-    }
+    },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const INPUT = document.querySelectorAll('input')
+      const COMMENT_HEAD = document.querySelector('.modal-head')
+      const ARROW_ICON = document.querySelector('.fa-arrow-left')
+      const COMMENT_BODY = document.querySelector('.modal-container')
+      const COMMENT_FOOTER = document.querySelector('.modal-footer')
+
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        COMMENT_HEAD.classList.add('comment-head-dark')
+        ARROW_ICON.classList.add('comment-back-dark')
+        COMMENT_BODY.classList.add('comment-head-dark')
+        COMMENT_FOOTER.classList.add('comment-head-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('comment-input-dark')
+        }
+      } else {
+        HTML.classList.remove('black')
+        COMMENT_HEAD.classList.remove('comment-head-dark')
+        ARROW_ICON.classList.remove('comment-back-dark')
+        COMMENT_BODY.classList.remove('comment-head-dark')
+        COMMENT_FOOTER.classList.remove('comment-head-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('comment-input-dark')
+        }
+      }
+    },
   }
 }
 </script>

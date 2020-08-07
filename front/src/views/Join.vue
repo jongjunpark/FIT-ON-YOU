@@ -24,7 +24,7 @@
         </select>
         <p v-if="mailErrMsg" class='err-msg join-err-msg'>유효하지 않은 이메일 형식입니다.</p>
         <p v-if="mailSucMsg && finalMail" class='err-msg join-err-msg'>이미 사용중인 이메일입니다.</p>
-        <p v-if="mailSucMsg && !finalMail && flag" class='suc-msg join-suc-msg'>사용가능합니다.</p>
+        <p v-if="mailSucMsg && !finalMail && joinFlag" class='suc-msg join-suc-msg'>사용가능합니다.</p>
       </div>
       <div class="join-input-area">
         <label for="">비밀번호</label>
@@ -71,7 +71,7 @@
           <div v-if='!input.profileImg'>
             <img class='profile-img' :src="require(`../assets/images/${defaultImg}`)" alt="">
           </div>
-          <div @mouseover="onCancleBtn" @mouseout="offCancleBtn" v-if='input.profileImg'>
+          <div @mouseover="onCancleBtn" @mouseout="offCancleBtn" v-show='input.profileImg'>
             <img @click='setDefaultImg' v-show='isCancle' class='cancle-img' src="../assets/images/X.png" alt="">
             <img class='profile-img select-img' :src="input.profileImg" alt="">
           </div>
@@ -142,7 +142,7 @@ export default {
       isMale: false,
       isCancle: false,
       defaultImg: "default-user.png",
-      flag: false,
+      joinFlag: false,
     }
   },
   created() {
@@ -531,10 +531,10 @@ export default {
             }).then(data => {
               if (data.data.data == "exist") {
                 this.finalMail = true;
-                this.flag = false;
+                this.joinFlag = false;
               } else {
                 this.finalMail = false;
-                this.flag = true;
+                this.joinFlag = true;
                 
               }
             })

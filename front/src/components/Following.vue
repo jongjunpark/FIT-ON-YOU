@@ -124,10 +124,19 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'Following',
   mounted() {
     this.defaultDark()
+  },
+  computed: {
+    ...mapState(['flag'])
+  },
+  watch: {
+    flag() {
+      this.defaultDark()
+    }
   },
   methods: {
     defaultDark() {
