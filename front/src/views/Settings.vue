@@ -80,7 +80,7 @@ export default {
       let nickname=this.user.nickname;
       console.log(nickname);
       formData.append('nickname',nickname);
-      axios.delete('http://localhost:8080/api/account/delete',{
+      axios.delete('http://i3b304.p.ssafy.io:8080/api/account/delete',{
         data:formData,
         
       })
