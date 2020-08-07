@@ -35,9 +35,9 @@
           <h4>{{followedCnt}}</h4>
 
         </div>
-      <p v-if="isChange && isChange2" class="nickname" @click="changeNickName">{{ user.nickname }} <img src="../assets/images/edit.png" alt="" class="edit-img"></p>
-      <div v-if="isChange2 && isChange" class="edit-content" @click="changeContent">
-        <h3>{{user.selfintroduce}}<img src="../assets/images/edit.png" alt="" class="edit-img"></h3>
+      <p v-show="isChange && isChange2" class="nickname" @click="changeNickName">{{ user.nickname }} <img src="../assets/images/edit.png" alt="" class="profile-edit-img"></p>
+      <div v-show="isChange2 && isChange" class="edit-content" @click="changeContent">
+        <h3>{{user.selfintroduce}}<img src="../assets/images/edit.png" alt="" class="profile-edit-img"></h3>
       </div>
       <div class="user-change-parent">
         <div v-if="isChange && isChange2" class="user-change" @click="goSettings">
@@ -84,7 +84,7 @@ export default {
     }
   },
   mounted(){
-
+    this.defaultDark()
     let ref=this;
     let data = this.$cookies.get('auth-nickname');
     let uri = data;
@@ -108,9 +108,6 @@ export default {
   },
   computed: {
     ...mapState(['isLoggedIn', 'user', 'flag'])
-  },
-  mounted() {
-    this.defaultDark()
   },
   methods: {
     ...mapMutations(['setUserIntro','setUserNick','setToken']),
@@ -244,14 +241,14 @@ export default {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.wrap')
-      const NAV = document.querySelector('#nav')
-      const NAVBASE = document.querySelector('.nav-base')
-      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
       const INPUT = document.querySelectorAll('input')
-      const changeinput = document.querySelectorAll('nick-cancel')
-      const changecontent = document.querySelectorAll('content-cancel')
+      const PTAG = document.querySelectorAll('p')
+      const H3TAG = document.querySelectorAll('h3')
+      const H4TAG = document.querySelectorAll('h4')
+      const changeinput = document.querySelectorAll('.nick-cancel')
+      const changecontent = document.querySelectorAll('.content-cancel')
 
-      const EDITPROFILEIMG = document.querySelectorAll('.edit-img')
+      const EDITPROFILEIMG = document.querySelectorAll('.profile-edit-img')
       
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -260,16 +257,22 @@ export default {
       if (Dark === 'off') {
         HTML.classList.add('black')
         wrap.classList.add('wrap-dark')
-        NAV.classList.add('nav-dark')
-        NAVBASE.classList.add('nav-dark')
-        NAVLOGO.classList.add('nav-logo-dark')
-        this.checked = true
-        for (var i=0; i<INPUT.length ; i++) {
+        
+        for (let i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.add('profile-dark-content')
+        }
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.add('font-dark')
+        }
+        for (let i=0; i<H3TAG.length ; i++) {
+          H3TAG[i].classList.add('font-dark')
+        }
+        for (let i=0; i<H4TAG.length ; i++) {
+          H4TAG[i].classList.add('font-dark')
         }
 
         for (let i=0; i<EDITPROFILEIMG.length ; i++) {
-          EDITPROFILEIMG[i].classList.add('edit-img-dark')
+          EDITPROFILEIMG[i].classList.add('profile-edit-img-dark')
         }
         for (let i=0; i<changeinput.length ; i++) {
           changeinput[i].classList.add('img-change-dark')
@@ -281,16 +284,22 @@ export default {
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
-        NAV.classList.remove('nav-dark')
-        NAVBASE.classList.remove('nav-dark')
-        NAVLOGO.classList.remove('nav-logo-dark')
-        this.checked = false
-        for (var j=0; j<INPUT.length ; j++) {
-          INPUT[j].classList.remove('profile-dark-content')
+
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('profile-dark-content')
+        }
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<H3TAG.length ; i++) {
+          H3TAG[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<H4TAG.length ; i++) {
+          H4TAG[i].classList.remove('font-dark')
         }
 
         for (let i=0; i<EDITPROFILEIMG.length ; i++) {
-          EDITPROFILEIMG[i].classList.remove('edit-img-dark')
+          EDITPROFILEIMG[i].classList.remove('profile-edit-img-dark')
         }
         for (let i=0; i<changeinput.length ; i++) {
           changeinput[i].classList.remove('img-change-dark')

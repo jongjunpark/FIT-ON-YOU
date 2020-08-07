@@ -56,14 +56,15 @@
   left: 50%;
   transform: translate(-50%, -50%);
   cursor: pointer;
+  z-index: 20;
 }
 
 .join-profile-img .select-img:hover {
   opacity: 0.4;
 }
 
-.join-profile-img .cancle-img:hover{
-  border-radius: 50%;
+.join-profile-img .cancle-img:hover ~ .select-img{
+  opacity: 0.4;
 }
 
 
@@ -205,4 +206,8 @@
 .join-profile-back-btn:hover {
   color: #5AAEFF !important;
   cursor: pointer;
+}
+
+.join-cancle-img-dark {
+  color: #ebebeb !important;
 }

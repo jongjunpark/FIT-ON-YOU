@@ -256,29 +256,42 @@ export default {
     },
     defaultDark() {
       const Dark = this.$cookies.get('dark')
-      const HTML = document.querySelector('html')
-      const wrap = document.querySelector('.wrap')
-      const NAV = document.querySelector('#nav')
-      const NAVBASE = document.querySelector('.nav-base')
-      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+      const H1TAG = document.querySelectorAll('h1')
+      const PTAG = document.querySelectorAll('p')
+      const LABEL = document.querySelectorAll('label')
+      const SPAN = document.querySelectorAll('span')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
       }
 
       if (Dark === 'off') {
-        HTML.classList.add('black')
-        wrap.classList.add('wrap-dark')
-        NAV.classList.add('nav-dark')
-        NAVBASE.classList.add('nav-dark')
-        NAVLOGO.classList.add('nav-logo-dark')
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.add('font-dark')
+        }
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.add('font-dark')
+        }
+        for (let i=0; i<LABEL.length ; i++) {
+          LABEL[i].classList.add('font-dark')
+        }
+        for (let i=0; i<SPAN.length ; i++) {
+          SPAN[i].classList.add('font-dark')
+        }
         this.checked = true
       } else {
-        HTML.classList.remove('black')
-        wrap.classList.remove('wrap-dark')
-        NAV.classList.remove('nav-dark')
-        NAVBASE.classList.remove('nav-dark')
-        NAVLOGO.classList.remove('nav-logo-dark')
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<LABEL.length ; i++) {
+          LABEL[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<SPAN.length ; i++) {
+          SPAN[i].classList.remove('font-dark')
+        }
         this.checked = false
       }
     },

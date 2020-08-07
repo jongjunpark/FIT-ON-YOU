@@ -72,6 +72,30 @@ export default {
       })
       .catch()
     },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const H1TAG = document.querySelectorAll('h1')
+
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.add('font-dark')
+        }
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.remove('font-dark')
+        }
+      }
+    },
   },
 }
 </script>

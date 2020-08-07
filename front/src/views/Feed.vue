@@ -21,8 +21,8 @@
     
     <CommentModal v-if="showModal" @close="showModal= false" :modalArticleNo="modalArticleNo" :modalArticleUser="modalArticleUser"/>
 
-    <div class='wrap feed-wrap' v-for="feed in mainfeed" :key="feed.articleUser">
-      <div class='wrap-container'>
+    <div class='wrap feed-wrap'>
+      <div class='wrap-container' v-for="feed in mainfeed" :key="feed.articleUser">
         <header class="feed-user-data">
           <div class="feed-user-profile" @click="goUserProfile(feed.articleUser)">
             <img :src="feed.userProfile">
@@ -173,10 +173,6 @@ export default {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.wrap')
-      const NAV = document.querySelector('#nav')
-      const NAVBASE = document.querySelector('.nav-base')
-      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
-      const INPUT = document.querySelectorAll('input')
       const INFLUNAVBTN = document.querySelector('.open-influ-nav')
       const INFLUNAV = document.querySelector('.influ-nav')
 
@@ -187,25 +183,13 @@ export default {
       if (Dark === 'off') {
         HTML.classList.add('black')
         wrap.classList.add('wrap-dark')
-        NAV.classList.add('nav-dark')
-        NAVBASE.classList.add('nav-dark')
-        NAVLOGO.classList.add('nav-logo-dark')
         INFLUNAVBTN.classList.add('nav-influ-btn-dark')
         INFLUNAV.classList.add('nav-influ-dark')
-        for (var i=0; i<INPUT.length ; i++) {
-          INPUT[i].classList.add('input-dark')
-        }
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
-        NAV.classList.remove('nav-dark')
-        NAVBASE.classList.remove('nav-dark')
-        NAVLOGO.classList.remove('nav-logo-dark')
         INFLUNAVBTN.classList.remove('nav-influ-btn-dark')
         INFLUNAV.classList.remove('nav-influ-dark')
-        for (var j=0; j<INPUT.length ; j++) {
-          INPUT[j].classList.remove('input-dark')
-        }
       }
     },
   },

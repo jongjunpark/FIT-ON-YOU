@@ -59,14 +59,9 @@ export default {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.wrap')
-      const NAV = document.querySelector('#nav')
-      const NAVBASE = document.querySelector('.nav-base')
-      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
-      const INPUT = document.querySelectorAll('input')
-      
       const READ = document.querySelectorAll('.alarm-container-message-read')
+      const H4TAG = document.querySelectorAll('.alarm-container-message > h4')
       
-
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
       }
@@ -74,31 +69,21 @@ export default {
       if (Dark === 'off') {
         HTML.classList.add('black')
         wrap.classList.add('wrap-dark')
-        NAV.classList.add('nav-dark')
-        NAVBASE.classList.add('nav-dark')
-        NAVLOGO.classList.add('nav-logo-dark')
-        this.checked = true
-        for (var i=0; i<INPUT.length ; i++) {
-          INPUT[i].classList.add('input-dark')
-        }
-        
         for (let i=0; i<READ.length ; i++) {
           READ[i].classList.add('alarm-container-message-read-dark')
+        }
+        for (let i=0; i<H4TAG.length ; i++) {
+          H4TAG[i].classList.add('font-dark')
         }
 
       } else {
         HTML.classList.remove('black')
-        wrap.classList.remove('wrap-dark')
-        NAV.classList.remove('nav-dark')
-        NAVBASE.classList.remove('nav-dark')
-        NAVLOGO.classList.remove('nav-logo-dark')
-        this.checked = false
-        for (var j=0; j<INPUT.length ; j++) {
-          INPUT[j].classList.remove('input-dark')
-        }
-        
+        wrap.classList.remove('wrap-dark')      
         for (let i=0; i<READ.length ; i++) {
           READ[i].classList.remove('alarm-container-message-read-dark')
+        }
+        for (let i=0; i<H4TAG.length ; i++) {
+          H4TAG[i].classList.remove('font-dark')
         }
       }
     },

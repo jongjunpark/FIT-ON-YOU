@@ -144,3 +144,7 @@
 .user-me-content-dark {
   color: #202020;
 }
+
+.message-user-icon-dark {
+  border: 1.0px solid   #ebebeb !important;
+}

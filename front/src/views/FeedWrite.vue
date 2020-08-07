@@ -61,7 +61,7 @@
 </template>
 
 <script>
-
+import { mapState } from 'vuex';
 import axios from 'axios';
 export default {
   
@@ -178,7 +178,77 @@ export default {
      
       axios.post("http://localhost:8080/api/board/upload",dataforms).then(
         console.log('success'))
-    }
+    },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const PTAG = document.querySelectorAll('p')
+      const HANGER = document.querySelector('.write-hanger-img')
+      const CLOTH_HANGER = document.querySelectorAll('.write-cloth-hanger-img')
+      const WRITE_PLUS = document.querySelectorAll('.write-plus')
+      const CANCLE_IMG = document.querySelectorAll('.cancle-img')
+      const INPUT = document.querySelectorAll('input')
+      const TEXTAREA = document.querySelectorAll('textarea')
+      const HASHTAG = document.querySelectorAll('.write-hash-item')
+
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        HANGER.classList.add('hanger-dark')
+        for (let i=0; i<CLOTH_HANGER.length; i++) {
+          CLOTH_HANGER[i].classList.add('hanger-dark')
+        }
+        for (let i=0; i<WRITE_PLUS.length; i++) {
+          WRITE_PLUS[i].classList.add('write-plus-dark')
+        }
+        for (let i=0; i<CANCLE_IMG.length; i++) {
+          CANCLE_IMG[i].classList.add('write-cancle-dark')
+        }
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.add('font-dark')
+        }
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.add('textarea-dark')
+        }
+        for (let i=0; i<HASHTAG.length ; i++) {
+          HASHTAG[i].classList.add('write-plus-dark')
+        }
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        HANGER.classList.remove('hanger-dark')
+        for (let i=0; i<CLOTH_HANGER.length; i++) {
+          CLOTH_HANGER[i].classList.remove('hanger-dark')
+        }
+        for (let i=0; i<WRITE_PLUS.length; i++) {
+          WRITE_PLUS[i].classList.remove('write-plus-dark')
+        }
+        for (let i=0; i<CANCLE_IMG.length; i++) {
+          CANCLE_IMG[i].classList.remove('write-cancle-dark')
+        }
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.remove('textarea-dark')
+        }
+        for (let i=0; i<HASHTAG.length ; i++) {
+          HASHTAG[i].classList.remove('write-plus-dark')
+        }
+      }
+    },
+
   }
 }
 </script>

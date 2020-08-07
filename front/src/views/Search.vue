@@ -3,10 +3,10 @@
     <div class="search-bar">
       <i v-if='isReturn' @click='setReturn' class="fas fa-undo-alt"></i>
       <transition name='fade' mode="out-in">
-        <i key=1 v-if='isHashSearch' @click='setHash' class="fas fa-hashtag"></i>
-        <i key=2 v-else class="fas fa-user"></i>
+        <i key=1 v-if='isHashSearch' :style='`color:${iconColor}`' @click='setHash' class="fas fa-hashtag"></i>
+        <i key=2 v-else class="fas fa-user" :style='`color:${iconColor}`'></i>
       </transition>
-      <i v-show='isUserSearch' @click='setUser' class="fas fa-user"></i>
+      <i v-show='isUserSearch' @click='setUser' class="fas fa-user search-user-icon"></i>
       <input @input="hashContent = $event.target.value" v-model='hashContent' 
         v-show='isHashInput' @keypress.enter='onHashResult' @keyup.188="addHash" type="text" class="search-input" placeholder=" , 를 통해 구분해주세요">
       <span v-show='isHashInput'>
@@ -104,6 +104,7 @@ export default {
       isDefault: true,
       isHashResult: false,
       isUserResult: false,
+      iconColor: '',
     }
   },
   watch: {
@@ -179,15 +180,10 @@ export default {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.wrap')
-      const NAV = document.querySelector('#nav')
-      const NAVBASE = document.querySelector('.nav-base')
-      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
       const INPUT = document.querySelectorAll('.search-input')
-      const TEXTAREA = document.querySelectorAll('textarea')
-      const HASHICON = document.querySelector('.fa-hashtag')
-      const USERICON = document.querySelector('.fa-user')
-      const SEARCH_ICON = document.querySelectorAll('.fa-sistrix')
 
+      const SEARCH_ICON = document.querySelectorAll('.fa-sistrix')
+      const USERICON = document.querySelector('.search-user-icon')
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
       }
@@ -195,36 +191,24 @@ export default {
       if (Dark === 'off') {
         HTML.classList.add('black')
         wrap.classList.add('wrap-dark')
-        NAV.classList.add('nav-dark')
-        NAVBASE.classList.add('nav-dark')
-        NAVLOGO.classList.add('nav-logo-dark')
-        HASHICON.classList.add('search-icon-black')
         USERICON.classList.add('search-icon-black')
+        this.iconColor = '#ebebeb'
         for (let i=0; i<INPUT.length ; i++) {
           SEARCH_ICON[i].classList.add('search-icon-black')
         }
         for (let i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.add('search-input-dark')
         }
-        for (let i=0; i<TEXTAREA.length ; i++) {
-          TEXTAREA[i].classList.add('textarea-dark')
-        }
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
-        NAV.classList.remove('nav-dark')
-        NAVBASE.classList.remove('nav-dark')
-        NAVLOGO.classList.remove('nav-logo-dark')
-        HASHICON.classList.remove('search-icon-black')
         USERICON.classList.remove('search-icon-black')
+        this.iconColor = 'black'
         for (let i=0; i<INPUT.length ; i++) {
           SEARCH_ICON[i].classList.remove('search-icon-black')
         }
         for (let i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.remove('search-input-dark')
-        }
-        for (let i=0; i<TEXTAREA.length ; i++) {
-          TEXTAREA[i].classList.remove('textarea-dark')
         }
       }
     },
@@ -295,7 +279,7 @@ export default {
 .search-input {
   border: none;
   border-bottom: 2px solid black;
-  background-color: #fff;
+  background-color: transparent !important;
   width: 50%;
 }
 
@@ -305,6 +289,11 @@ export default {
 
 .search-input::placeholder {
   font-size: 1vw;
+}
+@media (min-width: 1200px) {
+  .search-input::placeholder {
+    font-size: 15px;
+  }
 }
 
 .search-bar .inner-search-btn {
@@ -316,8 +305,6 @@ export default {
 .search-bar .inner-search-btn:hover {
   color: #5AAEFF;
 }
-
-
 
 .search-box {
   display: flex;
@@ -396,15 +383,16 @@ export default {
 
 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+  transition: opacity .2s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.fade-enter, .fade-leave-to {
   opacity: 0;
 }
 
 .search-input-dark {
-  background-color: transparent !important;
   border-bottom: 1px solid !important;
+  color: #ebebeb !important;
+  transition: 0.1s ease;
 }
 
 .search-icon-black {

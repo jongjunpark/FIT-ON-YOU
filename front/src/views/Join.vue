@@ -6,8 +6,8 @@
         <label for="">이메일</label>
         <input @focus="activeInput" @blur='deactiveInputEmail' v-model='input.email' type="text" id='email-join' placeholder="example">
         <span class='email-join-span'> @ </span>
-        <input @focus="activeInput" @blur='deactiveInputEmail' v-model='input.url' v-if='offSelect' type="text" id='email-join2' placeholder="url">
-        <span v-if='!offSelect' id='email-join2'>{{ input.url }}</span>
+        <input @focus="activeInput" @blur='deactiveInputEmail' v-model='input.url' v-show='offSelect' type="text" id='email-join2' placeholder="url">
+        <span v-show='!offSelect' id='email-join2'>{{ input.url }}</span>
         <span class='email-join-span'> |  </span>
         <select @focus="activeInput" @blur='deactiveInputEmail' v-model='select' name="job" id='email-combo'>
           <option >직접입력</option>
@@ -72,8 +72,8 @@
             <img class='profile-img' :src="require(`../assets/images/${defaultImg}`)" alt="">
           </div>
           <div @mouseover="onCancleBtn" @mouseout="offCancleBtn" v-if='input.profileImg'>
-            <img class='profile-img select-img' :src="input.profileImg" alt="">
             <img @click='setDefaultImg' v-show='isCancle' class='cancle-img' src="../assets/images/X.png" alt="">
+            <img class='profile-img select-img' :src="input.profileImg" alt="">
           </div>
           <label for='profile-img-edit' class="join-profile-img-edit">
             <input type="file" id="profile-img-edit" accept="image/*" @change="setProfileImg">
@@ -570,14 +570,16 @@ export default {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.wrap')
-      const NAV = document.querySelector('#nav')
-      const NAVBASE = document.querySelector('.nav-base')
-      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+      const H1TAG = document.querySelectorAll('h1')
+      const LABEL = document.querySelectorAll('label')
+      const SPAN = document.querySelectorAll('span')
+      const PTAG = document.querySelectorAll('p')
       const INPUT = document.querySelectorAll('input')
       const TEXTAREA = document.querySelectorAll('textarea')
 
       const BACKBTN = document.querySelector('.join-profile-back-btn')
       const SKIP = document.querySelector('.join-skip-btn')
+      const CANCLEIMG = document.querySelector('.cancle-img')
       
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -586,36 +588,54 @@ export default {
       if (Dark === 'off') {
         HTML.classList.add('black')
         wrap.classList.add('wrap-dark')
-        NAV.classList.add('nav-dark')
-        NAVBASE.classList.add('nav-dark')
-        NAVLOGO.classList.add('nav-logo-dark')
-        this.checked = true
-        for (var i=0; i<INPUT.length ; i++) {
+        for (let i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.add('input-dark')
         }
         for (let i=0; i<TEXTAREA.length ; i++) {
           TEXTAREA[i].classList.add('textarea-dark')
         }
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.add('font-dark')
+        }
+        for (let i=0; i<LABEL.length ; i++) {
+          LABEL[i].classList.add('font-dark')
+        }
+        for (let i=0; i<SPAN.length ; i++) {
+          SPAN[i].classList.add('font-dark')
+        }
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.add('font-dark')
+        }
 
         BACKBTN.classList.add('join-profile-back-btn-dark')
         SKIP.classList.add('join-skip-btn-dark')
+        CANCLEIMG.classList.add('join-cancle-img-dark')
 
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
-        NAV.classList.remove('nav-dark')
-        NAVBASE.classList.remove('nav-dark')
-        NAVLOGO.classList.remove('nav-logo-dark')
-        this.checked = false
-        for (var j=0; j<INPUT.length ; j++) {
-          INPUT[j].classList.remove('input-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('input-dark')
         }
         for (let i=0; i<TEXTAREA.length ; i++) {
           TEXTAREA[i].classList.remove('textarea-dark')
         }
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<LABEL.length ; i++) {
+          LABEL[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<SPAN.length ; i++) {
+          SPAN[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.remove('font-dark')
+        }
         
         BACKBTN.classList.remove('join-profile-back-btn-dark')
         SKIP.classList.remove('join-skip-btn-dark')
+        CANCLEIMG.classList.remove('join-cancle-img-dark')
       }
     },
   }
