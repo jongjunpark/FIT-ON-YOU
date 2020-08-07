@@ -478,11 +478,9 @@ export default {
       if (photoFile.files[0]) {
 
         frm.append("profile-img-edit", photoFile.files[0]);
-        axios.post('http://localhost:8080/api/account/addProfileImg',frm,{
-          headers:{
-              'Content-Type': 'multipart/form-data'
-          }
-        }).then( () =>{
+        frm.append("nickname",this.nickname);
+        axios.post('http://localhost:8080/api/account/addProfileImg',frm,
+        ).then( () =>{
           console.log("1");
           this.$router.go('/feed')
           

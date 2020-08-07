@@ -9,51 +9,25 @@
           <div class='modal-category'>댓글</div>
         </div>
         <div class="modal-container">
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-            <div class="comment-article">
-              <div class="comment-article-head">
-                <div class="comment-username comment-text">Username</div>
-                <div class="comment-update-time comment-text">10시간 전</div>
+          <div class="" v-for="(comment,index) in commentList" :key="index">
+            <div class="comment-box">
+              <div class="comment-user-icon">
+                <img class="comment-user-icon" :src="profileList[index]">
               </div>
-              <div class="comment-content comment-text">안녕하세요 옷 정말 잘입네요.....</div>
+              <div class="comment-article">
+                <div class="comment-article-head">
+                  <div class="comment-username comment-text">{{comment.writer}}</div>
+                  <div class="comment-update-time comment-text">10시간전</div>
+                </div>
+                <div class="comment-content comment-text">{{comment.content}}</div>
+              </div>
             </div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
-          </div>
-          <div class="comment-box">
-            <div class="comment-user-icon"></div>
           </div>
         </div>
         <div class="modal-footer">
           <div class="comment-my-icon"></div>
           <input @input="comment_content = $event.target.value" class='comment-input' type="text" placeholder="댓글을 입력해 주세요.">
-          <i class="fas fa-check-circle"></i>
+          <i class="fas fa-check-circle" @click="addComment"></i>
         </div>
       </div>
     </div>
@@ -61,17 +35,32 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
+import axios from 'axios'
 export default {
   name: 'CommentModal',
-  computed: {
-    ...mapState(['flag'])
-  },
+  props:['modalArticleNo','modalArticleUser'],
   data() {
     return {
-      comment_content: ''
+      comment_content: '',
+      commentList: [],
+      profileList:[],
     }
+  },
+  mounted(){
+    let ref=this;
+    axios.get('http://localhost:8080/api/comment',{
+      params:{
+        articleNo:this.modalArticleNo,
+      }
+    })
+    .then((res)=>{
+      console.log(res,2)
+      ref.commentList=res.data.commentli;
+      ref.profileList=res.data.profileli;
+
+    })
+    .catch()
+
   },
   watch: {
     comment_content() {
@@ -93,59 +82,38 @@ export default {
         INPUTBTN.classList.remove('on-comment-input')
       }
     },
-    defaultDark() {
-      const Dark = this.$cookies.get('dark')
-      const HTML = document.querySelector('html')
-      const wrap = document.querySelector('.wrap')
-      const NAV = document.querySelector('#nav')
-      const NAVBASE = document.querySelector('.nav-base')
-      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
-      const INPUT = document.querySelectorAll('input')
-      const TEXTAREA = document.querySelectorAll('textarea')
-      const COMMENT_HEAD = document.querySelector('.modal-head')
-      const ARROW_ICON = document.querySelector('.fa-arrow-left')
-      const COMMENT_BODY = document.querySelector('.modal-container')
-      const COMMENT_FOOTER = document.querySelector('.modal-footer')
+    addComment(){
+      let ref=this;
 
-      if (Dark === null) {
-        this.$cookies.set('dark', 'on')
-      }
+      let data = this.$cookies.get('auth-nickname');
+      let uri = data;
+      let uri_enc = encodeURIComponent(uri);
+      let uri_dec = decodeURIComponent(uri_enc);
+      let res = uri_dec;
 
-      if (Dark === 'off') {
-        HTML.classList.add('black')
-        wrap.classList.add('wrap-dark')
-        NAV.classList.add('nav-dark')
-        NAVBASE.classList.add('nav-dark')
-        NAVLOGO.classList.add('nav-logo-dark')
-        COMMENT_HEAD.classList.add('comment-head-dark')
-        ARROW_ICON.classList.add('comment-back-dark')
-        COMMENT_BODY.classList.add('comment-head-dark')
-        COMMENT_FOOTER.classList.add('comment-head-dark')
-        for (let i=0; i<INPUT.length ; i++) {
-          INPUT[i].classList.add('comment-input-dark')
+      const frm = new FormData();
+      frm.append("articleNo", this.modalArticleNo);
+      frm.append("writer", res);
+      frm.append("content", this.comment_content);
+      frm.append("articleUser",this.modalArticleUser);
+
+      axios.post('http://localhost:8080/api/comment',frm
+      )
+      .then((data)=>{
+        let tmp={
+          commentNo:data.data.rescmt.commentNo,
+          writer:data.data.rescmt.writer,
+          articleNo:data.data.rescmt.articleNo,
+          content:data.data.rescmt.content
         }
-        for (let i=0; i<TEXTAREA.length ; i++) {
-          TEXTAREA[i].classList.add('textarea-dark')
-        }
-      } else {
-        HTML.classList.remove('black')
-        wrap.classList.remove('wrap-dark')
-        NAV.classList.remove('nav-dark')
-        NAVBASE.classList.remove('nav-dark')
-        NAVLOGO.classList.remove('nav-logo-dark')
-        COMMENT_HEAD.classList.remove('comment-head-dark')
-        ARROW_ICON.classList.remove('comment-back-dark')
-        COMMENT_BODY.classList.remove('comment-head-dark')
-        COMMENT_FOOTER.classList.remove('comment-head-dark')
-        for (let i=0; i<INPUT.length ; i++) {
-          INPUT[i].classList.remove('comment-input-dark')
-        }
-        for (let i=0; i<TEXTAREA.length ; i++) {
-          TEXTAREA[i].classList.remove('textarea-dark')
-        }
-        
-      }
-    },
+        ref.commentList.push(tmp)
+        ref.comment_content=''
+
+      })
+      .catch(()=>{
+        console.log("fail");
+      })
+    }
   }
 }
 </script>

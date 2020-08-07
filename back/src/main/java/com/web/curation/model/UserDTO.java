@@ -20,6 +20,7 @@ public class UserDTO {
 	private LocalDate birth;
 	private String gender;
 	private String selfintroduce;
+	private String profile_img;
 
 	public UserDTO() {
 	}
@@ -32,6 +33,7 @@ public class UserDTO {
 		this.nickname = user.getNickname();
 		this.password = user.getPassword();
 		this.selfintroduce = user.getSelfintroduce();
+		this.profile_img = user.getProfile_img();
 	}
 
 	public String getNickname() {
