@@ -1,17 +1,17 @@
 <template>
   <div class='wrap'>
     <div class="hidden-box">
-      <p v-if="!isChange" class="nickInput">
+      <p v-show="!isChange" class="nickInput">
         <input type="text" :placeholder="user.nickname" v-model="nickname" maxlength="20">
       </p>
-      <img v-if="!isChange && !nickname" class='nick-cancel' src="../assets/images/X.png" alt="" @click="cancel">
-      <img v-if="!isChange && nickname" class='nick-cancel' src="../assets/images/pngguru.com (1).png" alt="" @click="change">
+      <img v-show="!isChange && !nickname" class='nick-cancel' src="../assets/images/X.png" alt="" @click="cancel">
+      <img v-show="!isChange && nickname" class='nick-cancel' src="../assets/images/pngguru.com (1).png" alt="" @click="change">
       
-      <p v-if="!isChange2" class="contentInput">
+      <p v-show="!isChange2" class="contentInput">
         <input type="text" :placeholder="user.selfintroduce" v-model="content" maxlength="100">
       </p>
-      <img v-if="!isChange2 && !content" class='content-cancel' src="../assets/images/X.png" alt="" @click="cancelInput">
-      <img v-if="!isChange2 && content" class='content-cancel' src="../assets/images/pngguru.com (1).png" alt="" @click="changeInput">
+      <img v-show="!isChange2 && !content" class='content-cancel' src="../assets/images/X.png" alt="" @click="cancelInput">
+      <img v-show="!isChange2 && content" class='content-cancel' src="../assets/images/pngguru.com (1).png" alt="" @click="changeInput">
     </div>
     <div class="wrap-container profile-wrap">
       <section class='edit-profile-area'>
@@ -107,7 +107,10 @@ export default {
     this.profileImg=this.user.profile_img;
   },
   computed: {
-    ...mapState(['isLoggedIn', 'user'])
+    ...mapState(['isLoggedIn', 'user', 'flag'])
+  },
+  mounted() {
+    this.defaultDark()
   },
   methods: {
     ...mapMutations(['setUserIntro','setUserNick','setToken']),
@@ -236,6 +239,66 @@ export default {
     },
     goSettings() {
       this.$router.push('/settings')
+    },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const NAV = document.querySelector('#nav')
+      const NAVBASE = document.querySelector('.nav-base')
+      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+      const INPUT = document.querySelectorAll('input')
+      const changeinput = document.querySelectorAll('nick-cancel')
+      const changecontent = document.querySelectorAll('content-cancel')
+
+      const EDITPROFILEIMG = document.querySelectorAll('.edit-img')
+      
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        NAV.classList.add('nav-dark')
+        NAVBASE.classList.add('nav-dark')
+        NAVLOGO.classList.add('nav-logo-dark')
+        this.checked = true
+        for (var i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('profile-dark-content')
+        }
+
+        for (let i=0; i<EDITPROFILEIMG.length ; i++) {
+          EDITPROFILEIMG[i].classList.add('edit-img-dark')
+        }
+        for (let i=0; i<changeinput.length ; i++) {
+          changeinput[i].classList.add('img-change-dark')
+        }
+        for (let i=0; i<changecontent.length ; i++) {
+          changecontent[i].classList.add('img-change-dark')
+        }
+
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        NAV.classList.remove('nav-dark')
+        NAVBASE.classList.remove('nav-dark')
+        NAVLOGO.classList.remove('nav-logo-dark')
+        this.checked = false
+        for (var j=0; j<INPUT.length ; j++) {
+          INPUT[j].classList.remove('profile-dark-content')
+        }
+
+        for (let i=0; i<EDITPROFILEIMG.length ; i++) {
+          EDITPROFILEIMG[i].classList.remove('edit-img-dark')
+        }
+        for (let i=0; i<changeinput.length ; i++) {
+          changeinput[i].classList.remove('img-change-dark')
+        }
+        for (let i=0; i<changecontent.length ; i++) {
+          changecontent[i].classList.remove('img-change-dark')
+        }
+      }
     },
   },
 }

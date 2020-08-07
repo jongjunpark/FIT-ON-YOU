@@ -65,7 +65,13 @@ export default {
   watch: {
     comment_content() {
       this.checkCommentInput();
+    },
+    flag() {
+      this.defaultDark()
     }
+  },
+  mounted() {
+    this.defaultDark()
   },
   methods: {
     checkCommentInput() {
@@ -143,6 +149,7 @@ export default {
   padding: 0 30px;
   height: 100%;
   margin-top: 30%;
+  transition: all .3s ease;
 }
 @media (min-width: 1200px) {
   .modal-wrapper {
@@ -162,6 +169,7 @@ export default {
   border-bottom: 0.5px solid rgb(175, 175, 175);
   display: flex;
   align-items: center;
+  transition: all .3s ease;
 }
 
 .modal-footer {
@@ -173,6 +181,7 @@ export default {
   background-color: white;
   display: flex;
   align-items: center;
+  transition: all .3s ease;
 }
 
 
@@ -242,8 +251,8 @@ export default {
   opacity: 0;
 }
 
-.modal-enter .modal-container,
-.modal-leave-active .modal-container {
+.modal-enter .modal-wrapper,
+.modal-leave-active .modal-wrapper {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
@@ -315,5 +324,18 @@ export default {
 .comment-update-time {
   color: rgb(99, 99, 99);
   font-size: 70% !important;
+}
+
+.comment-head-dark {
+  background-color: #202020;
+}
+
+.comment-back-dark {
+  color: #ebebeb !important;
+}
+
+.comment-input-dark {
+  color: #ebebeb;
+  border-color: #ebebeb !important;
 }
 </style>

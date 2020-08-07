@@ -66,6 +66,9 @@ import axios from 'axios';
 export default {
   
   name: 'FeedWrite',
+  computed: {
+    ...mapState(['flag'])
+  },
   data() {
     return {
       photo :[],
@@ -92,6 +95,12 @@ export default {
     writeHashList() {
       this.checkWriteForm();
     },
+    flag() {
+      this.defaultDark()
+    }
+  },
+  mounted() {
+    this.defaultDark()
   },
   methods: {
     setFeedImg(num) {
@@ -434,5 +443,22 @@ export default {
 .write-hash-item-close-btn .fa-times:hover{
   color: #fc0303;
 }
+
+.hanger-dark {
+  filter: invert(70%);
+}
+
+.write-plus-dark {
+  color: #ebebeb !important;
+}
+.write-plus-dark:hover {
+  background-color: #ebebeb !important;
+  color: #202020 !important;
+}
+
+.write-cancle-dark {
+  color: #ebebeb !important;
+}
+
 
 </style>

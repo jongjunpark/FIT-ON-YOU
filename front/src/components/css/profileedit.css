@@ -284,3 +284,15 @@
 .follower:hover {
   color: #5AAEFF;
 }
+
+.edit-img-dark {
+  filter: invert(70%);
+}
+
+.profile-dark-content {
+  color: #ebebeb !important;
+}
+
+.img-change-dark {
+  filter: invert(70%);
+}
