@@ -13,17 +13,20 @@
         <label class='login-password-label' for="login-password">비밀번호</label>
       </div>
       <div class="login-checkbox-area">
-        <input type="checkbox" class='login-checkbox'>
+        <input type="checkbox" id='login-checkbox' @change="setLoginInf">
+        <label for="login-checkbox"><i class="far fa-check-circle"></i></label>
         <label for="login-checkbox"> 로그인상태 유지</label>
       </div>
       <div v-if='offLoginBtn' class='btn login-btn'>로그인</div>
       <div v-if='onLoginBtn' @click='loginHandler' class='btn on-login-btn'>로그인</div>
       <div class="social-area">
         <div class="btn google-btn" id="customBtn">
-          <img class="google-img" src="../assets/images/google-mini.png"/>
+          <i class="fab fa-google"></i>
+          <!-- <img class="google-img" src="../assets/images/google-mini.png"/> -->
         </div>
-        <div class="btn kakao-btn" @click="loginWithKakao"> 
-          <img class="kakao-img" src="../assets/images/kakao-mini.png"/>
+        <div class="btn kakao-btn" @click="loginWithKakao">
+          <i class="fas fa-comment"></i> 
+          <!-- <img class="kakao-img" src="../assets/images/kakao-mini.png"/> -->
         </div>
       </div>
       <div class="login-link-area">
@@ -260,6 +263,8 @@ export default {
       const PTAG = document.querySelectorAll('p')
       const LABEL = document.querySelectorAll('label')
       const SPAN = document.querySelectorAll('span')
+      const GOOGLE = document.querySelector('.google-btn')
+      const KAKAO = document.querySelector('.kakao-btn')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -276,7 +281,8 @@ export default {
         for (let i=0; i<SPAN.length ; i++) {
           SPAN[i].classList.add('font-dark')
         }
-        this.checked = true
+        GOOGLE.classList.add('social-btn-dark')
+        KAKAO.classList.add('social-btn-dark')
       } else {
         for (let i=0; i<H1TAG.length ; i++) {
           H1TAG[i].classList.remove('font-dark')
@@ -288,11 +294,18 @@ export default {
         for (let i=0; i<SPAN.length ; i++) {
           SPAN[i].classList.remove('font-dark')
         }
-        this.checked = false
+        GOOGLE.classList.remove('social-btn-dark')
+        KAKAO.classList.remove('social-btn-dark')
       }
     },
-
-    
+    setLoginInf() {
+      const LOGINF = document.querySelector('.fa-check-circle')
+      if (event.target.checked) {
+        LOGINF.classList.add('on-login-checkbox')
+      } else {
+        LOGINF.classList.remove('on-login-checkbox')
+      }
+    }
   },
   /* eslint-enable */
   }
