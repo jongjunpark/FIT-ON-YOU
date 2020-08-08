@@ -175,7 +175,7 @@
   display: inline-block;
 }
 
-.edit-img {
+.profile-edit-img {
   width: 20px;
   height: 20px;
 }
@@ -283,4 +283,16 @@
 
 .follower:hover {
   color: #5AAEFF;
+}
+
+.profile-edit-img-dark {
+  filter: invert(70%) !important;
+}
+
+.profile-dark-content {
+  color: #ebebeb !important;
+}
+
+.img-change-dark {
+  filter: invert(70%) !important;
 }

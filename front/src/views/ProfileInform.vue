@@ -22,6 +22,7 @@ import MyFeed from '../components/MyFeed.vue'
 import BookMark from '../components/BookMark.vue'
 import Following from '../components/Following.vue'
 import Follower from '../components/Follower.vue'
+import { mapState } from 'vuex'
 
 export default {
   name: 'ProfileInform',
@@ -38,6 +39,14 @@ export default {
       isFollowing: false,
       isFollower: false,
     }
+  },
+  watch: {
+    flag() {
+      this.defaultDark()
+    }
+  },
+  computed: {
+    ...mapState(['flag']),
   },
   methods: {
     goMyFeed() {
@@ -106,9 +115,28 @@ export default {
     },
     goProfile() {
       this.$router.push("/profileedit")
-    }
+    },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+      }
+    },
   },
   mounted() {
+    this.defaultDark()
+    
     if (this.isMyFeed) {
       this.goMyFeed()
     } else if (this.isBookMark) {

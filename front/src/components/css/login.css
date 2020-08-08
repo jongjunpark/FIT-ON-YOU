@@ -190,8 +190,8 @@
   }
 }
 .go-join, .go-find {
-  
   margin: 16px 0;
+  color: #686868 !important;
 }
 
 .go-join-in:hover {

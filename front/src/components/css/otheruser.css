@@ -1,0 +1,131 @@
+.other-nickname {
+	font-size: 30px;
+  font-weight: 600;
+  top: 50%;
+  position: absolute;
+}
+
+.other-content {
+	position: absolute;
+  top: 65%;
+  left: 0; 
+  width: 200px;
+  height: 100px;
+}
+
+.List2-other {
+  background-color: #DBDBDB;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  position: absolute;
+  top: 15%;
+  left: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.List3-other {
+  background-color: #DBDBDB;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  position: absolute;
+  top: 15%;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.List-other {
+  background-color: #DBDBDB;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  position: absolute;
+  top: 15%;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.other-user-follow {
+	position: absolute;
+  width: 130px;
+  height: 50px;
+	left: 5%;
+}
+
+@media (min-width: 1200px) {
+  .other-user-follow {
+		position: absolute;
+		width: 130px;
+		height: 50px;
+		left: 15%;
+  }
+}
+
+.other-user-DM {
+	position: absolute;
+  width: 130px;
+	height: 50px;
+	right: 5%;
+}
+
+@media (min-width: 1200px) {
+  .other-user-DM {
+		position: absolute;
+		width: 130px;
+		height: 50px;
+		right: 15%;
+  }
+}
+
+
+.other-user-child {
+	display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #5AAEFF;
+  width: 100%;
+  height: 100%;
+  border-radius: 1.5rem;
+  background-color: #5AAEFF;
+  margin: auto;
+  cursor: pointer;
+	position: absolute;
+}
+
+.other-user-child-DM {
+	display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #FFBA00;
+  width: 100%;
+  height: 100%;
+  border-radius: 1.5rem;
+  background-color: #FFBA00;
+  margin: auto;
+  cursor: pointer;
+  position: absolute;
+}
+
+.other-user-child-DM > span {
+  color: white;
+}
+
+.other-user-child > span {
+  color: white;
+}
+
+.parent-other {
+	position: relative;
+  width: 100%;
+  height: 50px;
+	top: 40%;
+}

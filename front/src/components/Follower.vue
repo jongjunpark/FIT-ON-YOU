@@ -8,97 +8,115 @@
         <div class="follower-username">Username</div>
         <div class="follower-btn-area">
           <div class="follower-follow-btn">팔로우하기</div>
-          <biv class="follower-dm-btn">DM보내기</biv>
+          <div class="follower-dm-btn">DM보내기</div>
         </div>
       </div>
     </div>
     <div class="follower-box">
-      <div class="follower-icon-area"></div>
+      <div class="follower-icon-area">
+        <img src="#" alt="#">
+      </div>
       <div class="follower-text-area">
         <div class="follower-username"></div>
         <div class="follower-btn-area">
           <div class="follower-follow-btn"></div>
-          <biv class="follower-dm-btn"></biv>
+          <div class="follower-dm-btn"></div>
         </div>
       </div>
     </div>
     <div class="follower-box">
-      <div class="follower-icon-area"></div>
+      <div class="follower-icon-area">
+        <img src="#" alt="#">
+      </div>
       <div class="follower-text-area">
         <div class="follower-username"></div>
         <div class="follower-btn-area">
           <div class="follower-follow-btn"></div>
-          <biv class="follower-dm-btn"></biv>
+          <div class="follower-dm-btn"></div>
         </div>
       </div>
     </div>
     <div class="follower-box">
-      <div class="follower-icon-area"></div>
+      <div class="follower-icon-area">
+        <img src="#" alt="#">
+      </div>
       <div class="follower-text-area">
         <div class="follower-username"></div>
         <div class="follower-btn-area">
           <div class="follower-follow-btn"></div>
-          <biv class="follower-dm-btn"></biv>
+          <div class="follower-dm-btn"></div>
         </div>
       </div>
     </div>
     <div class="follower-box">
-      <div class="follower-icon-area"></div>
+      <div class="follower-icon-area">
+        <img src="#" alt="#">
+      </div>
       <div class="follower-text-area">
         <div class="follower-username"></div>
         <div class="follower-btn-area">
           <div class="follower-follow-btn"></div>
-          <biv class="follower-dm-btn"></biv>
+          <div class="follower-dm-btn"></div>
         </div>
       </div>
     </div>
     <div class="follower-box">
-      <div class="follower-icon-area"></div>
+      <div class="follower-icon-area">
+        <img src="#" alt="#">
+      </div>
       <div class="follower-text-area">
         <div class="follower-username"></div>
         <div class="follower-btn-area">
           <div class="follower-follow-btn"></div>
-          <biv class="follower-dm-btn"></biv>
+          <div class="follower-dm-btn"></div>
         </div>
       </div>
     </div>
     <div class="follower-box">
-      <div class="follower-icon-area"></div>
+      <div class="follower-icon-area">
+        <img src="#" alt="#">
+      </div>
       <div class="follower-text-area">
         <div class="follower-username"></div>
         <div class="follower-btn-area">
           <div class="follower-follow-btn"></div>
-          <biv class="follower-dm-btn"></biv>
+          <div class="follower-dm-btn"></div>
         </div>
       </div>
     </div>
     <div class="follower-box">
-      <div class="follower-icon-area"></div>
+      <div class="follower-icon-area">
+        <img src="#" alt="#">
+      </div>
       <div class="follower-text-area">
         <div class="follower-username"></div>
         <div class="follower-btn-area">
           <div class="follower-follow-btn"></div>
-          <biv class="follower-dm-btn"></biv>
+          <div class="follower-dm-btn"></div>
         </div>
       </div>
     </div>
     <div class="follower-box">
-      <div class="follower-icon-area"></div>
+      <div class="follower-icon-area">
+        <img src="#" alt="#">
+      </div>
       <div class="follower-text-area">
         <div class="follower-username"></div>
         <div class="follower-btn-area">
           <div class="follower-follow-btn"></div>
-          <biv class="follower-dm-btn"></biv>
+          <div class="follower-dm-btn"></div>
         </div>
       </div>
     </div>
     <div class="follower-box">
-      <div class="follower-icon-area"></div>
+      <div class="follower-icon-area">
+        <img src="#" alt="#">
+      </div>
       <div class="follower-text-area">
         <div class="follower-username"></div>
         <div class="follower-btn-area">
           <div class="follower-follow-btn"></div>
-          <biv class="follower-dm-btn"></biv>
+          <div class="follower-dm-btn"></div>
         </div>
       </div>
     </div>
@@ -106,8 +124,39 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-name: 'Follower'
+  name: 'Follower',
+  mounted() {
+    this.defaultDark()
+  },
+  computed: {
+    ...mapState(['flag'])
+  },
+  watch: {
+    flag() {
+      this.defaultDark()
+    }
+  },
+  methods: {
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+      }
+    },
+  },
 }
 </script>
 
@@ -123,6 +172,7 @@ name: 'Follower'
   border-bottom: 1px solid red;
   padding-top: 13vw;
   position: relative;
+  margin: 2vh 0;
 }
 @media (min-width: 1200px) {
   .follower-container .follower-box {

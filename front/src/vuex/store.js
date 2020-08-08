@@ -12,6 +12,7 @@ const state = {
   pwdUser: '',
   authToken: '',
   isLoggedIn: false,
+  flag: false,
 }
 
 Vue.use(Vuex)

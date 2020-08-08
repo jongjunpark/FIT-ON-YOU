@@ -48,8 +48,39 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-name: 'BookMark'
+  name: 'BookMark',
+  mounted() {
+    this.defaultDark()
+  },
+  computed: {
+    ...mapState(['flag'])
+  },
+  watch: {
+    flag() {
+      this.defaultDark()
+    }
+  },
+  methods: {
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+      }
+    },
+  },
 }
 </script>
 
@@ -67,7 +98,7 @@ name: 'BookMark'
 .bookmark-search-inner-box {
   width: 30%;
   padding-top: 30%;
-  margin: 5px;
+  margin: 1px;
   background-color: grey;
   position: relative
 }

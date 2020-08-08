@@ -35,16 +35,21 @@ export default {
       emailVaild: false,
       okBtn: false,
       errMsg: false,
-      flag: false,
     }
   },
   watch: {
     email() {
       this.checkEmailValidate();
     },
+    flag() {
+      this.defaultDark()
+    },
   },
   computed: {
-    ...mapState(['certifNum'])
+    ...mapState(['certifNum', 'flag'])
+  },
+  mounted() {
+    this.defaultDark()
   },
   methods: {
     ...mapMutations(['confirmPwd', 'findUserPWd']),
@@ -96,7 +101,31 @@ export default {
     deactiveInput() {
       event.path[1].style.border = '1px solid #B0B0B0'
       event.path[1].style.zIndex = 1
-    }, 
+    },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const H1TAG = document.querySelectorAll('h1')
+      
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.add('font-dark')
+        }
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.remove('font-dark')
+        }
+      }
+    },
   }
 }
 </script>

@@ -36,7 +36,7 @@ public class User {
     private String email;
 
     @Column(insertable = false, updatable = false)
-    private LocalDateTime create_Date;
+    private LocalDateTime create_date;
    
     private LocalDate birth;
     private String gender;
@@ -61,10 +61,10 @@ public class User {
 		this.email = email;
 	}
 	public LocalDateTime getCreate_Date() {
-		return create_Date;
+		return create_date;
 	}
 	public void setCreate_Date(LocalDateTime create_Date) {
-		this.create_Date = create_Date;
+		this.create_date = create_Date;
 	}
 	public LocalDate getBirth() {
 		return birth;

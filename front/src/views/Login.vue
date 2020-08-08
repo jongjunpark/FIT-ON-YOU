@@ -38,7 +38,7 @@
 /* eslint-disable */
 import "../components/css/login.css"
 import axios from 'axios';
-import { mapGetters, mapMutations, mapActions  } from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions  } from 'vuex'
 
 Kakao.init('713af847cf1784de91646f5cb2455cbf');
 
@@ -81,12 +81,17 @@ export default {
     },
     password() {
       this.setPasswordClass();
-    }
+    },
+    flag() {
+      this.defaultDark()
+    },
   },
   mounted() {
-    window.addEventListener("google-loaded", this.startApp);    
+    window.addEventListener("google-loaded", this.startApp);
+    this.defaultDark()    
   },
   computed: {
+    ...mapState(['flag']),
     ...mapGetters([]),
   }, 
   methods:{
@@ -248,6 +253,47 @@ export default {
         }
 
       });
+    },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const H1TAG = document.querySelectorAll('h1')
+      const PTAG = document.querySelectorAll('p')
+      const LABEL = document.querySelectorAll('label')
+      const SPAN = document.querySelectorAll('span')
+
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.add('font-dark')
+        }
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.add('font-dark')
+        }
+        for (let i=0; i<LABEL.length ; i++) {
+          LABEL[i].classList.add('font-dark')
+        }
+        for (let i=0; i<SPAN.length ; i++) {
+          SPAN[i].classList.add('font-dark')
+        }
+        this.checked = true
+      } else {
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<LABEL.length ; i++) {
+          LABEL[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<SPAN.length ; i++) {
+          SPAN[i].classList.remove('font-dark')
+        }
+        this.checked = false
+      }
     },
 
     

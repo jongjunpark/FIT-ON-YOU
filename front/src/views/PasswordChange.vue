@@ -54,9 +54,15 @@ export default {
       this.checkPasswordValidate();
       this.checkPassword();
     },
+    flag() {
+      this.defaultDark()
+    },
   },
   computed: {
-    ...mapState(['pwdUser'])
+    ...mapState(['pwdUser', 'flag'])
+  },
+  mounted() {
+    this.defaultDark()
   },
   methods: {
     ...mapMutations(['setToken', 'setLoggedIn']),
@@ -122,6 +128,45 @@ export default {
       .catch(data => {
         console.log(data)
       });
+    },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const INPUT = document.querySelectorAll('input')
+      const H1TAG = document.querySelectorAll('h1')
+      const LABEL = document.querySelectorAll('label')
+      
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('input-dark')
+        }
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.add('font-dark')
+        }
+        for (let i=0; i<LABEL.length ; i++) {
+          LABEL[i].classList.add('font-dark')
+        }
+
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('input-dark')
+        }
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<LABEL.length ; i++) {
+          LABEL[i].classList.remove('font-dark')
+        }
+      }
     },
   },
   created() {

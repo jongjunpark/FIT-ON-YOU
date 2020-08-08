@@ -29,4 +29,6 @@ public interface FollowDao extends JpaRepository<Follow, String>{
 	Long countByFolloweduser(String followeduser);
 	Long countByFollowinguser(String followinguser);
 	
+	long countByFolloweduserAndFollowinguser(String followeduser, String followinguser);
+	
 }

@@ -61,10 +61,16 @@ export default {
     'nowPassword'() {
       this.checkPassword();
     },
+    flag() {
+      this.defaultDark()
+    },
     
   },
   computed: {
-    ...mapState(['user'])
+    ...mapState(['user', 'flag'])
+  },
+  mounted() {
+    this.defaultDark()
   },
   methods: {
     ...mapMutations(['setToken', 'setLoggedIn']),
@@ -114,7 +120,7 @@ export default {
       formData.append('password',this.passwordConfirm);
 
       if (this.user.password === this.nowPassword) {
-        axios.post('http://localhost:8080/account/changePassword',
+        axios.post('http://localhost:8080/api/account/changePassword',
           formData).then(data => {
           console.log(data)
           this.$cookies.set('auth-token', data.data.auth_token)
@@ -137,6 +143,45 @@ export default {
           title: '비밀번호가 틀렸습니다.',
           text: '한번 더 확인해주세요',
         })
+      }
+    },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const INPUT = document.querySelectorAll('input')
+      const H1TAG = document.querySelectorAll('h1')
+      const LABEL = document.querySelectorAll('label')
+      
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('input-dark')
+        }
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.add('font-dark')
+        }
+        for (let i=0; i<LABEL.length ; i++) {
+          LABEL[i].classList.add('font-dark')
+        }
+
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('input-dark')
+        }
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<LABEL.length ; i++) {
+          LABEL[i].classList.remove('font-dark')
+        }
       }
     },
   },

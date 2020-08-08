@@ -3,19 +3,19 @@
     <div class="search-bar">
       <i v-if='isReturn' @click='setReturn' class="fas fa-undo-alt"></i>
       <transition name='fade' mode="out-in">
-        <i key=1 v-if='isHashSearch' @click='setHash' class="fas fa-hashtag"></i>
-        <i key=2 v-else class="fas fa-user"></i>
+        <i key=1 v-if='isHashSearch' :style='`color:${iconColor}`' @click='setHash' class="fas fa-hashtag"></i>
+        <i key=2 v-else class="fas fa-user" :style='`color:${iconColor}`'></i>
       </transition>
-      <i v-if='isUserSearch' @click='setUser' class="fas fa-user"></i>
+      <i v-show='isUserSearch' @click='setUser' class="fas fa-user search-user-icon"></i>
       <input @input="hashContent = $event.target.value" v-model='hashContent' 
-        v-if='isHashInput' @keyup.188="addHash" type="text" class="search-input" placeholder="'#'은 필수입니다.">
-      <span v-if='isHashInput'>
-        <i class="fab inner-search-btn fa-sistrix"></i>
+        v-show='isHashInput' @keypress.enter='onHashResult' @keyup.188="addHash" type="text" class="search-input" placeholder=" , 를 통해 구분해주세요">
+      <span v-show='isHashInput'>
+        <i @click='onHashResult' class="fab inner-search-btn fa-sistrix"></i>
       </span>
       <input @input="userContent = $event.target.value" v-model='userContent' 
-        v-if='isUserInput' type="text" class="search-input" placeholder="유저이름을 입력하세요">
-      <span v-if='isUserInput'>
-        <i class="fab inner-search-btn fa-sistrix"></i>
+        v-show='isUserInput' @keypress.enter='onUserResult' type="text" class="search-input" placeholder="유저이름을 입력하세요">
+      <span v-show='isUserInput'>
+        <i @click='onUserResult' class="fab inner-search-btn fa-sistrix"></i>
       </span>
       <transition-group name='fade' tag="div" class="hash-group" mode="in-out">
         <div class='hash-item' v-for='(hash, index) in hashList' :key='`hash-${index}`'>
@@ -25,7 +25,7 @@
       </transition-group>
     </div>
 
-    <div class='wrap-container'>
+    <div v-if="isDefault" class='wrap-container'>
 
       <div class="search-box">
         <div class="search-inner-box">
@@ -72,12 +72,25 @@
         </div>
       </div>
     </div>
+    <HashSearch v-if="isHashResult"></HashSearch>
+    <UserSearch v-if="isUserResult"></UserSearch>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import HashSearch from '../components/HashSearch.vue'
+import UserSearch from '../components/UserSearch.vue'
+
 export default {
   name: 'Search',
+  computed: {
+    ...mapState(['flag'])
+  },
+  components: {
+    HashSearch,
+    UserSearch,
+  },
   data() {
     return {
       isHashSearch: true,
@@ -88,12 +101,19 @@ export default {
       hashContent: '',
       hashList: [],
       userContent: '',
+      isDefault: true,
+      isHashResult: false,
+      isUserResult: false,
+      iconColor: '',
     }
   },
   watch: {
     hashContent() {
       this.checkHashTag();
     },
+    flag() {
+      this.defaultDark()
+    }
   },
   methods: {
     goSearch() {
@@ -145,10 +165,57 @@ export default {
     },
     delHashItem(index) {
       this.hashList.splice(index, 1)
-    }
+    },
+    onHashResult() {
+      this.isDefault = false
+      this.isUserResult = false
+      this.isHashResult = true
+    },
+    onUserResult() {
+      this.isDefault = false
+      this.isHashResult = false
+      this.isUserResult = true
+    },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const INPUT = document.querySelectorAll('.search-input')
+
+      const SEARCH_ICON = document.querySelectorAll('.fa-sistrix')
+      const USERICON = document.querySelector('.search-user-icon')
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        USERICON.classList.add('search-icon-black')
+        this.iconColor = '#ebebeb'
+        for (let i=0; i<INPUT.length ; i++) {
+          SEARCH_ICON[i].classList.add('search-icon-black')
+        }
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('search-input-dark')
+        }
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        USERICON.classList.remove('search-icon-black')
+        this.iconColor = 'black'
+        for (let i=0; i<INPUT.length ; i++) {
+          SEARCH_ICON[i].classList.remove('search-icon-black')
+        }
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('search-input-dark')
+        }
+      }
+    },
   },
   mounted() {
     this.goSearch()
+    this.defaultDark()
   }
 }
 </script>
@@ -189,7 +256,7 @@ export default {
 }
 
 .search-bar .fas:hover{
-  color: #5AAEFF;
+  color: #5AAEFF !important;
 }
 
 .search-bar .fa-user:hover {
@@ -203,7 +270,7 @@ export default {
 }
 
 .search-bar .fa-undo-alt:hover {
-  color: tomato;
+  color: tomato !important;
   transform: rotate(480deg);
   transition: ease 0.8s;
 }
@@ -212,7 +279,7 @@ export default {
 .search-input {
   border: none;
   border-bottom: 2px solid black;
-  background-color: #fff;
+  background-color: transparent !important;
   width: 50%;
 }
 
@@ -222,6 +289,11 @@ export default {
 
 .search-input::placeholder {
   font-size: 1vw;
+}
+@media (min-width: 1200px) {
+  .search-input::placeholder {
+    font-size: 15px;
+  }
 }
 
 .search-bar .inner-search-btn {
@@ -233,8 +305,6 @@ export default {
 .search-bar .inner-search-btn:hover {
   color: #5AAEFF;
 }
-
-
 
 .search-box {
   display: flex;
@@ -304,18 +374,33 @@ export default {
   color: #fff;
   margin: 0;
   margin-bottom: 5px;
+  margin-right: 5px;
 }
 
 .hash-item-close-btn .fa-times:hover{
-  color: #fc0303;
+  color: #fc0303 !important;
 }
 
 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+  transition: opacity .2s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.fade-enter, .fade-leave-to {
   opacity: 0;
 }
 
+.search-input-dark {
+  border-bottom: 1px solid !important;
+  color: #ebebeb !important;
+  transition: 0.1s ease;
+}
+
+.search-icon-black {
+  color: #ebebeb !important;
+  
+}
+
+.search-icon-black:hover {
+  color: #5AAEFF !important;
+}
 </style>

@@ -34,8 +34,18 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'Community',
+  computed: {
+    ...mapState(['flag'])
+  },
+  watch: {
+    flag() {
+      this.defaultDark()
+    }
+  },
   methods: {
     goCommunity() {
       const selectBar = document.querySelector('.menu-bar-select')
@@ -49,9 +59,34 @@ export default {
       selectBar.classList.remove('go-second-menu')
       selectBar.classList.remove('go-first-menu')
     },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const INPUT = document.querySelectorAll('input')
+
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('input-dark')
+        }
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('input-dark')
+        }
+      }
+    },
   },
   mounted() {
     this.goCommunity()
+    this.defaultDark()
   }
 }
 </script>

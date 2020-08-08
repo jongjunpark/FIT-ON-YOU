@@ -3,8 +3,10 @@ package com.web.curation.dao;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.web.curation.model.Board;
 import com.web.curation.model.ImageStore;
@@ -25,7 +27,6 @@ public interface ImageDao extends JpaRepository<ImageStore, String>{
 			" group by i.articleno "
 			+" order by i.articleno desc", nativeQuery=true)
 	List<ImageStore> bookMarkImgList(@Param("nickname") String nickname);
-	
 	
 	List<ImageStore> findImagestoreByArticleNoOrderByArticleNoDesc(int num);
 }
