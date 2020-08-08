@@ -147,12 +147,12 @@ Vue.use(VueRouter)
     path: '/directmessage',
     name: 'DirectMessage',
     component: DirectMessage,
-    beforeEnter(to, from, next) {
-      if (!Vue.$cookies.isKey('auth-token')) {
-        next('/')
-      } else {
-        next()
-      }    }
+    // beforeEnter(to, from, next) {
+    //   if (!Vue.$cookies.isKey('auth-token')) {
+    //     next('/')
+    //   } else {
+    //     next()
+    //   }    }
   },
   {
     path: '/profileinform',
