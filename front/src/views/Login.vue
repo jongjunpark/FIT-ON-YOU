@@ -15,7 +15,7 @@
       <div class="login-checkbox-area">
         <input type="checkbox" id='login-checkbox' @change="setLoginInf">
         <label for="login-checkbox"><i class="far fa-check-circle"></i></label>
-        <label for="login-checkbox"> 로그인상태 유지</label>
+        <label for="login-checkbox" class='login-inf-label'> 로그인상태 유지</label>
       </div>
       <div v-if='offLoginBtn' class='btn login-btn'>로그인</div>
       <div v-if='onLoginBtn' @click='loginHandler' class='btn on-login-btn'>로그인</div>
@@ -277,7 +277,7 @@ export default {
         for (let i=0; i<PTAG.length ; i++) {
           PTAG[i].classList.add('font-dark')
         }
-        LABEL[2].classList.add('font-dark')
+        LABEL[3].classList.add('font-dark')
         for (let i=0; i<SPAN.length ; i++) {
           SPAN[i].classList.add('font-dark')
         }
@@ -290,7 +290,7 @@ export default {
         for (let i=0; i<PTAG.length ; i++) {
           PTAG[i].classList.remove('font-dark')
         }
-        LABEL[2].classList.remove('font-dark')
+        LABEL[3].classList.remove('font-dark')
         for (let i=0; i<SPAN.length ; i++) {
           SPAN[i].classList.remove('font-dark')
         }

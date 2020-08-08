@@ -82,7 +82,7 @@ span {
   top: 0;
   left: 0;
   right: 0;
-  height: 10vh;
+  height: 8vh;
   background-color: #fff;
   border-bottom: 1px solid rgb(199, 199, 199);
   z-index: 10;
@@ -94,7 +94,7 @@ span {
   top: 0;
   left: 0;
   right: 0;
-  height: 10vh;
+  height: 8vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -110,7 +110,7 @@ span {
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 3%;
+  bottom: 3vh;
   height: 50px;
   line-height: 50px;
   padding: 0 30px;
@@ -135,13 +135,21 @@ span {
   left: 50%;
   bottom: 0;
   transform: translate(-50%, 0);
-  width: 150px;
-  height: 50px;
+  width: 30vw;
+  height: 6.5vh;
   border-radius: 10px;
-  line-height: 50px;
+  line-height: 6.5vh;
   box-shadow: 0 6px 12px 0 rgba(0,0,0,0.25),
               -3px -3px 10px -1px rgba(250,250,250,0.15);
   background-color: white;
+}
+
+@media (min-width: 1200px) {
+  #nav2 .bottom-nav{
+    width: 150px;
+    border-radius: 10px;
+    line-height: 50px;
+  }
 }
 
 
@@ -150,46 +158,45 @@ span {
 }
 
 #nav .nav-logo .fa-hat-cowboy {
-  font-size: 250%;
+  font-size: 5vh;
   margin: 0;
-  line-height: 0.5;
   color: #262626;
   transition: 0.3s ease;
 }
 
-/* #nav .nav-user{
+#nav .nav-user{
   position: absolute;
-  top: 10px;
+  top: 21%;
   right: 30px;
-  width: 40px;
+  width: 5vh;
 }
 
 .nav-user .nav-user-img {
-  margin-bottom: 10px;
-} */
+  margin-bottom: 2.5vh;
+}
 
 .nav-user .nav-user-img .fa-bars {
-  font-size: 250%;
+  font-size: 5vh;
   color: black;
   margin: 0;
   transition: 0.3s ease;
 }
 
 .nav-user .nav-user-icon {
-  height: 40px;
-  width: 40px;
+  height: 5vh;
+  width: 5vh;
   border-radius: 50%;
   background-color: #262626;
-  line-height: 40px;
-  margin-bottom: 15px;
+  line-height: 5vh;
+  margin-bottom: 2vh;
   cursor: pointer;
   color: white;
 }
 
 .user-bar {
   overflow-y: hidden;
-  height: 180px;
-  width: 40px;
+  height: 20vh;
+  width: 5vh;
   z-index: 50;
 }
 
@@ -223,46 +230,87 @@ span {
 .menu-bar-list .menu-bar-select {
   position: absolute;
   top: 0;
-  left: 10px;
+  left: 1.5vw;
   background-color: black;
-  height: 5px;
-  width: 30px;
+  border-radius: 3vh;
+  height: 0.8vh;
+  width: 7vw;
+}
+@media (min-width:1200px) {
+  .menu-bar-list .menu-bar-select {
+    left: 10px;
+    height: 5px;
+    width: 30px;
+  }
 }
 
 .go-first-menu {
-  position: absolute;
-  top: 0 !important;
-  left: 10px !important;
+  left: 1.5vw !important;
   transition: 0.5s ease-out;
 }
+@media (min-width:1200px) {
+  .go-first-menu {
+    left: 10px !important;
+    transition: 0.5s ease-out;
+  }
+}
+
 .go-second-menu {
-  position: absolute;
-  top: 0 !important;
   left: 50% !important;
   transform: translate(-50%, 0) !important;
   transition: 0.5s ease-out;
 }
+@media (min-width:1200px) {
+  .go-second-menu {
+    left: 50% !important;
+    transform: translate(-50%, 0) !important;
+    transition: 0.5s ease-out;
+  }
+}
+
 .go-third-menu {
-  position: absolute;
-  top: 0 !important;
-  left: 74% !important;
+  left: 21.5vw !important;
   transition: 0.5s ease-out;  
 }
+@media (min-width:1200px) {
+  .go-third-menu {
+    left: 74% !important;
+    transition: 0.5s ease-out;  
+  } 
+}
+
 
 #nav2 .write-icon {
   position: absolute;
   right: 30px;
   bottom: 0;
-  height: 50px;
-  width: 50px;
+  height: 6.5vh;
+  width: 6.5vh;
   border-radius: 50%;
   text-align: center;
-  line-height: 50px;
+  line-height: 6.5vh;
   box-shadow: 0 6px 12px 0 rgba(0,0,0,0.25),
               -3px -3px 10px -1px rgba(250,250,250,0.15);
   cursor: pointer;
   background-color: white;
 }
+@media (min-width:1200px) {
+  #nav2 .write-icon {
+    position: absolute;
+    right: 30px;
+    bottom: 0;
+    height: 6.5vh;
+    width: 6.5vh;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 50px;
+    box-shadow: 0 6px 12px 0 rgba(0,0,0,0.25),
+                -3px -3px 10px -1px rgba(250,250,250,0.15);
+    cursor: pointer;
+    background-color: white;
+  }
+}
+
 
 #nav2 .write-icon:hover{
   background-color: rgb(211, 211, 211);
@@ -275,18 +323,18 @@ span {
 
 .user-bar-menu .user-bar-img {
   color: #fff;
-  font-size: 120%;
+  font-size: 2.5vh;
   margin: 0;
 }
 
 .nav-menu-icon .menu-bar-img {
-  font-size: 120%;
+  font-size: 2.5vh;
   margin: 0;
   color: grey;
 }
 
 .write-icon .write-icon-img {
-  font-size: 120%;
+  font-size: 2.5vh;
   margin: 0;
   color: grey;
 }
@@ -302,7 +350,7 @@ span {
 
 .wrap {
   padding: 0 30px;
-  margin-top: 10vh;
+  margin-top: 8vh;
   height: 100%;
   transition: 0.3s ease;
 }
@@ -323,20 +371,20 @@ align-items: center;
 
 .btn {
   font-weight: 500;
-  font-size: 18px;
+  font-size: 3vh;
   text-align: center;
   cursor: pointer;
-  height: 50px;
-  line-height: 50px;
+  height: 6.5vh;
+  line-height: 6.5vh;
   border-radius: 5px;
-  margin-bottom: 10px;
+  margin-bottom: 1.2vh;
   box-shadow: 0 6px 12px 0 rgba(0,0,0,0.25);
 }
 
 .main-logo {
-  margin: 20px;
+  margin: 5vh 0;
   font-weight: 900;
-  font-size: 40px;
+  font-size: 6vh;
 }
 
 .err-msg {
@@ -344,6 +392,7 @@ align-items: center;
   color: #FF3636 !important;
   width: 100%;
   font-weight: 700 !important;
+  font-size: 2vh
 }
 
 .suc-msg {
@@ -351,6 +400,7 @@ align-items: center;
   color: #1DDB16 !important;
   width: 100%;
   font-weight: 700 !important;
+  font-size: 2vh
 }
 
 i {
@@ -360,8 +410,8 @@ i {
 
 .darkmode {
   position: fixed;
-  left: 30px;
-  bottom: 4vh;
+  left: 28px;
+  bottom: 3.5vh;
   cursor: pointer;
   z-index: 1000000;
 }

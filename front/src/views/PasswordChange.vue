@@ -19,8 +19,8 @@
       <p v-if="pwErrMsg" class='err-msg join-err-msg'>비밀번호가 일치하지 않습니다.</p>
       <p v-if="pwSucMsg" class='suc-msg join-suc-msg'>비밀번호가 일치합니다.</p>
     </div>
-    <div v-show='!pwdFlag' class='btn passwordchange-btn'>변경하기</div>
-    <div @click='changePassword' v-show='pwdFlag' class='btn on-passwordchange-btn'>변경하기</div>
+    <div v-show='!pwdFlag' class='btn pwc-btn passwordchange-btn'>변경하기</div>
+    <div @click='changePassword' v-show='pwdFlag' class='btn pwc-btn on-passwordchange-btn'>변경하기</div>
    </div>
   </div>
 </template>

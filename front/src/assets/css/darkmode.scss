@@ -1,10 +1,10 @@
 :root {
 	--toggle-size: 10rem;
-    --switch-w: 3rem;
-    --switch-h: 2rem;
+    --switch-w: 8vh;
+    --switch-h: 5vh;
 	--switch-handle-scale: .65;
     --switch-off-handle-x: -.125rem;
-    --switch-on-handle-x: calc(50% - .125rem);
+    --switch-on-handle-x: calc(3.1vh - .125rem);
 	--switch-transition-duration: .2s;
 }
 @media (min-width: 1200px) {

@@ -1,7 +1,7 @@
 
 .login-checkbox-area {
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 3vh;
 }
 
 .login-checkbox-area input[type="checkbox"] {
@@ -11,19 +11,23 @@
 .login-checkbox-area .fa-check-circle {
   margin: 0;
   margin-right: 5px;
-  font-size: 110%;
+  font-size: 2.5vh;
 }
 
+.login-checkbox-area .login-inf-label {
+  font-size: 2vh;
+}
 
 .login-input-area {
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 2.5vh;
   position: relative;
 }
 
 .social-area {
   display: flex;
   width: 100%;
+  margin-top: 1vh;
 }
 
 .login-link-area {
@@ -33,49 +37,52 @@
 }
 
 .login-input-area .login-email {
-  height: 60px;
+  height: 8vh;
   width: 100%;
   border-radius: 5px;
   border: 1px solid #D5D5D5;
   background-color: #D5D5D5;
-  padding: 15px 0 0 15px;
+  padding: 2vh 0 0 2vh;
   box-sizing: border-box;
   color: #686868;
   font-family: "Noto Sans KR", sans-serif !important;
+  font-size: 2.2vh;
 }
 
 .login-input-area .login-password {
-  height: 60px;
+  height: 8vh;
   width: 100%;
   border-radius: 5px;
   border: 1px solid #D5D5D5;
   background-color: #D5D5D5;
-  padding: 15px 0 0 15px;
+  padding: 2vh 0 0 2vh;
   box-sizing: border-box;
   color: #686868;
   font-family: "Noto Sans KR", sans-serif !important;
+  font-size: 2.2vh;
 }
 
 .login-input-area label {
   position: absolute;
   top: 50%;
-  left: 20px;
+  left: 2vh;
   transform: translate(0, -50%);
   color: #686868;
+  font-size: 2vh;
 }
 
 .login-input-area label.is-email {
   position: absolute;
-  top: 15px !important;
-  left: 10px !important;
-  font-size: 12px !important;
+  top: 2vh !important;
+  left: 1.2vh !important;
+  font-size: 1.4vh !important;
 }
 
 .login-input-area label.is-password {
   position: absolute;
-  top: 15px !important;
-  left: 10px !important;
-  font-size: 12px !important;
+  top: 2vh !important;
+  left: 1.2vh !important;
+  font-size: 1.4vh !important;
 }
 
 .login-input-area .login-email:focus, .login-password:focus {
@@ -87,38 +94,38 @@
 .login-input-area .login-email.non-text:focus + label{
   transition: ease 0.3s;
   position: absolute;
-  top: 15px;
-  left: 10px;
-  font-size: 12px !important;
+  top: 2vh;
+  left: 1.2vh;
+  font-size: 1.4vh !important;
 }
 
 .login-input-area .login-email.non-text:not(:focus) + label{
   transition: ease 0.3s;
   position: absolute;
   top: 50%;
-  left: 20px;
+  left: 2.5vh;
 }
 
 .login-input-area .login-password.non-text:focus + label{
   transition: ease 0.3s;
   position: absolute;
-  top: 15px;
-  left: 10px;
-  font-size: 12px !important;
+  top: 2vh;
+  left: 1.2vh;
+  font-size: 1.4vh !important;
 }
 
 .login-input-area .login-password.non-text:not(:focus) + label{
   transition: ease 0.3s;
   position: absolute;
   top: 50%;
-  left: 20px;
+  left: 2.5vh;
 }
 
 .btn.login-btn {
   color: #B0B0B0;
   background-color: grey;
   width: 100%;
-  font-size: 20px;
+  font-size: 3vh;
   box-sizing: border-box;
   cursor:default;
 }
@@ -127,23 +134,23 @@
   color: white;
   background-color: #5AAEFF;
   width: 100%;
-  font-size: 20px;
+  font-size: 3vh;
   box-sizing: border-box;
 }
 .btn.on-login-btn-error {
   color: #D5D5D5;
   background-color: #FF3636;
   width: 100%;
-  font-size: 20px;
+  font-size: 2vh;
   box-sizing: border-box;
 }
 
 .btn.google-btn {
-  width: 13vw;
-  padding-top: 13vw;
+  width: 7vh;
+  padding-top: 7vh;
   height: 0;
-  margin-right: 10px;
-  margin-top: 10px;
+  margin-right: 1.2vh;
+  margin-top: 1.2vh;
   border-radius: 50%;
   position: relative;
   box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.15),
@@ -169,12 +176,12 @@
 
 
 .btn.kakao-btn {
-  width: 13vw;
-  padding-top: 13vw;
+  width: 7vh;
+  padding-top: 7vh;
   height: 0;
   border-radius: 50%;
-  margin-left: 10px;
-  margin-top: 10px;
+  margin-left: 1.2vh;
+  margin-top: 1.2vh;
   position: relative;
   box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.15),
               -3px -3px 10px -1px rgba(250,250,250,0.15);
@@ -198,7 +205,7 @@
 }
 
 
-.btn.google-btn .google-img {
+/* .btn.google-btn .google-img {
   position: absolute;
   top: 0; bottom: 0; left: 0; right: 0;
   width: 100%;
@@ -222,20 +229,19 @@
   height: 100%;
   padding: 33% 30% 30% 30%;
   }
-}
+} */
 
 .btn.google-btn .fa-google {
   position: absolute;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   margin: 0;
-  font-size: 100%;
+  font-size: 2.5vh;
   color: #777;
   transition: transform 0.5s;
 }
 
 .google-btn:hover .fa-google{
-  font-size: 95%;
   color: #db3236
 }
 
@@ -244,7 +250,7 @@
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   margin: 0;
-  font-size: 100%;
+  font-size: 2.5vh;
   color: #777;
   transition: transform 0.5s;
 }
@@ -254,13 +260,10 @@
 }
 
 
-.kakao-btn:hover .kakao-img{
-  filter: sepia(1);
-}
-
 .go-join, .go-find {
-  margin: 16px 0;
+  margin: 2vh 0;
   color: #686868 !important;
+  font-size: 2vh;
 }
 
 .go-join-in:hover {
@@ -273,6 +276,7 @@
   cursor: pointer;
 }
 
+
 .login-email-label-error {
   color: #FF3636 !important;
   font-weight: 700;
@@ -284,24 +288,24 @@
 }
 
 .login-input-area .login-email-error {
-  height: 60px;
+  height: 8vh;
   width: 100%;
   border-radius: 5px;
   border: 1.5px solid #FF3636 !important;
   background-color: #D5D5D5;
-  padding: 15px 0 0 15px;
+  padding: 2vh 0 0 2vh;
   box-sizing: border-box;
   color: #686868;
   font-family: "Noto Sans KR", sans-serif !important;
 }
 
 .login-input-area .login-password-error {
-  height: 60px;
+  height: 8vh;
   width: 100%;
   border-radius: 5px;
   border: 1.5px solid #FF3636 !important;
   background-color: #D5D5D5;
-  padding: 15px 0 0 15px;
+  padding: 2vh 0 0 2vh;
   box-sizing: border-box;
   color: #686868;
   font-family: "Noto Sans KR", sans-serif !important;
