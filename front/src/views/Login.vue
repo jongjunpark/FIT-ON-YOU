@@ -13,7 +13,7 @@
         <label class='login-password-label' for="login-password">비밀번호</label>
       </div>
       <div class="login-checkbox-area">
-        <input type="checkbox" id='login-checkbox'>
+        <input type="checkbox" id='login-checkbox' @change="setLoginInf">
         <label for="login-checkbox"><i class="far fa-check-circle"></i></label>
         <label for="login-checkbox"> 로그인상태 유지</label>
       </div>
@@ -296,8 +296,14 @@ export default {
         this.checked = false
       }
     },
-
-    
+    setLoginInf() {
+      const LOGINF = document.querySelector('.fa-check-circle')
+      if (event.target.checked) {
+        LOGINF.classList.add('on-login-checkbox')
+      } else {
+        LOGINF.classList.remove('on-login-checkbox')
+      }
+    }
   },
   /* eslint-enable */
   }

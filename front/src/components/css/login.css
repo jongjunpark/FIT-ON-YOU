@@ -10,6 +10,7 @@
 
 .login-checkbox-area .fa-check-circle {
   margin: 0;
+  margin-right: 5px;
   font-size: 110%;
 }
 
@@ -249,14 +250,11 @@
 }
 
 .on-login-checkbox {
-  animation: oncheck 2s;
+  animation-name: oncheck;
+  animation-duration: 3s;
+  color: #5AAEFF;
 }
-
-@keyframes oncheck {
-  from {
-
-  }
-  to {
-    
-  }
+@keyframes onocheck {
+	50% {transform: scale(1.2)}
+	100% {transform: scale(1)}
 }
