@@ -171,6 +171,7 @@ span {
   font-size: 250%;
   color: black;
   margin: 0;
+  transition: 0.3s ease;
 }
 
 .nav-user .nav-user-icon {

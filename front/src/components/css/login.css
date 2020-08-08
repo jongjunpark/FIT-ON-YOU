@@ -4,6 +4,16 @@
   margin-bottom: 20px;
 }
 
+.login-checkbox-area input[type="checkbox"] {
+  display: none;
+}
+
+.login-checkbox-area .fa-check-circle {
+  margin: 0;
+  font-size: 110%;
+}
+
+
 .login-input-area {
   width: 100%;
   margin-bottom: 20px;
@@ -236,4 +246,17 @@
   box-sizing: border-box;
   color: #686868;
   font-family: "Noto Sans KR", sans-serif !important;
+}
+
+.on-login-checkbox {
+  animation: oncheck 2s;
+}
+
+@keyframes oncheck {
+  from {
+
+  }
+  to {
+    
+  }
 }
