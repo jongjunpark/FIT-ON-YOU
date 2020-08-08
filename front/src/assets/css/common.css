@@ -82,7 +82,7 @@ span {
   top: 0;
   left: 0;
   right: 0;
-  height: 60px;
+  height: 10vh;
   background-color: #fff;
   border-bottom: 1px solid rgb(199, 199, 199);
   z-index: 10;
@@ -94,7 +94,7 @@ span {
   top: 0;
   left: 0;
   right: 0;
-  height: 60px;
+  height: 10vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -139,7 +139,8 @@ span {
   height: 50px;
   border-radius: 10px;
   line-height: 50px;
-  box-shadow: 0 6px 12px 0 rgba(0,0,0,0.25);
+  box-shadow: 0 6px 12px 0 rgba(0,0,0,0.25),
+              -3px -3px 10px -1px rgba(250,250,250,0.15);
   background-color: white;
 }
 
@@ -156,7 +157,7 @@ span {
   transition: 0.3s ease;
 }
 
-#nav .nav-user{
+/* #nav .nav-user{
   position: absolute;
   top: 10px;
   right: 30px;
@@ -165,7 +166,7 @@ span {
 
 .nav-user .nav-user-img {
   margin-bottom: 10px;
-}
+} */
 
 .nav-user .nav-user-img .fa-bars {
   font-size: 250%;
@@ -257,7 +258,8 @@ span {
   border-radius: 50%;
   text-align: center;
   line-height: 50px;
-  box-shadow: 0 6px 12px 0 rgba(0,0,0,0.25);
+  box-shadow: 0 6px 12px 0 rgba(0,0,0,0.25),
+              -3px -3px 10px -1px rgba(250,250,250,0.15);
   cursor: pointer;
   background-color: white;
 }
@@ -300,7 +302,7 @@ span {
 
 .wrap {
   padding: 0 30px;
-  margin-top: 60px;
+  margin-top: 10vh;
   height: 100%;
   transition: 0.3s ease;
 }
@@ -328,6 +330,7 @@ align-items: center;
   line-height: 50px;
   border-radius: 5px;
   margin-bottom: 10px;
+  box-shadow: 0 6px 12px 0 rgba(0,0,0,0.25);
 }
 
 .main-logo {
@@ -358,9 +361,15 @@ i {
 .darkmode {
   position: fixed;
   left: 30px;
-  bottom: 3%;
+  bottom: 4vh;
   cursor: pointer;
-
+  z-index: 1000000;
+}
+@media (min-width: 1200px) {
+  .darkmode {
+    left: 93%;
+    bottom: 3%;
+  }
 }
 
 .black {
