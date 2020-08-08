@@ -149,3 +149,16 @@ ul.join_box {
 	50% {transform: scale(1.2)}
 	100% {transform: scale(1)}
 }
+
+.join-confirm-box-dark {
+  background-color: transparent !important;
+  border-color: rgb(87, 87, 87) !important;
+}
+
+.join-confirm-textarea-dark {
+  background-color: #D5D5D5 !important;
+}
+
+.hr-dark {
+  background-color: rgb(87, 87, 87) !important;
+}

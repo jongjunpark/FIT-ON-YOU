@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import "../components/css/joinconfirm.css"
 export default {
   name: 'JoinConfirm',
@@ -53,6 +54,14 @@ export default {
       isCheck1: false,
       isCheck2: false,
       isCheck3: false,
+    }
+  },
+  computed: {
+    ...mapState(['flag'])
+  },
+  watch: {
+    flag() {
+      this.defaultDark()
     }
   },
   methods: {
@@ -109,7 +118,52 @@ export default {
           this.isCheck3 = false
         }
       }
-    }
+    },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const PTAG = document.querySelectorAll('p')
+      const LITAG = document.querySelectorAll('li')
+      const TEXTAREA = document.querySelectorAll('textarea')
+      const JOINBOX = document.querySelector('.join_box')
+      const HRTAG = document.querySelector('.join-confirm-divide-line')
+
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        JOINBOX.classList.add('join-confirm-box-dark')
+        HRTAG.classList.add('hr-dark')
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.add('font-dark')
+        }
+        for (let i=0; i<LITAG.length ; i++) {
+          LITAG[i].classList.add('font-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.add('join-confirm-textarea-dark')
+        }
+
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        JOINBOX.classList.remove('join-confirm-box-dark')
+        HRTAG.classList.remove('hr-dark')
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<LITAG.length ; i++) {
+          LITAG[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.remove('join-confirm-textarea-dark')
+        }
+      }
+    },
   }
 }
 </script>

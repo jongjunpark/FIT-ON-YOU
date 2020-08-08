@@ -400,7 +400,7 @@ i {
 }
 
 .font-dark {
-  color: #ebebeb;
+  color: #ebebeb !important;
 }
 
 .user-bar-dark {

@@ -272,9 +272,7 @@ export default {
         for (let i=0; i<PTAG.length ; i++) {
           PTAG[i].classList.add('font-dark')
         }
-        for (let i=0; i<LABEL.length ; i++) {
-          LABEL[i].classList.add('font-dark')
-        }
+        LABEL[2].classList.add('font-dark')
         for (let i=0; i<SPAN.length ; i++) {
           SPAN[i].classList.add('font-dark')
         }
@@ -286,9 +284,7 @@ export default {
         for (let i=0; i<PTAG.length ; i++) {
           PTAG[i].classList.remove('font-dark')
         }
-        for (let i=0; i<LABEL.length ; i++) {
-          LABEL[i].classList.remove('font-dark')
-        }
+        LABEL[2].classList.remove('font-dark')
         for (let i=0; i<SPAN.length ; i++) {
           SPAN[i].classList.remove('font-dark')
         }

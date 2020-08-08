@@ -17,6 +17,8 @@ import Alarm from '../views/Alarm.vue'
 import DM from '../views/DM.vue'
 import FeedWrite from '../views/FeedWrite.vue'
 import OtherUser from '../views/OtherUser.vue'
+// import SocialJoin from '../views/SocialJoin.vue'
+import JoinConfirm from '../views/JoinConfirm.vue'
 
 Vue.use(VueRouter)
 
@@ -212,6 +214,23 @@ Vue.use(VueRouter)
     //   }   
     //  }
   },
+  // {
+  //   path: '/socialjoin',
+  //   name: 'SocialJoin',
+  //   component: SocialJoin,
+  // },
+  {
+    path: '/joinconfirm',
+    name: 'JoinConfirm',
+    component: JoinConfirm,
+  }
+    // beforeEnter(to, from, next) {
+    //   if (!Vue.$cookies.isKey('auth-token')) {
+    //     next('/')
+    //   } else {
+    //     next()
+    //   }
+    // }
 ]
 
 const router = new VueRouter({
