@@ -12,7 +12,7 @@
           <div class="" v-for="(comment,index) in commentList" :key="index">
             <div class="comment-box">
               <div class="comment-user-icon">
-                <img class="comment-user-icon" :src="profileList[index]">
+                <img class="comment-user-icon" :src="comment.user.profile_img">
               </div>
               <div class="comment-article">
                 <div class="comment-article-head">
@@ -62,7 +62,6 @@ export default {
     .then((res)=>{
       console.log(res,2)
       ref.commentList=res.data.commentli;
-      ref.profileList=res.data.profileli;
 
     })
     .catch()
@@ -162,10 +161,12 @@ export default {
           commentNo:data.data.rescmt.commentNo,
           writer:data.data.rescmt.writer,
           articleNo:data.data.rescmt.articleNo,
-          content:data.data.rescmt.content
+          content:data.data.rescmt.content,
+          user:{
+            profile_img:ref.user.profile_img,
+          }
         }
         ref.commentList.push(tmp);
-        ref.profileList.push(ref.user.profile_img);
         ref.comment_content='';
 
       })

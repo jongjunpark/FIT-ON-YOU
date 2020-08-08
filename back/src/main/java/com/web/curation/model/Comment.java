@@ -1,6 +1,7 @@
 package com.web.curation.model;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,4 +31,7 @@ public class Comment {
 	
 	private String content;
 	
+	@ManyToOne(optional=false)
+	@JoinColumn(name="writer", referencedColumnName="nickname",insertable=false, updatable=false)
+	private User user;
 }

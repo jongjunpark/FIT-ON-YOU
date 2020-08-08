@@ -22,7 +22,7 @@
     <CommentModal v-if="showModal" @close="showModal= false" :modalArticleNo="modalArticleNo" :modalArticleUser="modalArticleUser"/>
 
     <div class='wrap feed-wrap'>
-      <div class='wrap-container' v-for="feed in mainfeed" :key="feed.articleUser">
+      <div class='wrap-container' v-for="(feed,index) in mainfeed" :key="feed.articleUser">
         <header class="feed-user-data">
           <div class="feed-user-profile" @click="goUserProfile(feed.articleUser)">
             <img :src="feed.userProfile">
@@ -40,12 +40,15 @@
           </VueSlickCarousel>
           <div class="feed-btn-box">
             <div class='feed-btn-left'>
-              <i class="fas fa-heart" @click="clickLike(feed.articleNo, false, $event)"></i>
+              
+              <i :class="'fas fa-heart '+likeicon[likeStates[index]]" 
+              @click="clickLike(feed.articleNo,likeStates[index],index,$event)"></i>
               <i :id="'show-modal'+ feed.articleNo" @click="clickComment(feed.articleNo,feed.articleUser)" class="fas fa-comment-alt"></i>
 
             </div>
             <div class='feed-btn-right'>
-              <i @click="clickBookMark(feed.articleNo)" class="fas fa-bookmark"></i>
+              <i :class="'fas fa-bookmark ' +markicon[bookmarkStates[index]]"
+              @click="clickBookMark(feed.articleNo,bookmarkStates[index],index,$event)"></i>
             </div>
           </div>
           <header class='feed-content-head'>{{feed.content}}</header>
@@ -95,8 +98,8 @@ export default {
       mainfeed:[],
       influencer:[],
       feedlist:[],
-      likesState:[],
-      bookmarkState:[],
+      likeStates:[],
+      bookmarkStates:[],
       settings: {
         "dots": false,
         "arrows": true,
@@ -118,6 +121,8 @@ export default {
       },
       modalArticleNo : '',
       modalArticleUser:'',
+      likeicon:['','heart'],
+      markicon:['','mark'],
     }
   },
   components: { 
@@ -148,34 +153,63 @@ export default {
       selectBar.classList.remove('go-third-menu')
     },
   
-    clickLike(articleNo,flag,e) {
-      if(flag){
-        e.target.classList.remove('heart');
-      }
-      else{
-        e.target.classList.add('heart');
+    clickLike(articleNo,flag,index,e) {
+      let ref=this
+      if(flag==0){
+        this.likeStates[index]=1
+        e.target.classList.add('heart')
         this.modal = true
         axios.post('http://localhost:8080/api/board/likes',{
-          articleNo:articleNo,
-          nickname:this.user.nickname
+            articleNo:articleNo,
+            nickname:this.user.nickname
+          })
+          .then(console.log("좋아요"))
+          .catch()
+      }
+      else if(flag==1){
+        this.likeStates[index]=0
+        e.target.classList.remove('heart')
+        axios.delete('http://localhost:8080/api/board/likes',{
+          data:{
+            articleNo:articleNo,
+            nickname:this.user.nickname
+          }
         })
-        .then(console.log("좋아요"))
+        .then(console.log(ref.likeStates[index],"좋아요 취소"))
         .catch()
       }
+      
     },
     clickComment(articleNo,articleUser) {
       this.modalArticleNo=articleNo;
       this.modalArticleUser=articleUser;
       this.showModal = true
     },
-    clickBookMark(articleNo) {
-      alert("북마크 추가 됨");
-      axios.post('http://localhost:8080/api/board/bookmark',{
-        bookedArticle:articleNo,
-        bookUser:this.user.nickname
-      })
-      .then(console.log("북마크 추가"))
-      .catch()
+    clickBookMark(articleNo,flag,index,e) {
+      let ref=this
+      if(flag==0){
+        this.bookmarkStates[index]=1
+        e.target.classList.add('mark')
+        axios.post('http://localhost:8080/api/board/bookmark',{
+            bookedArticle:articleNo,
+            bookUser:this.user.nickname
+          })
+          .then(console.log("북마크 등록"))
+          .catch()
+      }
+      else if(flag==1){
+        this.bookmarkStates[index]=0
+        e.target.classList.remove('mark')
+        axios.delete('http://localhost:8080/api/board/bookmark',{
+          data:{
+            bookedArticle:articleNo,
+            bookUser:this.user.nickname
+          }
+        })
+        .then(console.log(ref.bookmarkStates[index],"북마크 취소"))
+        .catch()
+      }
+
     },
     setInfluNav() {
       this.isInfluNav = !this.isInfluNav
@@ -230,6 +264,7 @@ export default {
   mounted() {
     this.onNewsFeed()
     this.defaultDark()
+    let ref=this;
     let nickdata = this.$cookies.get('auth-nickname')
     let uri = nickdata;
     let uri_enc = encodeURIComponent(uri);
@@ -299,6 +334,8 @@ export default {
         });
        
         this.mainfeed.push(feeddata)
+        ref.likeStates.push(this.feedlist[index].likechk);
+        ref.bookmarkStates.push(this.feedlist[index].markchk);
   }
   });
   console.log(this.mainfeed)
@@ -306,7 +343,11 @@ export default {
       this.influencer=data.data;
       console.log(this.influencer)
     });
+
+  console.log(this.likeStates,'좋아요리스트');
+  console.log(this.bookmarkStates,'북마크리스트');
   }
+
   
 }
 
@@ -547,6 +588,9 @@ export default {
 
 .heart{
   color:crimson;
+}
+.mark{
+  color:gold;
 }
 </style>
 

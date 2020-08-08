@@ -53,7 +53,7 @@ public class CommentController {
 		List<String> profile=new ArrayList<>();
 		commentli=commentDao.findAllByArticleNoOrderByCommentNoAsc(articleNo);
 		for(Comment comment : commentli) {
-			profile.add(userDao.findProfileImgByNickname(comment.getWriter()));
+			comment.getUser().setPassword("");
 		}
 		
 		result.status=true;
@@ -63,7 +63,6 @@ public class CommentController {
 		resultMap.put("result",result);		
 		resultMap.put("commentli",commentli);		
 		resultMap.put("result",result);		
-		resultMap.put("profileli",profile);
 		
 		return resultMap;
 		
@@ -125,5 +124,6 @@ public class CommentController {
 		return result;
 		
 	}
+	
 
 }

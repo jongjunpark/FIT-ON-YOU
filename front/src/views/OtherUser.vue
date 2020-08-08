@@ -89,11 +89,12 @@ export default {
      console.log(data);
      ref.nickname=data.data.userinfo.nickname;
      ref.profileImg=data.data.userinfo.profile_img;
-     if(data.data.userinfo.selfointroduce!=null){
-       ref.selfintro=data.data.userinfo.selfointroduce
+     if(data.data.userinfo.selfintroduce!=null){
+       ref.selfintro=data.data.userinfo.selfintroduce
      }
      ref.followedCnt=data.data.followedCnt
      ref.followingCnt=data.data.followingCnt
+
     
    })
    .catch(
