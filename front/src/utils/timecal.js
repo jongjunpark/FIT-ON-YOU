@@ -1,5 +1,5 @@
 export default{
-  timeForToday : function(value){
+  timeForToday(value){
     const today = new Date();
     const timeValue = new Date(value);
     const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
@@ -16,5 +16,6 @@ export default{
         return `${betweenTimeDay}일전`;
     }
     return `${Math.floor(betweenTimeDay / 365)}년전`;
-  }
+  },
+  
 }

@@ -31,13 +31,20 @@ export default {
       remaintime: false,
     }
   },
+  watch: {
+    flag() {
+      this.defaultDark()
+    }
+  },
   mounted() {
     var fiveMinutes = 60 * 3,
     display = document.querySelector('#time');
     this.startTimer(fiveMinutes, display);
+    this.defaultDark()
+
   },
   computed: {
-    ...mapState(['pwdUser', 'certifNum']),
+    ...mapState(['pwdUser', 'certifNum', 'flag']),
   },
   methods: {
     ...mapMutations(['confirmPwd', 'findUserPWd']),
@@ -69,7 +76,7 @@ export default {
       display = document.querySelector('#time');
       this.startTimer(fiveMinutes, display);
       this.remaintime = false;
-      axios.get('http://localhost:8080/api/account/findPassword',{
+      axios.get('http://i3b304.p.ssafy.io:8080/api/account/findPassword',{
         params:{
           email: this.pwdUser.email,
           pTime: this.pwdUser.birth.substring(0, 4) + this.pwdUser.birth.substring(5, 7) + this.pwdUser.birth.substring(8, 10) 
@@ -95,6 +102,42 @@ export default {
           title: '인증번호가 틀렸습니다.',
           text: '한번 더 확인해주세요',
         })
+      }
+    },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const NAV = document.querySelector('#nav')
+      const NAVBASE = document.querySelector('.nav-base')
+      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+      const INPUT = document.querySelectorAll('input')
+      
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        NAV.classList.add('nav-dark')
+        NAVBASE.classList.add('nav-dark')
+        NAVLOGO.classList.add('nav-logo-dark')
+        this.checked = true
+        for (var i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('input-dark')
+        }
+
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        NAV.classList.remove('nav-dark')
+        NAVBASE.classList.remove('nav-dark')
+        NAVLOGO.classList.remove('nav-logo-dark')
+        this.checked = false
+        for (var j=0; j<INPUT.length ; j++) {
+          INPUT[j].classList.remove('input-dark')
+        }
       }
     },
   }

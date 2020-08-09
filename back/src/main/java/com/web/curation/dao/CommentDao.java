@@ -19,4 +19,5 @@ public interface CommentDao extends JpaRepository<Comment, String>{
 	
 	@Query(value="select * from comment c, user u where articleNo=:articleNo and c.writer=u.nickname", nativeQuery=true)
 	List<Comment> allCommentListByArtcieNo(int articleNo);
+	
 }

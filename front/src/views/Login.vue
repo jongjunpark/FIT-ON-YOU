@@ -38,7 +38,7 @@
 /* eslint-disable */
 import "../components/css/login.css"
 import axios from 'axios';
-import { mapGetters, mapMutations, mapActions  } from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions  } from 'vuex'
 
 Kakao.init('713af847cf1784de91646f5cb2455cbf');
 
@@ -81,12 +81,17 @@ export default {
     },
     password() {
       this.setPasswordClass();
-    }
+    },
+    flag() {
+      this.defaultDark()
+    },
   },
   mounted() {
-    window.addEventListener("google-loaded", this.startApp);    
+    window.addEventListener("google-loaded", this.startApp);
+    this.defaultDark()    
   },
   computed: {
+    ...mapState(['flag']),
     ...mapGetters([]),
   }, 
   methods:{
@@ -248,6 +253,34 @@ export default {
         }
 
       });
+    },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const NAV = document.querySelector('#nav')
+      const NAVBASE = document.querySelector('.nav-base')
+      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        NAV.classList.add('nav-dark')
+        NAVBASE.classList.add('nav-dark')
+        NAVLOGO.classList.add('nav-logo-dark')
+        this.checked = true
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        NAV.classList.remove('nav-dark')
+        NAVBASE.classList.remove('nav-dark')
+        NAVLOGO.classList.remove('nav-logo-dark')
+        this.checked = false
+      }
     },
 
     

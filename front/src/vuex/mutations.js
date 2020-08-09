@@ -35,7 +35,9 @@ export default {
   },
   setUserNick(state,data){
     state.user.nickname=data;
+  },
+  setFlag(state, data) {
+    state.flag = data
   }
-
 
 }

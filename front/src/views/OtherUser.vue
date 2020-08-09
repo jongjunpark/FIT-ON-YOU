@@ -12,15 +12,15 @@
         </div>
         <div class="follow">
           <h2>팔로우</h2>
-          <h3>123,456</h3>
+          <h3>{{followingCnt}}</h3>
         </div>
         <div class="follower">
           <h2>팔로워</h2>
-          <h3>123,456</h3>
+          <h3>{{followedCnt}}</h3>
         </div>
-      <p class="other-nickname">UserName</p>
+      <p class="other-nickname">{{nickname}}</p>
       <div class="other-content">
-        <h3>자기소개 입니다.</h3>
+        <h3>{{selfintro}}</h3>
       </div>
 			<div class="parent-other">
 				<div class="other-user-follow">
@@ -53,14 +53,91 @@
 <script>
 import "../components/css/otheruser.css"
 import "../components/css/profileedit.css"
-
+import { mapState } from 'vuex'
+import axios from 'axios'
 
 export default {
  name: 'OtherUser',
  data() {
 	return {
-		profileImg: '',
+    profileImg:false,
+    nickname:'',
+    selfintro:'자기소개 입니다.',
+    followingCnt:'',
+    followedCnt:'',
+
+
 	}
+ },
+ computed: {
+    ...mapState(['flag'])
+  },
+  watch: {
+    flag() {
+      this.defaultDark()
+    }
+  },
+ mounted() {
+   this.defaultDark()
+   let ref=this;
+   let uNick=this.$route.params.nickname;
+   axios.get('http://localhost:8080/api/mypage/otheruser',{
+     params:{
+      nickname:uNick,
+    }
+   }).then((data)=>{
+     console.log(data);
+     ref.nickname=data.data.userinfo.nickname;
+     ref.profileImg=data.data.userinfo.profile_img;
+     if(data.data.userinfo.selfintroduce!=null){
+       ref.selfintro=data.data.userinfo.selfintroduce
+     }
+     ref.followedCnt=data.data.followedCnt
+     ref.followingCnt=data.data.followingCnt
+
+    
+   })
+   .catch(
+   )
+
+ },
+ methods: {
+   defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const NAV = document.querySelector('#nav')
+      const NAVBASE = document.querySelector('.nav-base')
+      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+      const INPUT = document.querySelectorAll('input')
+      
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        NAV.classList.add('nav-dark')
+        NAVBASE.classList.add('nav-dark')
+        NAVLOGO.classList.add('nav-logo-dark')
+        this.checked = true
+        for (var i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('input-dark')
+        }
+
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        NAV.classList.remove('nav-dark')
+        NAVBASE.classList.remove('nav-dark')
+        NAVLOGO.classList.remove('nav-logo-dark')
+        this.checked = false
+        for (var j=0; j<INPUT.length ; j++) {
+          INPUT[j].classList.remove('input-dark')
+        }
+      }
+    },
  },
 }
 </script>

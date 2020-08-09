@@ -4,7 +4,7 @@
       ∨
     </div>
     <transition name='slide-influ-nav'>
-      <div v-if="isInfluNav" class="influ-nav-box">
+      <div v-show="isInfluNav" class="influ-nav-box">
         <div class="influ-nav">
           <VueSlickCarousel v-bind="settings">
             <div v-for="influ in influencer" :key="influ.nickname">
@@ -21,8 +21,8 @@
     
     <CommentModal v-if="showModal" @close="showModal= false" :modalArticleNo="modalArticleNo" :modalArticleUser="modalArticleUser"/>
 
-    <div class='wrap feed-wrap' v-for="feed in mainfeed" :key="feed.articleUser">
-      <div class='wrap-container'>
+    <div class='wrap feed-wrap'>
+      <div class='wrap-container' v-for="(feed,index) in mainfeed" :key="feed.articleUser">
         <header class="feed-user-data">
           <div class="feed-user-profile" @click="goUserProfile(feed.articleUser)">
             <img :src="feed.userProfile">
@@ -40,12 +40,15 @@
           </VueSlickCarousel>
           <div class="feed-btn-box">
             <div class='feed-btn-left'>
-              <i class="fas fa-heart"></i>
+              
+              <i :class="'fas fa-heart '+likeicon[likeStates[index]]" 
+              @click="clickLike(feed.articleNo,likeStates[index],index,$event)"></i>
               <i :id="'show-modal'+ feed.articleNo" @click="clickComment(feed.articleNo,feed.articleUser)" class="fas fa-comment-alt"></i>
 
             </div>
             <div class='feed-btn-right'>
-              <i @click="clickBookMark" class="fas fa-bookmark"></i>
+              <i :class="'fas fa-bookmark ' +markicon[bookmarkStates[index]]"
+              @click="clickBookMark(feed.articleNo,bookmarkStates[index],index,$event)"></i>
             </div>
           </div>
           <header class='feed-content-head'>{{feed.content}}</header>
@@ -95,6 +98,8 @@ export default {
       mainfeed:[],
       influencer:[],
       feedlist:[],
+      likeStates:[],
+      bookmarkStates:[],
       settings: {
         "dots": false,
         "arrows": true,
@@ -116,6 +121,8 @@ export default {
       },
       modalArticleNo : '',
       modalArticleUser:'',
+      likeicon:['','heart'],
+      markicon:['','mark'],
     }
   },
   components: { 
@@ -123,7 +130,12 @@ export default {
     CommentModal
   },
   computed:{
-    ...mapState(['user']),
+    ...mapState(['user', 'flag']),
+  },
+  watch: {
+    flag() {
+      this.defaultDark()
+    }
   },
   
   methods: {
@@ -141,21 +153,67 @@ export default {
       selectBar.classList.remove('go-third-menu')
     },
   
-    clickLike() {
-      this.modal = true
+    clickLike(articleNo,flag,index,e) {
+      let ref=this
+      if(flag==0){
+        this.likeStates[index]=1
+        e.target.classList.add('heart')
+        this.modal = true
+        axios.post('http://localhost:8080/api/board/likes',{
+            articleNo:articleNo,
+            nickname:this.user.nickname
+          })
+          .then(console.log("좋아요"))
+          .catch()
+      }
+      else if(flag==1){
+        this.likeStates[index]=0
+        e.target.classList.remove('heart')
+        axios.delete('http://localhost:8080/api/board/likes',{
+          data:{
+            articleNo:articleNo,
+            nickname:this.user.nickname
+          }
+        })
+        .then(console.log(ref.likeStates[index],"좋아요 취소"))
+        .catch()
+      }
+      
     },
     clickComment(articleNo,articleUser) {
-      console.log(articleUser,1)
       this.modalArticleNo=articleNo;
       this.modalArticleUser=articleUser;
-      console.log(articleNo,12312);
       this.showModal = true
     },
-    clickBookMark() {
+    clickBookMark(articleNo,flag,index,e) {
+      let ref=this
+      if(flag==0){
+        this.bookmarkStates[index]=1
+        e.target.classList.add('mark')
+        axios.post('http://localhost:8080/api/board/bookmark',{
+            bookedArticle:articleNo,
+            bookUser:this.user.nickname
+          })
+          .then(console.log("북마크 등록"))
+          .catch()
+      }
+      else if(flag==1){
+        this.bookmarkStates[index]=0
+        e.target.classList.remove('mark')
+        axios.delete('http://localhost:8080/api/board/bookmark',{
+          data:{
+            bookedArticle:articleNo,
+            bookUser:this.user.nickname
+          }
+        })
+        .then(console.log(ref.bookmarkStates[index],"북마크 취소"))
+        .catch()
+      }
 
     },
     setInfluNav() {
       this.isInfluNav = !this.isInfluNav
+      
       const INFLUBTN = document.querySelector('.open-influ-nav')
       if(INFLUBTN.innerHTML === '∧'){
         INFLUBTN.innerHTML = '∨'
@@ -163,13 +221,50 @@ export default {
         INFLUBTN.innerHTML = '∧'
       }
     },
-    // goUserProfile(name){
-    //   this.$router.push(`/`)
-    // }
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const NAV = document.querySelector('#nav')
+      const NAVBASE = document.querySelector('.nav-base')
+      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+      const INPUT = document.querySelectorAll('input')
+      const INFLUNAVBTN = document.querySelector('.open-influ-nav')
+      const INFLUNAV = document.querySelector('.influ-nav')
+
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        NAV.classList.add('nav-dark')
+        NAVBASE.classList.add('nav-dark')
+        NAVLOGO.classList.add('nav-logo-dark')
+        INFLUNAVBTN.classList.add('nav-influ-btn-dark')
+        INFLUNAV.classList.add('nav-influ-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('input-dark')
+        }
+      } else if(Dark ==='on' ) {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        NAV.classList.remove('nav-dark')
+        NAVBASE.classList.remove('nav-dark')
+        NAVLOGO.classList.remove('nav-logo-dark')
+        INFLUNAVBTN.classList.remove('nav-influ-btn-dark')
+        INFLUNAV.classList.remove('nav-influ-dark')
+        for (let j=0; j<INPUT.length ; j++) {
+          INPUT[j].classList.remove('input-dark')
+        }
+      }
+    },
   },
   mounted() {
     this.onNewsFeed()
-    
+    this.defaultDark()
+    let ref=this;
     let nickdata = this.$cookies.get('auth-nickname')
     let uri = nickdata;
     let uri_enc = encodeURIComponent(uri);
@@ -239,6 +334,8 @@ export default {
         });
        
         this.mainfeed.push(feeddata)
+        ref.likeStates.push(this.feedlist[index].likechk);
+        ref.bookmarkStates.push(this.feedlist[index].markchk);
   }
   });
   console.log(this.mainfeed)
@@ -246,7 +343,11 @@ export default {
       this.influencer=data.data;
       console.log(this.influencer)
     });
+
+  console.log(this.likeStates,'좋아요리스트');
+  console.log(this.bookmarkStates,'북마크리스트');
   }
+
   
 }
 
@@ -257,25 +358,28 @@ export default {
   max-width: 440px !important;
   width: 100%;
   margin: 0 auto;
-  margin-top: 70px;
+  margin-top: 60px;
   }
 }
 
 .wrap-container {
   margin-bottom: 50px;
 }
-
-@media (max-width: 280px) {
+.feed-wrap {
+    padding-top: 20px;
+  }
+/* @media (max-width: 280px) {
   .feed-wrap {
     margin-top: 150px;
   }
-}
+} */
 @media (min-width: 1200px) {
   .feed-wrap {
-    margin-top: 70px !important;
+    margin-top: 60px !important;
+    padding-top: 20px;
   }
 }
-@media (min-height: 700px) {
+/* @media (min-height: 700px) {
   .feed-wrap {
     margin-top: 150px;
   }
@@ -289,7 +393,7 @@ export default {
   .feed-wrap {
     margin-top: 80px;
   }
-}
+} */
 .open-influ-nav {
   position: fixed;
   top: 60px;
@@ -468,6 +572,25 @@ export default {
 }
 .margin-box {
   height: 20px;
+}
+
+.nav-influ-btn-dark {
+  background-color: rgb(109, 108, 108);
+}
+
+.nav-influ-btn-dark:hover {
+  color: #202020;
+}
+
+.nav-influ-dark {
+  background-color: rgb(77, 76, 76);
+}
+
+.heart{
+  color:crimson;
+}
+.mark{
+  color:gold;
 }
 </style>
 
