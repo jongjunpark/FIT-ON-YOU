@@ -1,13 +1,11 @@
 <template>
   <div class='wrap'>
     <div class='wrap-container'>
+      <div class="commu-margin-box"></div>
       <div class="search-box">
-        <div class="search-inner-box">
-        </div>
-        <div class="search-inner-box">
-        </div>
-        <div class="search-inner-box">
-        </div>
+        <div class="search-inner-box"></div>
+        <div class="search-inner-box"></div>
+        <div class="search-inner-box"></div>
       </div>
       <div class="search-box">
         <div class="search-inner-box"></div>
@@ -35,6 +33,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import "../components/css/community.css"
 
 export default {
   name: 'Community',
@@ -90,19 +89,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.search-box {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.search-inner-box {
-  width: 30%;
-  padding-top: 30%;
-  margin: 5px;
-  background-color: grey;
-  position: relative
-}
-</style>

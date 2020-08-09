@@ -2,7 +2,7 @@
   <div class='wrap'>
    <div class='wrap-container'>
      <div class='passwordchange-head'>
-      <h1>새로운 비밀번호로 <br> 변경해주세요.</h1>
+      <h1>새로운 <br> 비밀번호로 <br> 변경해주세요.</h1>
     </div>
     <div class='lock-profile-img'>
       <img class='profile-img' src="../assets/images/pngflow.com.png" alt="">

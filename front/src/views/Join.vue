@@ -62,9 +62,9 @@
       <div @click='nextJoin' v-if='!JoinBtn && isMale' class='btn on-join-btn'>가입하기</div>
       <div @click='nextJoin' v-if='!JoinBtn && isFemale' class='btn on-join-btn-woman'>가입하기</div>
     </div>
-    <div class='wrap-container center-container hidden'>
+    <div class='wrap-container center-container join-profile-hidden'>
       <header class='join-profile-header'>
-        <div @click='goBack' class='join-profile-back-btn'>＜ 뒤로가기</div>
+        <i @click='goBack' class="fas fa-arrow-circle-left"></i>
       </header>
       <section class='join-profile-area'>
         <div class='join-profile-img'>
@@ -404,8 +404,8 @@ export default {
       const SecondPage = document.querySelector('.wrap-container:nth-child(2)')
 
       firstPage.classList.add('goNext-front')
-      SecondPage.classList.remove('hidden')
-      firstPage.classList.remove('return')
+      SecondPage.classList.remove('join-profile-hidden')
+      firstPage.classList.remove('join-profile-return')
       SecondPage.classList.add('goNext-end')
       if (this.isMale) {
         this.defaultImg = 'default-user.png'
@@ -422,9 +422,9 @@ export default {
       const SecondPage = document.querySelector('.wrap-container:nth-child(2)')
 
       firstPage.classList.remove('goNext-front')
-      firstPage.classList.add('return')
+      firstPage.classList.add('join-profile-return')
       SecondPage.classList.remove('goNext-end')
-      SecondPage.classList.add('hidden')
+      SecondPage.classList.add('join-profile-hidden')
       if(!this.input.textProfile && !this.input.profileImg) {
         this.changeProfile = false
       }

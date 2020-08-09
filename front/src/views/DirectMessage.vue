@@ -9,7 +9,7 @@
         <p class="back-btn-name">kidcozyboy</p>
       </div>
       <div class="message-content-wrap">
-        <div class="message-content">
+        <div class="direct-message-content">
           <div class="user-opponent">
             <img src="../assets/images/default-user.png" alt="" class="in-img-content">
             <p class="in-user-content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus modi laudantium.</p>
@@ -27,8 +27,8 @@
       </div>
       <div class="input-message">
         <input type="textarea" name="" id="" class="input-message-in" placeholder="메세지 보내기..." v-model="text" @keyup.enter="sendMessage">
+        <button class="butn" @click="sendMessage">↑</button>
       </div>
-      <button class="butn" @click="sendMessage">↑</button>
     </div>
   </div>
 </template>
@@ -59,8 +59,8 @@ export default {
     sendMessage() {
       // axios 요청후
       if (this.text !== '') {
-        var divParent = document.querySelector('.message-content');
-        divParent.className = 'message-content';
+        var divParent = document.querySelector('.direct-message-content');
+        divParent.className = 'direct-message-content';
 
         var div = document.createElement('div');
         div.className = 'user-me'; 
@@ -92,7 +92,7 @@ export default {
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.wrap')
       const INPUT = document.querySelectorAll('input')
-      const PTAG = document.querySelectorAll('p')
+      const PTAG = document.querySelectorAll('.in-user-content, .back-btn-name')
 
       const MessageDM = document.querySelector('.input-message-in')
       const MessageMe = document.querySelectorAll('.user-me-content')

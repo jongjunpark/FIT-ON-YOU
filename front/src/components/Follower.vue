@@ -160,83 +160,65 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .follower-container {
   width: 100%;
+  height: 70vh;
+  overflow-y: auto;
 }
+.follower-container::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background-color: transparent; }
+::-webkit-scrollbar-thumb { background: silver;}
+::-webkit-scrollbar-button { display: none; }
 
 .follower-container .follower-box {
   width: 100%;
+  height: 8vh;
   background-color: grey;
   display: flex;
   border-bottom: 1px solid red;
-  padding-top: 13vw;
   position: relative;
-  margin: 2vh 0;
+  margin: 1.5vh 0;
 }
-@media (min-width: 1200px) {
-  .follower-container .follower-box {
-    padding-top: 10%;
-  }
-}
-
 
 .follower-box .follower-icon-area {
-  position: absolute;
-  top:0; bottom:0; left:0; right:0;
-  width: 30%;
   height: 100%;
   background-color: burlywood;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 0 2vh;
 }
-@media (min-width: 1200px) {
+@media (max-width: 449px) {
   .follower-box .follower-icon-area {
-    width: 20%;
+    margin: 0 1vh;
   }
 }
 
-
 .follower-box .follower-icon-area img {
-  width: 100%;
-  height: 100%;
+  width: 7vh;
+  height: 7vh;
   background-color: black;
-  margin: 0 25%;
   border-radius: 50%;
-  /* width: 100%;
-  height: 100%; */
 }
 
 .follower-box .follower-text-area {
-  position: absolute;
-  top:0; bottom:0; left:30%; right:0;
   background-color: cornflowerblue;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 70%;
   height: 100%;
+  width: 100%;
 }
-@media (min-width: 1200px) {
-  .follower-box .follower-text-area {
-    left: 20%;
-    width: 80%;
-  }
-}
-
 
 .follower-text-area .follower-username {
-  font-size: 4vw;
+  font-size: 2vh;
+  display: flex;
+  align-items: center;
   font-weight: 700;
   height: 50%;
+  width: 100%;
 }
-@media (min-width: 1200px) {
-  .follower-text-area .follower-username {
-    font-size: 100%;
-  }
-}
-
 
 .follower-text-area .follower-btn-area {
   display: flex;
@@ -245,40 +227,51 @@ export default {
   height: 50%;
   background-color: darkcyan;
 }
-
-.follower-btn-area .follower-follow-btn {
-  width: 30%;
-  height: 100%;
-  background-color: orange;
-  border-radius: 10px;
-  text-align: center;
-  font-weight: 700;
-  font-size: 3vw;
-  line-height: 2;
-  margin-right: 20%;
-}
-@media (min-width: 1200px) {
-  .follower-btn-area .follower-follow-btn {
-    font-size: 100%;
-    line-height: 1.5;
+@media (max-width: 449px) {
+  .follower-text-area .follower-btn-area {
+    justify-content: space-evenly;
   }
 }
 
+.follower-btn-area .follower-follow-btn {
+  width: 14vh;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: orange;
+  border-radius: 1.5vh;
+  margin-right: 10vh;
+  font-weight: 700;
+  font-size: 2vh;
+  line-height: 2vh;
+}
+@media (max-width: 449px) {
+  .follower-btn-area .follower-follow-btn {
+    margin-right: 0;
+  }
+}
+@media (max-width: 300px) {
+  .follower-btn-area .follower-follow-btn {
+    width: 11vh
+  }
+}
 
 .follower-btn-area .follower-dm-btn {
-  width: 30%;
+  width: 14vh;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: palegreen;
-  border-radius: 10px;
-  text-align: center;
+  border-radius: 1.5vh;
   font-weight: 700;
-  font-size: 3vw;
-  line-height: 2;
+  font-size: 2vh;
+  line-height: 2vh;
 }
-@media (min-width: 1200px) {
+@media (max-width: 300px) {
   .follower-btn-area .follower-dm-btn {
-    font-size: 100%;
-    line-height: 1.5;
+    width: 11vh
   }
 }
 </style>

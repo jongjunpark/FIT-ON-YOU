@@ -1,76 +1,82 @@
 .wrap-container-dm {
   width: 100%;
-  height: 650px;
+  height: 96%;
   position: relative;
 }
 
-.search-dm-input {
-  position: absolute;
-  bottom: 65px;
+.wrap-container-dm .dm-container-wrap {
   width: 100%;
-  height: 40px;
-  padding: 0.5rem;
-  padding-left: 3rem;
-  border: 1px solid black;
-  border-radius: 20px;
-}
-
-.search-dm {
-  border: 0px;
-}
-
-.search-dm-input:focus {outline: none;}
-
-.search-img-dm {
-  position: absolute;
-  bottom: 70px;
-  left: 10px;
-  margin: 0;
-  font-size: x-large;
-}
-
-.dm-container {
-  width: 100%;
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  margin-top: 20px;
-}
-
-.dm-container-wrap {
-  width: 100%;
-  height: 500px;
+  height: 72vh;
   overflow-y: auto;
   scroll-behavior: smooth;
 }
 
-.dm-container-wrap::-webkit-scrollbar { width: 0px; }
+.wrap-container-dm .dm-container-wrap::-webkit-scrollbar { width: 0px; }
 
+.wrap-container-dm .search-dm {
+  border: 0px;
+}
 
-.dm-container-message {
+.search-dm .search-dm-input {
+  position: absolute;
+  bottom: 8vh;
   width: 100%;
-  height: 70px;
+  height: 5.5vh;
+  padding: 1vh;
+  padding-left: 5vh;
+  border: 1px solid black;
+  border-radius: 2.5vh;
+  font-size: 2vh;
+}
+
+.search-dm .search-dm-input:focus {outline: none;}
+
+.wrap-container-dm .search-img-dm {
+  position: absolute;
+  bottom: 9.2vh;
+  left: 1.2vh;
+  margin: 0;
+  font-size: 3vh;
+}
+
+.dm-container-wrap .dm-container {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-top: 2.5vh;
+}
+
+.dm-container .dm-container-message {
+  width: 100%;
+  height: 9vh;
   display: flex;
   align-items: center;
   /* border-bottom: 1px solid #D5D5D5; */
 }
-.dm-container-message-img {
+
+.dm-container .dm-container-message:hover {
+  border: 2px solid #D5D5D5;
+  border-radius: 2.5vh;
+  padding: 1vh;
+}
+
+.dm-container-message .dm-container-message-img {
   border: 1px solid black;
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  margin-right: 20px;
+  width: 6.5vh;
+  height: 6.5vh;
+  margin-right: 2.5vh;
 }
 
-.in-text {
-  margin-left: 10px;
+.dm-container-message .dm-user-name {
+  font-size: 2.5vh;
+}
+
+.dm-container-message .dm-in-text {
+  margin-left: 1.3vh;
   color: #808080;
-}
-
-.dm-container-message:hover {
-  border: 2px solid #D5D5D5;
-  border-radius: 20px;
-  padding: .5rem;
+  font-size: 1.7vh;
 }
 
 .search-img-dm-dark {

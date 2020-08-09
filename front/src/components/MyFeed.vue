@@ -96,8 +96,8 @@ export default {
 }
 
 .myfeed-search-inner-box {
-  width: 30%;
-  padding-top: 30%;
+  width: 33%;
+  padding-top: 33%;
   margin: 1px;
   background-color: grey;
   position: relative
