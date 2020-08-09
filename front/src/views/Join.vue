@@ -197,6 +197,9 @@ export default {
     'finalMail'() {
       this.finalMailCheck();
     },
+    flag() {
+      this.defaultDark()
+    },
     input: {
       handler() {
         this.checkJoinForm();
@@ -204,11 +207,14 @@ export default {
     },
   },
   computed: {
-    ...mapState(['setLoggedIn']),
-    ...mapActions(['sendUserInfo'])
+    ...mapState(['setLoggedIn', 'flag']),
+  },
+  mounted() {
+    this.defaultDark()
   },
   methods: {
     ...mapMutations(['setToken']),
+    ...mapActions(['sendUserInfo']),
     checkSelect() {
       if (this.select === '직접입력') {
         this.onSelect = false
@@ -317,7 +323,7 @@ export default {
       }
     },
     checkNickname() {
-      axios.get('http://localhost:8080/api/account/checkNickname',{ 
+      axios.get('http://i3b304.p.ssafy.io:8080/api/account/checkNickname',{ 
         params: {
           nickname: this.input.nickname
           }
@@ -492,8 +498,8 @@ export default {
       if (photoFile.files[0]) {
 
         frm.append("profile-img-edit", photoFile.files[0]);
-        frm.append("nicknem",this.nickname);
-        axios.post('http://localhost:8080/api/account/addProfileImg',frm,
+        frm.append("nickname",this.nickname);
+        axios.post('http://i3b304.p.ssafy.io:8080/api/account/addProfileImg',frm,
         ).then( () =>{
           console.log("1");
 
@@ -548,7 +554,7 @@ export default {
          this.mailErrMsg = false;
          this.finalMail = false;
           if (this.mailSucMsg) {
-            axios.get('http://localhost:8080/api/account/checkDoubleEmail',{ 
+            axios.get('http://i3b304.p.ssafy.io:8080/api/account/checkDoubleEmail',{ 
               params: {
                 email: this.input.email+'@'+this.input.url
                 }
@@ -589,6 +595,58 @@ export default {
     },
     checkcheck() {
       console.log('hi')
+    },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const NAV = document.querySelector('#nav')
+      const NAVBASE = document.querySelector('.nav-base')
+      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+      const INPUT = document.querySelectorAll('input')
+      const TEXTAREA = document.querySelectorAll('textarea')
+
+      const BACKBTN = document.querySelector('.join-profile-back-btn')
+      const SKIP = document.querySelector('.join-skip-btn')
+      
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        NAV.classList.add('nav-dark')
+        NAVBASE.classList.add('nav-dark')
+        NAVLOGO.classList.add('nav-logo-dark')
+        this.checked = true
+        for (var i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.add('textarea-dark')
+        }
+
+        BACKBTN.classList.add('join-profile-back-btn-dark')
+        SKIP.classList.add('join-skip-btn-dark')
+
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        NAV.classList.remove('nav-dark')
+        NAVBASE.classList.remove('nav-dark')
+        NAVLOGO.classList.remove('nav-logo-dark')
+        this.checked = false
+        for (var j=0; j<INPUT.length ; j++) {
+          INPUT[j].classList.remove('input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.remove('textarea-dark')
+        }
+        
+        BACKBTN.classList.remove('join-profile-back-btn-dark')
+        SKIP.classList.remove('join-skip-btn-dark')
+      }
     },
   }
 }

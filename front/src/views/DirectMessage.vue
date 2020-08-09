@@ -2,7 +2,7 @@
   <div class="wrap">
     <div class="wrap-container-direct">
       <div class="wrap-direct">
-        <p class="back-btn">〈 </p>
+        <p class="back-btn" @click="goDM">〈 </p>
         <div class="in-img">
           <img src="../assets/images/default-user.png" alt="" class="in-img-profile">
         </div>
@@ -102,6 +102,58 @@ export default {
     },
     chatListFunction() {
       console.log('1');
+    },
+    goDM() {
+      this.$router.push('/dm')
+    },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const NAV = document.querySelector('#nav')
+      const NAVBASE = document.querySelector('.nav-base')
+      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+      const INPUT = document.querySelectorAll('input')
+      
+      const MessageDM = document.querySelector('.input-message-in')
+      const MessageMe = document.querySelectorAll('.user-me-content')
+      
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        NAV.classList.add('nav-dark')
+        NAVBASE.classList.add('nav-dark')
+        NAVLOGO.classList.add('nav-logo-dark')
+        this.checked = true
+        for (var i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('input-dark')
+        }
+        
+        MessageDM.classList.add('input-message-in-dark')
+        for (let i=0; i<MessageMe.length ; i++) {
+          MessageMe[i].classList.add('user-me-content-dark')
+        }
+
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        NAV.classList.remove('nav-dark')
+        NAVBASE.classList.remove('nav-dark')
+        NAVLOGO.classList.remove('nav-logo-dark')
+        this.checked = false
+        for (var j=0; j<INPUT.length ; j++) {
+          INPUT[j].classList.remove('input-dark')
+        }
+        
+        MessageDM.classList.remove('input-message-in-dark')
+        for (let i=0; i<MessageMe.length ; i++) {
+          MessageMe[i].classList.remove('user-me-content-dark')
+        }
+      }
     },
   },
   created(){

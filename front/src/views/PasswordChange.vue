@@ -54,9 +54,15 @@ export default {
       this.checkPasswordValidate();
       this.checkPassword();
     },
+    flag() {
+      this.defaultDark()
+    },
   },
   computed: {
-    ...mapState(['pwdUser'])
+    ...mapState(['pwdUser', 'flag'])
+  },
+  mounted() {
+    this.defaultDark()
   },
   methods: {
     ...mapMutations(['setToken', 'setLoggedIn']),
@@ -105,7 +111,7 @@ export default {
       formData.append('email',this.pwdUser.email);
       formData.append('password',this.passwordConfirm);
 
-      axios.post('http://localhost:8080/api/account/changePassword',
+      axios.post('http://i3b304.p.ssafy.io:8080/api/account/changePassword',
         formData).then(data => {
         console.log(data)
         this.$cookies.set('auth-token', data.data.auth_token)
@@ -122,6 +128,42 @@ export default {
       .catch(data => {
         console.log(data)
       });
+    },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const NAV = document.querySelector('#nav')
+      const NAVBASE = document.querySelector('.nav-base')
+      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+      const INPUT = document.querySelectorAll('input')
+      
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        NAV.classList.add('nav-dark')
+        NAVBASE.classList.add('nav-dark')
+        NAVLOGO.classList.add('nav-logo-dark')
+        this.checked = true
+        for (var i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('input-dark')
+        }
+
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        NAV.classList.remove('nav-dark')
+        NAVBASE.classList.remove('nav-dark')
+        NAVLOGO.classList.remove('nav-logo-dark')
+        this.checked = false
+        for (var j=0; j<INPUT.length ; j++) {
+          INPUT[j].classList.remove('input-dark')
+        }
+      }
     },
   },
   created() {

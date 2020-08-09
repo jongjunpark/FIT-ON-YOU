@@ -58,12 +58,12 @@ Vue.use(VueRouter)
     path: '/search',
     name: 'Search',
     component: Search,
-    // beforeEnter(to, from, next) {
-    //   if (!Vue.$cookies.isKey('auth-token')) {
-    //     next('/')
-    //   } else {
-    //     next()
-    //   }    }
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/')
+      } else {
+        next()
+      }    }
     
   },
   {

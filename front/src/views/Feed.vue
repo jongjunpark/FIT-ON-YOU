@@ -4,7 +4,7 @@
       ∨
     </div>
     <transition name='slide-influ-nav'>
-      <div v-if="isInfluNav" class="influ-nav-box">
+      <div v-show="isInfluNav" class="influ-nav-box">
         <div class="influ-nav">
           <VueSlickCarousel v-bind="settings">
             <div v-for="influ in influencer" :key="influ.nickname">
@@ -19,9 +19,10 @@
       </div>
     </transition>
     
+    <CommentModal v-if="showModal" @close="showModal= false" :modalArticleNo="modalArticleNo" :modalArticleUser="modalArticleUser"/>
 
-    <div class='wrap feed-wrap' v-for="feed in mainfeed" :key="feed.articleUser">
-      <div class='wrap-container'>
+    <div class='wrap feed-wrap'>
+      <div class='wrap-container' v-for="feed in mainfeed" :key="feed.articleUser">
         <header class="feed-user-data">
           <div class="feed-user-profile" @click="goUserProfile(feed.articleUser)">
             <img :src="feed.userProfile">
@@ -40,10 +41,8 @@
           <div class="feed-btn-box">
             <div class='feed-btn-left'>
               <i class="fas fa-heart"></i>
-              <i id="show-modal" @click="showModal = true" class="fas fa-comment-alt"></i>
-              <CommentModal v-if="showModal" @close="showModal = false">
+              <i :id="'show-modal'+ feed.articleNo" @click="clickComment(feed.articleNo,feed.articleUser)" class="fas fa-comment-alt"></i>
 
-              </CommentModal>
             </div>
             <div class='feed-btn-right'>
               <i @click="clickBookMark" class="fas fa-bookmark"></i>
@@ -95,6 +94,7 @@ export default {
       modal: false,
       mainfeed:[],
       influencer:[],
+      feedlist:[],
       settings: {
         "dots": false,
         "arrows": true,
@@ -113,7 +113,9 @@ export default {
         "speed": 500,
         "slidesToShow": 1,
         "slidesToScroll": 1
-      }
+      },
+      modalArticleNo : '',
+      modalArticleUser:'',
     }
   },
   components: { 
@@ -121,7 +123,12 @@ export default {
     CommentModal
   },
   computed:{
-    ...mapState(['user']),
+    ...mapState(['user', 'flag']),
+  },
+  watch: {
+    flag() {
+      this.defaultDark()
+    }
   },
   
   methods: {
@@ -142,14 +149,17 @@ export default {
     clickLike() {
       this.modal = true
     },
-    clickComment() {
-
+    clickComment(articleNo,articleUser) {
+      this.modalArticleNo=articleNo;
+      this.modalArticleUser=articleUser;
+      this.showModal = true
     },
     clickBookMark() {
 
     },
     setInfluNav() {
       this.isInfluNav = !this.isInfluNav
+      
       const INFLUBTN = document.querySelector('.open-influ-nav')
       if(INFLUBTN.innerHTML === '∧'){
         INFLUBTN.innerHTML = '∨'
@@ -157,35 +167,71 @@ export default {
         INFLUBTN.innerHTML = '∧'
       }
     },
-    // goUserProfile(name){
-    //   this.$router.push(`/`)
-    // }
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const NAV = document.querySelector('#nav')
+      const NAVBASE = document.querySelector('.nav-base')
+      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+      const INPUT = document.querySelectorAll('input')
+      const INFLUNAVBTN = document.querySelector('.open-influ-nav')
+      const INFLUNAV = document.querySelector('.influ-nav')
+
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        NAV.classList.add('nav-dark')
+        NAVBASE.classList.add('nav-dark')
+        NAVLOGO.classList.add('nav-logo-dark')
+        INFLUNAVBTN.classList.add('nav-influ-btn-dark')
+        INFLUNAV.classList.add('nav-influ-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('input-dark')
+        }
+      } else if(Dark ==='on' ) {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        NAV.classList.remove('nav-dark')
+        NAVBASE.classList.remove('nav-dark')
+        NAVLOGO.classList.remove('nav-logo-dark')
+        INFLUNAVBTN.classList.remove('nav-influ-btn-dark')
+        INFLUNAV.classList.remove('nav-influ-dark')
+        for (let j=0; j<INPUT.length ; j++) {
+          INPUT[j].classList.remove('input-dark')
+        }
+      }
+    },
   },
   mounted() {
     this.onNewsFeed()
+    this.defaultDark()
     let nickdata = this.$cookies.get('auth-nickname')
     let uri = nickdata;
     let uri_enc = encodeURIComponent(uri);
     let uri_dec = decodeURIComponent(uri_enc);
     let res = uri_dec;
-    axios.post("http://localhost:8080/api/board/influencer").then((data)=>{
-      this.influencer=data.data;
-      console.log(this.influencer)
-    });
+    
     
     const formData = new FormData();
     
     formData.append('nickname',res);
 
-    axios.post("http://localhost:8080/api/board/newsfeed",formData).then((data)=>{
+    axios.post("http://i3b304.p.ssafy.io:8080/api/board/newsfeed",formData).then((data)=>{
       console.log("success")
+      console.log(data)
       this.feedlist=data.data;
+      console.log(typeof(this.feedlist))
       for (let index = 0; index < this.feedlist.length; index++) {
         let feeddata={tags:[],
                       images:[],
                       content:"",
                       articleUser:"",
-                      userProfile:""}
+                      userProfile:"",}
 
         const el = this.feedlist[index];
 
@@ -193,14 +239,14 @@ export default {
 
         follow.append('follow',el.articleUser);
 
-        axios.post("http://localhost:8080/api/board/profileimg",follow).then((proff)=>{
+        axios.post("http://i3b304.p.ssafy.io:8080/api/board/profileimg",follow).then((proff)=>{
           feeddata.userProfile=proff.data.profile_img;
         });
 
         const articleNo = new FormData();
         articleNo.append('articleNo',el.articleNo);
 
-        axios.post("http://localhost:8080/api/board/images",articleNo).then((img)=>{
+        axios.post("http://i3b304.p.ssafy.io:8080/api/board/images",articleNo).then((img)=>{
           const imgs = img.data;
           const imglist = [];
           for (let i = 0; i < imgs.length; i++) {
@@ -212,15 +258,17 @@ export default {
             feeddata.content=this.feedlist[index].content;
             feeddata.articleDate= timeForToday(this.feedlist[index].articleDate);
             feeddata.articleUser= this.feedlist[index].articleUser;
+            feeddata.articleNo=this.feedlist[index].articleNo;
           }else{
             feeddata.url=imglist;
             feeddata.content=this.feedlist[index].content;
             feeddata.articleDate= timeForToday(this.feedlist[index].articleDate);
             feeddata.articleUser= this.feedlist[index].influeUser;
+            feeddata.articleNo=this.feedlist[index].articleNo;
         }
         
       });
-        axios.post("http://localhost:8080/api/board/tags",articleNo).then((tag)=>{
+        axios.post("http://i3b304.p.ssafy.io:8080/api/board/tags",articleNo).then((tag)=>{
         const tags = tag.data;
         const taglist = [];
         for (let i = 0; i < tags.length; i++) {
@@ -234,7 +282,12 @@ export default {
   }
   });
   console.log(this.mainfeed)
+  axios.post("http://i3b304.p.ssafy.io:8080/api/board/influencer").then((data)=>{
+      this.influencer=data.data;
+      console.log(this.influencer)
+    });
   }
+  
 }
 
 </script>
@@ -244,25 +297,28 @@ export default {
   max-width: 440px !important;
   width: 100%;
   margin: 0 auto;
-  margin-top: 70px;
+  margin-top: 60px;
   }
 }
 
 .wrap-container {
   margin-bottom: 50px;
 }
-
-@media (max-width: 280px) {
+.feed-wrap {
+    padding-top: 20px;
+  }
+/* @media (max-width: 280px) {
   .feed-wrap {
     margin-top: 150px;
   }
-}
+} */
 @media (min-width: 1200px) {
   .feed-wrap {
-    margin-top: 70px !important;
+    margin-top: 60px !important;
+    padding-top: 20px;
   }
 }
-@media (min-height: 700px) {
+/* @media (min-height: 700px) {
   .feed-wrap {
     margin-top: 150px;
   }
@@ -276,7 +332,7 @@ export default {
   .feed-wrap {
     margin-top: 80px;
   }
-}
+} */
 .open-influ-nav {
   position: fixed;
   top: 60px;
@@ -455,6 +511,18 @@ export default {
 }
 .margin-box {
   height: 20px;
+}
+
+.nav-influ-btn-dark {
+  background-color: rgb(109, 108, 108);
+}
+
+.nav-influ-btn-dark:hover {
+  color: #202020;
+}
+
+.nav-influ-dark {
+  background-color: rgb(77, 76, 76);
 }
 </style>
 

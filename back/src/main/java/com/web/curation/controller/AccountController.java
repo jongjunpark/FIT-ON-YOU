@@ -204,20 +204,18 @@ public class AccountController {
 		Map<String,Object> resultMap=new HashMap<>();
 		final BasicResponse result = new BasicResponse();
 		// 이 path는 로컬에선 일단 각자 경로로 테스트
-		String path = "C:\\ssafy\\pjt1\\s03p13b304\\front\\public\\user\\";
+		String path ="i3b304.p.ssafy.io/img/";
 		UUID uuid = UUID.randomUUID();
 		String savedName = uuid.toString()+"_"+img.getOriginalFilename();
 		File file = new File(path + savedName);
 		try {
 			img.transferTo(file);
-			String storePath="../user/"+savedName;
+			String storePath="i3b304.p.ssafy.io/img/"+savedName;
 			if(userDao.updateProfileImg(storePath, nickname)==1) {
 				result.data="success";
 				UserDTO userDTO = new UserDTO(userDao.findUserByNickname(nickname).get());
 				String Token = jwtService.create(userDTO);
 				resultMap.put("auth_token",Token);
-				
-				userDao.updateProfileImg(storePath, nickname);
 				
 			}
 			else {

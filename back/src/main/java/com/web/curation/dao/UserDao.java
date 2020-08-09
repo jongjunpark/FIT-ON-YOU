@@ -52,4 +52,9 @@ public interface UserDao extends JpaRepository<User, String> {
     @Transactional
     @Query(value="delete from user where nickname=:nickname", nativeQuery=true)
     int deleteUser(String nickname);
+    
+    
+    @Query(value="select profile_img from user where nickname=:nickname", nativeQuery=true)
+    String findProfileImgByNickname(String nickname);
+    
 }	
