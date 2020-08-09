@@ -29,8 +29,8 @@
           </div>
           <div v-for="(alarm,index) in alist" :key="index">
             <div :class="isRead[alarm.isRead]">
-              <img src="../assets/images/default-user.png" alt="" class="dm-container-message-img">
-              <i class="fas fa-comment-dots chat-alarm"></i>
+              <img :src="alarm.user.profile_img" alt="" class="dm-container-message-img" @click=goToUserPage(alarm.follower)>
+              <i :class="alarmIcon[alarm.type-1]"></i>
               <h4 class=""><span @click=goToUserPage(alarm.follower)>{{alarm.follower}}</span>
               {{alarmMsg[alarm.type-1]}}</h4>
               <h5 class="in-text">{{timeCal(alarm.createAt)}}</h5>
@@ -53,8 +53,9 @@ export default {
   data() {
     //댓글 1 팔로우 2 좋아요 3
     return {
-
-
+      alarmIcon:['fas fa-comment-dots chat-alarm',
+                  'fas fa-user-circle user-alarm',
+                  'fas fa-heart heart-alarm'],
       alarmMsg:[
         '님이 회원님의 게시글에 댓글을 남겼습니다.', 
         '님이 회원님을 팔로우하기 시작하였습니다',
