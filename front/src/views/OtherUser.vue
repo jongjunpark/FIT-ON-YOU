@@ -6,6 +6,7 @@
           <div v-if='!profileImg'>
             <img class='profile-img' src="../assets/images/default-user.png" alt="">
           </div>
+<<<<<<< HEAD
           <!--<div class="follow">
           <div class="profile-follow">
           <h2>팔로우</h2>
@@ -27,6 +28,8 @@
       <div class="other-content">
         <h3>{{selfintro}}</h3>
 -->
+=======
+>>>>>>> 5aee349cc625184d2f515a9adfedb7fa6c9670c7
           <div v-if='profileImg'>
             <img class='profile-img' :src="profileImg" alt="">
           </div>

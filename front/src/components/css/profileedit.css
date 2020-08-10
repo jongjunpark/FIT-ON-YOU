@@ -1,0 +1,302 @@
+.wrap-container.profile-wrap {
+  /* margin-top: 20px; */
+}
+
+.profile-head-area {
+  width: 100%;
+  height: 25vh;
+  margin-top: 8vh;
+  /* background-color: khaki; */
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  position: relative; 
+}
+
+.profile-head-area .profile-follow-box {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.profile-edit-area {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.profile-btn-area {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  margin-top: 5vh;
+}
+
+.profile-footer-area {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  margin-top: 8vh;
+}
+
+.edit-profile-img {
+  border-radius: 50%;
+  border: 2px solid grey;
+  width: 25vh;
+  height: 25vh;
+  position: relative;
+}
+
+.edit-profile-img .profile-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.edit-profile-img .edit-profile-img-edit{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 6vh;
+  height: 6vh;
+  background-image: url("../../assets/images/edit.png");
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: 60%;
+  cursor: pointer;
+}
+
+.edit-profile-img-edit input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.edit-profile-img .edit-profile-img-edit:hover{
+  background-color: #DBDBDB;
+}
+
+.profile-follow-box .profile-follow {
+  margin-bottom: 2vh ;
+}
+
+.profile-follow-box .profile-follow-head{
+  font-size: 3vh;
+  font-weight: 500;
+}
+
+.profile-follow-box .profile-follow-content{
+  font-size: 2vh;
+}
+
+.profile-edit-area .my-nickname {
+	font-size: 4vh;
+  font-weight: 600;
+  margin: 3vh 0;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.profile-edit-area .my-content {
+  font-size: 2vh;
+  margin-bottom: 3vh;
+  cursor: pointer;
+}
+
+.profile-edit-area .my-nickname:hover {
+  color: #5AAEFF !important;
+}
+
+.profile-hidden-box {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1000;  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-opacity-wrap {
+  opacity: 0.5;
+}
+
+.profile-nick-input {
+  font-size: 4vh;
+  font-weight: 600;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: 50%;
+}
+.profile-content-input {
+  font-size: 4vh;
+  font-weight: 600;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: 50%;
+}
+
+.profile-nick-input > input {
+  text-align: center;
+  width: 100%;
+  border-bottom: 2px solid black;
+  
+}
+.profile-content-input > input {
+  text-align: center;
+  width: 100%;
+  border-bottom: 2px solid black;
+}
+
+.profile-nick-cancel {
+  position: absolute;
+  top: 60%;
+  width: 4vh;
+  height: 4vh;
+}
+
+.profile-content-cancel {
+  position: absolute;
+  top: 60%;
+  width: 4vh;
+  height: 4vh;
+}
+
+.profile-nick-cancel:hover {
+  cursor: pointer;
+}
+
+.profile-content-cancel:hover {
+  cursor: pointer;
+}
+
+
+
+.profile-edit-content {
+  /* position: absolute;
+  top: 65%;
+  left: 0; 
+  width: 200px;
+  height: 100px;
+  cursor: pointer; */
+}
+.profile-edit-content:hover {
+  color: #5AAEFF !important;
+
+}
+
+.edit-img-parent {
+  display: inline-block;
+}
+
+.profile-edit-img {
+  width: 2vh;
+  height: 2vh;
+  cursor: pointer;
+}
+
+.profile-user-change {
+  display: flex;
+  width: 17vh;
+  height: 6vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6vh;
+  background-color: black;
+  box-shadow: 0 6px 12px 0 rgba(0,0,0,0.25),
+              -3px -3px 10px -1px rgba(250,250,250,0.15);
+  cursor: pointer;
+  transition: transform 0.5s;
+}
+
+.profile-user-change:hover {
+  transform: translateY(5px)
+}
+
+.profile-user-change > span {
+  color: white;
+  font-size: 2vh;
+}
+.profile-setting-btn {
+  margin: 0;
+  color: white;
+}
+
+/* .profile-user-change-parent {
+  position: relative;
+  width: 130px;
+  height: 50px;
+  top: 40%;
+} */
+
+.profile-user-btn .mylist-icon, 
+.profile-user-btn .follower-icon, 
+.profile-user-btn .following-icon, 
+.profile-user-btn .bookmark-icon {
+  color: grey;
+  margin: 0;
+  font-size: 4vh;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.profile-user-btn:hover .mylist-icon,
+.profile-user-btn:hover .follower-icon,
+.profile-user-btn:hover .following-icon,
+.profile-user-btn:hover .bookmark-icon {
+  color: #5AAEFF;
+}
+
+.profile-user-btn:hover .follower-icon .follow-inner, 
+.profile-user-btn:hover .following-icon .follow-inner {
+  background-color: #5AAEFF;
+}
+
+.profile-footer-area .follow-inner{
+  font-size: 1.5vh;
+  position: absolute;
+  bottom: 0;
+  right: -30%;
+  color: white;
+  background-color: grey;
+  padding: 0.4vh;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.profile-follow:hover {
+  color: #5AAEFF;
+}
+
+.profile-follower:hover {
+  color: #5AAEFF;
+}
+
+.profile-edit-img-dark {
+  filter: invert(70%) !important;
+}
+
+.profile-dark-content {
+  color: #ebebeb !important;
+}
+
+.img-change-dark {
+  filter: invert(70%) !important;
+}
