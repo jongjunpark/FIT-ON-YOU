@@ -243,7 +243,7 @@ export default {
     loginHandler() { 
       console.log(this.email);
       console.log(this.password);
-      axios.get('http://localhost:8080/api/account/login',{
+      axios.get('http://i3b304.p.ssafy.io:8080/api/account/login',{
         params:{email:this.email,
                   password:this.password},
       }).then( response => {
@@ -255,6 +255,14 @@ export default {
           this.setToken(response.data.auth_token)
           this.sendUserInfo();
           this.setLoggedIn(true);
+          firebase.auth().signInWithEmailAndPassword(this.email, this.password).catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // ...
+          console.log(errorCode);
+          console.log(errorMessage);
+          });
           this.$router.push('/feed')
         }
         // 이메일 없음

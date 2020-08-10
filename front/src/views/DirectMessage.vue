@@ -10,73 +10,92 @@
       </div>
       <div class="message-content-wrap">
         <div class="message-content">
-          <div class="user-opponent">
-            <img src="../assets/images/default-user.png" alt="" class="in-img-content">
-            <p class="in-user-content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus modi laudantium.</p>
+         <div v-for="message in messages" :key="message.id">
+          <div v-show='message.senduser == authUser.nickname' class="user-me">
+            <p class="user-me-content">{{message.senduser}}</p>x`x`
+            <p class="in-user-content">{{message.message}}</p>
           </div>
-          <div class="user-me">
-            <p class="user-me-content">
-              안녕하세요.
-            </p>
+          <div v-show='message.senduser != authUser.nickname' class="user-opponent">
+            <p class="user-me-content">{{message.senduser}}</p>
+            <p class="in-user-content">{{message.message}}</p>
           </div>
-          <div class="user-opponent">
-            <img src="../assets/images/default-user.png" alt="" class="in-img-content">
-            <p class="in-user-content">배고파.</p>
-          </div>
+         </div>         
       </div>
       </div>
       <div class="input-message">
-        <input type="textarea" name="" id="" class="input-message-in" placeholder="메세지 보내기..." v-model="text" @keyup.enter="sendMessage">
+        <input type="textarea" name="" id="" class="input-message-in" placeholder="메세지 보내기..." v-model="text" @keyup.enter="saveMessage">
       </div>
-      <button class="butn" @click="sendMessage">↑</button>
+      <button class="butn" @click="saveMessage">↑</button>
     </div>
   </div>
 </template>
 
 <script>
 import "../components/css/directmessage.css"
-import { mapState } from 'vuex'
+import { mapState } from "vuex"
+import firebase from 'firebase'
+
+// Required for side-effects
+require("firebase/firestore");
+
+// Your web app's Firebase configuration
+var firebaseConfig = {
+  apiKey: "AIzaSyCPKM_f3wVIMx9PG9A62_c7ObfSShrqXBQ",
+  authDomain: "vue-firestore-704a4.firebaseapp.com",
+  databaseURL: "https://vue-firestore-704a4.firebaseio.com",
+  projectId: "vue-firestore-704a4",
+  storageBucket: "vue-firestore-704a4.appspot.com",
+  messagingSenderId: "880449748292",
+  appId: "1:880449748292:web:c13cb68cfd9815dff16b11",
+  measurementId: "G-HX35ED5RHD"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
+
+var db = firebase.firestore();
+
+window.db = db;
+
+db.settings({
+});
+
 export default {
   name: 'DirectMessage',
   data() {
     return {
       text: '',
+      messages:[],
+      authUser:{},
+      roomname:'',
     }
-  },
-  mounted() {
-    this.getInfiniteChat()
-    this.defaultDark()
   },
   computed: {
-    ...mapState(['flag'])
-  },
-  watch: {
-    flag() {
-      this.defaultDark()
-    }
+    ...mapState(['user'])
   },
   methods: {
-    sendMessage() {
-      // axios 요청후
-      if (this.text !== '') {
-        var divParent = document.querySelector('.message-content');
-        divParent.className = 'message-content';
+ 
+    saveMessage(){
+      //save to firestore
+      db.collection(`chat`).add({
+        message: this.text,
+        createdAt: new Date(),
+        senduser: this.user.nickname,
+      })
 
-        var div = document.createElement('div');
-        div.className = 'user-me'; 
+      console.log(this.user);
+      this.text = null;
+    },
+    fetchMessage(){
+      db.collection('chat').orderBy('createdAt').onSnapshot((querySnapshot)=>{
+        let allMessages = [];
+        querySnapshot.forEach(doc=>{
+          allMessages.push(doc.data());
+        })
 
-        var p = document.createElement('p');
-        p.className = 'user-me-content';
-        p.innerText = this.text;
-
-        if(this.$cookies.get('dark') === 'off') {p.classList.add('user-me-content-dark')}
-
-        div.appendChild(p);
-        divParent.appendChild(div)
-
-        document.querySelector('.message-content-wrap').scrollTop = document.querySelector('.message-content-wrap').scrollHeight;
-        
-        this.text = '';}
+        this.messages=allMessages;
+        console.dir(this.messages);
+      })
     },
     getInfiniteChat() {
       setInterval(this.chatListFunction, 3000);
@@ -137,5 +156,12 @@ export default {
       }
     },
   },
+  created(){
+      this.fetchMessage();
+      this.authUser = this.user;
+  },
+  mounted(){
+      this.roomname = this.$route.params;
+  }
 }
 </script>

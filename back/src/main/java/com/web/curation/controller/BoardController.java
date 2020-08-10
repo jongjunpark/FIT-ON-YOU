@@ -318,7 +318,7 @@ public class BoardController {
 	}
 	@PostMapping(value="/upload")
 	public void addArticle(@RequestParam("imgdata") MultipartFile[] imgs, @RequestParam("nickname") String nickname, @RequestParam("content") String content, @RequestParam("tags") String[] tags) {
-		String path ="C:\\ssafy\\pjt1\\s03p13b304\\front\\public\\images\\board\\";
+		String path ="i3b304.p.ssafy.io/img/";
 		UUID uuid = UUID.randomUUID();
 		
 		String[] names = new String[3];
@@ -347,7 +347,7 @@ public class BoardController {
 			File file = new File(path + names[idx]);
 			try {
 				multipartFile.transferTo(file);
-				String storePath="../images/board/"+names[idx];
+				String storePath="i3b304.p.ssafy.io/img/"+names[0];
 				img.setImageUrl(storePath);
 				System.out.println(storePath);
 				imageDao.save(img);

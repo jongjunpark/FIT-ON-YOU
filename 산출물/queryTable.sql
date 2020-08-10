@@ -129,5 +129,12 @@ create table `articleTag`(
     primary key(tagNo),
     foreign key(tagName) references tag(tagName),
     foreign key(articleNo) references Board(articleNo)
-    )Engine = InnoDB default charset = utf8mb4
-
+    )Engine = InnoDB default charset = utf8mb4;
+    
+create table `curation`(
+   `curationNo` int auto_increment primary key,
+	`username` varchar(20) ,
+	`tagname`  varchar(100),
+    foreign key(username) references user(nickname) on delete cascade,
+    foreign key(tagname) references articleTag(tagName)
+)engine=InnoDB default charset=utf8mb4;
