@@ -114,9 +114,7 @@ export default {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.wrap')
-      const NAV = document.querySelector('#nav')
-      const NAVBASE = document.querySelector('.nav-base')
-      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+      const PTAG = document.querySelectorAll('p')
       const HANGER = document.querySelector('.write-hanger-img')
       const CLOTH_HANGER = document.querySelectorAll('.write-cloth-hanger-img')
       const WRITE_PLUS = document.querySelectorAll('.write-plus')
@@ -132,9 +130,6 @@ export default {
       if (Dark === 'off') {
         HTML.classList.add('black')
         wrap.classList.add('wrap-dark')
-        NAV.classList.add('nav-dark')
-        NAVBASE.classList.add('nav-dark')
-        NAVLOGO.classList.add('nav-logo-dark')
         HANGER.classList.add('hanger-dark')
         for (let i=0; i<CLOTH_HANGER.length; i++) {
           CLOTH_HANGER[i].classList.add('hanger-dark')
@@ -144,6 +139,9 @@ export default {
         }
         for (let i=0; i<CANCLE_IMG.length; i++) {
           CANCLE_IMG[i].classList.add('write-cancle-dark')
+        }
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.add('font-dark')
         }
         for (let i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.add('input-dark')
@@ -157,9 +155,6 @@ export default {
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
-        NAV.classList.remove('nav-dark')
-        NAVBASE.classList.remove('nav-dark')
-        NAVLOGO.classList.remove('nav-logo-dark')
         HANGER.classList.remove('hanger-dark')
         for (let i=0; i<CLOTH_HANGER.length; i++) {
           CLOTH_HANGER[i].classList.remove('hanger-dark')
@@ -169,6 +164,9 @@ export default {
         }
         for (let i=0; i<CANCLE_IMG.length; i++) {
           CANCLE_IMG[i].classList.remove('write-cancle-dark')
+        }
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.remove('font-dark')
         }
         for (let i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.remove('input-dark')
@@ -181,6 +179,7 @@ export default {
         }
       }
     },
+
     setFeedImg(num) {
       var photoFile = document.getElementById(`feed-img-edit${num}`);
       

@@ -1,4 +1,11 @@
 
+.login-err-msg {
+  position: absolute;
+  top: 15vh;
+  left: 15px;
+  margin-bottom: 1vh !important;
+}
+
 .login-checkbox-area {
   width: 100%;
   margin-bottom: 3vh;
