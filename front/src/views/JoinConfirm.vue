@@ -1,7 +1,7 @@
 <template>
   <div class='wrap'>
     <div class="wrap-container">
-      <p class='join-confirm-logo'>FIT ON U</p>
+      <p class='join-confirm-logo'>이용약관</p>
       <form action="" id="joinForm">
         <ul class="join_box">
           <li class="checkBox check01">

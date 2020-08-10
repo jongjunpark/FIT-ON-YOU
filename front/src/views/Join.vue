@@ -1,7 +1,7 @@
 <template>
   <div class='wrap'>
     <div class='wrap-container wrap-join'>
-      <h1 class='join-logo'>Welcome</h1>
+      <h1 class='join-logo'>회원가입</h1>
       <div class="join-input-area">
         <label for="">이메일</label>
         <input @focus="activeInput" @blur='deactiveInputEmail' v-model='input.email' type="text" id='email-join' placeholder="example">

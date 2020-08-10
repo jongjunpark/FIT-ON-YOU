@@ -3,8 +3,8 @@
     <div class="nav-base"></div>
     <div id="nav">
       <div class="nav-logo">
-        <img v-show='!checked' src="@/assets/images/my-logo2.png" alt="">
-        <img v-show='checked' src="@/assets/images/my-logo-dark2.png" alt="">
+        <img v-show='!checked' @click="goHome" src="@/assets/images/my-logo2.png" alt="">
+        <img v-show='checked' @click="goHome" src="@/assets/images/my-logo-dark2.png" alt="">
       </div>
       <div class="nav-user" >
         <div @click='setUserBar' class="nav-user-img">
@@ -31,7 +31,7 @@
     
     <router-view/>
     
-    <div id="nav2" >
+    <div v-if='isLoggedIn' id="nav2" >
       <div class="bottom-nav">
         <div class='menu-bar-list'>
           <div class="menu-bar-select"></div>

@@ -156,6 +156,7 @@ span {
 #nav .nav-logo {
   width: 9vh;
   height: 5.5vh;
+  cursor: pointer;
 }
 
 #nav .nav-logo .fa-hat-cowboy {
