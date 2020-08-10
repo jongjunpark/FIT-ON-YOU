@@ -329,20 +329,25 @@ public class AccountController {
 		
 		return resultMap;
 	}
-	@GetMapping("/account/social")
+	@PostMapping("/account/social")
 	@ApiOperation(value="소셜 로그인시 회원가입 처리 여부")
-	public Object checkKakao(@RequestParam("email") String email) {
+	public Object checkKakao(@RequestBody User user) {
+		System.out.println(user.getNickname()+" "+user.getEmail());
 		final BasicResponse result = new BasicResponse();
 		Map<String,Object> resultMap=new HashMap<>();
 		
-		Optional<User> user=userDao.findUserByEmail(email);
-		if(user.isPresent()) {
+		Optional<User> u=userDao.findUserByEmail(user.getEmail());
+		if(u.isPresent()) {
 			result.status=true;
 			result.data="exist";	
 		}else {
 			result.status=true;
-			result.data="none";
+			result.data="new";
+			userDao.save(user);
 		}
+		UserDTO userDTO = new UserDTO(user);
+		String Token = jwtService.create(userDTO);
+		resultMap.put("auth_token",Token);
 		
 		resultMap.put("result", result);
 		

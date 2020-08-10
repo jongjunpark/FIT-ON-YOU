@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
@@ -33,4 +35,8 @@ public class Alarm {
 	private int isRead;  // 안읽음 0 , 읽음 1
 	@Column(insertable = false, updatable = false) // 일기전용시 false
 	private LocalDateTime createAt;
+	
+	@ManyToOne(optional=false)
+	@JoinColumn(name="follower", referencedColumnName="nickname",insertable=false, updatable=false)
+	private User user;
 }

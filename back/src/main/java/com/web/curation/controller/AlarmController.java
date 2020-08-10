@@ -45,7 +45,10 @@ public class AlarmController {
 	public Map<String,Object> alarmList(@Valid @RequestParam String nickname){
 		Map<String,Object> resultMap= new HashMap<>();
 		
-		List<Alarm> list=alarmDao.findByRecevierAndIsReadOrderByAlramNoDesc(nickname, 0);
+		List<Alarm> list=alarmDao.findByRecevierAndIsReadOrderByAlramNoDesc(nickname);
+		for(Alarm a : list) {
+			a.getUser().setPassword("");
+		}
 		int cnt=list.size();
 		if(cnt!=0) {
 			resultMap.put("result",1);

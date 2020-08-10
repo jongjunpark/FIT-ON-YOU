@@ -12,7 +12,10 @@ import org.springframework.data.repository.query.Param;
 import com.web.curation.model.Alarm;
 
 public interface AlarmDao extends JpaRepository<Alarm, String>{
-	List<Alarm> findByRecevierAndIsReadOrderByAlramNoDesc(String recevier,int isRead);
+	
+	
+	@Query(value="select * from alarm a, user u where recevier=:recevier and a.follower=u.nickname order by a.alramNo desc",nativeQuery=true)
+	List<Alarm> findByRecevierAndIsReadOrderByAlramNoDesc(String recevier);
 	
 //	@Modifying
 //	@Transactional
