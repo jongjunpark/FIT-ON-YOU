@@ -90,11 +90,6 @@ export default {
       test:'',
     }
   },
-  watch: {
-    flag() {
-      this.defaultDark()
-    },
-  },
   mounted(){
     this.defaultDark()
     let ref=this;

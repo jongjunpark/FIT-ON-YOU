@@ -603,11 +603,11 @@ export default {
       const H1TAG = document.querySelectorAll('h1')
       const LABEL = document.querySelectorAll('label')
       const SPAN = document.querySelectorAll('span')
-      const PTAG = document.querySelectorAll('p')
+      const USERNAME = document.querySelector('.join-profile-username')
       const INPUT = document.querySelectorAll('input')
       const TEXTAREA = document.querySelectorAll('textarea')
 
-      const BACKBTN = document.querySelector('.join-profile-back-btn')
+      // const BACKBTN = document.querySelector('.join-profile-back-btn')
       const SKIP = document.querySelector('.join-skip-btn')
       const CANCLEIMG = document.querySelector('.cancle-img')
       
@@ -633,13 +633,11 @@ export default {
         for (let i=0; i<SPAN.length ; i++) {
           SPAN[i].classList.add('font-dark')
         }
-        for (let i=0; i<PTAG.length ; i++) {
-          PTAG[i].classList.add('font-dark')
-        }
 
-        BACKBTN.classList.add('join-profile-back-btn-dark')
+        // BACKBTN.classList.add('join-profile-back-btn-dark')
         SKIP.classList.add('join-skip-btn-dark')
         CANCLEIMG.classList.add('join-cancle-img-dark')
+        USERNAME.classList.add('font-dark')
 
       } else {
         HTML.classList.remove('black')
@@ -659,13 +657,11 @@ export default {
         for (let i=0; i<SPAN.length ; i++) {
           SPAN[i].classList.remove('font-dark')
         }
-        for (let i=0; i<PTAG.length ; i++) {
-          PTAG[i].classList.remove('font-dark')
-        }
         
-        BACKBTN.classList.remove('join-profile-back-btn-dark')
+        // BACKBTN.classList.remove('join-profile-back-btn-dark')
         SKIP.classList.remove('join-skip-btn-dark')
         CANCLEIMG.classList.remove('join-cancle-img-dark')
+        USERNAME.classList.remove('font-dark')
       }
     },
   }

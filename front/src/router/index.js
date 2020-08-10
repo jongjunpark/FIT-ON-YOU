@@ -160,17 +160,6 @@ Vue.use(VueRouter)
     path: '/profileinform',
     name: 'ProfileInform',
     component: ProfileInform,
-    // beforeEnter(to, from, next) {
-    //   if (!Vue.$cookies.isKey('auth-token')) {
-    //     next('/')
-    //   } else {
-    //     next()
-    //   }    }
-  },
-  {
-    path: '/profileinform',
-    name: 'ProfileInform',
-    component: ProfileInform,
     beforeEnter(to, from, next) {
       if (!Vue.$cookies.isKey('auth-token')) {
         next('/')
