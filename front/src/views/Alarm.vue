@@ -29,7 +29,7 @@
           </div>
           <div v-for="(alarm,index) in alist" :key="index">
             <div :class="isRead[alarm.isRead]">
-              <img :src="alarm.user.profile_img" alt="" class="dm-container-message-img" @click=goToUserPage(alarm.follower)>
+              <img :src="alarm.user.profile_img" alt="" class="alarm-container-message-img" @click=goToUserPage(alarm.follower)>
               <i :class="alarmIcon[alarm.type-1]"></i>
               <h4 class=""><span @click=goToUserPage(alarm.follower)>{{alarm.follower}}</span>
               {{alarmMsg[alarm.type-1]}}</h4>
