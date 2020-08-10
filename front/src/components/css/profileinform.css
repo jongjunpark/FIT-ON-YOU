@@ -1,0 +1,144 @@
+.profile-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 50%;
+  margin: 2vh 0 3vh 0;
+  position: relative;
+  /* background-color: gray; */
+}
+
+.profile-nav .profile-nav-select {
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  background-color: #5AAEFF;
+  border-radius: 0.8vh;
+  height: 5px;
+  width: 20%;
+  transition: all 0.5s;
+}
+
+.profile-nav .fas, .profile-nav .far{
+  margin: 0;
+  color: grey;
+  font-size: 3vh;
+}
+
+.profile-nav .profile-nav-icon:hover .fas {
+  color: #5AAEFF !important;
+}
+
+.profile-nav .profile-nav-icon:hover .far {
+  color: #5AAEFF !important;
+}
+
+.profile-nav .profile-nav-icon:hover .fa-user .follow-inner {
+  background-color: #5AAEFF !important;
+  color: white !important;
+} 
+
+.profile-nav .profile-nav-icon {
+  /* margin-right: 1%; */
+  width: 20%;
+  height: 6vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.15),
+              -3px -3px 10px -1px rgba(250,250,250,0.15);
+  border: 1px solid rgba(0,0,0,0.05);
+  transition: transform 0.5s;
+  border-radius: 1vh;
+  cursor: pointer;
+}
+
+.profile-nav .profile-nav-icon:hover {
+  box-shadow: inset 4px 4px 6px -1px rgba(0,0,0,0.2),
+  inset -4px -4px 6px -1px rgba(255,255,255,0.1),
+  -0.5px -0.5px 0px rgba(0,0,0,0.05),
+  0.5px 0.5px 0px rgba(0,0,0,0.05),
+  0px 12px 10px -10px rgba(0,0,0,0.1);
+  border: 1px solid rgba(0,0,0,0.01);
+  transform: translateY(5px)
+}
+
+.profile-nav .profile-nav-btn0:hover ~ .go-myfeed-menu,
+.profile-nav .profile-nav-btn1:hover ~ .go-bookmark-menu,
+.profile-nav .profile-nav-btn2:hover ~ .go-following-menu,
+.profile-nav .profile-nav-btn3:hover ~ .go-follower-menu {
+  transform: translateY(5px)
+}
+
+
+.profile-nav .profile-nav-back {
+  width: 10%;
+  height: 6vh;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.profile-nav .profile-nav-back .fa-reply {
+  font-size: 2vh;
+}
+
+.profile-nav .profile-nav-icon .following{
+  position: relative;
+}
+
+.profile-nav .profile-nav-icon .follower{
+  position: relative;
+  top: 0;
+  right: 0;
+}
+
+.profile-nav .profile-nav-icon .follow-inner{
+  font-size: 40%;
+  position: absolute;
+  bottom: 0;
+  right: -30%;
+  color: white;
+  background-color: grey;
+  padding: 2px;
+  border-radius: 50%;
+}
+@media (max-width: 380px) {
+  .profile-nav .profile-nav-icon .follow-inner {
+    font-size: 30%;
+  }
+}
+
+@media (max-width: 280px) {
+  .profile-nav .profile-nav-icon .follow-inner {
+    font-size: 20%;
+  }
+}
+
+
+.go-myfeed-menu {
+  left: 0 !important;
+}
+
+.go-bookmark-menu {
+  left: 22.3% !important;
+}
+
+.go-following-menu {
+  left: 44.6% !important;
+}
+
+.go-follower-menu {
+  left: 66.9% !important;
+}
+
+/* .test-content-box {
+  width: 100%;
+  height: 500px;
+  background-color: grey;
+  opacity: 0.5;
+  margin-top: 30px;
+} */

@@ -1,0 +1,16 @@
+.commu-margin-box {
+  margin-top: 4vh;
+}
+.search-box {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.search-inner-box {
+  width: 33%;
+  padding-top: 33%;
+  margin: 1px;
+  background-color: grey;
+  position: relative
+}

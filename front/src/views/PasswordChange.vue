@@ -2,7 +2,7 @@
   <div class='wrap'>
    <div class='wrap-container'>
      <div class='passwordchange-head'>
-      <h1>새로운 비밀번호로 <br> 변경해주세요.</h1>
+      <h1>새로운 <br> 비밀번호로 <br> 변경해주세요.</h1>
     </div>
     <div class='lock-profile-img'>
       <img class='profile-img' src="../assets/images/pngflow.com.png" alt="">
@@ -19,8 +19,8 @@
       <p v-if="pwErrMsg" class='err-msg join-err-msg'>비밀번호가 일치하지 않습니다.</p>
       <p v-if="pwSucMsg" class='suc-msg join-suc-msg'>비밀번호가 일치합니다.</p>
     </div>
-    <div v-show='!pwdFlag' class='btn passwordchange-btn'>변경하기</div>
-    <div @click='changePassword' v-show='pwdFlag' class='btn on-passwordchange-btn'>변경하기</div>
+    <div v-show='!pwdFlag' class='btn pwc-btn passwordchange-btn'>변경하기</div>
+    <div @click='changePassword' v-show='pwdFlag' class='btn pwc-btn on-passwordchange-btn'>변경하기</div>
    </div>
   </div>
 </template>
@@ -133,10 +133,9 @@ export default {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.wrap')
-      const NAV = document.querySelector('#nav')
-      const NAVBASE = document.querySelector('.nav-base')
-      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
       const INPUT = document.querySelectorAll('input')
+      const H1TAG = document.querySelectorAll('h1')
+      const LABEL = document.querySelectorAll('label')
       
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -145,23 +144,27 @@ export default {
       if (Dark === 'off') {
         HTML.classList.add('black')
         wrap.classList.add('wrap-dark')
-        NAV.classList.add('nav-dark')
-        NAVBASE.classList.add('nav-dark')
-        NAVLOGO.classList.add('nav-logo-dark')
-        this.checked = true
-        for (var i=0; i<INPUT.length ; i++) {
+        for (let i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.add('input-dark')
+        }
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.add('font-dark')
+        }
+        for (let i=0; i<LABEL.length ; i++) {
+          LABEL[i].classList.add('font-dark')
         }
 
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
-        NAV.classList.remove('nav-dark')
-        NAVBASE.classList.remove('nav-dark')
-        NAVLOGO.classList.remove('nav-logo-dark')
-        this.checked = false
-        for (var j=0; j<INPUT.length ; j++) {
-          INPUT[j].classList.remove('input-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('input-dark')
+        }
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<LABEL.length ; i++) {
+          LABEL[i].classList.remove('font-dark')
         }
       }
     },

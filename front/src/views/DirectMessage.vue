@@ -110,11 +110,9 @@ export default {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.wrap')
-      const NAV = document.querySelector('#nav')
-      const NAVBASE = document.querySelector('.nav-base')
-      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
       const INPUT = document.querySelectorAll('input')
-      
+      const PTAG = document.querySelectorAll('.in-user-content, .back-btn-name')
+
       const MessageDM = document.querySelector('.input-message-in')
       const MessageMe = document.querySelectorAll('.user-me-content')
       
@@ -125,14 +123,13 @@ export default {
       if (Dark === 'off') {
         HTML.classList.add('black')
         wrap.classList.add('wrap-dark')
-        NAV.classList.add('nav-dark')
-        NAVBASE.classList.add('nav-dark')
-        NAVLOGO.classList.add('nav-logo-dark')
-        this.checked = true
-        for (var i=0; i<INPUT.length ; i++) {
+        for (let i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.add('input-dark')
         }
-        
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.add('font-dark')
+        }
+
         MessageDM.classList.add('input-message-in-dark')
         for (let i=0; i<MessageMe.length ; i++) {
           MessageMe[i].classList.add('user-me-content-dark')
@@ -141,14 +138,13 @@ export default {
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
-        NAV.classList.remove('nav-dark')
-        NAVBASE.classList.remove('nav-dark')
-        NAVLOGO.classList.remove('nav-logo-dark')
-        this.checked = false
-        for (var j=0; j<INPUT.length ; j++) {
-          INPUT[j].classList.remove('input-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('input-dark')
         }
-        
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.remove('font-dark')
+        }
+
         MessageDM.classList.remove('input-message-in-dark')
         for (let i=0; i<MessageMe.length ; i++) {
           MessageMe[i].classList.remove('user-me-content-dark')

@@ -3,10 +3,10 @@
     <div class="search-bar">
       <i v-if='isReturn' @click='setReturn' class="fas fa-undo-alt"></i>
       <transition name='fade' mode="out-in">
-        <i key=1 v-if='isHashSearch' @click='setHash' class="fas fa-hashtag"></i>
-        <i key=2 v-else class="fas fa-user"></i>
+        <i key=1 v-if='isHashSearch' :style='`color:${iconColor}`' @click='setHash' class="fas fa-hashtag"></i>
+        <i key=2 v-else class="fas fa-user" :style='`color:${iconColor}`'></i>
       </transition>
-      <i v-show='isUserSearch' @click='setUser' class="fas fa-user"></i>
+      <i v-show='isUserSearch' @click='setUser' class="fas fa-user search-user-icon"></i>
       <input @input="hashContent = $event.target.value" v-model='hashContent' 
         v-show='isHashInput' @keypress.enter='onHashResult' @keyup.188="addHash" type="text" class="search-input" placeholder=" , 를 통해 구분해주세요">
       <span v-show='isHashInput'>
@@ -81,6 +81,7 @@
 import { mapState } from 'vuex'
 import HashSearch from '../components/HashSearch.vue'
 import UserSearch from '../components/UserSearch.vue'
+import '../components/css/search.css'
 
 export default {
   name: 'Search',
@@ -104,6 +105,7 @@ export default {
       isDefault: true,
       isHashResult: false,
       isUserResult: false,
+      iconColor: '',
     }
   },
   watch: {
@@ -179,15 +181,10 @@ export default {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.wrap')
-      const NAV = document.querySelector('#nav')
-      const NAVBASE = document.querySelector('.nav-base')
-      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
       const INPUT = document.querySelectorAll('.search-input')
-      const TEXTAREA = document.querySelectorAll('textarea')
-      const HASHICON = document.querySelector('.fa-hashtag')
-      const USERICON = document.querySelector('.fa-user')
-      const SEARCH_ICON = document.querySelectorAll('.fa-sistrix')
 
+      const SEARCH_ICON = document.querySelectorAll('.fa-sistrix')
+      const USERICON = document.querySelector('.search-user-icon')
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
       }
@@ -195,36 +192,24 @@ export default {
       if (Dark === 'off') {
         HTML.classList.add('black')
         wrap.classList.add('wrap-dark')
-        NAV.classList.add('nav-dark')
-        NAVBASE.classList.add('nav-dark')
-        NAVLOGO.classList.add('nav-logo-dark')
-        HASHICON.classList.add('search-icon-black')
         USERICON.classList.add('search-icon-black')
+        this.iconColor = '#ebebeb'
         for (let i=0; i<INPUT.length ; i++) {
           SEARCH_ICON[i].classList.add('search-icon-black')
         }
         for (let i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.add('search-input-dark')
         }
-        for (let i=0; i<TEXTAREA.length ; i++) {
-          TEXTAREA[i].classList.add('textarea-dark')
-        }
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
-        NAV.classList.remove('nav-dark')
-        NAVBASE.classList.remove('nav-dark')
-        NAVLOGO.classList.remove('nav-logo-dark')
-        HASHICON.classList.remove('search-icon-black')
         USERICON.classList.remove('search-icon-black')
+        this.iconColor = 'black'
         for (let i=0; i<INPUT.length ; i++) {
           SEARCH_ICON[i].classList.remove('search-icon-black')
         }
         for (let i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.remove('search-input-dark')
-        }
-        for (let i=0; i<TEXTAREA.length ; i++) {
-          TEXTAREA[i].classList.remove('textarea-dark')
         }
       }
     },
@@ -235,183 +220,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.search-bar {
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, 0);
-  width: 50%;
-  height: 60px;
-  z-index: 50000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-@media (min-width: 1200px) {
-  .search-bar {
-  width: 300px;
-  }
-}
-@media (max-width: 290px) {
-  .search-bar {
-  width: 100px;
-  }
-}
-
-.search-bar .fas {
-  transition: ease 0.3s;
-}
-
-.search-bar .fa-hashtag, .fa-user{
-  font-size: 150%;
-  margin: 0 10px;
-  color: black;
-  transition: ease 0.3s;
-}
-
-.search-bar .fas:hover{
-  color: #5AAEFF;
-}
-
-.search-bar .fa-user:hover {
-  color: #5AAEFF; 
-}
-
-.search-bar .fa-undo-alt {
-  font-size: 100%;
-  margin: 0;
-  transform: rotate(110deg)
-}
-
-.search-bar .fa-undo-alt:hover {
-  color: tomato;
-  transform: rotate(480deg);
-  transition: ease 0.8s;
-}
-
-
-.search-input {
-  border: none;
-  border-bottom: 2px solid black;
-  background-color: #fff;
-  width: 50%;
-}
-
-.search-input:focus {
-  outline: none;
-}
-
-.search-input::placeholder {
-  font-size: 1vw;
-}
-
-.search-bar .inner-search-btn {
-  font-size: 100%;
-  margin: 0;
-  color: #050505;
-}
-
-.search-bar .inner-search-btn:hover {
-  color: #5AAEFF;
-}
-
-
-
-.search-box {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.search-inner-box {
-  width: 33%;
-  padding-top: 30%;
-  margin: 1px;
-  background-color: grey;
-  position: relative
-}
-
-.search-inner-box img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.2s !important;
-}
-
-.fade-enter, .fade-leave-to {
-  opacity: 0;
-}
-
-.hash-group {
-  position: absolute;
-  top: 60px;
-  left: 50%;
-  transform: translate(-50%, 0);
-  width: 120%;
-  border-radius: 5px;
-  background-color: white;
-  box-shadow: 0 6px 12px 0 rgba(0,0,0,0.25);
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.hash-group .hash-item {
-  padding: 1px 5px;
-  background-color: #050505;
-  color: #fff;
-  border-radius: 10px;
-  margin: 5px;
-  font-size: 80%;
-  padding-left: 3%;
-  font-weight: 700;
-}
-
-.hash-item .hash-item-close-btn {
-  display: inline-block;
-  cursor: pointer;
-  /* margin-right: 5px; */
-}
-
-.hash-item-close-btn .fa-times {
-  font-size: 80%;
-  font-weight: 600;
-  color: #fff;
-  margin: 0;
-  margin-bottom: 5px;
-  margin-right: 5px;
-}
-
-.hash-item-close-btn .fa-times:hover{
-  color: #fc0303;
-}
-
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
-}
-
-.search-input-dark {
-  background-color: transparent !important;
-  border-bottom: 1px solid !important;
-}
-
-.search-icon-black {
-  color: #ebebeb !important;
-}
-
-.search-icon-black:hover {
-  color: #5AAEFF !important;
-}
-</style>

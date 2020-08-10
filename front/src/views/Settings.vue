@@ -1,11 +1,13 @@
 <template>
   <div class='wrap'>
     <h1 class="settings-name">계정설정</h1>
-    <button class="btn change-password-btn" @click="goPassword">비밀번호 변경</button>
-    <button class="btn change-search-btn">검색내역 지우기</button>
-    <button class="btn change-search-btn">알림내역 지우기</button>
-    <button class="btn logout-btn" @click="goLogout">로그아웃</button>
-    <button class="btn signout-btn" @click="leave">회원 탈퇴</button>
+    <div class="settings-btn-area">
+      <button class="btn change-password-btn settings-btn" @click="goPassword">비밀번호 변경</button>
+      <button class="btn change-search-btn settings-btn">검색내역 지우기</button>
+      <button class="btn change-search-btn settings-btn">알림내역 지우기</button>
+      <button class="btn logout-btn settings-btn" @click="goLogout">로그아웃</button>
+      <button class="btn signout-btn settings-btn" @click="leave">회원 탈퇴</button>
+    </div>
   </div>
 </template>
 
@@ -99,6 +101,30 @@ export default {
         }
       })
       .catch()
+    },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const H1TAG = document.querySelectorAll('h1')
+
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.add('font-dark')
+        }
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.remove('font-dark')
+        }
+      }
     },
   },
 }

@@ -1,0 +1,301 @@
+.write-img-box {
+  position: relative;
+  width: 100%;
+  padding-top: 40vh;
+  margin-top: 3vh;
+}
+@media (min-width: 1200px) {
+  .write-img-box {
+    padding-top: 300px;
+  }
+}
+
+.write-img-box .write-hanger-img {
+  position: absolute;
+  top: 0; bottom: 0; left: 0; right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.write-img-box .write-upload-btn {
+  position: absolute;
+  top: 50%; 
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 12vh;
+  height: 5vh;
+  background-color: #fff;
+  box-shadow: 0 0.4vh 1.2vh 0 rgba(0,0,0,0.25);
+  border-radius: 2.5vh;
+  text-align: center;
+  line-height: 5vh;
+  cursor: pointer;
+  z-index: 20;
+  transition: all 0.3s;
+}
+
+.write-upload-btn input[type="file"] {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.feed-more-label input[type="file"] {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.write-img-box .write-upload-btn:hover {
+  background-color: black;
+}
+
+.write-img-box .write-upload-btn:hover .fa-images{
+  color: white;
+  transition: all 0.3s;
+}
+.write-img-box .write-upload-btn:hover .fa-plus{
+  color: white;
+  transition: all 0.3s;
+}
+
+.write-upload-btn .fa-images {
+  margin: 0 0 0 5px;
+  font-size: 2.6vh;
+  transition: all 0.3s;
+}
+
+.write-upload-btn .fa-images .fa-plus {
+  margin: 0;
+  font-size: 1.5vh;
+  transition: all 0.3s;
+}
+
+.write-cloth-box {
+  display: flex;
+  justify-content: space-evenly;
+  position: absolute;
+  top: 3vh; bottom: 0; left: 0; right: 0;
+  width: 100%;
+  height: 10vh;
+  padding: 1vh 30px;
+  z-index: 10;
+}
+
+.write-cloth-box .write-cloth-hanger {
+  width: 20vh;
+  height: 0;
+  padding-top: 7vh;
+  position: relative;
+}
+@media (min-width: 450px) {
+  .write-cloth-box .write-cloth-hanger {
+    padding-top: 9vh;
+}
+}
+
+
+.write-cloth-hanger .write-cloth-hanger-img {
+  position: absolute;
+  top: 0; bottom: 0; left: 0; right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.write-cloth-hanger .write-uploaded-img {
+  position: absolute;
+  top: 6vh;
+  width: 100%;
+  height: 20vh;
+}
+@media (min-width: 450px) {
+  .write-cloth-hanger .write-uploaded-img {
+    height: 25vh;
+    top: 8vh;
+  }
+}
+
+.write-cloth-hanger .write-uploaded-img .feed-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 1.5vh;
+  box-shadow: 0 6px 12px 0 rgba(0,0,0,0.25);
+  background-color: #fff;
+}
+
+.write-cloth-hanger .write-uploaded-img .cancle-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  font-size: 5vh;
+  color: black
+}
+
+.write-cloth-hanger .write-uploaded-img .fa-plus {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  font-size: 3vh;
+  border-radius: 50%;
+  box-shadow: 0 6px 12px 0 rgba(0,0,0,0.25);
+  padding: 1.3vh;
+}
+@media (min-width: 1200px) {
+  .write-cloth-hanger .write-uploaded-img .fa-plus {
+  font-size: 200%;
+  }
+}
+
+.write-cloth-hanger .feed-img:hover{
+  opacity: 0.7;
+}
+
+.cancle-img:hover ~ .feed-img{
+  opacity: 0.7;
+}
+
+.write-cloth-hanger .write-uploaded-img .fa-plus:hover {
+  background-color: black;
+  color: #fff;
+}
+
+.write-content-box {
+  width: 100%;
+  margin: 0 0 1vh 0;
+}
+
+.write-content-box .write-content-head {
+  font-size: 2vh;
+  font-weight: 700;
+}
+
+.write-content-box .write-hash-head {
+  font-size: 2vh;
+  font-weight: 700;
+}
+
+.write-content-box textarea {
+  width: 100%;
+  border: 1px solid black;
+  height: 9vh;
+  border-radius: 0.5vh;
+  resize: none;
+  padding: 1.3vh;
+  font-size: 2vh;
+}
+
+.write-content-box input {
+  width: 100%;
+  height: 6vh;
+  border: 1px solid black;
+  border-radius: 0.5vh;
+  resize: none;
+  padding: 1.3vh;
+  font-size: 2vh;
+}
+
+.write-btn-box {
+  position: absolute;
+  top: 75vh;
+  width: 100%;
+  padding: 0 30px;
+}
+
+.btn.write-btn {
+  color: #B0B0B0;
+  background-color: grey;
+  width: 100%;
+  font-size: 3vh;
+  box-sizing: border-box;
+  cursor:default;
+  margin-top: 0;
+}
+
+.btn.on-write-btn {
+  color: white;
+  background-color: #5AAEFF;
+  border: 0;
+  width: 100%;
+  font-size: 3vh;
+  box-sizing: border-box;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.2s !important;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.write-hash-group {
+  width: 100%;
+  max-height: 8vh;
+  border-radius: 0.5vh;
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  margin-top: 1vh;
+}
+.write-hash-group::-webkit-scrollbar { width: 5px; }
+/* 스크롤바의 width */
+::-webkit-scrollbar-track { background-color: transparent; }
+/* 스크롤바의 전체 배경색 */
+::-webkit-scrollbar-thumb { background: silver;}
+/* 스크롤바 색 */
+::-webkit-scrollbar-button { display: none; }
+/* 스크롤바 버튼 */
+
+.write-hash-group .write-hash-item {
+  background-color: #050505;
+  color: #fff;
+  border-radius: 1.5vh;
+  margin: 0.5vh 0.8vh 0 0;
+  height: 3vh;
+  font-size: 1.8vh;
+  padding: 0 2vh;
+  font-weight: 700;
+}
+@media (min-width: 1200px) {
+  .write-hash-group .write-hash-item {
+  padding: 0 2%;
+  }
+}
+
+.write-hash-item .write-hash-item-close-btn {
+  display: inline-block;
+  cursor: pointer;
+  /* margin-right: 5px; */
+}
+
+.write-hash-item-close-btn .fa-times {
+  font-size: 80%;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 5px 5px 0;
+}
+
+.write-hash-item-close-btn .fa-times:hover{
+  color: #fc0303;
+}
+
+.hanger-dark {
+  filter: invert(70%);
+}
+
+.write-plus-dark {
+  color: #ebebeb !important;
+}
+.write-plus-dark:hover {
+  background-color: #ebebeb !important;
+  color: #202020 !important;
+}
+
+.write-cancle-dark {
+  color: #ebebeb !important;
+}

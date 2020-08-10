@@ -39,5 +39,4 @@ export default {
   setFlag(state, data) {
     state.flag = data
   }
-
 }
