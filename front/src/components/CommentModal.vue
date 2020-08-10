@@ -67,9 +67,6 @@ export default {
     .catch()
 
   },
-  computed: {
-    ...mapState(['flag'])
-  },
   watch: {
     comment_content() {
       this.checkCommentInput();

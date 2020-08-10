@@ -6,30 +6,6 @@
           <div v-if='!profileImg'>
             <img class='profile-img' src="../assets/images/default-user.png" alt="">
           </div>
-<<<<<<< HEAD
-          <!--<div class="follow">
-          <div class="profile-follow">
-          <h2>팔로우</h2>
-            <p class='profile-follow-head'>팔로워</p>
-          <h3>{{followingCnt}}</h3>
-            <p class='profile-follow-content'>123,456</p>
-        </div>
-          </div>
-        <div class="follower">
-          <div class="profile-follower">
-          <h2>팔로워</h2>
-            <p class='profile-follow-head'>팔로잉</p>
-          <h3>{{followedCnt}}</h3>
-            <p class='profile-follow-content'>123,456</p>
-        </div>
-          </div>
-      <p class="other-nickname">{{nickname}}</p>
-        </div>
-      <div class="other-content">
-        <h3>{{selfintro}}</h3>
--->
-=======
->>>>>>> 5aee349cc625184d2f515a9adfedb7fa6c9670c7
           <div v-if='profileImg'>
             <img class='profile-img' :src="profileImg" alt="">
           </div>

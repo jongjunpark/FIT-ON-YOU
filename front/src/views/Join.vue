@@ -323,7 +323,7 @@ export default {
       }
     },
     checkNickname() {
-      axios.get('http://i3b304.p.ssafy.io:8080/api/account/checkNickname',{ 
+      axios.get('http://localhost:8080/api/account/checkNickname',{ 
         params: {
           nickname: this.input.nickname
           }
@@ -499,18 +499,10 @@ export default {
 
         frm.append("profile-img-edit", photoFile.files[0]);
         frm.append("nickname",this.nickname);
-        axios.post('http://i3b304.p.ssafy.io:8080/api/account/addProfileImg',frm,
+        axios.post('http://localhost:8080/api/account/addProfileImg',frm,
         ).then( () =>{
           console.log("1");
 
-          firebase.auth().signInWithEmailAndPassword('fjsdklahfjsdhfl@naver.com', 'Zz12357822456a').catch(function(error) {
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          // ...
-          console.log(errorCode);
-          console.log(errorMessage);
-          });
 
           this.$router.go('/feed')
           
@@ -554,7 +546,7 @@ export default {
          this.mailErrMsg = false;
          this.finalMail = false;
           if (this.mailSucMsg) {
-            axios.get('http://i3b304.p.ssafy.io:8080/api/account/checkDoubleEmail',{ 
+            axios.get('http://localhost:8080/api/account/checkDoubleEmail',{ 
               params: {
                 email: this.input.email+'@'+this.input.url
                 }

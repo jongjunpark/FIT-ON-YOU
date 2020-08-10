@@ -121,11 +121,7 @@ export default {
   computed: {
     ...mapState(['isLoggedIn', 'user', 'flag'])
   },
-  watch: {
-    flag() {
-      this.defaultDark()
-    }
-  },
+ 
   methods: {
     ...mapMutations(['setUserIntro','setUserNick','setToken']),
     ...mapActions(['sendUserInfo']),
