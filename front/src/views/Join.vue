@@ -96,7 +96,6 @@ import * as EmailValidator from "email-validator"
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import { mapState, mapMutations, mapActions } from 'vuex'
-import firebase from 'firebase'
 
 
 export default {
@@ -452,19 +451,7 @@ export default {
       const test2 = this.input.password
        console.log("email=========>"+test1);
       console.log("paa=========>"+test2);
-       firebase.auth().createUserWithEmailAndPassword(test1.toString(), test2.toString()).then(()=>{
-          console.log("됨");
-        }).catch((error) => {
-        // Handle Errors here.
-        console.log(this.input.email);
-        console.log(this.input.password);
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        console.log(errorCode);
-        console.log(errorMessage);
-        console.log("안됨");
-        // ...
-        });
+      
       axios.post('http://localhost:8080/api/account/signup',{
 
           email: this.input.email+'@'+this.input.url,
@@ -496,16 +483,6 @@ export default {
         axios.post('http://localhost:8080/api/account/addProfileImg',frm,
         ).then( () =>{
           console.log("1");
-
-          firebase.auth().signInWithEmailAndPassword('fjsdklahfjsdhfl@naver.com', 'Zz12357822456a').catch(function(error) {
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          // ...
-          console.log(errorCode);
-          console.log(errorMessage);
-          });
-
           this.$router.go('/feed')
           
         })
