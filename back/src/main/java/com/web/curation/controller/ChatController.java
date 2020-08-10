@@ -1,5 +1,8 @@
 package com.web.curation.controller;
 
+import java.security.cert.PKIXRevocationChecker.Option;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,35 +24,54 @@ import com.web.curation.model.ChatDTO;
 @RequestMapping("/chat")
 public class ChatController {
 
-	@Autowired
-	ChatDao chatDao;
+   @Autowired
+   ChatDao chatDao;
 
-	@GetMapping("/existroom")
-	public Object existroom(@RequestParam String firstuser, @RequestParam String seconduser) {
-		System.out.println(1);
-		final BasicResponse result = new BasicResponse();
-		Chat chat;
-		Optional<ChatDTO> optChatdto = chatDao.getRoomnameByUserInfos(firstuser, seconduser);
-		if (optChatdto.isPresent()) {// 있다면 lasttime을 update후에
-			System.out.println(2);
-			// 룸네임을 반환
-			chat = new Chat(optChatdto.get());
-			chatDao.updateLasttime(chat.getRoomname());
-			result.data = "success";
-			result.object = chat;
-			result.status = true;
-		} else {
-			System.out.println(3);
-			// 새로운 룸네임을 저장후 이를 반환
-			String roomname = firstuser + seconduser;
-			chatDao.InsertRoomname(firstuser, seconduser, roomname);
-			optChatdto = chatDao.getRoomnameByUserInfos(firstuser, seconduser);
-			chat = new Chat(optChatdto.get());
-			result.object = chat;
-			result.data = "success";
-			result.status = true;
-		}
-		System.out.println(4);
-		return new ResponseEntity<>(result, HttpStatus.OK);
-	}
+   @GetMapping("/allChatList")
+   public Object getAllCahtList(@RequestParam String username) {
+      final BasicResponse result = new BasicResponse();
+      List<ChatDTO> chatDtoList = new ArrayList<>();
+      chatDtoList = chatDao.getRoomListByUsername(username);
+      if (!chatDtoList.isEmpty()) {
+         System.out.println(chatDtoList);
+         result.data = "success";
+         result.object = chatDao.getRoomListByUsername(username);
+         result.status = true;
+      } else {
+         result.data = "empty";
+         result.object = chatDtoList;
+         result.status = true;
+      }
+
+      return new ResponseEntity<>(result, HttpStatus.OK);
+   }
+
+   @GetMapping("/existroom")
+   public Object existroom(@RequestParam String firstuser, @RequestParam String seconduser) {
+      System.out.println(1);
+      final BasicResponse result = new BasicResponse();
+      Chat chat;
+      Optional<ChatDTO> optChatdto = chatDao.getRoomnameByUserInfos(firstuser, seconduser);
+      if (optChatdto.isPresent()) {// 있다면 lasttime을 update후에
+         System.out.println(2);
+         // 룸네임을 반환
+         chat = new Chat(optChatdto.get());
+         chatDao.updateLasttime(chat.getRoomname());
+         result.data = "success";
+         result.object = chat;
+         result.status = true;
+      } else {
+         System.out.println(3);
+         // 새로운 룸네임을 저장후 이를 반환
+         String roomname = firstuser + seconduser;
+         chatDao.InsertRoomname(firstuser, seconduser, roomname);
+         optChatdto = chatDao.getRoomnameByUserInfos(firstuser, seconduser);
+         chat = new Chat(optChatdto.get());
+         result.object = chat;
+         result.data = "success";
+         result.status = true;
+      }
+      System.out.println(4);
+      return new ResponseEntity<>(result, HttpStatus.OK);
+   }
 }

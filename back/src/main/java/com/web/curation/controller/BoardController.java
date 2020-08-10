@@ -2,14 +2,10 @@ package com.web.curation.controller;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,51 +13,36 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.web.curation.dao.AlarmDao;
 import com.web.curation.dao.ArticletagDao;
 import com.web.curation.dao.BoardDao;
-import com.web.curation.dao.BoardTwoDao;
 import com.web.curation.dao.BookmarkDao;
+import com.web.curation.dao.CurationDao;
 import com.web.curation.dao.FollowDao;
 import com.web.curation.dao.ImageDao;
 import com.web.curation.dao.InfluencerDao;
 import com.web.curation.dao.LikesDao;
+import com.web.curation.dao.SearchDao;
+import com.web.curation.dao.TagDao;
+import com.web.curation.dao.UserDao;
 import com.web.curation.model.Alarm;
 import com.web.curation.model.Articletag;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Board;
-import com.web.curation.model.BoardDTO;
 import com.web.curation.model.Bookmark;
-import com.web.curation.model.Follow;
 import com.web.curation.model.ImageStore;
 import com.web.curation.model.Influencer;
 import com.web.curation.model.Likes;
-import com.web.curation.dao.CurationDao;
-import com.web.curation.dao.FollowDao;
-import com.web.curation.dao.ImageDao;
-import com.web.curation.dao.SearchDao;
-import com.web.curation.dao.TagDao;
-import com.web.curation.dao.UserDao;
-import com.web.curation.model.BasicResponse;
-import com.web.curation.model.Board;
-import com.web.curation.model.Curation;
-import com.web.curation.model.Follow;
-import com.web.curation.model.ImageStore;
-import com.web.curation.model.Search;
 import com.web.curation.model.Tag;
 import com.web.curation.model.User;
-import com.web.curation.model.UserDTO;
 
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
@@ -100,91 +81,68 @@ public class BoardController {
 	@Autowired
 	TagDao tagDao;
 	
-	@Autowired
-	BoardTwoDao boardTwoDao;
-	
-	
-	@GetMapping("/api/board/curation")
-	@ApiOperation(value = "큐레이션 기능")
-	public Object curatedContents(String username) {
-		System.out.println(1);
-		final BasicResponse result = new BasicResponse();
-		List<Curation> curationList = curationDao.getCurationByUsername(username);
-		List<Board> boardList = new ArrayList<>();
+//	@Autowired
+//	BoardTwoDao boardTwoDao;
+//	
+//	
+//	@GetMapping("/api/board/curation")
+//	@ApiOperation(value = "큐레이션 기능")
+//	public Object curatedContents(String username) {
+//		System.out.println(1);
+//		final BasicResponse result = new BasicResponse();
+//		List<Curation> curationList = curationDao.getCurationByUsername(username);
+//		List<Board> boardList = new ArrayList<>();
+//
+//		if (!curationList.isEmpty()) {// 안비어 있을경우
+//			int size = curationList.size();
+//
+//			List<String> input = new ArrayList<>();
+//			for (int i = 0; i < size; i++) {
+//				System.out.println(curationList.get(i).getTagname());
+//				input.add(curationList.get(i).getTagname());
+//			}
+//
+//			List<Search> contents = searchDao.getContentsNoByTagname(input);
+//
+//			int contentsSize = contents.size();
+//			for (int c = 0; c < contentsSize; c++) {
+//				Board newBoard = boardDao.findBoardByArticleNo(contents.get(c).getArticleno());
+//
+//				if (newBoard != null) {
+//					boardList.add(newBoard);
+//				}
+//			}
+//
+//			result.data = "success";
+//			result.status = true;
+//			result.object = boardList;
+//		} else {// 큐레이션이 비어있을 경우
+//				// 팔로우 의 새 게시글을 보여준다
+//		}
+//
+//		return result;
+//	}
+//
 
-		if (!curationList.isEmpty()) {// 안비어 있을경우
-			int size = curationList.size();
 
-			List<String> input = new ArrayList<>();
-			for (int i = 0; i < size; i++) {
-				System.out.println(curationList.get(i).getTagname());
-				input.add(curationList.get(i).getTagname());
-			}
-
-			List<Search> contents = searchDao.getContentsNoByTagname(input);
-
-			int contentsSize = contents.size();
-			for (int c = 0; c < contentsSize; c++) {
-				Board newBoard = boardDao.findBoardByArticleNo(contents.get(c).getArticleno());
-
-				if (newBoard != null) {
-					boardList.add(newBoard);
-				}
-			}
-
-			result.data = "success";
-			result.status = true;
-			result.object = boardList;
-		} else {// 큐레이션이 비어있을 경우
-				// 팔로우 의 새 게시글을 보여준다
-		}
-
-		return result;
-	}
-
-	@PostMapping
-	public Object writeBoard(@Valid @RequestBody Board board) {
-
-		final BasicResponse result = new BasicResponse();
-		if (boardDao.save(board) == null) {
-			result.status = true;
-			result.data = "fail";
-
-		} else {
-			result.status = true;
-			result.data = "success";
-		}
-		return new ResponseEntity<>(result, HttpStatus.OK);
-	}
-
-	Comparator<BoardDTO> boardComp = new Comparator<BoardDTO>() {
-		@Override
-		public int compare(BoardDTO o1, BoardDTO o2) {
-			if (o1.getArticleNo() < o2.getArticleNo())
-				return 1;
-			else
-				return -1;
-		}
-	};
-
-	@PostMapping("/newsfeed")
-	public Object getFollowArticle(@RequestParam String nickname) {
-		List<Follow> searchFollow = new ArrayList<Follow>();
-		searchFollow = followDao.getFollowByFollowinguser(nickname);
-		List<BoardDTO> result = new ArrayList<>();
-
-		for (Follow follow : searchFollow) {
-//			List<Board> temp = boardDao.findBoardByArticleUserOrderByArticleNoDesc(follow.getFolloweduser());
-			List<BoardDTO> temp = boardTwoDao.getMainFeedList(follow.getFolloweduser(),nickname);
-			for (BoardDTO board : temp) {
-				result.add(board);
-			}
-		}
-
-		result.sort(boardComp);
-
-		return result;
-	}
+//	@PostMapping("/newsfeed")
+//	public Object getFollowArticle(@RequestParam String nickname) {
+//		List<Follow> searchFollow = new ArrayList<Follow>();
+//		searchFollow = followDao.getFollowByFollowinguser(nickname);
+//		List<BoardDTO> result = new ArrayList<>();
+//
+//		for (Follow follow : searchFollow) {
+////			List<Board> temp = boardDao.findBoardByArticleUserOrderByArticleNoDesc(follow.getFolloweduser());
+//			List<BoardDTO> temp = boardTwoDao.getMainFeedList(follow.getFolloweduser(),nickname);
+//			for (BoardDTO board : temp) {
+//				result.add(board);
+//			}
+//		}
+//
+//		result.sort(boardComp);
+//
+//		return result;
+//	}
 
 	@PostMapping("/images")
 	public List<ImageStore> getImageArticle(@RequestParam int articleNo) {
