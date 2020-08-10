@@ -4,76 +4,13 @@
       ∨
     </div>
     <transition name='slide-influ-nav'>
-      <div v-if="isInfluNav" class="influ-nav-box">
+      <div v-show="isInfluNav" class="influ-nav-box">
         <div class="influ-nav">
           <VueSlickCarousel v-bind="settings">
-            <div>
+            <div v-for="influ in influencer" :key="influ.nickname">
               <div class="influ-box">
                 <div class="influ-icon">
-                  <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-19/s320x320/36842227_2058150601180234_854349517221265408_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_ohc=eO6D5fslDBsAX9XpqcX&oh=a84379ba4552588f7ddcab8f82a76c52&oe=5F4B7D7A" alt="">
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="influ-box">
-                <div class="influ-icon">
-                  <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-19/s320x320/71533411_449636125903525_7464596574253875200_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_ohc=7H2dBLnpXDwAX8ZfLGK&oh=a067d970dab058cd94a1fb9a9838aa27&oe=5F4E0FDB" alt="">
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="influ-box">
-                <div class="influ-icon">
-                  <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-19/s320x320/95592923_2739279709639483_5362681631616270336_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_ohc=GCShxBSR0FIAX9NNc_g&oh=7d83b275ee97642410e82d748447031f&oe=5F4DB68C" alt="">
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="influ-box">
-                <div class="influ-icon">
-                  <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-19/s320x320/116525805_691987371384404_1791999639578458581_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_ohc=4pLOGgd8bKwAX9fa0Z-&oh=0f76245424d81a085823c398bcb63b42&oe=5F4C88CE" alt="">
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="influ-box">
-                <div class="influ-icon">
-                  <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-19/s320x320/40730683_300262830563612_6253477682965643264_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_ohc=DcM0yqd_EVIAX_LqHQz&oh=1b45a10a6ea8373ce72d23ad2fc765ad&oe=5F4C5E5C" alt="">
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="influ-box">
-                <div class="influ-icon">
-                  <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-19/s320x320/105365279_3520222574663213_8532879881338910739_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_ohc=ESwhrrcwzqUAX8SJnHh&oh=b25b15104625bed706f2c7af4670cbec&oe=5F4CA0F8" alt="">
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="influ-box">
-                <div class="influ-icon">
-                  <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-19/10809958_859072497460383_1366814555_a.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_ohc=WuByDpFo1oIAX8adJtw&oh=d827e456674e7e721957960dae63599c&oe=5F4D1001" alt="">
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="influ-box">
-                <div class="influ-icon">
-                  <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-19/s320x320/115961735_273060193994558_7619050446248374354_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_ohc=fQB3PN11FYcAX_OW62o&oh=4f9a01ea96035411468273b47cad15ce&oe=5F4DF25A" alt="">
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="influ-box">
-                <div class="influ-icon">
-                  <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-19/s320x320/29416658_527605414306437_7146489572367532032_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_ohc=s-OJEX7WGOoAX_LRg2-&oh=1756009912651ffa5b48235f3a950095&oe=5F4DC197" alt="">
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="influ-box">
-                <div class="influ-icon">
-                  <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-19/s320x320/52840555_1918106758318832_360224314479345664_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_ohc=vzNWxQ8xMeoAX-eE035&oh=2ec2bc1df4457ee529b3ea2c923f450f&oe=5F4A60D9" alt="">
+                  <img :src="influ.profile_img">
                 </div>
               </div>
             </div>
@@ -81,184 +18,41 @@
         </div>
       </div>
     </transition>
+    
+    <CommentModal v-if="showModal" @close="showModal= false" :modalArticleNo="modalArticleNo" :modalArticleUser="modalArticleUser"/>
 
     <div class='wrap feed-wrap'>
-      <div class='wrap-container'>
+      <div class='wrap-container' v-for="(feed,index) in mainfeed" :key="feed.articleUser">
         <header class="feed-user-data">
-          <div class="feed-user-profile">
-            <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-19/s320x320/95592923_2739279709639483_5362681631616270336_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_ohc=GCShxBSR0FIAX9NNc_g&oh=7d83b275ee97642410e82d748447031f&oe=5F4DB68C" alt="#">
+          <div class="feed-user-profile" @click="goUserProfile(feed.articleUser)">
+            <img :src="feed.userProfile">
           </div>
           <div class="feed-article-head">
-            <p class='feed-username'>kidcozyboy</p>
-            <p class='feed-article-date'>3시간 전</p>
+            <p class='feed-username'>{{feed.articleUser}}</p>
+            <p class='feed-article-date'>{{feed.articleDate}}</p>
           </div>
         </header>
         <section class="feed-content">
           <VueSlickCarousel v-bind="settings2">
-            <article class="feed-content-img">
-              <img src="../assets/images/feed-test-img.jpg" alt="#">
-            </article>
-            <article class="feed-content-img">
-              <img src="../assets/images/feed-test-img4.jpg" alt="#">
-            </article>
-            <article class="feed-content-img">
-              <img src="../assets/images/feed-test-img3.png" alt="#">
+            <article class="feed-content-img" v-for="imgs in feed.images" :key="imgs.src">
+              <img :src="imgs.src">
             </article>
           </VueSlickCarousel>
           <div class="feed-btn-box">
             <div class='feed-btn-left'>
-              <i class="fas fa-heart"></i>
-              <i id="show-modal" @click="showModal = true" class="fas fa-comment-alt"></i>
-              <CommentModal v-if="showModal" @close="showModal = false">
+              
+              <i :class="'fas fa-heart '+likeicon[likeStates[index]]" 
+              @click="clickLike(feed.articleNo,likeStates[index],index,$event)"></i>
+              <i :id="'show-modal'+ feed.articleNo" @click="clickComment(feed.articleNo,feed.articleUser)" class="fas fa-comment-alt"></i>
 
-              </CommentModal>
             </div>
             <div class='feed-btn-right'>
-              <i @click="clickBookMark" class="fas fa-bookmark"></i>
+              <i :class="'fas fa-bookmark ' +markicon[bookmarkStates[index]]"
+              @click="clickBookMark(feed.articleNo,bookmarkStates[index],index,$event)"></i>
             </div>
           </div>
-          <header class='feed-content-head'>COZ</header>
-          <aside class='feed-content-tag'>#dazedkorea #ChromeHearts #Burberry</aside>
-        </section>
-      </div>
-      <div class='wrap-container'>
-        <header class="feed-user-data">
-          <div class="feed-user-profile">
-            <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-19/s320x320/116525805_691987371384404_1791999639578458581_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_ohc=4pLOGgd8bKwAX9fa0Z-&oh=0f76245424d81a085823c398bcb63b42&oe=5F4C88CE" alt="#">
-          </div>
-          <div class="feed-article-head">
-            <p class='feed-username'>keemhongwu</p>
-            <p class='feed-article-date'>4시간 전</p>
-          </div>
-        </header>
-        <section class="feed-content">
-          <VueSlickCarousel v-bind="settings2">
-            <article class="feed-content-img">
-              <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-15/e35/s1080x1080/116152223_1273335322997876_7355345239487507950_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_cat=108&_nc_ohc=WhOnd7XWONsAX-gPf1c&oh=b8a82d5b8217af5abb404fc43fb2a57b&oe=5F4CD285" alt="#">
-            </article>
-            <article class="feed-content-img">
-              <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/106508030_588611342080828_1832395914087840562_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_cat=104&_nc_ohc=YL8cuGE0tr4AX8QpN-3&oh=1194775b659500300ecaca53f4673fe7&oe=5F4D358F" alt="#">
-            </article>
-            <article class="feed-content-img">
-              <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-15/e35/s1080x1080/105970916_161940912053134_3670143124224710785_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_cat=110&_nc_ohc=Ulru5KRaUHUAX89y5bE&oh=56362bf86407dcd5d1905675134c1842&oe=5F4BEEE8" alt="#">
-            </article>
-          </VueSlickCarousel>
-          <div class="feed-btn-box">
-            <div class='feed-btn-left'>
-              <i @click="clickLike" class="fas fa-heart"></i>
-              <i @click="clickComment" class="fas fa-comment-alt"></i>
-            </div>
-            <div class='feed-btn-right'>
-              <i @click="clickBookMark" class="fas fa-bookmark"></i>
-            </div>
-          </div>
-          <header class='feed-content-head'>불금</header>
-          <aside class='feed-content-tag'>#Daily #린넨 #화이트룩</aside>
-        </section>
-      </div>
-      <div class='wrap-container'>
-        <header class="feed-user-data">
-          <div class="feed-user-profile">
-            <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-19/s320x320/71533411_449636125903525_7464596574253875200_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_ohc=7H2dBLnpXDwAX8ZfLGK&oh=a067d970dab058cd94a1fb9a9838aa27&oe=5F4E0FDB" alt="#">
-          </div>
-          <div class="feed-article-head">
-            <p class='feed-username'>jennierubyjane</p>
-            <p class='feed-article-date'>4시간 전</p>
-          </div>
-        </header>
-        <section class="feed-content">
-          <VueSlickCarousel v-bind="settings2">
-            <article class="feed-content-img">
-              <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/115845973_2329752243986374_794663954761266814_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_cat=1&_nc_ohc=AFNbW2TMC2EAX-a3Qgd&oh=1a5b6a4fb01fb7b8408e126a22627f5a&oe=5F4AA4A6" alt="#">
-            </article>
-            <article class="feed-content-img">
-              <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/109808509_1100148067052880_2770842009460315741_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_cat=1&_nc_ohc=vNs69Wls-tgAX8KdFHy&oh=8fe4a3b37eb03ef9ba7146b762a555c3&oe=5F4DE25B" alt="#">
-            </article>
-            <article class="feed-content-img">
-              <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/107424621_2584108538546487_3451861503933358503_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_cat=1&_nc_ohc=I1iW4jAUszUAX94a0Oo&oh=b2c428764b769ee80ff7a37177fd48e6&oe=5F4BB663" alt="#">
-            </article>
-          </VueSlickCarousel>
-          <div class="feed-btn-box">
-            <div class='feed-btn-left'>
-              <i @click="clickLike" class="fas fa-heart"></i>
-              <i @click="clickComment" class="fas fa-comment-alt"></i>
-            </div>
-            <div class='feed-btn-right'>
-              <i @click="clickBookMark" class="fas fa-bookmark"></i>
-            </div>
-          </div>
-          <header class='feed-content-head'>오늘봐❄️❄️❄️</header>
-          <aside class='feed-content-tag'>#Chanel #Gucci #Blackpink #Azkii</aside>
-        </section>
-      </div>
-      <div class='wrap-container'>
-        <header class="feed-user-data">
-          <div class="feed-user-profile">
-            <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-19/s320x320/36842227_2058150601180234_854349517221265408_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_ohc=eO6D5fslDBsAX9XpqcX&oh=a84379ba4552588f7ddcab8f82a76c52&oe=5F4B7D7A" alt="#">
-          </div>
-          <div class="feed-article-head">
-            <p class='feed-username'>artistboy_</p>
-            <p class='feed-article-date'>4시간 전</p>
-          </div>
-        </header>
-        <section class="feed-content">
-          <VueSlickCarousel v-bind="settings2">
-            <article class="feed-content-img">
-              <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/116422869_290142065388713_1828280228150552415_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_cat=105&_nc_ohc=QdwQEI3gwckAX-UMZIV&oh=e4abf994c19b579e1e5232cafa84b73d&oe=5F4D363A" alt="#">
-            </article>
-            <article class="feed-content-img">
-              <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-15/e35/p1080x1080/114361583_640709466542685_803387787253716416_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_cat=109&_nc_ohc=waq4blw_T94AX9AMkDN&oh=bc5286b19c313f863450d97a5f3ed0b4&oe=5F4C97E7" alt="#">
-            </article>
-            <article class="feed-content-img">
-              <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-15/e35/s1080x1080/109498583_1796016527239393_3768403805793298082_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_cat=101&_nc_ohc=HVOTOTBhmpYAX-XC5af&oh=11c23776aa7c19537b58c293cff4b497&oe=5F4AC8A1  " alt="#">
-            </article>
-          </VueSlickCarousel>
-          <div class="feed-btn-box">
-            <div class='feed-btn-left'>
-              <i @click="clickLike" class="fas fa-heart"></i>
-              <i @click="clickComment" class="fas fa-comment-alt"></i>
-            </div>
-            <div class='feed-btn-right'>
-              <i @click="clickBookMark" class="fas fa-bookmark"></i>
-            </div>
-          </div>
-          <header class='feed-content-head'>왈가닥뷰티에서 금손선생님들과 함께한 작업!!</header>
-          <aside class='feed-content-tag'>#Canvas #BlueLip #멜빵 #뱀무늬셔츠</aside>
-        </section>
-      </div>
-      <div class='wrap-container'>
-        <header class="feed-user-data">
-          <div class="feed-user-profile">
-            <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-19/s320x320/40730683_300262830563612_6253477682965643264_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_ohc=DcM0yqd_EVIAX_LqHQz&oh=1b45a10a6ea8373ce72d23ad2fc765ad&oe=5F4C5E5C" alt="#">
-          </div>
-          <div class="feed-article-head">
-            <p class='feed-username'>parkbboyoung</p>
-            <p class='feed-article-date'>5시간 전</p>
-          </div>
-        </header>
-        <section class="feed-content">
-          <VueSlickCarousel v-bind="settings2">
-            <article class="feed-content-img">
-              <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-15/sh0.08/e35/c0.115.922.922a/s640x640/115886609_350469826363192_6132658822732527130_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_cat=104&_nc_ohc=5PwfP_Y2CjIAX9h2fht&oh=c33407c4b784b1497ea69a8f74852899&oe=5F4D083E" alt="#">
-            </article>
-            <article class="feed-content-img">
-              <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-15/e35/95659011_854314271722943_1271107050899544588_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_cat=111&_nc_ohc=Y4cumoXtEJkAX860cQn&oh=313d228431aba000d594d8ae9457c303&oe=5F4BBB12" alt="#">
-            </article>
-            <article class="feed-content-img">
-              <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-15/e35/97370334_253565055887659_6144263934509229288_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_cat=107&_nc_ohc=5dNCbyvjBv8AX9m98Ej&oh=4bd89591023b5340672f162e7f259e43&oe=5F4B4D82" alt="#">
-            </article>
-          </VueSlickCarousel>
-          <div class="feed-btn-box">
-            <div class='feed-btn-left'>
-              <i @click="clickLike" class="fas fa-heart"></i>
-              <i @click="clickComment" class="fas fa-comment-alt"></i>
-            </div>
-            <div class='feed-btn-right'>
-              <i @click="clickBookMark" class="fas fa-bookmark"></i>
-            </div>
-          </div>
-          <header class='feed-content-head'>뽀블리</header>
-          <aside class='feed-content-tag'>#러블리룩 #청자켓 #목폴라 #스프라이트</aside>
+          <header class='feed-content-head'>{{feed.content}}</header>
+          <aside class='feed-content-tag'><span v-for="ta in feed.tags" :key="ta.tagname">{{ta.tagname}}</span></aside>
         </section>
       </div>
       <div class="margin-box"></div>
@@ -275,7 +69,24 @@ import axios from 'axios'
 import CommentModal from '../components/CommentModal.vue'
 import { mapState, mapActions  } from 'vuex'
 
-
+function timeForToday(value) {
+        const today = new Date();
+        const timeValue = new Date(value);
+        const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
+        if (betweenTime < 1) return '방금전';
+        if (betweenTime < 60) {
+            return `${betweenTime}분전`;
+        }
+        const betweenTimeHour = Math.floor(betweenTime / 60);
+        if (betweenTimeHour < 24) {
+            return `${betweenTimeHour}시간전`;
+        }
+        const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
+        if (betweenTimeDay < 365) {
+            return `${betweenTimeDay}일전`;
+        }
+        return `${Math.floor(betweenTimeDay / 365)}년전`;
+ }
 
 export default {
   name: 'Feed',
@@ -285,6 +96,10 @@ export default {
       isInfluNav: false,
       modal: false,
       mainfeed:[],
+      influencer:[],
+      feedlist:[],
+      likeStates:[],
+      bookmarkStates:[],
       settings: {
         "dots": false,
         "arrows": true,
@@ -303,7 +118,11 @@ export default {
         "speed": 500,
         "slidesToShow": 1,
         "slidesToScroll": 1
-      }
+      },
+      modalArticleNo : '',
+      modalArticleUser:'',
+      likeicon:['','heart'],
+      markicon:['','mark'],
     }
   },
   components: { 
@@ -311,11 +130,16 @@ export default {
     CommentModal
   },
   computed:{
-    ...mapState(['user']),
+    ...mapState(['user', 'flag']),
   },
-
+  watch: {
+    flag() {
+      this.defaultDark()
+    }
+  },
+  
   methods: {
-    ...mapActions(['sendUserInfo']),
+    ...mapActions(['sendUserInfo', 'setLoggedIn', 'setToken']),
     onNewsFeed() {
       const selectBar = document.querySelector('.menu-bar-select')
       const newsFeed = document.querySelector('.fa-newspaper')
@@ -329,54 +153,202 @@ export default {
       selectBar.classList.remove('go-third-menu')
     },
   
-    clickLike() {
-      this.modal = true
+    clickLike(articleNo,flag,index,e) {
+      let ref=this
+      if(flag==0){
+        this.likeStates[index]=1
+        e.target.classList.add('heart')
+        this.modal = true
+        axios.post('http://localhost:8080/api/board/likes',{
+            articleNo:articleNo,
+            nickname:this.user.nickname
+          })
+          .then(console.log("좋아요"))
+          .catch()
+      }
+      else if(flag==1){
+        this.likeStates[index]=0
+        e.target.classList.remove('heart')
+        axios.delete('http://localhost:8080/api/board/likes',{
+          data:{
+            articleNo:articleNo,
+            nickname:this.user.nickname
+          }
+        })
+        .then(console.log(ref.likeStates[index],"좋아요 취소"))
+        .catch()
+      }
+      
     },
-    clickComment() {
-
+    clickComment(articleNo,articleUser) {
+      this.modalArticleNo=articleNo;
+      this.modalArticleUser=articleUser;
+      this.showModal = true
     },
-    clickBookMark() {
+    clickBookMark(articleNo,flag,index,e) {
+      let ref=this
+      if(flag==0){
+        this.bookmarkStates[index]=1
+        e.target.classList.add('mark')
+        axios.post('http://localhost:8080/api/board/bookmark',{
+            bookedArticle:articleNo,
+            bookUser:this.user.nickname
+          })
+          .then(console.log("북마크 등록"))
+          .catch()
+      }
+      else if(flag==1){
+        this.bookmarkStates[index]=0
+        e.target.classList.remove('mark')
+        axios.delete('http://localhost:8080/api/board/bookmark',{
+          data:{
+            bookedArticle:articleNo,
+            bookUser:this.user.nickname
+          }
+        })
+        .then(console.log(ref.bookmarkStates[index],"북마크 취소"))
+        .catch()
+      }
 
     },
     setInfluNav() {
       this.isInfluNav = !this.isInfluNav
+      
       const INFLUBTN = document.querySelector('.open-influ-nav')
       if(INFLUBTN.innerHTML === '∧'){
         INFLUBTN.innerHTML = '∨'
       } else {
         INFLUBTN.innerHTML = '∧'
       }
-    }
+    },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const NAV = document.querySelector('#nav')
+      const NAVBASE = document.querySelector('.nav-base')
+      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+      const INPUT = document.querySelectorAll('input')
+      const INFLUNAVBTN = document.querySelector('.open-influ-nav')
+      const INFLUNAV = document.querySelector('.influ-nav')
+
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        NAV.classList.add('nav-dark')
+        NAVBASE.classList.add('nav-dark')
+        NAVLOGO.classList.add('nav-logo-dark')
+        INFLUNAVBTN.classList.add('nav-influ-btn-dark')
+        INFLUNAV.classList.add('nav-influ-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('input-dark')
+        }
+      } else if(Dark ==='on' ) {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        NAV.classList.remove('nav-dark')
+        NAVBASE.classList.remove('nav-dark')
+        NAVLOGO.classList.remove('nav-logo-dark')
+        INFLUNAVBTN.classList.remove('nav-influ-btn-dark')
+        INFLUNAV.classList.remove('nav-influ-dark')
+        for (let j=0; j<INPUT.length ; j++) {
+          INPUT[j].classList.remove('input-dark')
+        }
+      }
+    },
   },
   mounted() {
     this.onNewsFeed()
+    this.defaultDark()
+    let ref=this;
+    let nickdata = this.$cookies.get('auth-nickname')
+    let uri = nickdata;
+    let uri_enc = encodeURIComponent(uri);
+    let uri_dec = decodeURIComponent(uri_enc);
+    let res = uri_dec;
+    
+    
     const formData = new FormData();
-    formData.append('nickname',this.user.nickname);
-    console.log(this.user.nickname)
+    
+    formData.append('nickname',res);
+
     axios.post("http://localhost:8080/api/board/newsfeed",formData).then((data)=>{
       console.log("success")
       console.log(data)
       this.feedlist=data.data;
+      console.log(typeof(this.feedlist))
       for (let index = 0; index < this.feedlist.length; index++) {
+        let feeddata={tags:[],
+                      images:[],
+                      content:"",
+                      articleUser:"",
+                      userProfile:"",}
+
         const el = this.feedlist[index];
+
+        let follow = new FormData();
+
+        follow.append('follow',el.articleUser);
+
+        axios.post("http://localhost:8080/api/board/profileimg",follow).then((proff)=>{
+          feeddata.userProfile=proff.data.profile_img;
+        });
+
         const articleNo = new FormData();
         articleNo.append('articleNo',el.articleNo);
+
         axios.post("http://localhost:8080/api/board/images",articleNo).then((img)=>{
-          const temp = img.data;``
-          const templist = [];
-          for (let i = 0; i < temp.length; i++) {
-            const el2= temp[i];
-            templist.push({src:el2.imageUrl});  
+          const imgs = img.data;
+          const imglist = [];
+          for (let i = 0; i < imgs.length; i++) {
+            const el2= imgs[i];
+            imglist.push({src:el2.imageUrl});  
           }
           if(this.feedlist[index].articleUser!=null){
-            this.mainfeed.push({url:templist,content:this.feedlist[index].content,articleDate: this.feedlist[index].articleDate,articleUser: this.feedlist[index].articleUser});
+            feeddata.images=imglist;
+            feeddata.content=this.feedlist[index].content;
+            feeddata.articleDate= timeForToday(this.feedlist[index].articleDate);
+            feeddata.articleUser= this.feedlist[index].articleUser;
+            feeddata.articleNo=this.feedlist[index].articleNo;
           }else{
-            this.mainfeed.push({url:templist,content:this.feedlist[index].content,articleDate: this.feedlist[index].articleDate,articleUser: this.feedlist[index].influeUser});
+            feeddata.url=imglist;
+            feeddata.content=this.feedlist[index].content;
+            feeddata.articleDate= timeForToday(this.feedlist[index].articleDate);
+            feeddata.articleUser= this.feedlist[index].influeUser;
+            feeddata.articleNo=this.feedlist[index].articleNo;
         }
+        
       });
+        axios.post("http://localhost:8080/api/board/tags",articleNo).then((tag)=>{
+        const tags = tag.data;
+        const taglist = [];
+        for (let i = 0; i < tags.length; i++) {
+            const el2= tags[i];
+            taglist.push({tagname:el2.tagName});  
+          }
+            feeddata.tags=taglist;
+        });
+       
+        this.mainfeed.push(feeddata)
+        ref.likeStates.push(this.feedlist[index].likechk);
+        ref.bookmarkStates.push(this.feedlist[index].markchk);
   }
-  console.log(this.mainfeed)});
+  });
+  console.log(this.mainfeed)
+  axios.post("http://localhost:8080/api/board/influencer").then((data)=>{
+      this.influencer=data.data;
+      console.log(this.influencer)
+    });
+
+  console.log(this.likeStates,'좋아요리스트');
+  console.log(this.bookmarkStates,'북마크리스트');
   }
+
+  
 }
 
 </script>
@@ -386,25 +358,28 @@ export default {
   max-width: 440px !important;
   width: 100%;
   margin: 0 auto;
-  margin-top: 70px;
+  margin-top: 60px;
   }
 }
 
 .wrap-container {
   margin-bottom: 50px;
 }
-
-@media (max-width: 280px) {
+.feed-wrap {
+    padding-top: 20px;
+  }
+/* @media (max-width: 280px) {
   .feed-wrap {
     margin-top: 150px;
   }
-}
+} */
 @media (min-width: 1200px) {
   .feed-wrap {
-    margin-top: 70px !important;
+    margin-top: 60px !important;
+    padding-top: 20px;
   }
 }
-@media (min-height: 700px) {
+/* @media (min-height: 700px) {
   .feed-wrap {
     margin-top: 150px;
   }
@@ -418,7 +393,7 @@ export default {
   .feed-wrap {
     margin-top: 80px;
   }
-}
+} */
 .open-influ-nav {
   position: fixed;
   top: 60px;
@@ -597,6 +572,25 @@ export default {
 }
 .margin-box {
   height: 20px;
+}
+
+.nav-influ-btn-dark {
+  background-color: rgb(109, 108, 108);
+}
+
+.nav-influ-btn-dark:hover {
+  color: #202020;
+}
+
+.nav-influ-dark {
+  background-color: rgb(77, 76, 76);
+}
+
+.heart{
+  color:crimson;
+}
+.mark{
+  color:gold;
 }
 </style>
 

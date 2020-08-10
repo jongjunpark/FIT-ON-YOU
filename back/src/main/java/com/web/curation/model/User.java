@@ -1,25 +1,23 @@
 package com.web.curation.model;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 @Entity
+@Table
 @Setter
 @Getter
 @ToString
@@ -36,7 +34,7 @@ public class User {
     private String email;
 
     @Column(insertable = false, updatable = false)
-    private LocalDateTime create_Date;
+    private LocalDateTime create_date;
    
     private LocalDate birth;
     private String gender;
@@ -61,10 +59,10 @@ public class User {
 		this.email = email;
 	}
 	public LocalDateTime getCreate_Date() {
-		return create_Date;
+		return create_date;
 	}
 	public void setCreate_Date(LocalDateTime create_Date) {
-		this.create_Date = create_Date;
+		this.create_date = create_Date;
 	}
 	public LocalDate getBirth() {
 		return birth;

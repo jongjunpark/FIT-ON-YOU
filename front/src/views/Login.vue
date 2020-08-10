@@ -20,10 +20,10 @@
       <div v-if='onLoginBtn' @click='loginHandler' class='btn on-login-btn'>로그인</div>
       <div class="social-area">
         <div class="btn google-btn" id="customBtn">
-          <img class="google-img" src="../assets/images/google2.png"/>
+          <img class="google-img" src="../assets/images/google-mini.png"/>
         </div>
         <div class="btn kakao-btn" @click="loginWithKakao"> 
-          <img class="kakao-img" src="../assets/images/kakao.png"/>
+          <img class="kakao-img" src="../assets/images/kakao-mini.png"/>
         </div>
       </div>
       <div class="login-link-area">
@@ -38,7 +38,7 @@
 /* eslint-disable */
 import "../components/css/login.css"
 import axios from 'axios';
-import { mapGetters, mapMutations, mapActions  } from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions  } from 'vuex'
 
 Kakao.init('713af847cf1784de91646f5cb2455cbf');
 
@@ -81,16 +81,21 @@ export default {
     },
     password() {
       this.setPasswordClass();
-    }
+    },
+    flag() {
+      this.defaultDark()
+    },
   },
   mounted() {
-    window.addEventListener("google-loaded", this.startApp);    
+    window.addEventListener("google-loaded", this.startApp);
+    this.defaultDark()    
   },
   computed: {
+    ...mapState(['flag']),
     ...mapGetters([]),
   }, 
   methods:{
-    ...mapMutations(['setToken', 'setUser']),
+    ...mapMutations(['setToken', 'setUser', 'setLoggedIn']),
     ...mapActions(['AC_USER', 'sendUserInfo']),
 
     loginWithKakao(){
@@ -116,7 +121,26 @@ export default {
               ref.AC_USER(userData);
               console.log(ref.$store.state.user);
               // window.AC_USER(userData)
+              console.log(response.kakao_account.profile.nickname,123)
 
+              axios.post('http://localhost:8080/api/account/social',{
+                nickname : response.kakao_account.profile.nickname,
+                profile_image : response.kakao_account.profile.profile_image_url,
+                email : response.kakao_account.email,
+                gender : response.kakao_account.gender,
+              })
+              .then((data)=>{
+                console.log("카카오로그인성공")
+                console.log(data);
+                ref.$cookies.set('auth-token', data.data.auth_token)
+                ref.setToken(data.data.auth_token)
+                ref.sendUserInfo();
+                ref.setLoggedIn(true)
+                ref.$router.push('/feed')
+
+
+              })
+              .catch()
             },
             fail: function(error) {
                 console.log(error);
@@ -150,8 +174,25 @@ export default {
           ref.AC_USER(userData);
           console.log(ref.$store.state.user);
 
+          axios.post('http://localhost:8080/api/account/social',{
+                nickname : googleUser.getBasicProfile().Cd,
+                profile_image : googleUser.getBasicProfile().fL,
+                email : googleUser.getBasicProfile().zu,
+              })
+              .then((data)=>{
+                console.log("구글로그인성공")
+                console.log(data);
+                ref.$cookies.set('auth-token', data.data.auth_token)
+                ref.setToken(data.data.auth_token)
+                ref.sendUserInfo();
+                ref.setLoggedIn(true)
+                ref.$router.push('/feed')
+
+
+              })
+              .catch()
+
         }, function(error) {
-          alert(JSON.stringify(error, undefined, 2));
         });
       });
     },
@@ -202,7 +243,7 @@ export default {
     loginHandler() { 
       console.log(this.email);
       console.log(this.password);
-      axios.get('http://localhost:8080/api/account/login',{
+      axios.get('http://i3b304.p.ssafy.io:8080/api/account/login',{
         params:{email:this.email,
                   password:this.password},
       }).then( response => {
@@ -213,6 +254,15 @@ export default {
           this.$cookies.set('auth-token', response.data.auth_token)
           this.setToken(response.data.auth_token)
           this.sendUserInfo();
+          this.setLoggedIn(true);
+          firebase.auth().signInWithEmailAndPassword(this.email, this.password).catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // ...
+          console.log(errorCode);
+          console.log(errorMessage);
+          });
           this.$router.push('/feed')
         }
         // 이메일 없음
@@ -248,6 +298,34 @@ export default {
         }
 
       });
+    },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const NAV = document.querySelector('#nav')
+      const NAVBASE = document.querySelector('.nav-base')
+      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        NAV.classList.add('nav-dark')
+        NAVBASE.classList.add('nav-dark')
+        NAVLOGO.classList.add('nav-logo-dark')
+        this.checked = true
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        NAV.classList.remove('nav-dark')
+        NAVBASE.classList.remove('nav-dark')
+        NAVLOGO.classList.remove('nav-logo-dark')
+        this.checked = false
+      }
     },
 
     

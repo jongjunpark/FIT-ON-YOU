@@ -5,7 +5,7 @@
       <div class="nav-logo">
         <i @click='goHome' class="fas fa-hat-cowboy"></i>
       </div>
-      <div class="nav-user">
+      <div class="nav-user" v-show="isLoggedIn">
         <div @click='setUserBar' class="nav-user-img">
           <i class="fas fa-bars"></i>
         </div>
@@ -15,10 +15,11 @@
               <li class="nav-user-icon user-bar-menu"  @click="goProfile">
                 <i class="user-bar-img fas fa-user"></i>
               </li>
-              <li class="nav-user-icon user-bar-menu">
-                <i class="user-bar-img fas fa-comment-alt"></i>
+              <li class="nav-user-icon user-bar-menu" @click="goDM">
+                <!-- <i class="user-bar-img fas fa-comment-alt"></i> -->
+                <i class="user-bar-img far fa-paper-plane"></i>
               </li>
-              <li class="nav-user-icon user-bar-menu">
+              <li class="nav-user-icon user-bar-menu" @click="goAlarm">
                 <i class="user-bar-img fas fa-bell"></i>
               </li>
             </ul>
@@ -29,7 +30,7 @@
     
     <router-view/>
     
-    <div v-show="isLoggedIn" id="nav2">
+    <div  id="nav2" v-if="isLoggedIn">
       <div class="bottom-nav">
         <div class='menu-bar-list'>
           <div class="menu-bar-select"></div>
@@ -44,15 +45,21 @@
           </div>
         </div>
       </div>
-      <div class="write-icon">
+      <div @click='goWrite' class="write-icon">
         <i class="write-icon-img fas fa-pen"></i>
       </div>
     </div>
+     <div class="darkmode" >
+      <input type="checkbox" id="theme-toggle" @click="darkOn" v-model="checked">
+      <label for="theme-toggle"><span></span></label>
+    </div>
+    
   </div>
 </template>
 
 <script>
 import "./assets/css/common.css";
+import "./assets/css/darkmode.scss";
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 // import axios from 'axios';
 
@@ -61,12 +68,18 @@ export default {
   name: 'App',
   data() {
     return {
-      isUserIcon: false
+      isUserIcon: false,
+      checked: false
     }
   },
   computed: {
-    ...mapState(['authToken', 'isLoggedIn', 'user']),
+    ...mapState(['authToken', 'isLoggedIn', 'user', 'flag']),
     ...mapGetters([])
+  },
+  watch: {
+    checked() {
+      this.setFlag(this.checked)
+    }
   },
  
   mounted() {
@@ -79,10 +92,11 @@ export default {
       this.setLoggedIn(false);
       this.setUser('')
     }
+    this.defaultDark()
 
   },
   methods: {
-    ...mapMutations(['setLoggedIn', 'setToken', 'setUser']),
+    ...mapMutations(['setLoggedIn', 'setToken', 'setUser', 'setFlag']),
     ...mapActions(['sendUserInfo']),
 
     setUserBar() {
@@ -158,6 +172,106 @@ export default {
       this.isUserIcon = false;
       this.$router.push('/profileedit')
     },
+    goWrite() {
+      this.$router.push('/write')
+    },
+    goDM() {
+      this.isUserIcon = false;
+      this.$router.push('/dm')
+    },
+    goAlarm() {
+      this.isUserIcon = false;
+      this.$router.push('/alarm')
+    },
+    darkOn() {
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const NAV = document.querySelector('#nav')
+      const NAVBASE = document.querySelector('.nav-base')
+      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+      const Dark = this.$cookies.get('dark')
+      const INPUT = document.querySelectorAll('input')
+      const HAMBURGER = document.querySelector('.fa-bars')
+      
+      const TEXTAREA = document.querySelectorAll('textarea')
+
+
+      if (Dark === 'on') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        NAV.classList.add('nav-dark')
+        NAVBASE.classList.add('nav-dark')
+        NAVLOGO.classList.add('nav-logo-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('input-dark')
+        }
+        HAMBURGER.classList.add('fa-bars-dark')
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.add('textarea-dark')
+        }
+        this.$cookies.set('dark', 'off')
+
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        NAV.classList.remove('nav-dark')
+        NAVBASE.classList.remove('nav-dark')
+        NAVLOGO.classList.remove('nav-logo-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.remove('textarea-dark')
+        }
+        HAMBURGER.classList.remove('fa-bars-dark')
+        this.$cookies.set('dark', 'on')
+      }
+    },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const NAV = document.querySelector('#nav')
+      const NAVBASE = document.querySelector('.nav-base')
+      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+      const INPUT = document.querySelectorAll('input')
+      const TEXTAREA = document.querySelectorAll('textarea')
+      const HAMBURGER = document.querySelector('.fa-bars')
+
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        NAV.classList.add('nav-dark')
+        NAVBASE.classList.add('nav-dark')
+        NAVLOGO.classList.add('nav-logo-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.add('textarea-dark')
+        }
+        HAMBURGER.classList.add('fa-bars-dark')
+        this.checked = true
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        NAV.classList.remove('nav-dark')
+        NAVBASE.classList.remove('nav-dark')
+        NAVLOGO.classList.remove('nav-logo-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.remove('textarea-dark')
+        }
+        HAMBURGER.classList.remove('fa-bars-dark')
+        this.checked = false
+      }
+    }, 
   }
 }
 </script>
