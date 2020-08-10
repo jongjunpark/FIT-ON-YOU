@@ -1,10 +1,12 @@
 package com.web.curation.dao;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import com.web.curation.model.Chat;
 import com.web.curation.model.ChatDTO;
 
 public interface ChatDao extends JpaRepository<ChatDTO, String> {
@@ -17,4 +19,7 @@ public interface ChatDao extends JpaRepository<ChatDTO, String> {
 
 	@Query(value = "update chatlist set lasttime = null where roomname = :roomname", nativeQuery = true)
 	void updateLasttime(String roomname);
+
+	@Query(value = "select * from chatlist where (firstuser = :username)or(seconduser = :username)", nativeQuery = true)
+	List<ChatDTO> getRoomListByUsername(String username);
 }

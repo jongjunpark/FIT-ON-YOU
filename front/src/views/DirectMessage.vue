@@ -12,7 +12,7 @@
         <div class="message-content">
          <div v-for="message in messages" :key="message.id">
           <div v-show='message.senduser == authUser.nickname' class="user-me">
-            <p class="user-me-content">{{message.senduser}}</p>x`x`
+            <p class="user-me-content">{{message.senduser}}</p>
             <p class="in-user-content">{{message.message}}</p>
           </div>
           <div v-show='message.senduser != authUser.nickname' class="user-opponent">
