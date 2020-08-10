@@ -1,7 +1,9 @@
 <template>
   <div class='wrap'>
     <div class='wrap-container'>
-      <h1 class='main-logo'>FIT ON U</h1>
+      <div class='main-logo'>
+        <img src="@/assets/images/HEAD.png" alt="">
+      </div>
       <p v-if='errormsgEmail' class='err-msg login-err-msg'>이메일이 존재하지 않습니다.</p>
       <p v-if='errormsgPwd' class='err-msg login-err-msg'>비밀번호가 틀렸습니다.</p>
       <div class='login-input-area'>

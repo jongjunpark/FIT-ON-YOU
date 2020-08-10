@@ -154,7 +154,8 @@ span {
 
 
 #nav .nav-logo {
-
+  width: 100px;
+  height: 7vh;
 }
 
 #nav .nav-logo .fa-hat-cowboy {
@@ -162,6 +163,11 @@ span {
   margin: 0;
   color: #262626;
   transition: 0.3s ease;
+}
+
+#nav .nav-logo img {
+  width:100%;
+  height: 100%;
 }
 
 #nav .nav-user{
@@ -387,9 +393,16 @@ align-items: center;
 }
 
 .main-logo {
-  margin: 5vh 0;
+  margin: 3vh 0;
+  width: 40vh;
+  height: 18vh;
   font-weight: 900;
   font-size: 6vh;
+}
+
+.main-logo img {
+  width: 100%;
+  height: 100%;
 }
 
 .err-msg {

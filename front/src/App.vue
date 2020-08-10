@@ -3,7 +3,7 @@
     <div class="nav-base"></div>
     <div id="nav">
       <div class="nav-logo">
-        <i @click='goHome' class="fas fa-hat-cowboy"></i>
+        <img src="@/assets/images/my-logo.png" alt="">
       </div>
       <div class="nav-user" >
         <div @click='setUserBar' class="nav-user-img">
@@ -299,7 +299,7 @@ export default {
       const HTML = document.querySelector('html')
       const NAV = document.querySelector('#nav')
       const NAVBASE = document.querySelector('.nav-base')
-      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+      // const NAVLOGO = document.querySelector('.fa-hat-cowboy')
       const HAMBURGER = document.querySelector('.fa-bars')
       const USERBAR = document.querySelectorAll('.nav-user-icon')
 
@@ -311,7 +311,7 @@ export default {
         HTML.classList.add('black')
         NAV.classList.add('nav-dark')
         NAVBASE.classList.add('nav-dark')
-        NAVLOGO.classList.add('nav-logo-dark')
+        // NAVLOGO.classList.add('nav-logo-dark')
         HAMBURGER.classList.add('fa-bars-dark')
         for (let i=0; i<USERBAR.length; i++) {
           USERBAR[i].classList.add('user-bar-dark')
@@ -321,7 +321,7 @@ export default {
         HTML.classList.remove('black')
         NAV.classList.remove('nav-dark')
         NAVBASE.classList.remove('nav-dark')
-        NAVLOGO.classList.remove('nav-logo-dark')
+        // NAVLOGO.classList.remove('nav-logo-dark')
         HAMBURGER.classList.remove('fa-bars-dark')
         for (let i=0; i<USERBAR.length; i++) {
           USERBAR[i].classList.remove('user-bar-dark')
