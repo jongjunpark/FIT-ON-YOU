@@ -1,66 +1,86 @@
 .join-logo {
-  margin: 10px 0;
+  margin: 1vh 0;
+  font-size: 5vh;
 }
 
 .join-input-area {
   width: 100%;
   margin: 0 0 -1px 0;
-  height: 80px;
-  border-radius: 5px;
+  height: 10vh;
+  border-radius: 0.8vh;
   border: 1px solid #B0B0B0;
   position: relative;
 }
+
+.join-input-area input::placeholder {
+  font-size: 1.7vh; 
+}
+.join-input-area select {
+  font-size: 1.7vh;
+}
+
+
 .join-input-area:focus {
   border: 2px solid black;
 }
 
 .sex-area {
   width: 100%;
-  height: 100px;
-  margin-top: 30px;
+  height: 14vh;
+  margin-top: 2vh;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
 }
 
 
 .join-input-area #email-join {
-  width: 26%;
-  margin: 30px 0 0 20px;
+  width: 30%;
+  margin: 4vh 0 0 2vh;
   box-sizing: border-box;
   border: 0;
-  font-size: 14px;
+  font-size: 1.7vh;
   font-family: "Noto Sans KR", sans-serif !important;
 }
+
 .join-input-area #email-join:focus {
   outline: none !important;
   border: 2px solid #5AAEFF;
-  border-radius: 5px;
+  border-radius: 0.8vh;
   font-weight: 700;
 }
 
 .join-input-area #email-join2 {
   display: inline-block;
-  width: 27%;
+  width: 26%;
   box-sizing: border-box;
   border: 0;
-  font-size: 14px;
+  font-size: 1.7vh;
   font-family: "Noto Sans KR", sans-serif !important;
 }
 .join-input-area #email-join2:focus {
   outline: none !important;
   border: 2px solid #5AAEFF;
-  border-radius: 5px;
+  border-radius: 0.8vh;
   font-weight: 700;
 }
 
 .join-input-area #email-combo{
-  width: 27%;
+  width: 21vw;
   box-sizing: border-box;
   border: 0;
   font-family: "Noto Sans KR", sans-serif !important;
   color: #686868;
 }
+@media (min-width:1200px) {
+  .join-input-area #email-combo {
+    width: 28%;
+  }
+}
+.join-input-area #email-combo option {
+  font-size: 1.5vh;
+}
+
 .join-input-area #email-combo:focus{
   outline: none;
 }
@@ -68,61 +88,54 @@
 .join-input-area .common-input-join {
   width: 90%;
   box-sizing: border-box;
-  margin: 30px 0 0 20px;
+  margin: 4vh 0 0 2vh;
   border: 0;
-  font-size: 14px;
+  font-size: 1.7vh;
   font-family: "Noto Sans KR", sans-serif !important;
 }
+
 .join-input-area .common-input-join:focus {
   outline: none !important;
   border: 2px solid #5AAEFF;
-  border-radius: 5px;
+  border-radius: 0.8vh;
   font-weight: 700;
 }
 
 .join-input-area .birth-join {
   width: 25%;
   box-sizing: border-box;
-  margin: 30px 0 0 20px;
+  margin: 4vh 0 0 2vh;
   border: 0;
-  font-size: 14px;
+  font-size: 1.7vh;
   font-family: "Noto Sans KR", sans-serif !important;
 }
+
 .join-input-area .birth-join:focus {
   outline: none !important;
   border: 2px solid #5AAEFF;
-  border-radius: 5px;
+  border-radius: 0.8vh;
   font-weight: 700;
 }
 
 .join-input-area label {
   position: absolute;
   top: 2px;
-  left: 10px;
+  left: 1.2vh;
   font-weight: 600;
+  font-size: 2vh;
 }
 
 .email-join-span {
   color: #B0B0B0;
+  font-size: 1.7vh;
 }
 
-.btn {
-  font-weight: 500;
-  font-size: 18px;
-  text-align: center;
-  cursor: pointer;
-  height: 50px;
-  line-height: 50px;
-  border-radius: 5px;
-  margin-bottom: 10px;
-}
 
 .btn.join-btn {
   color: #B0B0B0;
-  border: 2px solid #B0B0B0;
-  background-color: white;
+  background-color: grey;
   width: 100%;
-  font-size: 20px;
+  font-size: 3vh;
   box-sizing: border-box;
   cursor:default;
 }
@@ -131,7 +144,7 @@
   color: white;
   background-color: #5AAEFF;
   width: 100%;
-  font-size: 20px;
+  font-size: 3vh;
   box-sizing: border-box;
 }
 
@@ -139,7 +152,7 @@
   color: white;
   background-color: #D3779D;
   width: 100%;
-  font-size: 20px;
+  font-size: 3vh;
   box-sizing: border-box;
 }
 
@@ -147,24 +160,44 @@
 
 .join-err-msg {
   margin: 0 0 0 20px !important;
-  font-size: 14px;
+  font-size: 1.7vh;
 }
 .join-suc-msg {
   margin: 0 0 0 20px !important;
-  font-size: 14px;
+  font-size: 1.7vh;
 }
 
 i {
-  font-size: 5rem;
-  margin: 0 80px;
+  font-size: 10vh;
   cursor: pointer;
   color: #686868;
 }
 
 .change-color {
   color: #5AAEFF !important;
+  animation-name: onchecksex;
+  animation-duration: 0.5s;
 }
 
 .change-color-woman {
   color: #D3779D;
+  animation-name: onchecksex;
+  animation-duration: 0.5s;
+}
+
+@keyframes onchecksex {
+	50% {transform: scale(1.1)}
+	100% {transform: scale(1)}
+}
+
+.join-profile-back-btn-dark {
+  color: #202020 ;
+}
+
+.join-skip-btn-dark {
+  color: #202020 ;
+}
+
+.join-cancle-img-dark {
+  filter: invert(70);
 }

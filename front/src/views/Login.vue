@@ -13,17 +13,20 @@
         <label class='login-password-label' for="login-password">비밀번호</label>
       </div>
       <div class="login-checkbox-area">
-        <input type="checkbox" class='login-checkbox'>
-        <label for="login-checkbox"> 로그인상태 유지</label>
+        <input type="checkbox" id='login-checkbox' @change="setLoginInf">
+        <label for="login-checkbox"><i class="far fa-check-circle"></i></label>
+        <label for="login-checkbox" class='login-inf-label'> 로그인상태 유지</label>
       </div>
       <div v-if='offLoginBtn' class='btn login-btn'>로그인</div>
       <div v-if='onLoginBtn' @click='loginHandler' class='btn on-login-btn'>로그인</div>
       <div class="social-area">
         <div class="btn google-btn" id="customBtn">
-          <img class="google-img" src="../assets/images/google2.png"/>
+          <i class="fab fa-google"></i>
+          <!-- <img class="google-img" src="../assets/images/google-mini.png"/> -->
         </div>
-        <div class="btn kakao-btn" @click="loginWithKakao"> 
-          <img class="kakao-img" src="../assets/images/kakao.png"/>
+        <div class="btn kakao-btn" @click="loginWithKakao">
+          <i class="fas fa-comment"></i> 
+          <!-- <img class="kakao-img" src="../assets/images/kakao-mini.png"/> -->
         </div>
       </div>
       <div class="login-link-area">
@@ -38,7 +41,7 @@
 /* eslint-disable */
 import "../components/css/login.css"
 import axios from 'axios';
-import { mapGetters, mapMutations, mapActions  } from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions  } from 'vuex'
 
 Kakao.init('713af847cf1784de91646f5cb2455cbf');
 
@@ -81,16 +84,21 @@ export default {
     },
     password() {
       this.setPasswordClass();
-    }
+    },
+    flag() {
+      this.defaultDark()
+    },
   },
   mounted() {
-    window.addEventListener("google-loaded", this.startApp);    
+    window.addEventListener("google-loaded", this.startApp);
+    this.defaultDark()    
   },
   computed: {
+    ...mapState(['flag']),
     ...mapGetters([]),
   }, 
   methods:{
-    ...mapMutations(['setToken', 'setUser']),
+    ...mapMutations(['setToken', 'setUser', 'setLoggedIn']),
     ...mapActions(['AC_USER', 'sendUserInfo']),
 
     loginWithKakao(){
@@ -116,7 +124,26 @@ export default {
               ref.AC_USER(userData);
               console.log(ref.$store.state.user);
               // window.AC_USER(userData)
+              console.log(response.kakao_account.profile.nickname,123)
 
+              axios.post('http://localhost:8080/api/account/social',{
+                nickname : response.kakao_account.profile.nickname,
+                profile_image : response.kakao_account.profile.profile_image_url,
+                email : response.kakao_account.email,
+                gender : response.kakao_account.gender,
+              })
+              .then((data)=>{
+                console.log("카카오로그인성공")
+                console.log(data);
+                ref.$cookies.set('auth-token', data.data.auth_token)
+                ref.setToken(data.data.auth_token)
+                ref.sendUserInfo();
+                ref.setLoggedIn(true)
+                ref.$router.push('/feed')
+
+
+              })
+              .catch()
             },
             fail: function(error) {
                 console.log(error);
@@ -150,8 +177,25 @@ export default {
           ref.AC_USER(userData);
           console.log(ref.$store.state.user);
 
+          axios.post('http://localhost:8080/api/account/social',{
+                nickname : googleUser.getBasicProfile().Cd,
+                profile_image : googleUser.getBasicProfile().fL,
+                email : googleUser.getBasicProfile().zu,
+              })
+              .then((data)=>{
+                console.log("구글로그인성공")
+                console.log(data);
+                ref.$cookies.set('auth-token', data.data.auth_token)
+                ref.setToken(data.data.auth_token)
+                ref.sendUserInfo();
+                ref.setLoggedIn(true)
+                ref.$router.push('/feed')
+
+
+              })
+              .catch()
+
         }, function(error) {
-          alert(JSON.stringify(error, undefined, 2));
         });
       });
     },
@@ -202,7 +246,7 @@ export default {
     loginHandler() { 
       console.log(this.email);
       console.log(this.password);
-      axios.get('http://localhost:8080/api/account/login',{
+      axios.get('http://i3b304.p.ssafy.io:8080/api/account/login',{
         params:{email:this.email,
                   password:this.password},
       }).then( response => {
@@ -213,6 +257,15 @@ export default {
           this.$cookies.set('auth-token', response.data.auth_token)
           this.setToken(response.data.auth_token)
           this.sendUserInfo();
+          this.setLoggedIn(true);
+          firebase.auth().signInWithEmailAndPassword(this.email, this.password).catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // ...
+          console.log(errorCode);
+          console.log(errorMessage);
+          });
           this.$router.push('/feed')
         }
         // 이메일 없음
@@ -249,8 +302,55 @@ export default {
 
       });
     },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const H1TAG = document.querySelectorAll('h1')
+      const PTAG = document.querySelectorAll('p')
+      const LABEL = document.querySelectorAll('label')
+      const SPAN = document.querySelectorAll('span')
+      const GOOGLE = document.querySelector('.google-btn')
+      const KAKAO = document.querySelector('.kakao-btn')
 
-    
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.add('font-dark')
+        }
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.add('font-dark')
+        }
+        LABEL[3].classList.add('font-dark')
+        for (let i=0; i<SPAN.length ; i++) {
+          SPAN[i].classList.add('font-dark')
+        }
+        GOOGLE.classList.add('social-btn-dark')
+        KAKAO.classList.add('social-btn-dark')
+      } else {
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.remove('font-dark')
+        }
+        LABEL[3].classList.remove('font-dark')
+        for (let i=0; i<SPAN.length ; i++) {
+          SPAN[i].classList.remove('font-dark')
+        }
+        GOOGLE.classList.remove('social-btn-dark')
+        KAKAO.classList.remove('social-btn-dark')
+      }
+    },
+    setLoginInf() {
+      const LOGINF = document.querySelector('.fa-check-circle')
+      if (event.target.checked) {
+        LOGINF.classList.add('on-login-checkbox')
+      } else {
+        LOGINF.classList.remove('on-login-checkbox')
+      }
+    }
   },
   /* eslint-enable */
   }

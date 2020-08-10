@@ -1,0 +1,88 @@
+.profile-edit-area .other-nickname {
+	font-size: 4vh;
+  font-weight: 600;
+  margin: 3vh 0;
+}
+
+.profile-edit-area .other-content {
+  font-size: 2vh;
+  margin-bottom: 3vh;
+}
+
+.other-user-child {
+  display: flex;
+  width: 17vh;
+  height: 6vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6vh;
+  background-color: #5AAEFF;
+  cursor: pointer;
+  box-shadow: 0 6px 12px 0 rgba(0,0,0,0.25),
+              -3px -3px 10px -1px rgba(250,250,250,0.15);
+  transition: transform 0.5s;
+}
+
+.other-user-child:hover {
+  transform: translateY(5px)
+}
+
+.other-user-child-DM {
+  display: flex;
+  width: 17vh;
+  height: 6vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6vh;
+  background-color: #FFBA00;
+  cursor: pointer;
+  box-shadow: 0 6px 12px 0 rgba(0,0,0,0.25),
+              -3px -3px 10px -1px rgba(250,250,250,0.15);
+  transition: transform 0.5s
+}
+
+.other-user-child-DM:hover {
+  transform: translateY(5px)
+}
+
+
+.other-user-child-DM > span {
+  color: white;
+  font-size: 2vh;
+}
+
+.other-user-child > span {
+  color: white;
+  font-size: 2vh;
+}
+
+.profile-user-btn {
+  /* background-color: #DBDBDB; */
+  border-radius: 50%;
+  width: 9vh;
+  height: 9vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 6px 6px 10px -1px rgba(0,0,0,0.15),
+  -3px -3px 10px -1px rgba(250,250,250,0.15);
+  border: 1px solid rgba(0,0,0,0.05);
+  transition: transform 0.5s;
+}
+.profile-user-btn:hover {
+  box-shadow: inset 4px 4px 6px -1px rgba(0,0,0,0.2),
+              inset -4px -4px 6px -1px rgba(255,255,255,0.1),
+              -0.5px -0.5px 0px rgba(0,0,0,0.05),
+              0.5px 0.5px 0px rgba(0,0,0,0.05),
+              0px 12px 10px -10px rgba(0,0,0,0.1);
+  border: 1px solid rgba(0,0,0,0.01);
+  transform: translateY(5px)
+}
+
+.profile-other-btn {
+  color: #fff;
+  font-size: 3.5vh;
+}

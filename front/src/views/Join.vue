@@ -6,8 +6,8 @@
         <label for="">이메일</label>
         <input @focus="activeInput" @blur='deactiveInputEmail' v-model='input.email' type="text" id='email-join' placeholder="example">
         <span class='email-join-span'> @ </span>
-        <input @focus="activeInput" @blur='deactiveInputEmail' v-model='input.url' v-if='offSelect' type="text" id='email-join2' placeholder="url">
-        <span v-if='!offSelect' id='email-join2'>{{ input.url }}</span>
+        <input @focus="activeInput" @blur='deactiveInputEmail' v-model='input.url' v-show='offSelect' type="text" id='email-join2' placeholder="url">
+        <span v-show='!offSelect' id='email-join2'>{{ input.url }}</span>
         <span class='email-join-span'> |  </span>
         <select @focus="activeInput" @blur='deactiveInputEmail' v-model='select' name="job" id='email-combo'>
           <option >직접입력</option>
@@ -24,7 +24,7 @@
         </select>
         <p v-if="mailErrMsg" class='err-msg join-err-msg'>유효하지 않은 이메일 형식입니다.</p>
         <p v-if="mailSucMsg && finalMail" class='err-msg join-err-msg'>이미 사용중인 이메일입니다.</p>
-        <p v-if="mailSucMsg && !finalMail && flag" class='suc-msg join-suc-msg'>사용가능합니다.</p>
+        <p v-if="mailSucMsg && !finalMail && joinFlag" class='suc-msg join-suc-msg'>사용가능합니다.</p>
       </div>
       <div class="join-input-area">
         <label for="">비밀번호</label>
@@ -62,18 +62,18 @@
       <div @click='nextJoin' v-if='!JoinBtn && isMale' class='btn on-join-btn'>가입하기</div>
       <div @click='nextJoin' v-if='!JoinBtn && isFemale' class='btn on-join-btn-woman'>가입하기</div>
     </div>
-    <div class='wrap-container center-container hidden'>
+    <div class='wrap-container center-container join-profile-hidden'>
       <header class='join-profile-header'>
-        <div @click='goBack' class='join-profile-back-btn'>＜ 뒤로가기</div>
+        <i @click='goBack' class="fas fa-arrow-circle-left"></i>
       </header>
       <section class='join-profile-area'>
         <div class='join-profile-img'>
           <div v-if='!input.profileImg'>
             <img class='profile-img' :src="require(`../assets/images/${defaultImg}`)" alt="">
           </div>
-          <div @mouseover="onCancleBtn" @mouseout="offCancleBtn" v-if='input.profileImg'>
-            <img class='profile-img select-img' :src="input.profileImg" alt="">
+          <div @mouseover="onCancleBtn" @mouseout="offCancleBtn" v-show='input.profileImg'>
             <img @click='setDefaultImg' v-show='isCancle' class='cancle-img' src="../assets/images/X.png" alt="">
+            <img class='profile-img select-img' :src="input.profileImg" alt="">
           </div>
           <label for='profile-img-edit' class="join-profile-img-edit">
             <input type="file" id="profile-img-edit" accept="image/*" @change="setProfileImg">
@@ -95,7 +95,8 @@ import PasswordValidator from 'password-validator'
 import * as EmailValidator from "email-validator"
 import Swal from 'sweetalert2'
 import axios from 'axios'
-import { mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
+import firebase from 'firebase'
 
 
 export default {
@@ -142,7 +143,7 @@ export default {
       isMale: false,
       isCancle: false,
       defaultImg: "default-user.png",
-      flag: false,
+      joinFlag: false,
     }
   },
   created() {
@@ -196,6 +197,9 @@ export default {
     'finalMail'() {
       this.finalMailCheck();
     },
+    flag() {
+      this.defaultDark()
+    },
     input: {
       handler() {
         this.checkJoinForm();
@@ -203,10 +207,14 @@ export default {
     },
   },
   computed: {
-    
+    ...mapState(['setLoggedIn', 'flag']),
+  },
+  mounted() {
+    this.defaultDark()
   },
   methods: {
     ...mapMutations(['setToken']),
+    ...mapActions(['sendUserInfo']),
     checkSelect() {
       if (this.select === '직접입력') {
         this.onSelect = false
@@ -315,7 +323,7 @@ export default {
       }
     },
     checkNickname() {
-      axios.get('http://localhost:8080/api/account/checkNickname',{ 
+      axios.get('http://i3b304.p.ssafy.io:8080/api/account/checkNickname',{ 
         params: {
           nickname: this.input.nickname
           }
@@ -397,8 +405,8 @@ export default {
       const SecondPage = document.querySelector('.wrap-container:nth-child(2)')
 
       firstPage.classList.add('goNext-front')
-      SecondPage.classList.remove('hidden')
-      firstPage.classList.remove('return')
+      SecondPage.classList.remove('join-profile-hidden')
+      firstPage.classList.remove('join-profile-return')
       SecondPage.classList.add('goNext-end')
       if (this.isMale) {
         this.defaultImg = 'default-user.png'
@@ -415,9 +423,9 @@ export default {
       const SecondPage = document.querySelector('.wrap-container:nth-child(2)')
 
       firstPage.classList.remove('goNext-front')
-      firstPage.classList.add('return')
+      firstPage.classList.add('join-profile-return')
       SecondPage.classList.remove('goNext-end')
-      SecondPage.classList.add('hidden')
+      SecondPage.classList.add('join-profile-hidden')
       if(!this.input.textProfile && !this.input.profileImg) {
         this.changeProfile = false
       }
@@ -444,6 +452,25 @@ export default {
         '자신만의 패션을 뽐내보세요!',
         'success'
       )
+      console.log("email=========>"+this.input.email);
+      console.log("paa=========>"+this.input);
+      const test1 = this.input.email
+      const test2 = this.input.password
+       console.log("email=========>"+test1);
+      console.log("paa=========>"+test2);
+       firebase.auth().createUserWithEmailAndPassword(test1.toString(), test2.toString()).then(()=>{
+          console.log("됨");
+        }).catch((error) => {
+        // Handle Errors here.
+        console.log(this.input.email);
+        console.log(this.input.password);
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log(errorCode);
+        console.log(errorMessage);
+        console.log("안됨");
+        // ...
+        });
       axios.post('http://localhost:8080/api/account/signup',{
 
           email: this.input.email+'@'+this.input.url,
@@ -454,14 +481,16 @@ export default {
           profile_img: this.profileImg
 
       }).then(data => {
+        console.log(data)
         this.$cookies.set('auth-token', data.data.auth_token)
-        // this.setToken(data.data.auth_token)
+        this.setToken(data.data.auth_token)
         Swal.fire(
         '환영해요!',
         '자신만의 패션을 뽐내보세요!',
         'success'
         )
-        this.$router.push('/feed')
+        this.setLoggedIn(true);
+        this.sendUserInfo();
       })
       .catch(function(){
         // console.log(data.data.data)
@@ -469,18 +498,27 @@ export default {
       if (photoFile.files[0]) {
 
         frm.append("profile-img-edit", photoFile.files[0]);
-        axios.post('http://localhost:8080/api/account/addProfileImg',frm,{
-          headers:{
-              'Content-Type': 'multipart/form-data'
-          }
-        }).then(function(){
+        frm.append("nickname",this.nickname);
+        axios.post('http://i3b304.p.ssafy.io:8080/api/account/addProfileImg',frm,
+        ).then( () =>{
           console.log("1");
+
+          firebase.auth().signInWithEmailAndPassword('fjsdklahfjsdhfl@naver.com', 'Zz12357822456a').catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // ...
+          console.log(errorCode);
+          console.log(errorMessage);
+          });
+
+          this.$router.go('/feed')
           
         })
         .catch(function(){
           console.log("2");
         });
-      }
+      } else {this.$router.go('/feed')}
 
     },
     notTab() {
@@ -516,17 +554,17 @@ export default {
          this.mailErrMsg = false;
          this.finalMail = false;
           if (this.mailSucMsg) {
-            axios.get('http://localhost:8080/api/account/checkDoubleEmail',{ 
+            axios.get('http://i3b304.p.ssafy.io:8080/api/account/checkDoubleEmail',{ 
               params: {
                 email: this.input.email+'@'+this.input.url
                 }
             }).then(data => {
               if (data.data.data == "exist") {
                 this.finalMail = true;
-                this.flag = false;
+                this.joinFlag = false;
               } else {
                 this.finalMail = false;
-                this.flag = true;
+                this.joinFlag = true;
                 
               }
             })
@@ -557,6 +595,78 @@ export default {
     },
     checkcheck() {
       console.log('hi')
+    },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const H1TAG = document.querySelectorAll('h1')
+      const LABEL = document.querySelectorAll('label')
+      const SPAN = document.querySelectorAll('span')
+      const PTAG = document.querySelectorAll('p')
+      const INPUT = document.querySelectorAll('input')
+      const TEXTAREA = document.querySelectorAll('textarea')
+
+      const BACKBTN = document.querySelector('.join-profile-back-btn')
+      const SKIP = document.querySelector('.join-skip-btn')
+      const CANCLEIMG = document.querySelector('.cancle-img')
+      
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.add('textarea-dark')
+        }
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.add('font-dark')
+        }
+        for (let i=0; i<LABEL.length ; i++) {
+          LABEL[i].classList.add('font-dark')
+        }
+        for (let i=0; i<SPAN.length ; i++) {
+          SPAN[i].classList.add('font-dark')
+        }
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.add('font-dark')
+        }
+
+        BACKBTN.classList.add('join-profile-back-btn-dark')
+        SKIP.classList.add('join-skip-btn-dark')
+        CANCLEIMG.classList.add('join-cancle-img-dark')
+
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.remove('textarea-dark')
+        }
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<LABEL.length ; i++) {
+          LABEL[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<SPAN.length ; i++) {
+          SPAN[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.remove('font-dark')
+        }
+        
+        BACKBTN.classList.remove('join-profile-back-btn-dark')
+        SKIP.classList.remove('join-skip-btn-dark')
+        CANCLEIMG.classList.remove('join-cancle-img-dark')
+      }
     },
   }
 }

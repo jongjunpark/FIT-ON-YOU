@@ -2,7 +2,7 @@
   <div class='wrap'>
    <div class='wrap-container'>
      <div class='passwordchange-head'>
-      <h1>새로운 비밀번호로 <br> 변경해주세요.</h1>
+      <h1>새로운 <br> 비밀번호로 <br> 변경해주세요.</h1>
     </div>
     <div class='lock-profile-img'>
       <img class='profile-img' src="../assets/images/pngflow.com.png" alt="">
@@ -19,8 +19,8 @@
       <p v-if="pwErrMsg" class='err-msg join-err-msg'>비밀번호가 일치하지 않습니다.</p>
       <p v-if="pwSucMsg" class='suc-msg join-suc-msg'>비밀번호가 일치합니다.</p>
     </div>
-    <div v-show='!pwdFlag' class='btn passwordchange-btn'>변경하기</div>
-    <div @click='changePassword' v-show='pwdFlag' class='btn on-passwordchange-btn'>변경하기</div>
+    <div v-show='!pwdFlag' class='btn pwc-btn passwordchange-btn'>변경하기</div>
+    <div @click='changePassword' v-show='pwdFlag' class='btn pwc-btn on-passwordchange-btn'>변경하기</div>
    </div>
   </div>
 </template>
@@ -30,7 +30,7 @@ import "../components/css/passwordchange.css"
 import PasswordValidator from 'password-validator'
 import axios from 'axios'
 import Swal from 'sweetalert2'
-import { mapState } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   name: 'PasswordChange',
   data() {
@@ -54,11 +54,19 @@ export default {
       this.checkPasswordValidate();
       this.checkPassword();
     },
+    flag() {
+      this.defaultDark()
+    },
   },
   computed: {
-    ...mapState(['pwdUser'])
+    ...mapState(['pwdUser', 'flag'])
+  },
+  mounted() {
+    this.defaultDark()
   },
   methods: {
+    ...mapMutations(['setToken', 'setLoggedIn']),
+    ...mapActions(['sendUserInfo']),
     activeInput() {
       event.path[1].style.border = '2px solid black'
       event.path[1].style.zIndex = 5
@@ -103,10 +111,13 @@ export default {
       formData.append('email',this.pwdUser.email);
       formData.append('password',this.passwordConfirm);
 
-      axios.post('http://localhost:8080/api/account/changePassword',
+      axios.post('http://i3b304.p.ssafy.io:8080/api/account/changePassword',
         formData).then(data => {
         console.log(data)
         this.$cookies.set('auth-token', data.data.auth_token)
+        this.setToken(data.data.auth_token)
+        this.setLoggedIn(true);
+        this.sendUserInfo();
         Swal.fire(
           '변경되었습니다.',
           '',
@@ -117,6 +128,45 @@ export default {
       .catch(data => {
         console.log(data)
       });
+    },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const INPUT = document.querySelectorAll('input')
+      const H1TAG = document.querySelectorAll('h1')
+      const LABEL = document.querySelectorAll('label')
+      
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('input-dark')
+        }
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.add('font-dark')
+        }
+        for (let i=0; i<LABEL.length ; i++) {
+          LABEL[i].classList.add('font-dark')
+        }
+
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('input-dark')
+        }
+        for (let i=0; i<H1TAG.length ; i++) {
+          H1TAG[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<LABEL.length ; i++) {
+          LABEL[i].classList.remove('font-dark')
+        }
+      }
     },
   },
   created() {

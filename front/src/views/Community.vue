@@ -1,13 +1,11 @@
 <template>
   <div class='wrap'>
     <div class='wrap-container'>
+      <div class="commu-margin-box"></div>
       <div class="search-box">
-        <div class="search-inner-box">
-        </div>
-        <div class="search-inner-box">
-        </div>
-        <div class="search-inner-box">
-        </div>
+        <div class="search-inner-box"></div>
+        <div class="search-inner-box"></div>
+        <div class="search-inner-box"></div>
       </div>
       <div class="search-box">
         <div class="search-inner-box"></div>
@@ -34,8 +32,19 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import "../components/css/community.css"
+
 export default {
   name: 'Community',
+  computed: {
+    ...mapState(['flag'])
+  },
+  watch: {
+    flag() {
+      this.defaultDark()
+    }
+  },
   methods: {
     goCommunity() {
       const selectBar = document.querySelector('.menu-bar-select')
@@ -49,25 +58,34 @@ export default {
       selectBar.classList.remove('go-second-menu')
       selectBar.classList.remove('go-first-menu')
     },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const INPUT = document.querySelectorAll('input')
+
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('input-dark')
+        }
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('input-dark')
+        }
+      }
+    },
   },
   mounted() {
     this.goCommunity()
+    this.defaultDark()
   }
 }
 </script>
-
-<style>
-.search-box {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.search-inner-box {
-  width: 30%;
-  padding-top: 30%;
-  margin: 5px;
-  background-color: grey;
-  position: relative
-}
-</style>

@@ -1,0 +1,332 @@
+<template>
+  <div class="wrap">
+    <div class='wrap-container'>
+      <div class="write-img-box">
+        <img class="write-hanger-img" src="../assets/images/hanger.png" alt="">
+        <label v-if="!feedImg[0]" class="write-upload-btn" for='feed-img-edit0'>
+          <i class="far fa-images"><i class="fas fa-plus"></i></i>
+          <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit0" accept="image/*" @change="setFeedImg(0)">
+        </label>
+      </div>
+      <div class="write-cloth-box">
+        <div class="write-cloth-hanger">
+          <img class="write-cloth-hanger-img first-feed-img" src="../assets/images/cloth-hanger.png" alt="">
+          <div @mouseover="onCancelBtn(1)" @mouseout="offCancleBtn" class="write-uploaded-img first-feed-img">
+            <i @click='delFeedImg(1)' v-show='feedImg[0]&&isCancle1' class="far fa-times-circle cancle-img"></i>
+            <img v-if="feedImg[0]" class='feed-img' :src="feedImg[0]" alt="">
+            <label for="feed-img-edit1" class='feed-more-label'>
+              <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit1" accept="image/*" @change="setFeedImg(1)">
+            </label>
+          </div>
+        </div>
+        <div class="write-cloth-hanger">
+          <img class="write-cloth-hanger-img second-feed-img" src="../assets/images/cloth-hanger.png" alt="">
+          <div @mouseover="onCancelBtn(2)" @mouseout="offCancleBtn" class="write-uploaded-img second-feed-img">
+            <i @click='delFeedImg(2)' v-show='feedImg[1]&&isCancle2' class="far fa-times-circle cancle-img"></i>
+            <img v-if="feedImg[1]" class='feed-img' :src="feedImg[1]" alt="">
+            <label for="feed-img-edit2" class='feed-more-label'>
+              <i v-if="feedImg[0] && !feedImg[1]" class="fas fa-plus"></i>
+              <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit2" accept="image/*" @change="setFeedImg(2)">
+            </label>
+          </div>
+        </div>
+        <div class="write-cloth-hanger">
+          <img class="write-cloth-hanger-img third-feed-img" src="../assets/images/cloth-hanger.png" alt="">
+          <div @mouseover="onCancelBtn(3)" @mouseout="offCancleBtn" class="write-uploaded-img third-feed-img">
+            <i @click='delFeedImg(3)' v-show='feedImg[2]&&isCancle3' class="far fa-times-circle cancle-img"></i>
+            <img v-if="feedImg[2]" class='feed-img' :src="feedImg[2]" alt="">
+            <label for="feed-img-edit3" class='feed-more-label'>
+              <i v-if="feedImg[0] && !feedImg[2]" class="fas fa-plus"></i>
+              <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit3" accept="image/*" @change="setFeedImg(3)">
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="write-content-box">
+        <p class='write-content-head'>내용</p>
+        <textarea @input="writeContent = $event.target.value" cols="30" rows="3" placeholder="내용"></textarea>
+        <p class='write-hash-head'>태그</p>
+        <input @input="writeHashContent = $event.target.value" v-model='writeHashContent' @keyup.188="addWriteHash" type="text" placeholder="태그">
+        <transition-group name='fade' tag="div" class="write-hash-group" mode="in-out">
+          <div class='write-hash-item' v-for='(hash, index) in writeHashList' :key='`hash-${index}`'>
+            <div @click='delWriteHashItem(index)' class="write-hash-item-close-btn"><i class="fas fa-times"></i></div>
+            {{ hash }}
+          </div>
+        </transition-group>
+      </div>
+      <div class="write-btn-box">
+        <div v-if="!isWriteBtn" class="btn write-btn">작성하기</div>
+        <div v-if="isWriteBtn" class="btn write-btn on-write-btn" @click="sendBoardData">작성하기</div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapState } from 'vuex';
+import axios from 'axios';
+import "../components/css/feedwrite.css"
+
+export default {
+  
+  name: 'FeedWrite',
+  computed: {
+    ...mapState(['flag'])
+  },
+  data() {
+    return {
+      photo :[],
+      feedImg : [],
+      isCancle1: false,
+      isCancle2: false,
+      isCancle3: false,
+      writeHashContent: '',
+      writeHashList: [],
+      writeContent: '',
+      isWriteBtn: false,
+    }
+  },
+  watch: {
+    feedImg() {
+      this.checkWriteForm();
+    },
+    writeContent() {
+      this.checkWriteForm();
+    },
+    writeHashContent() {
+      this.checkWriteForm();
+    },
+    writeHashList() {
+      this.checkWriteForm();
+      setTimeout(function() {
+        document.querySelector('.write-hash-group').scrollTop = document.querySelector('.write-hash-group').scrollHeight;
+      },1)
+    },
+    flag() {
+      this.defaultDark()
+    }
+  },
+  mounted() {
+    this.defaultDark()
+  },
+  methods: {
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const NAV = document.querySelector('#nav')
+      const NAVBASE = document.querySelector('.nav-base')
+      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+      const HANGER = document.querySelector('.write-hanger-img')
+      const CLOTH_HANGER = document.querySelectorAll('.write-cloth-hanger-img')
+      const WRITE_PLUS = document.querySelectorAll('.write-plus')
+      const CANCLE_IMG = document.querySelectorAll('.cancle-img')
+      const INPUT = document.querySelectorAll('input')
+      const TEXTAREA = document.querySelectorAll('textarea')
+      const HASHTAG = document.querySelectorAll('.write-hash-item')
+
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        NAV.classList.add('nav-dark')
+        NAVBASE.classList.add('nav-dark')
+        NAVLOGO.classList.add('nav-logo-dark')
+        HANGER.classList.add('hanger-dark')
+        for (let i=0; i<CLOTH_HANGER.length; i++) {
+          CLOTH_HANGER[i].classList.add('hanger-dark')
+        }
+        for (let i=0; i<WRITE_PLUS.length; i++) {
+          WRITE_PLUS[i].classList.add('write-plus-dark')
+        }
+        for (let i=0; i<CANCLE_IMG.length; i++) {
+          CANCLE_IMG[i].classList.add('write-cancle-dark')
+        }
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.add('textarea-dark')
+        }
+        for (let i=0; i<HASHTAG.length ; i++) {
+          HASHTAG[i].classList.add('write-plus-dark')
+        }
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        NAV.classList.remove('nav-dark')
+        NAVBASE.classList.remove('nav-dark')
+        NAVLOGO.classList.remove('nav-logo-dark')
+        HANGER.classList.remove('hanger-dark')
+        for (let i=0; i<CLOTH_HANGER.length; i++) {
+          CLOTH_HANGER[i].classList.remove('hanger-dark')
+        }
+        for (let i=0; i<WRITE_PLUS.length; i++) {
+          WRITE_PLUS[i].classList.remove('write-plus-dark')
+        }
+        for (let i=0; i<CANCLE_IMG.length; i++) {
+          CANCLE_IMG[i].classList.remove('write-cancle-dark')
+        }
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.remove('textarea-dark')
+        }
+        for (let i=0; i<HASHTAG.length ; i++) {
+          HASHTAG[i].classList.remove('write-plus-dark')
+        }
+      }
+    },
+    setFeedImg(num) {
+      var photoFile = document.getElementById(`feed-img-edit${num}`);
+      
+      if (num === 1) {
+        if (photoFile.files.length > 3) {
+          alert("이미지는 최대 3개까지 업로드 가능합니다.");
+        }
+      } else if (num === 2) {
+        if (photoFile.files.length > 2) {
+          alert("이미지는 최대 3개까지 업로드 가능합니다.");
+        }
+      } else if (num === 3) {
+        if (photoFile.files.length > 1) {
+          alert("이미지는 최대 3개까지 업로드 가능합니다.");
+        }
+      }
+
+      for(var i=0; i<photoFile.files.length; i++) {
+        if (num === 1 && i >= 3) {
+          break;
+        } else if (num === 2 && i >= 2) {
+          break;
+        } else if (num === 3 && i >= 1) {
+          break;
+        } else {
+          this.feedImg.push(URL.createObjectURL(photoFile.files[i]))
+          this.photo.push(photoFile.files[i]);
+
+        }
+      }
+    },
+    onCancelBtn(num) {
+      if (num === 1){
+        this.isCancle1 = true
+      } else if (num === 2) {
+        this.isCancle2 = true
+      } else if (num === 3) {
+        this.isCancle3 = true
+      }
+    },
+    offCancleBtn() {
+      this.isCancle1 = false
+      this.isCancle2 = false
+      this.isCancle3 = false
+    },
+    delFeedImg(num) {
+      let idx = num-1
+      this.feedImg.splice(idx, 1)
+    },
+    addWriteHash() {
+      this.writeHashList.push(this.writeHashContent.slice(0,-1))
+      this.writeHashContent = ''
+    },
+    delWriteHashItem(index) {
+      this.writeHashList.splice(index, 1)
+    },
+    checkWriteForm() {
+      if (this.feedImg[0] && (this.writeHashContent || this.writeHashList[0]) && this.writeContent) {
+        this.isWriteBtn = true
+      } else {
+        this.isWriteBtn = false
+      }
+    },
+    sendBoardData(){
+      let dataforms = new FormData();
+      console.log(this.photo)
+      for (let index = 0; index < this.photo.length; index++) {
+        dataforms.append("imgdata",this.photo[index]);
+      }
+      dataforms.append("nickname",this.$cookies.get('auth-nickname'));
+      dataforms.append("content", this.writeContent);
+      dataforms.append("tags",this.writeHashList);
+     
+      axios.post("http://localhost:8080/api/board/upload",dataforms).then(
+        console.log('success'))
+    },
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const PTAG = document.querySelectorAll('p')
+      const HANGER = document.querySelector('.write-hanger-img')
+      const CLOTH_HANGER = document.querySelectorAll('.write-cloth-hanger-img')
+      const WRITE_PLUS = document.querySelectorAll('.write-plus')
+      const CANCLE_IMG = document.querySelectorAll('.cancle-img')
+      const INPUT = document.querySelectorAll('input')
+      const TEXTAREA = document.querySelectorAll('textarea')
+      const HASHTAG = document.querySelectorAll('.write-hash-item')
+
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        HANGER.classList.add('hanger-dark')
+        for (let i=0; i<CLOTH_HANGER.length; i++) {
+          CLOTH_HANGER[i].classList.add('hanger-dark')
+        }
+        for (let i=0; i<WRITE_PLUS.length; i++) {
+          WRITE_PLUS[i].classList.add('write-plus-dark')
+        }
+        for (let i=0; i<CANCLE_IMG.length; i++) {
+          CANCLE_IMG[i].classList.add('write-cancle-dark')
+        }
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.add('font-dark')
+        }
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.add('textarea-dark')
+        }
+        for (let i=0; i<HASHTAG.length ; i++) {
+          HASHTAG[i].classList.add('write-plus-dark')
+        }
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        HANGER.classList.remove('hanger-dark')
+        for (let i=0; i<CLOTH_HANGER.length; i++) {
+          CLOTH_HANGER[i].classList.remove('hanger-dark')
+        }
+        for (let i=0; i<WRITE_PLUS.length; i++) {
+          WRITE_PLUS[i].classList.remove('write-plus-dark')
+        }
+        for (let i=0; i<CANCLE_IMG.length; i++) {
+          CANCLE_IMG[i].classList.remove('write-cancle-dark')
+        }
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.remove('textarea-dark')
+        }
+        for (let i=0; i<HASHTAG.length ; i++) {
+          HASHTAG[i].classList.remove('write-plus-dark')
+        }
+      }
+    },
+
+  }
+}
+</script>
