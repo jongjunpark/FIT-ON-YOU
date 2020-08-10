@@ -8,7 +8,9 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +19,7 @@ import com.web.curation.dao.AlarmDao;
 import com.web.curation.model.Alarm;
 import com.web.curation.model.BasicResponse;
 
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
@@ -30,21 +33,22 @@ import io.swagger.annotations.ApiResponses;
 @RequestMapping("/alarm")
 public class AlarmController {
 	/*
-	 * 댓글 추가  type 1
-	팔로우 했을때 type 2
-	팔로우 해지 했을때 type 3
-	좋아요 눌렀을때 type 4
-	좋아요 해지 했을때 type 5(?)
+	 * 댓글  type 1
+	팔로우  type 2
+	좋아요  type 3
 	 */
 	
 	@Autowired
 	private AlarmDao alarmDao;
 	
-	@GetMapping("/")
+	@GetMapping
 	public Map<String,Object> alarmList(@Valid @RequestParam String nickname){
 		Map<String,Object> resultMap= new HashMap<>();
 		
-		List<Alarm> list=alarmDao.findByRecevierAndIsReadOrderByAlarmNoDesc(nickname, 0);
+		List<Alarm> list=alarmDao.findByRecevierAndIsReadOrderByAlramNoDesc(nickname);
+		for(Alarm a : list) {
+			a.getUser().setPassword("");
+		}
 		int cnt=list.size();
 		if(cnt!=0) {
 			resultMap.put("result",1);
@@ -56,10 +60,19 @@ public class AlarmController {
 		}
 		return resultMap;
 	}
-
-	
-	
-	
+	@PutMapping
+	public Object isRead(@Valid @RequestParam int alramNo) {
+		final BasicResponse result = new BasicResponse();
+		if(alarmDao.isReadByAlarmNo(alramNo)==1) {
+			result.status=true;
+			result.data="success";
+		}else {
+			result.status=true;
+			result.data="fail";
+		}
+		
+		return result;
+	}
 	
 	
 }

@@ -81,4 +81,5 @@ public class Board {
 	private String influeUser;
 	
 	private int favoriteCnt;
+
 }
