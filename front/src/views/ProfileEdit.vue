@@ -90,6 +90,11 @@ export default {
       test:'',
     }
   },
+  watch: {
+    flag() {
+      this.defaultDark()
+    },
+  },
   mounted(){
     this.defaultDark()
     let ref=this;
@@ -128,7 +133,6 @@ export default {
       let ref=this;
       var frm = new FormData();
       var photoFile = document.getElementById("profile-img-edit");
-      console.log(photoFile)
       frm.append("profile-img-edit", photoFile.files[0]);
       frm.append("nickname",this.nickname);
       axios.post('http://localhost:8080/api/account/addProfileImg',frm)

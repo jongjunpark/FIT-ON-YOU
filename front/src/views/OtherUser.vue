@@ -53,12 +53,19 @@
 import "../components/css/profileedit.css"
 import "../components/css/otheruser.css"
 import { mapState } from 'vuex'
+import axios from 'axios'
 
 export default {
  name: 'OtherUser',
  data() {
 	return {
-		profileImg: '',
+    profileImg:false,
+    nickname:'',
+    selfintro:'자기소개 입니다.',
+    followingCnt:'',
+    followedCnt:'',
+
+
 	}
  },
  computed: {
@@ -71,6 +78,27 @@ export default {
   },
  mounted() {
    this.defaultDark()
+   let ref=this;
+   let uNick=this.$route.params.nickname;
+   axios.get('http://localhost:8080/api/mypage/otheruser',{
+     params:{
+      nickname:uNick,
+    }
+   }).then((data)=>{
+     console.log(data);
+     ref.nickname=data.data.userinfo.nickname;
+     ref.profileImg=data.data.userinfo.profile_img;
+     if(data.data.userinfo.selfintroduce!=null){
+       ref.selfintro=data.data.userinfo.selfintroduce
+     }
+     ref.followedCnt=data.data.followedCnt
+     ref.followingCnt=data.data.followingCnt
+
+    
+   })
+   .catch(
+   )
+
  },
  methods: {
    defaultDark() {

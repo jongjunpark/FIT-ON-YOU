@@ -12,7 +12,7 @@
           <div class="" v-for="(comment,index) in commentList" :key="index">
             <div class="comment-box">
               <div class="comment-user-icon">
-                <img class="comment-user-icon" :src="profileList[index]">
+                <img class="comment-user-icon" :src="comment.user.profile_img">
               </div>
               <div class="comment-article">
                 <div class="comment-article-head">
@@ -37,9 +37,14 @@
 <script>
 import { mapState } from 'vuex'
 import axios from 'axios'
+import { mapState } from 'vuex'
+
 export default {
   name: 'CommentModal',
   props:['modalArticleNo','modalArticleUser'],
+  computed: {
+    ...mapState(['flag','user'])
+  },
   data() {
     return {
       comment_content: '',
@@ -58,7 +63,6 @@ export default {
     .then((res)=>{
       console.log(res,2)
       ref.commentList=res.data.commentli;
-      ref.profileList=res.data.profileli;
 
     })
     .catch()
@@ -76,6 +80,59 @@ export default {
     }
   },
   methods: {
+    defaultDark() {
+      const Dark = this.$cookies.get('dark')
+      const HTML = document.querySelector('html')
+      const wrap = document.querySelector('.wrap')
+      const NAV = document.querySelector('#nav')
+      const NAVBASE = document.querySelector('.nav-base')
+      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+      const INPUT = document.querySelectorAll('input')
+      const TEXTAREA = document.querySelectorAll('textarea')
+      const COMMENT_HEAD = document.querySelector('.modal-head')
+      const ARROW_ICON = document.querySelector('.fa-arrow-left')
+      const COMMENT_BODY = document.querySelector('.modal-container')
+      const COMMENT_FOOTER = document.querySelector('.modal-footer')
+
+      if (Dark === null) {
+        this.$cookies.set('dark', 'on')
+      }
+
+      if (Dark === 'off') {
+        HTML.classList.add('black')
+        wrap.classList.add('wrap-dark')
+        NAV.classList.add('nav-dark')
+        NAVBASE.classList.add('nav-dark')
+        NAVLOGO.classList.add('nav-logo-dark')
+        COMMENT_HEAD.classList.add('comment-head-dark')
+        ARROW_ICON.classList.add('comment-back-dark')
+        COMMENT_BODY.classList.add('comment-head-dark')
+        COMMENT_FOOTER.classList.add('comment-head-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.add('comment-input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.add('textarea-dark')
+        }
+      } else {
+        HTML.classList.remove('black')
+        wrap.classList.remove('wrap-dark')
+        NAV.classList.remove('nav-dark')
+        NAVBASE.classList.remove('nav-dark')
+        NAVLOGO.classList.remove('nav-logo-dark')
+        COMMENT_HEAD.classList.remove('comment-head-dark')
+        ARROW_ICON.classList.remove('comment-back-dark')
+        COMMENT_BODY.classList.remove('comment-head-dark')
+        COMMENT_FOOTER.classList.remove('comment-head-dark')
+        for (let i=0; i<INPUT.length ; i++) {
+          INPUT[i].classList.remove('comment-input-dark')
+        }
+        for (let i=0; i<TEXTAREA.length ; i++) {
+          TEXTAREA[i].classList.remove('textarea-dark')
+        }
+        
+      }
+    },
     checkCommentInput() {
       const INPUTBTN = document.querySelector('.fa-check-circle')
       if (this.comment_content) {
@@ -98,6 +155,7 @@ export default {
       frm.append("writer", res);
       frm.append("content", this.comment_content);
       frm.append("articleUser",this.modalArticleUser);
+      console.log(this.modalArticleNo);
 
       axios.post('http://localhost:8080/api/comment',frm
       )
@@ -106,10 +164,13 @@ export default {
           commentNo:data.data.rescmt.commentNo,
           writer:data.data.rescmt.writer,
           articleNo:data.data.rescmt.articleNo,
-          content:data.data.rescmt.content
+          content:data.data.rescmt.content,
+          user:{
+            profile_img:ref.user.profile_img,
+          }
         }
-        ref.commentList.push(tmp)
-        ref.comment_content=''
+        ref.commentList.push(tmp);
+        ref.comment_content='';
 
       })
       .catch(()=>{
