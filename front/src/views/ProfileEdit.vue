@@ -38,11 +38,11 @@
         </div>
       </div>
       <div class="profile-edit-area">
-        <p v-show="isChange && isChange2" class="my-nickname" @click="changeNickName">{{ user.nickname }}닉
+        <p v-show="isChange && isChange2" class="my-nickname" @click="changeNickName">{{ user.nickname }}
           <img src="../assets/images/edit.png" alt="" class="profile-edit-img">
         </p>
         <div v-show="isChange2 && isChange" class="profile-edit-content" @click="changeContent">
-          <p class='my-content'>{{user.selfintroduce}}소개
+          <p class='my-content'>{{user.selfintroduce}}
             <img src="../assets/images/edit.png" alt="" class="profile-edit-img">
           </p>
         </div>
@@ -120,11 +120,6 @@ export default {
   },
   computed: {
     ...mapState(['isLoggedIn', 'user', 'flag'])
-  },
-  watch: {
-    flag() {
-      this.defaultDark()
-    }
   },
   methods: {
     ...mapMutations(['setUserIntro','setUserNick','setToken']),
