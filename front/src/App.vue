@@ -3,7 +3,8 @@
     <div class="nav-base"></div>
     <div id="nav">
       <div class="nav-logo">
-        <img src="@/assets/images/my-logo.png" alt="">
+        <img v-show='!checked' src="@/assets/images/my-logo2.png" alt="">
+        <img v-show='checked' src="@/assets/images/my-logo-dark2.png" alt="">
       </div>
       <div class="nav-user" >
         <div @click='setUserBar' class="nav-user-img">
@@ -70,6 +71,7 @@ export default {
     return {
       isUserIcon: false,
       checked: false,
+      isDark: false,
     }
   },
   computed: {
