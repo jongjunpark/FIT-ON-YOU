@@ -12,7 +12,7 @@
           <div class="" v-for="(comment,index) in commentList" :key="index">
             <div class="comment-box">
               <div class="comment-user-icon">
-                <img class="comment-user-icon" :src="profileList[index]">
+                <img class="comment-user-icon" :src="comment.user.profile_img">
               </div>
               <div class="comment-article">
                 <div class="comment-article-head">
@@ -42,7 +42,7 @@ export default {
   name: 'CommentModal',
   props:['modalArticleNo','modalArticleUser'],
   computed: {
-    ...mapState(['flag'])
+    ...mapState(['flag','user'])
   },
   data() {
     return {
@@ -54,7 +54,7 @@ export default {
   mounted(){
     this.defaultDark()
     let ref=this;
-    axios.get('http://i3b304.p.ssafy.io:8080/api/comment',{
+    axios.get('http://localhost:8080/api/comment',{
       params:{
         articleNo:this.modalArticleNo,
       }
@@ -62,7 +62,6 @@ export default {
     .then((res)=>{
       console.log(res,2)
       ref.commentList=res.data.commentli;
-      ref.profileList=res.data.profileli;
 
     })
     .catch()
@@ -153,18 +152,22 @@ export default {
       frm.append("writer", res);
       frm.append("content", this.comment_content);
       frm.append("articleUser",this.modalArticleUser);
+      console.log(this.modalArticleNo);
 
-      axios.post('http://i3b304.p.ssafy.io:8080/api/comment',frm
+      axios.post('http://localhost:8080/api/comment',frm
       )
       .then((data)=>{
         let tmp={
           commentNo:data.data.rescmt.commentNo,
           writer:data.data.rescmt.writer,
           articleNo:data.data.rescmt.articleNo,
-          content:data.data.rescmt.content
+          content:data.data.rescmt.content,
+          user:{
+            profile_img:ref.user.profile_img,
+          }
         }
-        ref.commentList.push(tmp)
-        ref.comment_content=''
+        ref.commentList.push(tmp);
+        ref.comment_content='';
 
       })
       .catch(()=>{

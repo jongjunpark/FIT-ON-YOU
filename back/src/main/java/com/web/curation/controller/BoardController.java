@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.web.curation.dao.AlarmDao;
 import com.web.curation.dao.ArticletagDao;
 import com.web.curation.dao.BoardDao;
+import com.web.curation.dao.BoardTwoDao;
 import com.web.curation.dao.BookmarkDao;
 import com.web.curation.dao.FollowDao;
 import com.web.curation.dao.ImageDao;
@@ -38,6 +39,7 @@ import com.web.curation.model.Alarm;
 import com.web.curation.model.Articletag;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Board;
+import com.web.curation.model.BoardDTO;
 import com.web.curation.model.Bookmark;
 import com.web.curation.model.Follow;
 import com.web.curation.model.ImageStore;
@@ -98,6 +100,10 @@ public class BoardController {
 	@Autowired
 	TagDao tagDao;
 	
+	@Autowired
+	BoardTwoDao boardTwoDao;
+	
+	
 	@GetMapping("/api/board/curation")
 	@ApiOperation(value = "큐레이션 기능")
 	public Object curatedContents(String username) {
@@ -151,9 +157,9 @@ public class BoardController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
-	Comparator<Board> boardComp = new Comparator<Board>() {
+	Comparator<BoardDTO> boardComp = new Comparator<BoardDTO>() {
 		@Override
-		public int compare(Board o1, Board o2) {
+		public int compare(BoardDTO o1, BoardDTO o2) {
 			if (o1.getArticleNo() < o2.getArticleNo())
 				return 1;
 			else
@@ -162,14 +168,15 @@ public class BoardController {
 	};
 
 	@PostMapping("/newsfeed")
-	public List<Board> getFollowArticle(@RequestParam String nickname) {
+	public Object getFollowArticle(@RequestParam String nickname) {
 		List<Follow> searchFollow = new ArrayList<Follow>();
 		searchFollow = followDao.getFollowByFollowinguser(nickname);
-		List<Board> result = new ArrayList<>();
+		List<BoardDTO> result = new ArrayList<>();
 
 		for (Follow follow : searchFollow) {
-			List<Board> temp = boardDao.findBoardByArticleUserOrderByArticleNoDesc(follow.getFolloweduser());
-			for (Board board : temp) {
+//			List<Board> temp = boardDao.findBoardByArticleUserOrderByArticleNoDesc(follow.getFolloweduser());
+			List<BoardDTO> temp = boardTwoDao.getMainFeedList(follow.getFolloweduser(),nickname);
+			for (BoardDTO board : temp) {
 				result.add(board);
 			}
 		}
@@ -241,6 +248,8 @@ public class BoardController {
 					result.status = true;
 					result.data = "success";
 				}
+				
+				boardDao.increFvCnt(likes.getArticleNo());
 			}
 		} else {
 			result.status = true;
@@ -256,11 +265,11 @@ public class BoardController {
 		final BasicResponse result = new BasicResponse();
 		if (likesDao.deleteByArticleNoAndNickname(likes.getArticleNo(), likes.getNickname()) == 1) {
 			// 좋아요 취소시 알람에서 삭제
-			System.out.println(likes.getArticleNo() + " " + likes.getNickname());
 			try {
 				alarmDao.deleteLikesAlarm("2", likes.getArticleNo(), likes.getNickname());
 				result.status = true;
 				result.data = "success";
+				boardDao.decreFvCnt(likes.getArticleNo());
 
 			} catch (Exception e) {
 				result.status = true;
@@ -284,7 +293,6 @@ public class BoardController {
 	@PostMapping("/profileimg")
 	public Object getUserProfile(@RequestParam String follow) {
 		String nickname = follow;
-		System.out.println(nickname);
 		User user = userDao.findUserByNickname(nickname).get();
 		return user;
 	}
