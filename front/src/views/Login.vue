@@ -121,7 +121,26 @@ export default {
               ref.AC_USER(userData);
               console.log(ref.$store.state.user);
               // window.AC_USER(userData)
+              console.log(response.kakao_account.profile.nickname,123)
 
+              axios.post('http://localhost:8080/api/account/social',{
+                nickname : response.kakao_account.profile.nickname,
+                profile_image : response.kakao_account.profile.profile_image_url,
+                email : response.kakao_account.email,
+                gender : response.kakao_account.gender,
+              })
+              .then((data)=>{
+                console.log("카카오로그인성공")
+                console.log(data);
+                ref.$cookies.set('auth-token', data.data.auth_token)
+                ref.setToken(data.data.auth_token)
+                ref.sendUserInfo();
+                ref.setLoggedIn(true)
+                ref.$router.push('/feed')
+
+
+              })
+              .catch()
             },
             fail: function(error) {
                 console.log(error);
@@ -154,6 +173,24 @@ export default {
           }
           ref.AC_USER(userData);
           console.log(ref.$store.state.user);
+
+          axios.post('http://localhost:8080/api/account/social',{
+                nickname : googleUser.getBasicProfile().Cd,
+                profile_image : googleUser.getBasicProfile().fL,
+                email : googleUser.getBasicProfile().zu,
+              })
+              .then((data)=>{
+                console.log("구글로그인성공")
+                console.log(data);
+                ref.$cookies.set('auth-token', data.data.auth_token)
+                ref.setToken(data.data.auth_token)
+                ref.sendUserInfo();
+                ref.setLoggedIn(true)
+                ref.$router.push('/feed')
+
+
+              })
+              .catch()
 
         }, function(error) {
         });
