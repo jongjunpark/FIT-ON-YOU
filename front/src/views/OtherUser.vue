@@ -13,17 +13,17 @@
         <div class="profile-follow-box">
           <div class="profile-follow">
             <p class='profile-follow-head'>팔로워</p>
-            <p class='profile-follow-content'>123,456</p>
+            <p class='profile-follow-content'>{{followingCnt}}</p>
           </div>
           <div class="profile-follower">
             <p class='profile-follow-head'>팔로잉</p>
-            <p class='profile-follow-content'>123,456</p>
+            <p class='profile-follow-content'>{{followedCnt}}</p>
           </div>
         </div>
       </div>
       <div class="profile-edit-area">
-        <p class="other-nickname">UserName</p>
-        <p class="other-content">자기소개 입니다.</p>
+        <p class="other-nickname">{{nickname}}</p>
+        <p class="other-content">{{selfintro}}</p>
       </div>
       <div class="profile-btn-area">     
         <div class="other-user-child">

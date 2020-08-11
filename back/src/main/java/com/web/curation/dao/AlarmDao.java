@@ -44,9 +44,14 @@ public interface AlarmDao extends JpaRepository<Alarm, String>{
 	//알람 읽음 처리
 	@Modifying
 	@Transactional
-	@Query(value="update alarm set isRead=1 where alramNo=:alramNo",nativeQuery=true)
-	int isReadByAlarmNo(int alramNo);
+	@Query(value="update alarm set isRead=1 where alramNo in :alramNo",nativeQuery=true)
+	int isRead(List<Integer> alramNo);
 	
+	//알림 모두 삭제
+	@Modifying
+	@Transactional
+	@Query(value="delete from alarm where recevier=:recevier",nativeQuery=true)
+	int allDel(String recevier);
 	
 	Alarm findByTypeAndArticleNoAndFollower(String type, int articleNo, String Follower);
 	

@@ -124,7 +124,6 @@ export default {
               ref.AC_USER(userData);
               console.log(ref.$store.state.user);
               // window.AC_USER(userData)
-              console.log(response.kakao_account.profile.nickname,123)
 
               axios.post('http://localhost:8080/api/account/social',{
                 nickname : response.kakao_account.profile.nickname,
@@ -158,7 +157,6 @@ export default {
    
     startApp() {
       let ref = this;
-
       gapi.load('auth2', function(){
         let auth2 = gapi.auth2.init({
           client_id: '834514064011-bqc7hgss1hil5965mdbgf57420u04lvv.apps.googleusercontent.com',
@@ -177,7 +175,7 @@ export default {
           console.log(userData)
           ref.AC_USER(userData);
           console.log(ref.$store.state.user);
-
+        
           axios.post('http://localhost:8080/api/account/social',{
                 nickname : googleUser.getBasicProfile().Cd,
                 profile_image : googleUser.getBasicProfile().fL,
