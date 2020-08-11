@@ -56,6 +56,9 @@
         </section>
       </div>
       <div class="margin-box"></div>
+      <infinite-loading @infinite="infiniteHandler" spinner="spiral">
+        <div slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</div>
+      </infinite-loading>
     </div>
   </div>
 </template>
@@ -68,6 +71,7 @@ import "../components/css/feed.css"
 import axios from 'axios'
 import CommentModal from '../components/CommentModal.vue'
 import { mapState, mapActions  } from 'vuex'
+import InfiniteLoading from 'vue-infinite-loading'
 
 function timeForToday(value) {
         const today = new Date();
@@ -123,11 +127,13 @@ export default {
       modalArticleUser:'',
       likeicon:['','heart'],
       markicon:['','mark'],
+      limit:1,
     }
   },
   components: { 
     VueSlickCarousel,
-    CommentModal
+    CommentModal,
+    InfiniteLoading,
   },
   computed:{
     ...mapState(['user', 'flag']),
@@ -244,6 +250,102 @@ export default {
         INFLUNAV.classList.remove('nav-influ-dark')
       }
     },
+    infiniteHandler($state){
+      let ref=this;
+      console.log("바닥에 닿음",ref.limit);
+
+      let nickdata = this.$cookies.get('auth-nickname')
+      let uri = nickdata;
+      let uri_enc = encodeURIComponent(uri);
+      let uri_dec = decodeURIComponent(uri_enc);
+      let res = uri_dec;
+
+
+      const frm = new FormData();
+      frm.append('nickname',res);
+      frm.append('page',ref.limit);
+      axios.post('http://localhost:8080/api/board/newsfeed/'+ref.limit,frm)
+      .then((data)=>{
+        setTimeout(() => {
+          if(data.data.length){
+            
+            console.log("success")
+            console.log(data)
+            this.feedlist=data.data;
+            console.log(typeof(this.feedlist))
+            for (let index = 0; index < this.feedlist.length; index++) {
+              let feeddata={tags:[],
+                            images:[],
+                            content:"",
+                            articleUser:"",
+                            userProfile:"",}
+
+              const el = this.feedlist[index];
+
+              let follow = new FormData();
+
+              follow.append('follow',el.articleUser);
+
+              axios.post("http://localhost:8080/api/board/profileimg",follow).then((proff)=>{
+                feeddata.userProfile=proff.data.profile_img;
+              });
+
+              const articleNo = new FormData();
+              articleNo.append('articleNo',el.articleNo);
+
+              axios.post("http://localhost:8080/api/board/images",articleNo).then((img)=>{
+                const imgs = img.data;
+                const imglist = [];
+                for (let i = 0; i < imgs.length; i++) {
+                  const el2= imgs[i];
+                  imglist.push({src:el2.imageUrl});  
+                }
+                if(this.feedlist[index].articleUser!=null){
+                  feeddata.images=imglist;
+                  feeddata.content=this.feedlist[index].content;
+                  feeddata.articleDate= timeForToday(this.feedlist[index].articleDate);
+                  feeddata.articleUser= this.feedlist[index].articleUser;
+                  feeddata.articleNo=this.feedlist[index].articleNo;
+                }else{
+                  feeddata.url=imglist;
+                  feeddata.content=this.feedlist[index].content;
+                  feeddata.articleDate= timeForToday(this.feedlist[index].articleDate);
+                  feeddata.articleUser= this.feedlist[index].influeUser;
+                  feeddata.articleNo=this.feedlist[index].articleNo;
+              }
+              
+            });
+              axios.post("http://localhost:8080/api/board/tags",articleNo).then((tag)=>{
+              const tags = tag.data;
+              const taglist = [];
+              for (let i = 0; i < tags.length; i++) {
+                  const el2= tags[i];
+                  taglist.push({tagname:el2.tagName});  
+                }
+                  feeddata.tags=taglist;
+              });
+            
+              this.mainfeed.push(feeddata)
+              ref.likeStates.push(this.feedlist[index].likechk);
+              ref.bookmarkStates.push(this.feedlist[index].markchk);
+            }
+
+            $state.loaded();
+            ref.limit+=1;
+            console.log(ref.limit,123123123)
+            if(ref.mainfeed.length/10==0){
+              $state.loaded();
+            }
+      
+
+          }
+          else{
+            $state.complete();
+          }
+        }, 1000);
+      })
+      .catch()
+    },
   },
   mounted() {
     this.onNewsFeed()
@@ -259,8 +361,8 @@ export default {
     const formData = new FormData();
     
     formData.append('nickname',res);
-
-    axios.post("http://localhost:8080/api/board/newsfeed",formData).then((data)=>{
+    // formData.append('pageNum',ref.limit),
+    axios.post("http://localhost:8080/api/board/newsfeed/0",formData).then((data)=>{
       console.log("success")
       console.log(data)
       this.feedlist=data.data;
@@ -320,16 +422,15 @@ export default {
         this.mainfeed.push(feeddata)
         ref.likeStates.push(this.feedlist[index].likechk);
         ref.bookmarkStates.push(this.feedlist[index].markchk);
-  }
-  });
-  console.log(this.mainfeed)
-  axios.post("http://localhost:8080/api/board/influencer").then((data)=>{
-      this.influencer=data.data;
-      console.log(this.influencer)
+      }
     });
+    axios.post("http://localhost:8080/api/board/influencer").then((data)=>{
+        this.influencer=data.data;
+        console.log(this.influencer)
+      });
 
-  console.log(this.likeStates,'좋아요리스트');
-  console.log(this.bookmarkStates,'북마크리스트');
+    console.log(this.likeStates,'좋아요리스트');
+    console.log(this.bookmarkStates,'북마크리스트');
   }
 
   
