@@ -2,6 +2,7 @@ package com.web.curation.controller;
 
 import java.security.cert.PKIXRevocationChecker.Option;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,9 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dao.ChatDao;
+import com.web.curation.dao.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Chat;
 import com.web.curation.model.ChatDTO;
+import com.web.curation.model.User;
+import com.web.curation.request.ChatReturnDTO;
 
 @CrossOrigin(origins = { "*" })
 @RestController
@@ -27,19 +31,42 @@ public class ChatController {
    @Autowired
    ChatDao chatDao;
 
+   @Autowired
+   UserDao userDao;
+
    @GetMapping("/allChatList")
    public Object getAllCahtList(@RequestParam String username) {
       final BasicResponse result = new BasicResponse();
       List<ChatDTO> chatDtoList = new ArrayList<>();
       chatDtoList = chatDao.getRoomListByUsername(username);
+      List<ChatReturnDTO> chatReturnDtoList = new ArrayList<>();
       if (!chatDtoList.isEmpty()) {
-         System.out.println(chatDtoList);
+         for (Iterator<ChatDTO> iter = chatDtoList.iterator(); iter.hasNext();) {
+            ChatDTO tempChat = iter.next();
+            ChatReturnDTO newChatDto = new ChatReturnDTO();
+            newChatDto.setChatno(tempChat.getChatno());
+            newChatDto.setFirstuser(tempChat.getFirstuser());
+            newChatDto.setLasttime(tempChat.getLasttime());
+            newChatDto.setRoomname(tempChat.getRoomname());
+            newChatDto.setSeconduser(tempChat.getSeconduser());
+            if (!tempChat.getFirstuser().equals(username)) {
+               System.out.println(1);
+               Optional<User> optUser = userDao.findUserByNickname(tempChat.getFirstuser());
+               newChatDto.setImg(optUser.get().getProfile_img());
+            } else if (!tempChat.getSeconduser().equals(username)) {
+               System.out.println(2);
+               Optional<User> optUser = userDao.findUserByNickname(tempChat.getSeconduser());
+               newChatDto.setImg(optUser.get().getProfile_img());
+            }
+            
+            chatReturnDtoList.add(newChatDto);
+         }
          result.data = "success";
-         result.object = chatDao.getRoomListByUsername(username);
+         result.object = chatReturnDtoList;
          result.status = true;
       } else {
          result.data = "empty";
-         result.object = chatDtoList;
+         result.object = chatReturnDtoList;
          result.status = true;
       }
 

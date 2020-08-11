@@ -146,7 +146,7 @@ Vue.use(VueRouter)
     //   }    }
   },
   {
-    path: '/directmessage',
+    path: '/directmessage/:roomname/:othername',
     name: 'DirectMessage',
     component: DirectMessage,
     // beforeEnter(to, from, next) {

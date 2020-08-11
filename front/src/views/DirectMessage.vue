@@ -6,7 +6,7 @@
         <div class="in-img">
           <img src="../assets/images/default-user.png" alt="" class="in-img-profile">
         </div>
-        <p class="back-btn-name">Kidcozyboy</p>
+        <p class="back-btn-name">{{ othername }}</p>
       </div>
       <div class="message-content-wrap">
         <div class="message-content">
@@ -70,6 +70,7 @@ export default {
       authUser:{},
       roomname:'',
       nick: '',
+      othername: '',
     }
   },
   computed: {
@@ -88,21 +89,17 @@ export default {
   methods: {
     saveMessage(){
       //save to firestore
-      if (this.text != null) {
-        db.collection(`chat`).add({
-          message: this.text,
-          createdAt: new Date(),
-          senduser: this.user.nickname,
-        })
-        console.log(this.user);
-        this.text = null;
-        this.defaultDark()
-        this.goDown()
+      db.collection(this.roomname).add({
+        message: this.text,
+        createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
+        senduser: this.user.nickname,
+      })
 
-      }
+      console.log(this.user);
+      this.text = null;
     },
     fetchMessage(){
-      db.collection('chat').orderBy('createdAt').onSnapshot((querySnapshot)=>{
+      db.collection(this.roomname).orderBy('createdAt').onSnapshot((querySnapshot)=>{
         let allMessages = [];
         querySnapshot.forEach(doc=>{
           allMessages.push(doc.data());
@@ -168,11 +165,14 @@ export default {
     },
   },
   created(){
+    this.roomname = this.$route.params.roomname.substring(1,);
+    this.othername = this.$route.params.othername.substring(1,);
+    console.log(this.roomname)
+    console.log(this.othername)
     this.fetchMessage();
   },
   mounted(){
-    this.defaultDark()
-    this.roomname = this.$route.params;
+    this.defaultDark()  
     this.goDown()
     let nickdata = this.$cookies.get('auth-nickname')
     let uri = nickdata;

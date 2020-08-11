@@ -13,7 +13,7 @@
         <label class='login-password-label' for="login-password">비밀번호</label>
       </div>
       <div class="login-checkbox-area">
-        <input type="checkbox" id='login-checkbox' @change="setLoginInf">
+        <input type="checkbox" id='login-checkbox' @change="setLoginInf" v-model="loginContinue">
         <label for="login-checkbox"><i class="far fa-check-circle"></i></label>
         <label for="login-checkbox" class='login-inf-label'> 로그인상태 유지</label>
       </div>
@@ -76,6 +76,7 @@ export default {
         height: 50,
         longtitle: true
       },
+      loginContinue: false
     }
   },
   watch: {
@@ -258,6 +259,13 @@ export default {
           this.setToken(response.data.auth_token)
           this.sendUserInfo();
           this.setLoggedIn(true);
+
+          if (!this.loginContinue) {
+            this.$cookies.set('still', 'on')
+          } else {
+            this.$cookies.set('still', 'off')
+          }
+
           this.$router.push('/feed')
         }
         // 이메일 없음
