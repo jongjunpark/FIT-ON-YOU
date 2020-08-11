@@ -174,6 +174,7 @@ export default {
                 email : googleUser.getBasicProfile().zu,
                 token_type : 'Bearer',
           }
+          console.log(userData)
           ref.AC_USER(userData);
           console.log(ref.$store.state.user);
 
