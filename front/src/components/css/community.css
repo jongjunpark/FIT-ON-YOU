@@ -1,13 +1,13 @@
 .commu-margin-box {
   margin-top: 4vh;
 }
-.search-box {
+.commu-box {
   display: flex;
   justify-content: center;
   width: 100%;
 }
 
-.search-inner-box {
+.commu-inner-box {
   width: 33%;
   padding-top: 33%;
   margin: 1px;

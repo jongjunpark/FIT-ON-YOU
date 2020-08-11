@@ -2,30 +2,30 @@
   <div class='wrap'>
     <div class='wrap-container'>
       <div class="commu-margin-box"></div>
-      <div class="search-box">
-        <div class="search-inner-box"></div>
-        <div class="search-inner-box"></div>
-        <div class="search-inner-box"></div>
+      <div class="commu-box">
+        <div class="commu-inner-box"></div>
+        <div class="commu-inner-box"></div>
+        <div class="commu-inner-box"></div>
       </div>
-      <div class="search-box">
-        <div class="search-inner-box"></div>
-        <div class="search-inner-box"></div>
-        <div class="search-inner-box"></div>
+      <div class="commu-box">
+        <div class="commu-inner-box"></div>
+        <div class="commu-inner-box"></div>
+        <div class="commu-inner-box"></div>
       </div>
-      <div class="search-box">
-        <div class="search-inner-box"></div>
-        <div class="search-inner-box"></div>
-        <div class="search-inner-box"></div>
+      <div class="commu-box">
+        <div class="commu-inner-box"></div>
+        <div class="commu-inner-box"></div>
+        <div class="commu-inner-box"></div>
       </div>
-      <div class="search-box">
-        <div class="search-inner-box"></div>
-        <div class="search-inner-box"></div>
-        <div class="search-inner-box"></div>
+      <div class="commu-box">
+        <div class="commu-inner-box"></div>
+        <div class="commu-inner-box"></div>
+        <div class="commu-inner-box"></div>
       </div>
-      <div class="search-box">
-        <div class="search-inner-box"></div>
-        <div class="search-inner-box"></div>
-        <div class="search-inner-box"></div>
+      <div class="commu-box">
+        <div class="commu-inner-box"></div>
+        <div class="commu-inner-box"></div>
+        <div class="commu-inner-box"></div>
       </div>
     </div>
   </div>
