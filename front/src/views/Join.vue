@@ -323,7 +323,7 @@ export default {
       }
     },
     checkNickname() {
-      axios.get('http://i3b304.p.ssafy.io:8080/api/account/checkNickname',{ 
+      axios.get('http://localhost:8080/api/account/checkNickname',{ 
         params: {
           nickname: this.input.nickname
           }
@@ -499,18 +499,10 @@ export default {
 
         frm.append("profile-img-edit", photoFile.files[0]);
         frm.append("nickname",this.nickname);
-        axios.post('http://i3b304.p.ssafy.io:8080/api/account/addProfileImg',frm,
+        axios.post('http://localhost:8080/api/account/addProfileImg',frm,
         ).then( () =>{
           console.log("1");
 
-          firebase.auth().signInWithEmailAndPassword('fjsdklahfjsdhfl@naver.com', 'Zz12357822456a').catch(function(error) {
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          // ...
-          console.log(errorCode);
-          console.log(errorMessage);
-          });
 
           this.$router.go('/feed')
           
@@ -554,7 +546,7 @@ export default {
          this.mailErrMsg = false;
          this.finalMail = false;
           if (this.mailSucMsg) {
-            axios.get('http://i3b304.p.ssafy.io:8080/api/account/checkDoubleEmail',{ 
+            axios.get('http://localhost:8080/api/account/checkDoubleEmail',{ 
               params: {
                 email: this.input.email+'@'+this.input.url
                 }
@@ -603,11 +595,11 @@ export default {
       const H1TAG = document.querySelectorAll('h1')
       const LABEL = document.querySelectorAll('label')
       const SPAN = document.querySelectorAll('span')
-      const PTAG = document.querySelectorAll('p')
+      const USERNAME = document.querySelector('.join-profile-username')
       const INPUT = document.querySelectorAll('input')
       const TEXTAREA = document.querySelectorAll('textarea')
 
-      const BACKBTN = document.querySelector('.join-profile-back-btn')
+      // const BACKBTN = document.querySelector('.join-profile-back-btn')
       const SKIP = document.querySelector('.join-skip-btn')
       const CANCLEIMG = document.querySelector('.cancle-img')
       
@@ -633,13 +625,11 @@ export default {
         for (let i=0; i<SPAN.length ; i++) {
           SPAN[i].classList.add('font-dark')
         }
-        for (let i=0; i<PTAG.length ; i++) {
-          PTAG[i].classList.add('font-dark')
-        }
 
-        BACKBTN.classList.add('join-profile-back-btn-dark')
+        // BACKBTN.classList.add('join-profile-back-btn-dark')
         SKIP.classList.add('join-skip-btn-dark')
         CANCLEIMG.classList.add('join-cancle-img-dark')
+        USERNAME.classList.add('font-dark')
 
       } else {
         HTML.classList.remove('black')
@@ -659,13 +649,11 @@ export default {
         for (let i=0; i<SPAN.length ; i++) {
           SPAN[i].classList.remove('font-dark')
         }
-        for (let i=0; i<PTAG.length ; i++) {
-          PTAG[i].classList.remove('font-dark')
-        }
         
-        BACKBTN.classList.remove('join-profile-back-btn-dark')
+        // BACKBTN.classList.remove('join-profile-back-btn-dark')
         SKIP.classList.remove('join-skip-btn-dark')
         CANCLEIMG.classList.remove('join-cancle-img-dark')
+        USERNAME.classList.remove('font-dark')
       }
     },
   }

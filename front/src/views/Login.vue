@@ -2,8 +2,8 @@
   <div class='wrap'>
     <div class='wrap-container'>
       <h1 class='main-logo'>FIT ON U</h1>
-      <p v-if='errormsgEmail' class='err-msg'>이메일이 존재하지 않습니다.</p>
-      <p v-if='errormsgPwd' class='err-msg'>비밀번호가 틀렸습니다.</p>
+      <p v-if='errormsgEmail' class='err-msg login-err-msg'>이메일이 존재하지 않습니다.</p>
+      <p v-if='errormsgPwd' class='err-msg login-err-msg'>비밀번호가 틀렸습니다.</p>
       <div class='login-input-area'>
         <input v-model='email' @keyup.enter='checkLoginInf' @keyup="checkLoginBtn" type="text" class='login-email non-text'>
         <label class='login-email-label' for="login-email">이메일</label>
@@ -172,6 +172,7 @@ export default {
                 email : googleUser.getBasicProfile().zu,
                 token_type : 'Bearer',
           }
+          console.log(userData)
           ref.AC_USER(userData);
           console.log(ref.$store.state.user);
         
@@ -256,14 +257,6 @@ export default {
           this.setToken(response.data.auth_token)
           this.sendUserInfo();
           this.setLoggedIn(true);
-          firebase.auth().signInWithEmailAndPassword(this.email, this.password).catch(function(error) {
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          // ...
-          console.log(errorCode);
-          console.log(errorMessage);
-          });
           this.$router.push('/feed')
         }
         // 이메일 없음
