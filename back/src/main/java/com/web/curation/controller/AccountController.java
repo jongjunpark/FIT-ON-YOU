@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -154,49 +155,69 @@ public class AccountController {
 		return new ResponseEntity<>(resultMap, HttpStatus.OK);
 	}
 
+
 	@GetMapping("/account/findPassword")
-	@ApiOperation(value = "비밀번호 찾기")
-	public Map<String, Object> findPassword(@Valid @RequestParam String email, @Valid @RequestParam String pTime) {
-		Map<String, Object> result = new HashMap<>();
-		LocalDate time = LocalDate.of(Integer.parseInt(pTime.substring(0, 4)), Integer.parseInt(pTime.substring(4, 6)),
-				Integer.parseInt(pTime.substring(6, 8)));
-		Optional<User> optUser = userDao.findUserByEmailAndBirth(email, time);
-		if (!optUser.isPresent()) {
-		} else {
-			UserDTO userDto = new UserDTO(optUser.get());
+	   @ApiOperation(value = "비밀번호 찾기")
+	   public Map<String, Object> findPassword(@Valid @RequestParam String email, @Valid @RequestParam String pTime) {
+	      Map<String, Object> result = new HashMap<>();
+	      System.out.println(1);
+	      LocalDate time = LocalDate.of(Integer.parseInt(pTime.substring(0, 4)), Integer.parseInt(pTime.substring(4, 6)),
+	            Integer.parseInt(pTime.substring(6, 8)));
+	      Optional<User> optUser = userDao.findUserByEmailAndBirth(email, time);
+	      if (!optUser.isPresent()) {
+	      } else {
+	         Properties props = new Properties();
+	         
+	         String host="smtp.gmail.com";
+	         String port="587";
+	         String user="ouosssssssa@gmail.com";
+	         String password="zzxx1122";
+	         
+	         props.put("mail.smtp.starttls.enable", "true");
+	         props.put("mail.smtp.ssl.trust", host);
+	         props.put("mail.smtp.auth", "true");
+	         props.put("mail.smtp.host", host);
+	         
+	         if (port != null)
+	         {
+	            props.put("mail.smtp.port", port);
+	            props.put("mail.smtp.socketFactory.port", port);
+	            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+	         }
+	         
+	         UserDTO userDto = new UserDTO(optUser.get());
 
-			String to = userDto.getEmail();
-			String subject = "핏온유 비밀번호 인증입니다 확인해 주세요";
-			int randomCode = new Random().nextInt(9000) + 1000;
-			String certificationNum = Integer.toString(randomCode);
-			StringBuilder text = new StringBuilder();
-			text.append(userDto.getNickname());
-			text.append(" 님의 비밀번호를 위한 비밀번호 인증 절차입니다 하단의 번호를 핏온유 화면에 입력해 주세요\n");
-			text.append("인증번호:" + certificationNum + '\n');
-			text.append("인증번호를 다른사람이 보지 않게 주의해 주세요.\n");
-//			text.append("핏온유 인증 페이지로 이동하기");
-//			text.append("http://localhost:8081/");
+	         String to = userDto.getEmail();
+	         String subject = "핏온유 비밀번호 인증입니다 확인해 주세요";
+	         int randomCode = new Random().nextInt(9000) + 1000;
+	         String certificationNum = Integer.toString(randomCode);
+	         StringBuilder text = new StringBuilder();
+	         text.append(userDto.getNickname());
+	         text.append(" 님의 비밀번호를 위한 비밀번호 인증 절차입니다 하단의 번호를 핏온유 화면에 입력해 주세요\n");
+	         text.append("인증번호:" + certificationNum + '\n');
+	         text.append("인증번호를 다른사람이 보지 않게 주의해 주세요.\n");
+//	         text.append("핏온유 인증 페이지로 이동하기");
+//	         text.append("http://localhost:8081/");
 
-			MimeMessage message = emailSender.createMimeMessage();
-			try {
-				System.out.println(4);
-				MimeMessageHelper helper = new MimeMessageHelper(message, true);
-				helper.setFrom("ouosssssssa@gmail.com");
-				helper.setTo(to);
-				helper.setSubject(subject);
-				helper.setText(text.toString());
-				emailSender.send(message);
-				result.put("userInfo", userDto);
-				result.put("certifNum", certificationNum);
+	         MimeMessage message = emailSender.createMimeMessage();
+	         try {
+	            System.out.println(4);
+	            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+	            helper.setFrom("ouosssssssa@gmail.com");
+	            helper.setTo(to);
+	            helper.setSubject(subject);
+	            helper.setText(text.toString());
+	            emailSender.send(message);
+	            result.put("userInfo", userDto);
+	            result.put("certifNum", certificationNum);
 
-			} catch (Exception e) {
-				System.out.println(5);
-				e.printStackTrace();
-			}
-		}
-		return result;
-	}
-
+	         } catch (Exception e) {
+	            System.out.println(5);
+	            e.printStackTrace();
+	         }
+	      }
+	      return result;
+	   }
 	@PostMapping(value = "/account/addProfileImg")
 	@ApiOperation(value = "가입하기")
 
@@ -204,13 +225,13 @@ public class AccountController {
 		Map<String,Object> resultMap=new HashMap<>();
 		final BasicResponse result = new BasicResponse();
 		// 이 path는 로컬에선 일단 각자 경로로 테스트
-		String path ="i3b304.p.ssafy.io/img/";
+		String path ="/var/www/html/dist/images/profile/";
 		UUID uuid = UUID.randomUUID();
 		String savedName = uuid.toString()+"_"+img.getOriginalFilename();
 		File file = new File(path + savedName);
 		try {
 			img.transferTo(file);
-			String storePath="i3b304.p.ssafy.io/img/"+savedName;
+			String storePath="../images/profile/"+savedName;
 			if(userDao.updateProfileImg(storePath, nickname)==1) {
 				result.data="success";
 				UserDTO userDTO = new UserDTO(userDao.findUserByNickname(nickname).get());
