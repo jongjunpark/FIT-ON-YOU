@@ -76,7 +76,7 @@ export default {
       display = document.querySelector('#time');
       this.startTimer(fiveMinutes, display);
       this.remaintime = false;
-      axios.get('http://localhost:8080/api/account/findPassword',{
+      axios.get('https://i3b304.p.ssafy.io/api/account/findPassword',{
         params:{
           email: this.pwdUser.email,
           pTime: this.pwdUser.birth.substring(0, 4) + this.pwdUser.birth.substring(5, 7) + this.pwdUser.birth.substring(8, 10) 

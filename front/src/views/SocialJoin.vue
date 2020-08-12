@@ -196,7 +196,7 @@ export default {
       }
     },
     JoinComplete() {
-      axios.post('http://localhost:8080/api/account/signup',{
+      axios.post('https://i3b304.p.ssafy.io/api/account/signup',{
 
           // email: this.input.email+'@'+this.input.url,
           password: this.input.password,

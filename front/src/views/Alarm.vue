@@ -63,7 +63,7 @@ export default {
     let uri_dec = decodeURIComponent(uri_enc);
     let resNick = uri_dec;
     
-    axios.get('http://localhost:8080/api/alarm',{
+    axios.get('https://i3b304.p.ssafy.io/api/alarm',{
       params:{
         nickname:resNick,
       }
@@ -87,7 +87,7 @@ export default {
         }
       }
       if(flag){
-        axios.post('http://localhost:8080/api/alarm',frm)
+        axios.post('https://i3b304.p.ssafy.io/api/alarm',frm)
         .then(
           console.log("성공")
         )

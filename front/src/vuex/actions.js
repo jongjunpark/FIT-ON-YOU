@@ -6,7 +6,7 @@ export default {
   },
   sendUserInfo(context) {
     if (context.state.authToken) {
-      axios.get('http://localhost:8080/api/account/token',{
+      axios.get('https://i3b304.p.ssafy.io/api/account/token',{
         params:{jwt : context.state.authToken}
       }).then((res)=>{
         console.log(res);
