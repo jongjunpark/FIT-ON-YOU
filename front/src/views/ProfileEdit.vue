@@ -38,11 +38,11 @@
         </div>
       </div>
       <div class="profile-edit-area">
-        <p v-show="isChange && isChange2" class="my-nickname" @click="changeNickName">{{ user.nickname }}닉
+        <p v-show="isChange && isChange2" class="my-nickname" @click="changeNickName">{{nickname }}
           <img src="../assets/images/edit.png" alt="" class="profile-edit-img">
         </p>
         <div v-show="isChange2 && isChange" class="profile-edit-content" @click="changeContent">
-          <p class='my-content'>{{user.selfintroduce}}소개
+          <p class='my-content'>{{content}}
             <img src="../assets/images/edit.png" alt="" class="profile-edit-img">
           </p>
         </div>
@@ -90,11 +90,6 @@ export default {
       test:'',
     }
   },
-  watch: {
-    flag() {
-      this.defaultDark()
-    },
-  },
   mounted(){
     this.defaultDark()
     let ref=this;
@@ -109,19 +104,21 @@ export default {
       params:{nickname:res}
     })
     .then((data)=>{
+      console.log(data);
       ref.followedCnt=data.data.followedCnt;
       ref.followingCnt=data.data.followingCnt;
+      ref.nickname=data.data.userinfo.nickname;
+      ref.content=data.data.userinfo.selfintroduce;
+      if(data.data.userinfo.profile_img){
+        ref.profileImg=data.data.userinfo.profile_img;
+      }
     })
     .catch()
+  },
 
-  },
-  beforeUpdate(){
-    this.profileImg=this.user.profile_img;
-  },
   computed: {
     ...mapState(['isLoggedIn', 'user', 'flag'])
   },
- 
   methods: {
     ...mapMutations(['setUserIntro','setUserNick','setToken']),
     ...mapActions(['sendUserInfo']),

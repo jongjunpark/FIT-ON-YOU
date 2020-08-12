@@ -15,5 +15,4 @@ public interface SearchDao extends JpaRepository<Search, String> {
 
 	@Query(value = "select * from articletag where tagname in (:input) group by articleno", nativeQuery = true)
 	List<Search> getContentsNoByTagname(@Param("input") List<String> input);
-
 }

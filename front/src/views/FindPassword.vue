@@ -9,8 +9,8 @@
       </div>
       <div class='find-input-area'>
         <input v-model='birth' @keyup="onOkBtn" type="text" id='find-birth' placeholder="생년월일 ex)19930321">
+        <p v-if='errMsg' class='err-msg fw-find-msg'>계정 혹은 생년월일이 틀렸습니다.</p>
       </div>
-      <p v-if='errMsg' class='err-msg'>계정 혹은 생년월일이 틀렸습니다.</p>
       <div v-if='!okBtn' class='btn find-btn'>인증메일 발송</div>
       <div v-if='okBtn' @click='findPassword' class='btn on-find-btn'>인증메일 발송</div>
     </div>
