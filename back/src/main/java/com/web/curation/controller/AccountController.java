@@ -21,6 +21,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -345,30 +346,52 @@ public class AccountController {
 		
 		return resultMap;
 	}
-	@PostMapping("/account/social")
-	@ApiOperation(value="소셜 로그인시 회원가입 처리 여부")
-	public Object checkKakao(@RequestBody User user) {
-		System.out.println(user.getNickname()+" "+user.getEmail());
+	@PostMapping("/account/social/{type}")
+	@ApiOperation(value="소셜 로그인시 회원가입 처리")
+	public Object socialjoin(@RequestBody User user, @PathVariable int type) {
+		
+		System.out.println(user.getNickname()+" "+user.getEmail()+" "+type);
 		final BasicResponse result = new BasicResponse();
 		Map<String,Object> resultMap=new HashMap<>();
 		
-		Optional<User> u=userDao.findUserByEmail(user.getEmail());
-		if(u.isPresent()) {
-			result.status=true;
-			result.data="exist";	
-		}else {
-			result.status=true;
-			result.data="new";
+		if(type==0) {  // 소셜 로그인시 
+			Optional<User> u=userDao.findUserByEmail(user.getEmail());
+			if(u.isPresent()) {   
+				
+				result.data="1";  // 이미 존재하면 1
+				UserDTO userDTO = new UserDTO(u.get());
+				resultMap.put("userinfo",userDTO);
+				String Token = jwtService.create(userDTO);
+				resultMap.put("auth_token",Token);
+				
+			}
+			else {
+				result.data="0";  // 존재하지 않는경우 0
+			}
+			
+		}		
+		if(type==1) {   // 약관 페이지에서 넘어온 경우
+			
+			result.data="success";
+			String uuid;
+			do {
+				uuid = new String(UUID.randomUUID().toString().substring(0,8));
+			}while(userDao.findById(uuid).isPresent());
+			user.setNickname(uuid);
+			
 			userDao.save(user);
+			
+			UserDTO userDTO = new UserDTO(user);
+			String Token = jwtService.create(userDTO);
+			resultMap.put("auth_token",Token);
+			
 		}
-		UserDTO userDTO = new UserDTO(user);
-		String Token = jwtService.create(userDTO);
-		resultMap.put("auth_token",Token);
-		
+		result.status=true; 
 		resultMap.put("result", result);
 		
-		return result;
+		return resultMap;
 	}
+	
 	
 	@PutMapping("/account/selfintro")
 	@ApiOperation(value="한줄 자기소개 수정")
