@@ -24,12 +24,14 @@
         </div>
       </transition-group>
     </div>
-    <div v-if="isDefault" class='wrap-container'>
+    <div v-if="isDefault" class='wrap-container search-container'>
 
-      <div class="search-box" v-for="(feed,index) in articleList" :key = "feed.articles.articlNo">
-        <div class="search-inner-box">
+      <div class="search-box" v-for="(feed,index) in feedList" :key = "feed[index].articles.articlNo">
+        <div class="search-inner-box" v-for="article in feedList[index]" :key = "article.articles.articlNo">
+          <div @click="onModal" class="search-inner-btn">자세히</div>
           <img :src="feed.imgs[0]" :id="index">
         </div>
+        <!-- <SearchModal v-for="article in feedList[index]" v-if="showModal" @close="showModal= false"/> -->
       </div>
      
     </div>
@@ -69,6 +71,8 @@ export default {
       isHashResult: false,
       isUserResult: false,
       iconColor: '',
+      tempList: [],
+      feedList: [],
     }
   },
   watch: {
@@ -176,6 +180,15 @@ export default {
         }
       }
     },
+    setList() {
+      for (let i=0; i<this.articleList/20; i++) {
+        for (let j=0; j<3; j++) {
+          this.tempList.push(this.a[j+i*3])
+        }
+        this.feedList.push(this.bin)
+        this.tempList = []
+      }
+    }
   },
   mounted() {
     this.goSearch()
@@ -185,7 +198,7 @@ export default {
     axios.post("http://localhost:8080/api/search/").then((data)=>{
       this.articleList=data.data;
      console.log(this.articleList)
-
+      this.setList();
     })
   }
 }

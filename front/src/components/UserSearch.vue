@@ -2,7 +2,7 @@
   <div class='wrap-container'>
     <div class="user-search-box">
       <div class="user-search-icon-area">
-        <img src="#" alt="#">
+        <img src="../assets/images/default-user.png" alt="#">
       </div>
       <div class="user-search-text-area">
         <div class="user-search-username">Username</div>
