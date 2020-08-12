@@ -24,6 +24,7 @@ import com.web.curation.dao.ArticletagDao;
 import com.web.curation.dao.BoardDao;
 import com.web.curation.dao.CurationDao;
 import com.web.curation.dao.ImageDao;
+import com.web.curation.dao.InfluencerDao;
 import com.web.curation.dao.SearchDao;
 import com.web.curation.dao.UserDao;
 import com.web.curation.model.Articletag;
@@ -56,6 +57,8 @@ public class SearchController {
 	ArticletagDao articleTagDao;
 	@Autowired
 	ImageDao imageDao;
+	@Autowired
+	InfluencerDao influencerDao;
 	
 	@PostMapping("/")
 	@ApiOperation(value="페이지 업로드")
@@ -148,6 +151,6 @@ public class SearchController {
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-
+	
 }
 
