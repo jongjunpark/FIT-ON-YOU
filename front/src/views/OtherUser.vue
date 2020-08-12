@@ -29,7 +29,7 @@
         <div class="other-user-child">
           <span><i class="fas fa-user profile-other-btn"></i> 팔로우</span>
         </div>
-        <div class="other-user-child-DM">
+        <div class="other-user-child-DM" @click="goChatting">
           <span><i class="fas fa-paper-plane profile-other-btn"></i> DM 보내기</span>
         </div>
       </div>
@@ -56,19 +56,18 @@ import { mapState } from 'vuex'
 import axios from 'axios'
 
 export default {
- name: 'OtherUser',
- data() {
-	return {
-    profileImg:false,
-    nickname:'',
-    selfintro:'자기소개 입니다.',
-    followingCnt:'',
-    followedCnt:'',
-
-
-	}
- },
- computed: {
+  name: 'OtherUser',
+  data() {
+    return {
+      profileImg: false,
+      nickname:'',
+      selfintro:'자기소개 입니다.',
+      followingCnt:'',
+      followedCnt:'',
+      nick: '',
+    }
+  },
+  computed: {
     ...mapState(['flag'])
   },
   watch: {
@@ -76,32 +75,37 @@ export default {
       this.defaultDark()
     }
   },
- mounted() {
-   this.defaultDark()
-   let ref=this;
-   let uNick=this.$route.params.nickname;
-   axios.get('http://localhost:8080/api/mypage/otheruser',{
-     params:{
-      nickname:uNick,
+  mounted() {
+    this.defaultDark()
+    let ref=this;
+    let uNick = this.$route.params.nickname;
+    this.nickname = uNick.substring(1,)
+    axios.get('http://localhost:8080/api/mypage/otheruser',{
+      params:{
+      nickname: uNick,
     }
-   }).then((data)=>{
-     console.log(data);
-     ref.nickname=data.data.userinfo.nickname;
-     ref.profileImg=data.data.userinfo.profile_img;
-     if(data.data.userinfo.selfintroduce!=null){
-       ref.selfintro=data.data.userinfo.selfintroduce
-     }
-     ref.followedCnt=data.data.followedCnt
-     ref.followingCnt=data.data.followingCnt
+    }).then((data)=>{
+      console.log(data);
+      ref.nickname=data.data.userinfo.nickname;
+      ref.profileImg=data.data.userinfo.profile_img;
+      if(data.data.userinfo.selfintroduce!=null){
+        ref.selfintro=data.data.userinfo.selfintroduce
+      }
+      ref.followedCnt=data.data.followedCnt
+      ref.followingCnt=data.data.followingCnt
+    })
+    .catch(
+    )
+    let nickdata = this.$cookies.get('auth-nickname')
+    let uri = nickdata;
+    let uri_enc = encodeURIComponent(uri);
+    let uri_dec = decodeURIComponent(uri_enc);
+    let res = uri_dec;
+    this.nick = res
 
-    
-   })
-   .catch(
-   )
-
- },
- methods: {
-   defaultDark() {
+  },
+  methods: {
+    defaultDark() {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.wrap')
@@ -133,6 +137,18 @@ export default {
         }
       }
     },
- },
+    goChatting() {
+      axios.get('http://localhost:8080/api/chat/existroom',{
+      params:{
+        firstuser: this.nickname,
+        seconduser: this.nick
+      }
+      }).then((data)=>{
+        this.$router.push(`/directmessage/:${data.data.object.roomname}/:${this.nickname}`)
+      })
+        .catch(
+        )
+      },
+  },
 }
 </script>

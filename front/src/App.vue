@@ -59,6 +59,16 @@
 </template>
 
 <script>
+
+// window.onbeforeunload = function() {
+//   const ROLE = window.$cookies.get('still')
+//   if (ROLE == 'on') {
+//     window.$cookies.remove('auth-nickname')
+//     window.$cookies.remove('auth-token')
+//     window.$cookies.remove('still')
+//   }
+// }
+
 import "./assets/css/common.css";
 import "./assets/css/darkmode.scss";
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
