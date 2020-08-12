@@ -26,9 +26,9 @@
     </div>
     <div v-if="isDefault" class='wrap-container'>
 
-      <div class="search-box" v-for="(feed,index) in articleList" :key = "feed.articles.articlNo">
-        <div class="search-inner-box">
-          <img :src="feed.imgs[0]" :id="index">
+      <div class="search-box" v-for="(feed,index) in articleList" :key = "feed.articles.articleNo">
+        <div class="search-inner-box">{{feed.imgs[0].imageUrl}}
+          <img :src="feed.imgs[0].imageUrl" :id="index">
         </div>
       </div>
      
@@ -182,7 +182,7 @@ export default {
     this.defaultDark()
 
 
-    axios.post("http://localhost:8080/api/search/").then((data)=>{
+    axios.post("https://i3b304.p.ssafy.io/api/search/").then((data)=>{
       this.articleList=data.data;
      console.log(this.articleList)
 
