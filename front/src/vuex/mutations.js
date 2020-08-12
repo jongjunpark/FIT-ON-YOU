@@ -38,5 +38,14 @@ export default {
   },
   setFlag(state, data) {
     state.flag = data
+  },
+  setArticledata(state, data) {
+    state.articledata = data;
+  },
+  setArticleimgs(state, data) {
+    state.articleimgs = data;
+  },
+  setArticletags(state, data) {
+    state.articletags = data;
   }
 }

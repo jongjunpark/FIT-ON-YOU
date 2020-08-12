@@ -28,11 +28,11 @@
 
       <div class="search-box" v-for="(feed,index) in feedList" :key="`feed-${index}`">
         <div class="search-inner-box" v-for="article in feedList[index]" :key="article.articles.articleNo">
-          <div @click="onModal" class="search-inner-btn">자세히</div>
+          <div @click="onModal(article.articles, article.imgs, article.tags)" class="search-inner-btn">자세히</div>
           <img v-if='article.imgs[0]' :src="article.imgs[0].imageUrl" :id="index">
         </div>
-        <SearchModal v-for="(article,idx) in feedList[index]" :key="`article-${idx}`" @close="showModal= false"/>
       </div>
+      <SearchModal v-if="showModal" @close="showModal= false"/>
      
     </div>
     <HashSearch v-if="isHashResult"></HashSearch>
@@ -41,20 +41,22 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState,mapMutations } from 'vuex'
 import HashSearch from '../components/HashSearch.vue'
 import UserSearch from '../components/UserSearch.vue'
+import SearchModal from '../components/SearchModal.vue'
 import '../components/css/search.css'
 import axios from 'axios'
 
 export default {
   name: 'Search',
   computed: {
-    ...mapState(['flag'])
+    ...mapState(['flag', 'articledata', 'articleimgs', 'articletags'])
   },
   components: {
     HashSearch,
     UserSearch,
+    SearchModal,
   },
   data() {
     return {
@@ -89,6 +91,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setArticledata', 'setArticleimgs', 'setArticletags']),
     goSearch() {
         const selectBar = document.querySelector('.menu-bar-select')
         const newsFeed = document.querySelector('.fa-newspaper')
@@ -195,8 +198,12 @@ export default {
       }
       console.log(this.feedList)
     },
-    onModal() {
+    onModal(data, imgs, tags) {
+      this.setArticledata(data);
+      this.setArticleimgs(imgs);
+      this.setArticletags(tags);
       this.showModal = true
+      console.log(this.articledata, this.articleimgs, this.articletags)
     },
     setHashList() {
       this.hashString += `#${this.hashList[this.hashList.length-1]} `

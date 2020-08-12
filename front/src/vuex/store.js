@@ -13,6 +13,9 @@ const state = {
   authToken: '',
   isLoggedIn: false,
   flag: false,
+  articledata: [],
+  articleimgs: [],
+  articletags: [],
 }
 
 Vue.use(Vuex)
