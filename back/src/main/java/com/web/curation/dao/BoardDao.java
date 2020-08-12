@@ -29,4 +29,11 @@ public interface BoardDao extends JpaRepository<Board, String> {
 	@Query(value="update board set favoriteCnt=favoriteCnt-1 where articleNo=:articleNo",nativeQuery=true)
 	int decreFvCnt(int articleNo);
 	
+	@Query(value="select * from board order by articleNo desc limit 60",nativeQuery = true)
+	List<Board> getList();
+	
+	@Query(value="DELETE FROM board WHERE articleNo=:articleNo",nativeQuery = true)
+	void delBoardArticle(int articleNo);
+	
+	
 }

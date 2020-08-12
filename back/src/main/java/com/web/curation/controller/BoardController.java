@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +44,8 @@ import com.web.curation.model.Influencer;
 import com.web.curation.model.Likes;
 import com.web.curation.model.Tag;
 import com.web.curation.model.User;
+import com.web.curation.model.UserDTO;
+import com.web.curation.service.user.BoardService;
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -81,68 +85,86 @@ public class BoardController {
 	@Autowired
 	TagDao tagDao;
 	
-//	@Autowired
-//	BoardTwoDao boardTwoDao;
-//	
-//	
-//	@GetMapping("/api/board/curation")
-//	@ApiOperation(value = "큐레이션 기능")
-//	public Object curatedContents(String username) {
-//		System.out.println(1);
-//		final BasicResponse result = new BasicResponse();
-//		List<Curation> curationList = curationDao.getCurationByUsername(username);
-//		List<Board> boardList = new ArrayList<>();
-//
-//		if (!curationList.isEmpty()) {// 안비어 있을경우
-//			int size = curationList.size();
-//
-//			List<String> input = new ArrayList<>();
-//			for (int i = 0; i < size; i++) {
-//				System.out.println(curationList.get(i).getTagname());
-//				input.add(curationList.get(i).getTagname());
-//			}
-//
-//			List<Search> contents = searchDao.getContentsNoByTagname(input);
-//
-//			int contentsSize = contents.size();
-//			for (int c = 0; c < contentsSize; c++) {
-//				Board newBoard = boardDao.findBoardByArticleNo(contents.get(c).getArticleno());
-//
-//				if (newBoard != null) {
-//					boardList.add(newBoard);
-//				}
-//			}
-//
-//			result.data = "success";
-//			result.status = true;
-//			result.object = boardList;
-//		} else {// 큐레이션이 비어있을 경우
-//				// 팔로우 의 새 게시글을 보여준다
-//		}
-//
-//		return result;
-//	}
-//
+	@Autowired
+	BoardTwoDao boardTwoDao;
+	
+	@Autowired
+	BoardService boardService;
+	
+	
+	@GetMapping("/api/board/curation")
+	@ApiOperation(value = "큐레이션 기능")
+	public Object curatedContents(String username) {
+		System.out.println(1);
+		final BasicResponse result = new BasicResponse();
+		List<Curation> curationList = curationDao.getCurationByUsername(username);
+		List<Board> boardList = new ArrayList<>();
 
+		if (!curationList.isEmpty()) {// 안비어 있을경우
+			int size = curationList.size();
 
-//	@PostMapping("/newsfeed")
-//	public Object getFollowArticle(@RequestParam String nickname) {
-//		List<Follow> searchFollow = new ArrayList<Follow>();
-//		searchFollow = followDao.getFollowByFollowinguser(nickname);
-//		List<BoardDTO> result = new ArrayList<>();
-//
-//		for (Follow follow : searchFollow) {
-////			List<Board> temp = boardDao.findBoardByArticleUserOrderByArticleNoDesc(follow.getFolloweduser());
-//			List<BoardDTO> temp = boardTwoDao.getMainFeedList(follow.getFolloweduser(),nickname);
-//			for (BoardDTO board : temp) {
-//				result.add(board);
-//			}
-//		}
-//
-//		result.sort(boardComp);
-//
-//		return result;
-//	}
+			List<String> input = new ArrayList<>();
+			for (int i = 0; i < size; i++) {
+				System.out.println(curationList.get(i).getTagname());
+				input.add(curationList.get(i).getTagname());
+			}
+
+			List<Search> contents = searchDao.getContentsNoByTagname(input);
+
+			int contentsSize = contents.size();
+			for (int c = 0; c < contentsSize; c++) {
+				Board newBoard = boardDao.findBoardByArticleNo(contents.get(c).getArticleno());
+
+				if (newBoard != null) {
+					boardList.add(newBoard);
+				}
+			}
+
+			result.data = "success";
+			result.status = true;
+			result.object = boardList;
+		} else {// 큐레이션이 비어있을 경우
+				// 팔로우 의 새 게시글을 보여준다
+		}
+
+		return result;
+	}
+
+	@PostMapping
+	public Object writeBoard(@Valid @RequestBody Board board) {
+
+		final BasicResponse result = new BasicResponse();
+		if (boardDao.save(board) == null) {
+			result.status = true;
+			result.data = "fail";
+
+		} else {
+			result.status = true;
+			result.data = "success";
+		}
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	Comparator<BoardDTO> boardComp = new Comparator<BoardDTO>() {
+		@Override
+		public int compare(BoardDTO o1, BoardDTO o2) {
+			if (o1.getArticleNo() < o2.getArticleNo())
+				return 1;
+			else
+				return -1;
+		}
+	};
+
+	@PostMapping("/newsfeed/{page}")
+	public Object getFollowArticle(@RequestParam String nickname,@PathVariable int page) {
+
+		List<BoardDTO> result = boardService.getMainFeedList(page,nickname);
+		for(BoardDTO r : result) {
+			System.out.print(r.getArticleNo()+" ");
+		}
+		System.out.println();
+		return result;
+	}
 
 	@PostMapping("/images")
 	public List<ImageStore> getImageArticle(@RequestParam int articleNo) {
@@ -276,7 +298,8 @@ public class BoardController {
 	}
 	@PostMapping(value="/upload")
 	public void addArticle(@RequestParam("imgdata") MultipartFile[] imgs, @RequestParam("nickname") String nickname, @RequestParam("content") String content, @RequestParam("tags") String[] tags) {
-		String path ="i3b304.p.ssafy.io/img/";
+		String path ="i3b304.p.ssafy.io/var/www/html/dist/images/board/";
+//		String path ="C:\\ssafy\\pjt1\\s03p13b304\\front\\public\\images\\board\\";
 		UUID uuid = UUID.randomUUID();
 		
 		String[] names = new String[3];
@@ -305,7 +328,8 @@ public class BoardController {
 			File file = new File(path + names[idx]);
 			try {
 				multipartFile.transferTo(file);
-				String storePath="i3b304.p.ssafy.io/img/"+names[0];
+//				String storePath="i3b304.p.ssafy.io/img/"+names[0];
+				String storePath="../images/board/"+names[0];
 				img.setImageUrl(storePath);
 				System.out.println(storePath);
 				imageDao.save(img);

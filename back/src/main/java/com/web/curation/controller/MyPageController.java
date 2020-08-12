@@ -3,6 +3,7 @@ package com.web.curation.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -59,7 +60,8 @@ public class MyPageController {
 		
 		//내가 팔로우 한사람
 		Long followingCnt= followDao.countByFollowinguser(nickname);
-		
+		Optional<User> user= userDao.findById(nickname);
+		resultMap.put("userinfo",user.get());
 		resultMap.put("followedCnt",followedCnt);
 		resultMap.put("followingCnt",followingCnt);
 		

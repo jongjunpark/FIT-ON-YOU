@@ -94,6 +94,23 @@ export default {
         createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
         senduser: this.user.nickname,
       })
+      
+      //  if (this.text !== '') {
+      // //save to firestore
+      //   var divParent = document.querySelector('.direct-message-content');
+      // db.collection(`chat`).add({
+      //   divParent.className = 'direct-message-content';
+      //   message: this.text,
+
+      //   createdAt: new Date(),
+      //   var div = document.createElement('div');
+      //   senduser: this.user.nickname,
+      //   div.className = 'user-me'; 
+      // })
+
+      //   var p = document.createElement('p');
+      //   p.className = 'user-me-content';
+      //   p.innerText = this.text;
 
       console.log(this.user);
       this.text = null;
