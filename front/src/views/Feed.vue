@@ -165,7 +165,7 @@ export default {
         this.likeStates[index]=1
         e.target.classList.add('heart')
         this.modal = true
-        axios.post('http://localhost:8080/api/board/likes',{
+        axios.post('https://i3b304.p.ssafy.io/api/board/likes',{
             articleNo:articleNo,
             nickname:this.user.nickname
           })
@@ -175,7 +175,7 @@ export default {
       else if(flag==1){
         this.likeStates[index]=0
         e.target.classList.remove('heart')
-        axios.delete('http://localhost:8080/api/board/likes',{
+        axios.delete('https://i3b304.p.ssafy.io/api/board/likes',{
           data:{
             articleNo:articleNo,
             nickname:this.user.nickname
@@ -196,7 +196,7 @@ export default {
       if(flag==0){
         this.bookmarkStates[index]=1
         e.target.classList.add('mark')
-        axios.post('http://localhost:8080/api/board/bookmark',{
+        axios.post('https://i3b304.p.ssafy.io/api/board/bookmark',{
             bookedArticle:articleNo,
             bookUser:this.user.nickname
           })
@@ -206,7 +206,7 @@ export default {
       else if(flag==1){
         this.bookmarkStates[index]=0
         e.target.classList.remove('mark')
-        axios.delete('http://localhost:8080/api/board/bookmark',{
+        axios.delete('https://i3b304.p.ssafy.io/api/board/bookmark',{
           data:{
             bookedArticle:articleNo,
             bookUser:this.user.nickname
@@ -264,7 +264,7 @@ export default {
       const frm = new FormData();
       frm.append('nickname',res);
       frm.append('page',ref.limit);
-      axios.post('http://localhost:8080/api/board/newsfeed/'+ref.limit,frm)
+      axios.post('https://i3b304.p.ssafy.io/api/board/newsfeed/'+ref.limit,frm)
       .then((data)=>{
         setTimeout(() => {
           if(data.data.length){
@@ -286,14 +286,14 @@ export default {
 
               follow.append('follow',el.articleUser);
 
-              axios.post("http://localhost:8080/api/board/profileimg",follow).then((proff)=>{
+              axios.post("https://i3b304.p.ssafy.io/api/board/profileimg",follow).then((proff)=>{
                 feeddata.userProfile=proff.data.profile_img;
               });
 
               const articleNo = new FormData();
               articleNo.append('articleNo',el.articleNo);
 
-              axios.post("http://localhost:8080/api/board/images",articleNo).then((img)=>{
+              axios.post("https://i3b304.p.ssafy.io/api/board/images",articleNo).then((img)=>{
                 const imgs = img.data;
                 const imglist = [];
                 for (let i = 0; i < imgs.length; i++) {
@@ -315,7 +315,7 @@ export default {
               }
               
             });
-              axios.post("http://localhost:8080/api/board/tags",articleNo).then((tag)=>{
+              axios.post("https://i3b304.p.ssafy.io/api/board/tags",articleNo).then((tag)=>{
               const tags = tag.data;
               const taglist = [];
               for (let i = 0; i < tags.length; i++) {
@@ -362,7 +362,7 @@ export default {
     
     formData.append('nickname',res);
     // formData.append('pageNum',ref.limit),
-    axios.post("http://localhost:8080/api/board/newsfeed/0",formData).then((data)=>{
+    axios.post("https://i3b304.p.ssafy.io/api/board/newsfeed/0",formData).then((data)=>{
       console.log("success")
       console.log(data)
       this.feedlist=data.data;
@@ -380,14 +380,14 @@ export default {
 
         follow.append('follow',el.articleUser);
 
-        axios.post("http://localhost:8080/api/board/profileimg",follow).then((proff)=>{
+        axios.post("https://i3b304.p.ssafy.io/api/board/profileimg",follow).then((proff)=>{
           feeddata.userProfile=proff.data.profile_img;
         });
 
         const articleNo = new FormData();
         articleNo.append('articleNo',el.articleNo);
 
-        axios.post("http://localhost:8080/api/board/images",articleNo).then((img)=>{
+        axios.post("https://i3b304.p.ssafy.io/api/board/images",articleNo).then((img)=>{
           const imgs = img.data;
           const imglist = [];
           for (let i = 0; i < imgs.length; i++) {
@@ -409,7 +409,7 @@ export default {
         }
         
       });
-        axios.post("http://localhost:8080/api/board/tags",articleNo).then((tag)=>{
+        axios.post("https://i3b304.p.ssafy.io/api/board/tags",articleNo).then((tag)=>{
         const tags = tag.data;
         const taglist = [];
         for (let i = 0; i < tags.length; i++) {
@@ -424,7 +424,7 @@ export default {
         ref.bookmarkStates.push(this.feedlist[index].markchk);
       }
     });
-    axios.post("http://localhost:8080/api/board/influencer").then((data)=>{
+    axios.post("https://i3b304.p.ssafy.io/api/board/influencer").then((data)=>{
         this.influencer=data.data;
         console.log(this.influencer)
       });

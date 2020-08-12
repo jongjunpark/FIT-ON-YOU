@@ -80,7 +80,7 @@ export default {
     let ref=this;
     let uNick = this.$route.params.nickname;
     this.nickname = uNick.substring(1,)
-    axios.get('http://localhost:8080/api/mypage/otheruser',{
+    axios.get('https://i3b304.p.ssafy.io/api/mypage/otheruser',{
       params:{
       nickname: uNick,
     }
@@ -138,7 +138,7 @@ export default {
       }
     },
     goChatting() {
-      axios.get('http://localhost:8080/api/chat/existroom',{
+      axios.get('https://i3b304.p.ssafy.io/api/chat/existroom',{
       params:{
         firstuser: this.nickname,
         seconduser: this.nick

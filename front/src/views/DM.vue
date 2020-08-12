@@ -84,7 +84,7 @@ export default {
       }
     },
     getLastMessage() {
-      axios.get('http://localhost:8080/api/chat/allChatList',{
+      axios.get('https://i3b304.p.ssafy.io/api/chat/allChatList',{
         params:{
         username: this.nickname,
         }
@@ -156,7 +156,7 @@ export default {
                 } else {
                   Next = element.firstuser
                 }
-                axios.get('http://localhost:8080/api/chat/existroom',{
+                axios.get('http://i3b304.p.ssafy.io:8080/api/chat/existroom',{
                   params:{
                     firstuser: this.nickname,
                     seconduser: Next

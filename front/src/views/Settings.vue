@@ -56,7 +56,7 @@ export default {
       console.log(nickname,1);
       const frm = new FormData();
       frm.append('recevier',nickname);
-      axios.post('http://localhost:8080/api/alarm/del',frm
+      axios.post('https://i3b304.p.ssafy.io/api/alarm/del',frm
       )
       .then(console.log("성공"))
       .catch(console.log("실패"))
@@ -69,7 +69,7 @@ export default {
       let nickname=this.user.nickname;
       console.log(nickname);
       formData.append('nickname',nickname);
-      axios.delete('http://localhost:8080/api/account/delete',{
+      axios.delete('https://i3b304.p.ssafy.io/api/account/delete',{
         data:formData,
         
       })

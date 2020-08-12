@@ -198,7 +198,7 @@ export default {
               console.log(ref.$store.state.user);
               // window.AC_USER(userData)
 
-              axios.post('http://localhost:8080/api/account/social',{
+              axios.post('https://i3b304.p.ssafy.io/api/account/social',{
                 nickname : response.kakao_account.profile.nickname,
                 profile_image : response.kakao_account.profile.profile_image_url,
                 email : response.kakao_account.email,
@@ -249,7 +249,7 @@ export default {
           ref.AC_USER(userData);
           console.log(ref.$store.state.user);
         
-          axios.post('http://localhost:8080/api/account/social',{
+          axios.post('https://i3b304.p.ssafy.io/api/account/social',{
                 nickname : googleUser.getBasicProfile().Cd,
                 profile_image : googleUser.getBasicProfile().fL,
                 email : googleUser.getBasicProfile().zu,
@@ -318,7 +318,7 @@ export default {
     loginHandler() { 
       console.log(this.email);
       console.log(this.password);
-      axios.get('http://localhost:8080/api/account/login',{
+      axios.get('https://i3b304.p.ssafy.io/api/account/login',{
         params:{email:this.email,
                   password:this.password},
       }).then( response => {
