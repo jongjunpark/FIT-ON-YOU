@@ -121,6 +121,7 @@ var userData={
   
 }
 
+
 const Store='Store'
  function attachSignin(element) {
     console.log(element.id);
@@ -186,16 +187,16 @@ export default {
             success: function(response) {
               let userData  = {
 
-                access_token : ac_token,
-                token_type : 'Bearer',
+                // access_token : ac_token,
+                // token_type : 'Bearer',
                 nickname : response.kakao_account.profile.nickname,
                 profile_image : response.kakao_account.profile.profile_image_url,
                 email : response.kakao_account.email,
                 gender : response.kakao_account.gender,
-                age_range : response.kakao_account.age_range
+                // age_range : response.kakao_account.age_range
               };
-              ref.AC_USER(userData);
-              console.log(ref.$store.state.user);
+              // ref.AC_USER(userData);
+              // console.log(ref.$store.state.user);
               // window.AC_USER(userData)
 
               axios.post('https://i3b304.p.ssafy.io/api/account/social',{
@@ -207,11 +208,20 @@ export default {
               .then((data)=>{
                 console.log("카카오로그인성공")
                 console.log(data);
-                ref.$cookies.set('auth-token', data.data.auth_token)
-                ref.setToken(data.data.auth_token)
-                ref.sendUserInfo();
-                ref.setLoggedIn(true)
-                ref.$router.push('/feed')
+                if(data.data.result.data=="1"){ // 이미 존재하는 경우
+                  ref.$cookies.set('auth-token', data.data.auth_token)
+                  ref.setToken(data.data.auth_token)
+                  ref.sendUserInfo();
+                  ref.setLoggedIn(true)
+                  ref.AC_USER(data.data.userinfo);
+
+                  ref.$router.push('/feed')
+                }
+                else if (data.data.result.data=="0"){
+                  ref.AC_USER(userData);
+
+                  ref.$router.push('/joinconfirm')
+                }
 
 
               })
@@ -237,17 +247,16 @@ export default {
         });
         auth2.attachClickHandler('customBtn', {},
         function(googleUser) {
-          const userData  = {
-                access_token : googleUser.getAuthResponse(true).access_token,
-                idToken : googleUser.getAuthResponse(true).id_token,
+          let userData  = {
+                // access_token : googleUser.getAuthResponse(true).access_token,
+                // idToken : googleUser.getAuthResponse(true).id_token,
                 nickname : googleUser.getBasicProfile().Cd,
                 profile_image : googleUser.getBasicProfile().fL,
                 email : googleUser.getBasicProfile().zu,
-                token_type : 'Bearer',
+                // token_type : 'Bearer',
           }
           console.log(userData)
           ref.AC_USER(userData);
-          console.log(ref.$store.state.user);
         
           axios.post('https://i3b304.p.ssafy.io/api/account/social',{
                 nickname : googleUser.getBasicProfile().Cd,
@@ -257,11 +266,17 @@ export default {
               .then((data)=>{
                 console.log("구글로그인성공")
                 console.log(data);
-                ref.$cookies.set('auth-token', data.data.auth_token)
-                ref.setToken(data.data.auth_token)
-                ref.sendUserInfo();
-                ref.setLoggedIn(true)
-                ref.$router.push('/feed')
+                if(data.data.result.data=="1"){ // 이미 존재하는 경우
+                  ref.$cookies.set('auth-token', data.data.auth_token)
+                  ref.setToken(data.data.auth_token)
+                  ref.sendUserInfo();
+                  ref.setLoggedIn(true)
+                  ref.$router.push('/feed')
+                }
+                else if (data.data.result.data=="0"){
+                  ref.AC_USER(userData);
+                  ref.$router.push('/joinconfirm')
+                }
 
 
               })
