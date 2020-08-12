@@ -1,6 +1,7 @@
 <template>
   <transition name="modal">
     <div class="search-modal-mask" @click.self="$emit('close')">
+      <i class="fas fa-times" @click.self="$emit('close')"></i>
       <div class="search-modal-wrap">
         <div class="search-more-box">
           <header class="search-more-user-data">
@@ -8,22 +9,21 @@
               <img src="userProfile">
             </div>
             <div class="search-more-article-head">
-              <p class='search-more-username'>Username</p>
-              <p class='search-more-article-date'>3시간전</p>
+              <p class='search-more-username'>{{ username }}</p>
+              <p class='search-more-article-date'>{{ time }}</p>
             </div>
           </header>
           <section class="search-more-content">
-            <VueSlickCarousel v-bind="settings">
-              <article class="search-more-content-img">
-                <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-15/sh0.08/e35/s640x640/115999683_208712917242400_7853725733733513666_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_cat=104&_nc_ohc=AvPIi_dvY8YAX9_vvo7&oh=33cf0cb25092a6bda81d298f097107dd&oe=5F4DE678">
-              </article>
-              <article class="search-more-content-img">
-                <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-15/e35/116363553_752834785516476_1926326966447616076_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_cat=100&_nc_ohc=OQtQ2R5KUcwAX-dbIaU&oh=e0b1affcf56a2cdf469c6339ae1af958&oe=5F4D1E40">
-              </article>
-              <article class="search-more-content-img">
-                <img src="https://scontent-ssn1-1.cdninstagram.com/v/t51.2885-15/e35/116592429_1139437373095582_3420540484434190690_n.jpg?_nc_ht=scontent-ssn1-1.cdninstagram.com&_nc_cat=110&_nc_ohc=rYAxs7P8CVoAX_E0Hwf&oh=c5cc8b2e3a48d679177594901f603aa6&oe=5F4A9ACC">
+            <VueSlickCarousel v-bind="settings" v-if="imgs[1]">
+              <article v-for="img in imgs" :key="img.imageNo" class="search-more-content-img">
+                <img :src="img.imageUrl">
               </article>
             </VueSlickCarousel>
+            <div v-else>
+              <article v-for="img in imgs" :key="img.imageNo" class="search-more-content-img">
+                <img :src="img.imageUrl">
+              </article>
+            </div>
             <div class="search-more-btn-box">
               <div class='search-more-btn-left'>
                 <i class="fas fa-heart"></i>
@@ -32,8 +32,9 @@
                 <i class="fas fa-bookmark"></i>
               </div>
             </div>
-            <p class='search-more-content-head'>Content</p>
-            <p class='search-more-content-tag'>#abc #def #ghi</p>
+            <p v-show="content" class='search-more-content-head'>{{ content }}</p>
+            <p v-show="longContent" class='search-more-content-head'>{{ longContent }}</p>
+            <p v-for="tag in tags" :key="tag.id" class='search-more-content-tag'>{{ tag.tagName }}</p>
           </section>
         </div>
 
@@ -48,11 +49,36 @@ import VueSlickCarousel from 'vue-slick-carousel'
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 
+function timeForToday(value) {
+        const today = new Date();
+        const timeValue = new Date(value);
+        const betweenTime = Math.floor((today.getTime() - timeValue.getTime()) / 1000 / 60);
+        if (betweenTime < 1) return '방금전';
+        if (betweenTime < 60) {
+            return `${betweenTime}분전`;
+        }
+        const betweenTimeHour = Math.floor(betweenTime / 60);
+        if (betweenTimeHour < 24) {
+            return `${betweenTimeHour}시간전`;
+        }
+        const betweenTimeDay = Math.floor(betweenTime / 60 / 24);
+        if (betweenTimeDay < 365) {
+            return `${betweenTimeDay}일전`;
+        }
+        return `${Math.floor(betweenTimeDay / 365)}년전`;
+ }
+
 export default {
   name: 'SearchModal',
   data() {
     return {
-      comment_content: '',
+      username: '',
+      time: '',
+      content: '',
+      longContent: '',
+      imgs: [],
+      img: '',
+      tags: [],
       settings: {
         "dots": true,
         "arrows": false,
@@ -78,9 +104,25 @@ export default {
   },
   mounted() {
     this.defaultDark()
+    if (this.articledata.articleUser) {
+      this.username = this.articledata.articleUser
+    } else {
+      this.username = this.articledata.influeUser
+    }
+    this.time = timeForToday(this.articledata.articleDate)
+    if (this.articledata.content.length>60) {
+      for (let i=0; i<60; i++) {
+        this.longContent += this.articledata.content[i]
+      }
+      this.longContent += ' ....'
+    } else {
+      this.content = this.articledata.content
+    }
+    this.imgs = this.articleimgs
+    this.tags = this.articletags
   },
   computed: {
-    ...mapState(['flag'])
+    ...mapState(['flag','articledata','articleimgs','articletags'])
   },
   methods: {
     checkCommentInput() {
@@ -144,6 +186,15 @@ export default {
   background-color: rgba(0, 0, 0, .5);
   display: table;
   transition: opacity .3s ease;
+}
+
+.search-modal-mask .fa-times {
+  position: absolute;
+  top: 3vh;
+  right: 3vh;
+  cursor: pointer;
+  color: #fff;
+  font-size: 5vh;
 }
 
 .modal-enter .modal-wrapper,

@@ -91,7 +91,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setArticledata', 'setArticleimgs', 'setArticletags']),
+    ...mapMutations(['setArticledata', 'setArticleimgs', 'setArticletags', 'setHashSearch', 'setUserSearch']),
     goSearch() {
         const selectBar = document.querySelector('.menu-bar-select')
         const newsFeed = document.querySelector('.fa-newspaper')
@@ -143,14 +143,25 @@ export default {
       this.hashList.splice(index, 1)
     },
     onHashResult() {
-      this.isDefault = false
-      this.isUserResult = false
-      this.isHashResult = true
+      this.hashList.push(this.hashContent)
+      this.setHashSearch(this.hashList);
+      if(this.isHashResult) {
+        this.isHashResult = false
+        this.isHashResult = true
+      } else {
+        this.isDefault = false
+        this.isUserResult = false
+        this.isHashResult = true
+      }
+      this.hashContent = ''
+      this.hashList = []
     },
     onUserResult() {
+      this.setUserSearch(this.userContent);
       this.isDefault = false
       this.isHashResult = false
       this.isUserResult = true
+      this.userContent = ''
     },
     defaultDark() {
       const Dark = this.$cookies.get('dark')
@@ -196,14 +207,12 @@ export default {
         this.feedList.push(this.tempList)
         this.tempList = []
       }
-      console.log(this.feedList)
     },
     onModal(data, imgs, tags) {
       this.setArticledata(data);
       this.setArticleimgs(imgs);
       this.setArticletags(tags);
       this.showModal = true
-      console.log(this.articledata, this.articleimgs, this.articletags)
     },
     setHashList() {
       this.hashString += `#${this.hashList[this.hashList.length-1]} `
@@ -212,16 +221,9 @@ export default {
   mounted() {
     this.goSearch()
     this.defaultDark()
-
-  //   axios.post("http://localhost:8080/api/search/").then((data)=>{
-  //     this.articleList=data.data;
-  //    console.log(this.articleList)
-  //     this.setList();
-  //   })
-  // }
     axios.post("http://localhost:8080/api/search/").then((data)=>{
       this.articleList=data.data;
-     console.log(this.articleList)
+    //  console.log(this.articleList)
       this.setList();
     })
   }

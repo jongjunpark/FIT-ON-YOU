@@ -47,5 +47,17 @@ export default {
   },
   setArticletags(state, data) {
     state.articletags = data;
+  },
+  setHashSearch(state, data) {
+    let hashString = ''
+    for (let i=0; i<data.length; i++) {
+      hashString += `#${data[i]} `
+    }
+    state.hashSearchList = hashString;
+  },
+  setUserSearch(state, data) {
+    let data_enc = encodeURIComponent(data);
+    let data_dec = decodeURIComponent(data_enc);
+    state.userSearch = data_dec
   }
 }

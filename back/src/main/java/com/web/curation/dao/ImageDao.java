@@ -29,4 +29,6 @@ public interface ImageDao extends JpaRepository<ImageStore, String>{
 	List<ImageStore> bookMarkImgList(@Param("nickname") String nickname);
 	
 	List<ImageStore> findImagestoreByArticleNoOrderByArticleNoDesc(int num);
+	
+
 }

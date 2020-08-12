@@ -3,12 +3,10 @@ package com.web.curation.controller;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.Random;
-import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
@@ -17,7 +15,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -158,11 +155,31 @@ public class AccountController {
 	@ApiOperation(value = "비밀번호 찾기")
 	public Map<String, Object> findPassword(@Valid @RequestParam String email, @Valid @RequestParam String pTime) {
 		Map<String, Object> result = new HashMap<>();
+		System.out.println(1);
 		LocalDate time = LocalDate.of(Integer.parseInt(pTime.substring(0, 4)), Integer.parseInt(pTime.substring(4, 6)),
 				Integer.parseInt(pTime.substring(6, 8)));
 		Optional<User> optUser = userDao.findUserByEmailAndBirth(email, time);
 		if (!optUser.isPresent()) {
 		} else {
+			Properties props = new Properties();
+			
+			String host="smtp.gmail.com";
+			String port="587";
+			String user="ouosssssssa@gmail.com";
+			String password="zzxx1122";
+			
+			props.put("mail.smtp.starttls.enable", "true");
+			props.put("mail.smtp.ssl.trust", host);
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.host", host);
+			
+			if (port != null)
+			{
+				props.put("mail.smtp.port", port);
+				props.put("mail.smtp.socketFactory.port", port);
+				props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+			}
+			
 			UserDTO userDto = new UserDTO(optUser.get());
 
 			String to = userDto.getEmail();
@@ -198,39 +215,39 @@ public class AccountController {
 	}
 
 	@PostMapping(value = "/account/addProfileImg")
-	@ApiOperation(value = "가입하기")
+   @ApiOperation(value = "가입하기")
 
-	public Object addProfileImg(@RequestParam("profile-img-edit") MultipartFile img, @RequestParam String nickname) {
-		Map<String,Object> resultMap=new HashMap<>();
-		final BasicResponse result = new BasicResponse();
-		// 이 path는 로컬에선 일단 각자 경로로 테스트
-		String path ="i3b304.p.ssafy.io/img/";
-		UUID uuid = UUID.randomUUID();
-		String savedName = uuid.toString()+"_"+img.getOriginalFilename();
-		File file = new File(path + savedName);
-		try {
-			img.transferTo(file);
-			String storePath="i3b304.p.ssafy.io/img/"+savedName;
-			if(userDao.updateProfileImg(storePath, nickname)==1) {
-				result.data="success";
-				UserDTO userDTO = new UserDTO(userDao.findUserByNickname(nickname).get());
-				String Token = jwtService.create(userDTO);
-				resultMap.put("auth_token",Token);
-				
-			}
-			else {
-				result.data="fail";
-			}
-			System.out.println(storePath);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		
-		resultMap.put("result",result);
-		System.out.println(img);
-		return resultMap;
-	}
+   public Object addProfileImg(@RequestParam("profile-img-edit") MultipartFile img, @RequestParam String nickname) {
+      Map<String,Object> resultMap=new HashMap<>();
+      final BasicResponse result = new BasicResponse();
+      // 이 path는 로컬에선 일단 각자 경로로 테스트
+      String path ="/var/www/html/dist/images/profile/";
+      UUID uuid = UUID.randomUUID();
+      String savedName = uuid.toString()+"_"+img.getOriginalFilename();
+      File file = new File(path + savedName);
+      try {
+         img.transferTo(file);
+         String storePath="../images/profile/"+savedName;
+         if(userDao.updateProfileImg(storePath, nickname)==1) {
+            result.data="success";
+            UserDTO userDTO = new UserDTO(userDao.findUserByNickname(nickname).get());
+            String Token = jwtService.create(userDTO);
+            resultMap.put("auth_token",Token);
+            
+         }
+         else {
+            result.data="fail";
+         }
+         System.out.println(storePath);
+      } catch (Exception e) {
+         e.printStackTrace();
+      }
+      
+      
+      resultMap.put("result",result);
+      System.out.println(img);
+      return resultMap;
+   }
 
 	@GetMapping("/account/checkDoubleEmail")
 	@ApiOperation(value = "이메일 중복검사")

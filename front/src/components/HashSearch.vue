@@ -49,13 +49,18 @@
 
 <script>
 import { mapState } from 'vuex'
+import axios from 'axios'
+
 export default {
   name: 'HashSearch',
-  mounted() {
-    this.defaultDark()
+  data() {
+    return {
+      scrollDown: 0,
+      hashList: [],
+    }
   },
   computed: {
-    ...mapState(['flag'])
+    ...mapState(['flag', 'hashSearchList'])
   },
   watch: {
     flag() {
@@ -81,6 +86,18 @@ export default {
       }
     },
   },
+  mounted() {
+    this.defaultDark();
+    axios.get(`https://i3b304.p.ssafy.io/api/search/hash/${this.scrollDown}`,{
+      params:{
+        findContent: this.hashSearchList,
+        username: 'park'
+      },
+    }).then((data) => {
+      console.log(data, 1)
+    }).catch()
+    console.log(this.hashSearchList)
+  }
 }
 </script>
 
