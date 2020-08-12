@@ -118,7 +118,7 @@ export default {
               if (this.lastMessage.message.length < 10) {
                 H5message.innerHTML = this.lastMessage.message.substring(0, 10)
               } else {
-                H5message.innerHTML = this.lastMessage.message.substring(0, 8) + '...'
+                H5message.innerHTML = this.lastMessage.message.substring(0, 8) + '..'
               }
               
 
@@ -136,8 +136,9 @@ export default {
               // IMGDM.src = element.img
               // IMGDM.classList.add('dm-container-message-img')
               
+              // IMGDM.src = "../assets/images/default-user.png"
               IMGDM.classList.add('dm-container-message-img')
-              IMGDM.src = "../assets/images/default-user.png"
+              IMGDM.setAttribute("src", "/images/default-user.png")
               DIVUNDER.classList.add('dm-container-message')
               H5message.classList.add('dm-in-text')
               H3.classList.add('dm-user-name')

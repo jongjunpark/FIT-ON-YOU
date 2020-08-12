@@ -26,8 +26,11 @@
         <p class="other-content">자기소개 입니다.</p>
       </div>
       <div class="profile-btn-area">     
-        <div class="other-user-child">
-          <span><i class="fas fa-user profile-other-btn"></i> 팔로우</span>
+        <div v-show="isFollwed" class="other-user-child" @click="followAdd">
+          <span><i class="fas fa-user profile-other-btn" style="color: #fff"></i> 팔로우</span>
+        </div>
+        <div v-show="!isFollwed" class="other-user-child-no" @click="followDelete">
+          <span><i class="fas fa-user profile-other-btn-no" style="color: black"></i> 팔로우 취소</span>
         </div>
         <div class="other-user-child-DM" @click="goChatting">
           <span><i class="fas fa-paper-plane profile-other-btn"></i> DM 보내기</span>
@@ -65,6 +68,8 @@ export default {
       followingCnt:'',
       followedCnt:'',
       nick: '',
+      isFollwed: true,
+      followNo: false,
     }
   },
   computed: {
@@ -102,6 +107,21 @@ export default {
     let uri_dec = decodeURIComponent(uri_enc);
     let res = uri_dec;
     this.nick = res
+    console.log(this.nickname, this.nick)
+    
+    axios.get('http://localhost:8080/api/isfollowed',{
+      params:{
+      followedUser: this.nickname,
+      followingUser: this.nick
+    }
+    }).then((data) => {
+      if (data.data.object) {
+        this.isFollwed = false
+        this.followNo = data.data.object.followno
+      }
+    })
+    .catch(
+    )
 
   },
   methods: {
@@ -148,7 +168,34 @@ export default {
       })
         .catch(
         )
-      },
+    },
+    followAdd() {
+      axios.get('http://localhost:8080/api/follow/add',{
+      params:{
+        followedUser: this.nickname,
+        followingUser: this.nick
+      }
+      }).then((data) => {
+        this.isFollwed = false
+        console.log(data.data.object.followno)
+        this.followNo = data.data.object.followno
+      })
+        .catch(
+        )
+    },
+    followDelete() {
+      console.log(this.followNo)
+      axios.get('http://localhost:8080/api/follow/delete',{
+      params:{
+        followNo: this.followNo,
+      }
+      }).then((data) => {
+        console.log(data.data)
+        this.isFollwed = true
+      })
+        .catch(
+        )
+    },
   },
 }
 </script>

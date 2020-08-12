@@ -1,6 +1,7 @@
 package com.web.curation.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -30,5 +31,7 @@ public interface FollowDao extends JpaRepository<Follow, String>{
 	Long countByFollowinguser(String followinguser);
 	
 	long countByFolloweduserAndFollowinguser(String followeduser, String followinguser);
+	
+	Optional<Follow> getFollowByfolloweduserAndFollowinguser(String followeduser, String followinguser);
 	
 }

@@ -3,6 +3,7 @@ package com.web.curation.controller;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dao.AlarmDao;
 import com.web.curation.dao.FollowDao;
-import com.web.curation.model.Alarm;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Follow;
 import com.web.curation.model.FollowDTO;
@@ -39,8 +39,8 @@ public class FollowController {
 		Follow follow = new Follow();
 		final BasicResponse result = new BasicResponse();
 		result.status=true;
-		
-		if(followDao.countByFolloweduserAndFollowinguser(followedUser, followingUser)==0) {
+		Optional<Follow> optfollow;
+		if(followDao.countByFolloweduserAndFollowinguser(followedUser, followingUser)==0) {//없을때
 			follow.setFolloweduser(followedUser);
 			follow.setFollowinguser(followingUser);
 			if (followDao.save(follow) == null) {
@@ -48,13 +48,14 @@ public class FollowController {
 				result.data="fail";
 			} else {
 				alarmDao.addFollowAlarm("2", followedUser, followingUser, 0);
-				
+				optfollow = followDao.getFollowByfolloweduserAndFollowinguser(followedUser, followingUser);
+				result.object = optfollow.get();
 				System.out.println("됨");
 				result.data="success";
 				
 	
 			}
-		}else {
+		}else {//있을때
 			result.data="fail";
 			result.object="이미 팔로우한 유저입니다.";
 		}
@@ -126,4 +127,20 @@ public class FollowController {
 		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+	
+	@GetMapping("/isfollowed")
+	   @ApiOperation(value = "팔로우 되있는지 확인")
+	   public Object isFollow(@Valid @RequestParam String followingUser, @Valid @RequestParam String followedUser) {
+	      final BasicResponse result = new BasicResponse();
+	      
+	      Optional<Follow> optFollow = followDao.getFollowByfolloweduserAndFollowinguser(followedUser, followingUser);
+	      
+	      if(optFollow.isPresent()) {//있다면
+	         result.data = "exist";
+	         result.object = optFollow.get();
+	         result.status = true;
+	      }
+	      return new ResponseEntity<>(result, HttpStatus.OK);
+	   }
+
 }
