@@ -27,7 +27,7 @@
     <div v-if="isDefault" class='wrap-container'>
 
       <div class="search-box" v-for="(feed,index) in articleList" :key = "feed.articles.articleNo">
-        <div class="search-inner-box">{{feed.imgs[0].imageUrl}}
+        <div class="search-inner-box">
           <img :src="feed.imgs[0].imageUrl" :id="index">
         </div>
       </div>

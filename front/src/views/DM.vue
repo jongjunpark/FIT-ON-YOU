@@ -35,7 +35,7 @@
 <script>
 import "../components/css/dm.css"
 import firebase from 'firebase'
-
+import axios from 'axios'
 var db = firebase.firestore();
 
 export default {
@@ -88,7 +88,7 @@ export default {
       }
     },
     getLastMessage() {
-      axios.get('http://localhost:8080/api/chat/allChatList',{
+      axios.get('https://i3b304.p.ssafy.io/api/chat/allChatList',{
         params:{
         username: this.nickname,
         }
@@ -161,7 +161,7 @@ export default {
                 } else {
                   Next = element.firstuser
                 }
-                axios.get('http://localhost:8080/api/chat/existroom',{
+                axios.get('https://i3b304.p.ssafy.io/api/chat/existroom',{
                   params:{
                     firstuser: this.nickname,
                     seconduser: Next
@@ -177,11 +177,6 @@ export default {
               
             });
           });
-
-     let allMessages = {};
-        querySnapshot.forEach(doc=>{
-          allMessages = doc.data();
-        })
 
         this.lastMessage=allMessages;
         console.dir(new Date(this.lastMessage.createdAt.seconds*1000));
