@@ -198,39 +198,39 @@ public class AccountController {
 	}
 
 	@PostMapping(value = "/account/addProfileImg")
-	@ApiOperation(value = "가입하기")
+   @ApiOperation(value = "가입하기")
 
-	public Object addProfileImg(@RequestParam("profile-img-edit") MultipartFile img, @RequestParam String nickname) {
-		Map<String,Object> resultMap=new HashMap<>();
-		final BasicResponse result = new BasicResponse();
-		// 이 path는 로컬에선 일단 각자 경로로 테스트
-		String path ="i3b304.p.ssafy.io/img/";
-		UUID uuid = UUID.randomUUID();
-		String savedName = uuid.toString()+"_"+img.getOriginalFilename();
-		File file = new File(path + savedName);
-		try {
-			img.transferTo(file);
-			String storePath="i3b304.p.ssafy.io/img/"+savedName;
-			if(userDao.updateProfileImg(storePath, nickname)==1) {
-				result.data="success";
-				UserDTO userDTO = new UserDTO(userDao.findUserByNickname(nickname).get());
-				String Token = jwtService.create(userDTO);
-				resultMap.put("auth_token",Token);
-				
-			}
-			else {
-				result.data="fail";
-			}
-			System.out.println(storePath);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		
-		resultMap.put("result",result);
-		System.out.println(img);
-		return resultMap;
-	}
+   public Object addProfileImg(@RequestParam("profile-img-edit") MultipartFile img, @RequestParam String nickname) {
+      Map<String,Object> resultMap=new HashMap<>();
+      final BasicResponse result = new BasicResponse();
+      // 이 path는 로컬에선 일단 각자 경로로 테스트
+      String path ="/var/www/html/dist/images/profile/";
+      UUID uuid = UUID.randomUUID();
+      String savedName = uuid.toString()+"_"+img.getOriginalFilename();
+      File file = new File(path + savedName);
+      try {
+         img.transferTo(file);
+         String storePath="../images/profile/"+savedName;
+         if(userDao.updateProfileImg(storePath, nickname)==1) {
+            result.data="success";
+            UserDTO userDTO = new UserDTO(userDao.findUserByNickname(nickname).get());
+            String Token = jwtService.create(userDTO);
+            resultMap.put("auth_token",Token);
+            
+         }
+         else {
+            result.data="fail";
+         }
+         System.out.println(storePath);
+      } catch (Exception e) {
+         e.printStackTrace();
+      }
+      
+      
+      resultMap.put("result",result);
+      System.out.println(img);
+      return resultMap;
+   }
 
 	@GetMapping("/account/checkDoubleEmail")
 	@ApiOperation(value = "이메일 중복검사")
