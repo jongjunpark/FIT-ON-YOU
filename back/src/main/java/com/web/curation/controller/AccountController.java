@@ -3,12 +3,10 @@ package com.web.curation.controller;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.Random;
-import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
@@ -17,7 +15,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -158,11 +155,31 @@ public class AccountController {
 	@ApiOperation(value = "비밀번호 찾기")
 	public Map<String, Object> findPassword(@Valid @RequestParam String email, @Valid @RequestParam String pTime) {
 		Map<String, Object> result = new HashMap<>();
+		System.out.println(1);
 		LocalDate time = LocalDate.of(Integer.parseInt(pTime.substring(0, 4)), Integer.parseInt(pTime.substring(4, 6)),
 				Integer.parseInt(pTime.substring(6, 8)));
 		Optional<User> optUser = userDao.findUserByEmailAndBirth(email, time);
 		if (!optUser.isPresent()) {
 		} else {
+			Properties props = new Properties();
+			
+			String host="smtp.gmail.com";
+			String port="587";
+			String user="ouosssssssa@gmail.com";
+			String password="zzxx1122";
+			
+			props.put("mail.smtp.starttls.enable", "true");
+			props.put("mail.smtp.ssl.trust", host);
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.host", host);
+			
+			if (port != null)
+			{
+				props.put("mail.smtp.port", port);
+				props.put("mail.smtp.socketFactory.port", port);
+				props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+			}
+			
 			UserDTO userDto = new UserDTO(optUser.get());
 
 			String to = userDto.getEmail();

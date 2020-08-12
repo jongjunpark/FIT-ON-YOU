@@ -68,7 +68,7 @@ export default {
         }
       }).then(data => {
         console.log("성공")
-        console.dir(data)
+        console.log(data.data.certifNum)
         if (data.data.certifNum) {
           this.confirmPwd(data.data.certifNum)
           this.findUserPWd(data.data.userInfo)
