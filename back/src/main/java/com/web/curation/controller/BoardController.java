@@ -2,6 +2,7 @@ package com.web.curation.controller;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -25,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.web.curation.dao.AlarmDao;
 import com.web.curation.dao.ArticletagDao;
 import com.web.curation.dao.BoardDao;
+import com.web.curation.dao.BoardTwoDao;
 import com.web.curation.dao.BookmarkDao;
 import com.web.curation.dao.CurationDao;
 import com.web.curation.dao.FollowDao;
@@ -38,15 +40,19 @@ import com.web.curation.model.Alarm;
 import com.web.curation.model.Articletag;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Board;
+import com.web.curation.model.BoardDTO;
 import com.web.curation.model.Bookmark;
+import com.web.curation.model.Curation;
 import com.web.curation.model.ImageStore;
 import com.web.curation.model.Influencer;
 import com.web.curation.model.Likes;
+import com.web.curation.model.Search;
 import com.web.curation.model.Tag;
 import com.web.curation.model.User;
 import com.web.curation.model.UserDTO;
 import com.web.curation.service.user.BoardService;
 
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
