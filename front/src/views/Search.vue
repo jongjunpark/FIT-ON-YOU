@@ -26,12 +26,12 @@
     </div>
     <div v-if="isDefault" class='wrap-container search-container'>
 
-      <div class="search-box" v-for="(feed,index) in feedList" :key = "feed[index].articles.articlNo">
-        <div class="search-inner-box" v-for="article in feedList[index]" :key = "article.articles.articlNo">
+      <div class="search-box" v-for="(feed,index) in feedList" :key="`feed-${index}`">
+        <div class="search-inner-box" v-for="article in feedList[index]" :key="article.articles.articleNo">
           <div @click="onModal" class="search-inner-btn">자세히</div>
-          <img :src="feed.imgs[0]" :id="index">
+          <img v-if='article.imgs[0]' :src="article.imgs[0].imageUrl" :id="index">
         </div>
-        <!-- <SearchModal v-for="article in feedList[index]" v-if="showModal" @close="showModal= false"/> -->
+        <SearchModal v-for="(article,idx) in feedList[index]" :key="`article-${idx}`" @close="showModal= false"/>
       </div>
      
     </div>
@@ -66,6 +66,7 @@ export default {
       isUserInput: false,
       hashContent: '',
       hashList: [],
+      hashString: '',
       userContent: '',
       isDefault: true,
       isHashResult: false,
@@ -73,11 +74,15 @@ export default {
       iconColor: '',
       tempList: [],
       feedList: [],
+      showModal: false,
     }
   },
   watch: {
     hashContent() {
       this.checkHashTag();
+    },
+    hashList() {
+      this.setHashList();
     },
     flag() {
       this.defaultDark()
@@ -181,20 +186,32 @@ export default {
       }
     },
     setList() {
-      for (let i=0; i<this.articleList/20; i++) {
+      for (let i=0; i<this.articleList.length/3; i++) {
         for (let j=0; j<3; j++) {
-          this.tempList.push(this.a[j+i*3])
+          this.tempList.push(this.articleList[j+i*3])
         }
-        this.feedList.push(this.bin)
+        this.feedList.push(this.tempList)
         this.tempList = []
       }
-    }
+      console.log(this.feedList)
+    },
+    onModal() {
+      this.showModal = true
+    },
+    setHashList() {
+      this.hashString += `#${this.hashList[this.hashList.length-1]} `
+    },
   },
   mounted() {
     this.goSearch()
     this.defaultDark()
 
-
+  //   axios.post("http://localhost:8080/api/search/").then((data)=>{
+  //     this.articleList=data.data;
+  //    console.log(this.articleList)
+  //     this.setList();
+  //   })
+  // }
     axios.post("http://localhost:8080/api/search/").then((data)=>{
       this.articleList=data.data;
      console.log(this.articleList)
