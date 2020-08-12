@@ -1,9 +1,7 @@
 package com.web.curation.controller;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.StringTokenizer;
@@ -15,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +23,7 @@ import com.web.curation.dao.ArticletagDao;
 import com.web.curation.dao.BoardDao;
 import com.web.curation.dao.CurationDao;
 import com.web.curation.dao.ImageDao;
+import com.web.curation.dao.InfluencerDao;
 import com.web.curation.dao.SearchDao;
 import com.web.curation.dao.UserDao;
 import com.web.curation.model.Articletag;
@@ -33,8 +33,9 @@ import com.web.curation.model.Curation;
 import com.web.curation.model.ImageStore;
 import com.web.curation.model.ResponseData;
 import com.web.curation.model.Search;
+import com.web.curation.model.SearchResultDTO;
 import com.web.curation.model.User;
-import com.web.curation.model.UserDTO;
+import com.web.curation.service.user.SearchService;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -56,10 +57,12 @@ public class SearchController {
 	ArticletagDao articleTagDao;
 	@Autowired
 	ImageDao imageDao;
-	
+	@Autowired
+	SearchService searchService;
+
 	@PostMapping("/")
-	@ApiOperation(value="페이지 업로드")
-	public Object uploadBoard (){
+	@ApiOperation(value = "페이지 업로드")
+	public Object uploadBoard() {
 		List<Board> temp = boardDao.getList();
 		List<ResponseData> result = new ArrayList<ResponseData>();
 		for (Board board : temp) {
@@ -67,26 +70,26 @@ public class SearchController {
 			data.setArticles(new Board());
 			data.setImgs(new ArrayList<>());
 			data.setTags(new ArrayList<>());
-			
+
 			try {
-			List<ImageStore> imgs = imageDao.findImagestoreByArticleNoOrderByArticleNoDesc(board.getArticleNo());
-			data.setImgs(imgs);
-			}catch(Exception e){
-			e.printStackTrace();
+				List<ImageStore> imgs = imageDao.findImagestoreByArticleNoOrderByArticleNoDesc(board.getArticleNo());
+				data.setImgs(imgs);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			try{
+			try {
 				List<Articletag> tags = articleTagDao.findArticletagByArticleNoOrderByArticleNo(board.getArticleNo());
 				data.setTags(tags);
-			}catch(Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			data.setArticles(board);
-			
+
 			result.add(data);
 		}
-		
+
 		return new ResponseEntity<List<ResponseData>>(result, HttpStatus.OK);
-		
+
 	}
 
 	@GetMapping("/user")
@@ -108,9 +111,9 @@ public class SearchController {
 	}
 
 	// ariticleNo만 가져다쓰면됨 왜 모든 컬럼을 가져와야 작동하는 지 이해를 할수 없음 걍외우셈
-	@GetMapping("/hash")
+	@GetMapping("/hash/{page}")
 	@ApiOperation(value = "검색")
-	public Object searchHash(@Valid @RequestParam String username, @Valid @RequestParam String findContent) {
+	public Object searchHash(@Valid @RequestParam String username, @Valid @RequestParam String findContent,@Valid @PathVariable int page) {
 
 		final BasicResponse result = new BasicResponse();
 
@@ -122,7 +125,6 @@ public class SearchController {
 			System.out.println("input================>" + input);
 			list.add(input);
 		}
-
 		int size = list.size();
 		System.out.println(size);
 
@@ -134,20 +136,32 @@ public class SearchController {
 			}
 		}
 
-		List<Search> searchList = searchDao.getSearchByTagname(list, list.size());
+		List<Search> searchList = searchService.getArticles(page, list, list.size());
+		List<SearchResultDTO> resultList = new ArrayList<>();
+		for (Iterator<Search> iter = searchList.iterator(); iter.hasNext();) {
+			Search search = iter.next();
+			System.out.println(search.getArticleno());
+			Optional<Board> board = boardDao.selectArticleno(search.getArticleno());
+			List<ImageStore> imgList = imageDao.findImagestoreByArticleNoOrderByArticleNoDesc(search.getArticleno());
+			SearchResultDTO searchResultDto = new SearchResultDTO(board.get());
+			for (Iterator<ImageStore> imgiter = imgList.iterator(); imgiter.hasNext();) {
+				ImageStore img = imgiter.next();
+				searchResultDto.getImgList().add(img.getImageUrl());
+			}
+			resultList.add(searchResultDto);
+		}
 
-		if (searchList.isEmpty()) {
+		if (resultList.isEmpty()) {
 			result.data = "검색된 태그가 존재하지 않습니다";
-			result.object = searchList;
+			result.object = resultList;
 			result.status = true;
 		} else {
 			result.data = "success";
-			result.object = searchList;
+			result.object = resultList;
 			result.status = true;
 		}
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-
+	
 }
-

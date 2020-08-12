@@ -14,4 +14,6 @@ public interface InfluencerDao extends JpaRepository<Influencer, String> {
 
 	@Query(value = "select * from influencer", nativeQuery = true)
 	List<Influencer> AllInfluencers();
+	
+
 }

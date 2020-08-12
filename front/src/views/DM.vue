@@ -3,22 +3,38 @@
     <div class="wrap-container-dm">
       <div class="dm-container-wrap">
         <div class="dm-container">
+          <div class="dm-container-message">
+            <img src="../assets/images/default-user.png" alt="" class="dm-container-message-img">
+            <h3>Username</h3>
+            <h5 class="in-text">마지막 메세지입니다.</h5>
+            <h5 class="in-text">1주전</h5>
+          </div>
+          <div class="dm-container-message">
+            <img src="../assets/images/default-user.png" alt="" class="dm-container-message-img">
+            <h3>Username2</h3>
+            <h5 class="in-text">안녕하세요.</h5>
+            <h5 class="in-text">1달전</h5>
+          </div>
+          <div class="dm-container-message">
+            <img src="../assets/images/default-user.png" alt="" class="dm-container-message-img">
+            <h3>Username</h3>
+            <h5 class="in-text">Lorem ipsum, dolor sit amet</h5>
+            <h5 class="in-text">1년전</h5>
+          </div>
         </div>
+
       </div>
       <div class="search-dm">
         <input type="text" name="" id="" class="search-dm-input" placeholder="검색">
-        <i class="fas fa-search search-img-dm"></i>
       </div>
+      <i class="fas fa-search search-img-dm"></i>
     </div>
   </div>
 </template>
 
 <script>
 import "../components/css/dm.css"
-import { mapState } from 'vuex'
 import firebase from 'firebase'
-import axios from 'axios'
-
 
 var db = firebase.firestore();
 
@@ -27,18 +43,6 @@ export default {
   data() {
     return {
       lastMessage:{},
-      nickname: '',
-    }
-  },
-  mounted() {
-    this.defaultDark()
-  },
-  computed: {
-    ...mapState(['flag'])
-  },
-  watch: {
-    flag() {
-      this.defaultDark()
     }
   },
   updated() {
@@ -174,20 +178,18 @@ export default {
             });
           });
 
+     let allMessages = {};
+        querySnapshot.forEach(doc=>{
+          allMessages = doc.data();
         })
-        .catch(
-        )
+
+        this.lastMessage=allMessages;
+        console.dir(new Date(this.lastMessage.createdAt.seconds*1000));
+      });
     },
   },
   created(){
-    let nickdata = this.$cookies.get('auth-nickname')
-    let uri = nickdata;
-    let uri_enc = encodeURIComponent(uri);
-    let uri_dec = decodeURIComponent(uri_enc);
-    let res = uri_dec;
-    this.nickname = res
     this.getLastMessage();
   }
-
 }
 </script>
