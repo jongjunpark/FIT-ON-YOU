@@ -49,17 +49,34 @@
 
 <script>
 import { mapState } from 'vuex'
+import axios from 'axios'
+
 export default {
   name: 'HashSearch',
-  mounted() {
-    this.defaultDark()
+  data() {
+    return {
+      scrollDown: 0,
+      hashList: [],
+      username: '',
+      userprofileimg: '',
+      time: '',
+      content: '',
+      longContent: '',
+      imgs: [],
+      img: '',
+      tags: [],
+      loginUserName: '',
+    }
   },
   computed: {
-    ...mapState(['flag'])
+    ...mapState(['flag', 'hashSearchList'])
   },
   watch: {
     flag() {
       this.defaultDark()
+    },
+    hashSearchList() {
+      this.getHashSearch()
     }
   },
   methods: {
@@ -80,7 +97,27 @@ export default {
         wrap.classList.remove('wrap-dark')
       }
     },
+    getHashSearch() {
+      axios.get(`https://i3b304.p.ssafy.io/api/search/hash/${this.scrollDown}`,{
+      params:{
+        findContent: this.hashSearchList,
+        username: this.loginUserName,
+      },
+      }).then((data) => {
+        console.log(data.object)
+      }).catch()
+    }
   },
+  mounted() {
+    let nickdata = this.$cookies.get('auth-nickname')
+    let uri = nickdata;
+    let uri_enc = encodeURIComponent(uri);
+    let uri_dec = decodeURIComponent(uri_enc);
+    let res = uri_dec;
+    this.loginUserName = res
+    this.defaultDark();
+    this.getHashSearch();
+  }
 }
 </script>
 

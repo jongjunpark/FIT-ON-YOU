@@ -24,35 +24,39 @@
         </div>
       </transition-group>
     </div>
-    <div v-if="isDefault" class='wrap-container'>
+    <div v-if="isDefault" class='wrap-container search-container'>
 
-      <div class="search-box" v-for="(feed,index) in articleList" :key = "feed.articles.articleNo">
-        <div class="search-inner-box">
-          <img :src="feed.imgs[0].imageUrl" :id="index">
+      <div class="search-box" v-for="(feed,index) in feedList" :key="`feed-${index}`">
+        <div class="search-inner-box" v-for="article in feedList[index]" :key="article.articles.articleNo">
+          <div @click="onModal(article.articles, article.imgs, article.tags)" class="search-inner-btn">자세히</div>
+          <img v-if='article.imgs[0]' :src="article.imgs[0].imageUrl" :id="index">
         </div>
       </div>
+      <SearchModal v-if="showModal" @close="showModal= false"/>
      
     </div>
-    <HashSearch v-if="isHashResult"></HashSearch>
-    <UserSearch v-if="isUserResult"></UserSearch>
+    <UserSearch v-if="isUserResult"/>
+    <HashSearch v-if="isHashResult"/>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState,mapMutations } from 'vuex'
 import HashSearch from '../components/HashSearch.vue'
 import UserSearch from '../components/UserSearch.vue'
+import SearchModal from '../components/SearchModal.vue'
 import '../components/css/search.css'
 import axios from 'axios'
 
 export default {
   name: 'Search',
   computed: {
-    ...mapState(['flag'])
+    ...mapState(['flag', 'articledata', 'articleimgs', 'articletags'])
   },
   components: {
     HashSearch,
     UserSearch,
+    SearchModal,
   },
   data() {
     return {
@@ -64,22 +68,30 @@ export default {
       isUserInput: false,
       hashContent: '',
       hashList: [],
+      hashString: '',
       userContent: '',
       isDefault: true,
       isHashResult: false,
       isUserResult: false,
       iconColor: '',
+      tempList: [],
+      feedList: [],
+      showModal: false,
     }
   },
   watch: {
     hashContent() {
       this.checkHashTag();
     },
+    hashList() {
+      this.setHashList();
+    },
     flag() {
       this.defaultDark()
     }
   },
   methods: {
+    ...mapMutations(['setArticledata', 'setArticleimgs', 'setArticletags', 'setHashSearch', 'setUserSearch']),
     goSearch() {
         const selectBar = document.querySelector('.menu-bar-select')
         const newsFeed = document.querySelector('.fa-newspaper')
@@ -131,14 +143,25 @@ export default {
       this.hashList.splice(index, 1)
     },
     onHashResult() {
-      this.isDefault = false
-      this.isUserResult = false
-      this.isHashResult = true
+      this.hashList.push(this.hashContent)
+      this.setHashSearch(this.hashList);
+      if(this.isHashResult) {
+        this.isHashResult = false
+        this.isHashResult = true
+      } else {
+        this.isDefault = false
+        this.isUserResult = false
+        this.isHashResult = true
+      }
+      this.hashContent = ''
+      this.hashList = []
     },
     onUserResult() {
+      this.setUserSearch(this.userContent);
       this.isDefault = false
       this.isHashResult = false
       this.isUserResult = true
+      this.userContent = ''
     },
     defaultDark() {
       const Dark = this.$cookies.get('dark')
@@ -176,6 +199,24 @@ export default {
         }
       }
     },
+    setList() {
+      for (let i=0; i<this.articleList.length/3; i++) {
+        for (let j=0; j<3; j++) {
+          this.tempList.push(this.articleList[j+i*3])
+        }
+        this.feedList.push(this.tempList)
+        this.tempList = []
+      }
+    },
+    onModal(data, imgs, tags) {
+      this.setArticledata(data);
+      this.setArticleimgs(imgs);
+      this.setArticletags(tags);
+      this.showModal = true
+    },
+    setHashList() {
+      this.hashString += `#${this.hashList[this.hashList.length-1]} `
+    },
   },
   mounted() {
     this.goSearch()
@@ -184,8 +225,8 @@ export default {
 
     axios.post("https://i3b304.p.ssafy.io/api/search/").then((data)=>{
       this.articleList=data.data;
-     console.log(this.articleList)
-
+      console.log(this.articleList)
+      this.setList();
     })
   }
 }

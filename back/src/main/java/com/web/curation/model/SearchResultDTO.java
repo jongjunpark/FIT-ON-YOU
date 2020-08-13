@@ -17,6 +17,7 @@ public class SearchResultDTO {
 	private String influeUser;
 	private int favoriteCnt;
 	private List<String> imgList;
+	private String userImg;
 
 	public SearchResultDTO(Board board) {
 		this.articleNo = board.getArticleNo();
