@@ -24,7 +24,7 @@ export default {
     let res = uri_dec;
     this.nick = res
     
-    axios.get('http://localhost:8080/api/follow/forFollowing',{
+    axios.get('https://i3b304.p.ssafy.io/api/follow/forFollowing',{
       params:{
       userName: this.nick,
     }
@@ -68,7 +68,7 @@ export default {
         Father.appendChild(FollowingBox)
 
         DMBTN.addEventListener('click', () => {
-          axios.get('http://localhost:8080/api/chat/existroom',{
+          axios.get('https://i3b304.p.ssafy.io/api/chat/existroom',{
             params:{
               firstuser: element.followeduser,
               seconduser: this.nick
@@ -84,7 +84,7 @@ export default {
         FollowingBtn.addEventListener('click', () => {
           const Action = FollowingBtn.className
           if (Action == 'following-follow-btn') {
-            axios.get('http://localhost:8080/api/follow/delete',{
+            axios.get('https://i3b304.p.ssafy.io/api/follow/delete',{
               params:{
                 followNo: Num,
               }
@@ -95,7 +95,7 @@ export default {
                 .catch(
                 )
           } else {
-            axios.get('http://localhost:8080/api/follow/add',{
+            axios.get('https://i3b304.p.ssafy.io/api/follow/add',{
               params:{
                 followedUser: element.followeduser,
                 followingUser: this.nick

@@ -172,7 +172,7 @@ export default {
       let ref=this;
       let userData=this.getUser();
       console.log(userData);
-      axios.post('http://localhost:8080/api/account/social/1',userData)
+      axios.post('https://i3b304.p.ssafy.io/api/account/social/1',userData)
       .then((data)=>{
         if(data.data.result.data=='success'){
           ref.$cookies.set('auth-token', data.data.auth_token)

@@ -109,7 +109,7 @@ export default {
     this.nick = res
     console.log(this.nickname, this.nick)
     
-    axios.get('http://localhost:8080/api/isfollowed',{
+    axios.get('https://i3b304.p.ssafy.io/api/isfollowed',{
       params:{
       followedUser: this.nickname,
       followingUser: this.nick
@@ -170,7 +170,7 @@ export default {
         )
     },
     followAdd() {
-      axios.get('http://localhost:8080/api/follow/add',{
+      axios.get('https://i3b304.p.ssafy.io/api/follow/add',{
       params:{
         followedUser: this.nickname,
         followingUser: this.nick
@@ -185,7 +185,7 @@ export default {
     },
     followDelete() {
       console.log(this.followNo)
-      axios.get('http://localhost:8080/api/follow/delete',{
+      axios.get('https://i3b304.p.ssafy.io/api/follow/delete',{
       params:{
         followNo: this.followNo,
       }
