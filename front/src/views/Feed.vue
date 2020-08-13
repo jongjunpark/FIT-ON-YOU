@@ -169,13 +169,20 @@ export default {
   
     clickLike(articleNo,flag,index,e) {
       let ref=this
+
+      let data = this.$cookies.get('auth-nickname');
+      let uri = data;
+      let uri_enc = encodeURIComponent(uri);
+      let uri_dec = decodeURIComponent(uri_enc);
+      let res = uri_dec;
+
       if(flag==0){
         this.likeStates[index]=1
         e.target.classList.add('heart')
         this.modal = true
         axios.post('https://i3b304.p.ssafy.io/api/board/likes',{
             articleNo:articleNo,
-            nickname:this.user.nickname
+            nickname:res
           })
           .then(console.log("좋아요"))
           .catch()
@@ -186,7 +193,7 @@ export default {
         axios.delete('https://i3b304.p.ssafy.io/api/board/likes',{
           data:{
             articleNo:articleNo,
-            nickname:this.user.nickname
+            nickname:res
           }
         })
         .then(console.log(ref.likeStates[index],"좋아요 취소"))
@@ -201,12 +208,19 @@ export default {
     },
     clickBookMark(articleNo,flag,index,e) {
       let ref=this
+
+      let data = this.$cookies.get('auth-nickname');
+      let uri = data;
+      let uri_enc = encodeURIComponent(uri);
+      let uri_dec = decodeURIComponent(uri_enc);
+      let res = uri_dec;
+
       if(flag==0){
         this.bookmarkStates[index]=1
         e.target.classList.add('mark')
         axios.post('https://i3b304.p.ssafy.io/api/board/bookmark',{
             bookedArticle:articleNo,
-            bookUser:this.user.nickname
+            bookUser:res
           })
           .then(console.log("북마크 등록"))
           .catch()
@@ -217,7 +231,7 @@ export default {
         axios.delete('https://i3b304.p.ssafy.io/api/board/bookmark',{
           data:{
             bookedArticle:articleNo,
-            bookUser:this.user.nickname
+            bookUser:res
           }
         })
         .then(console.log(ref.bookmarkStates[index],"북마크 취소"))
