@@ -14,8 +14,6 @@ const state = {
   isLoggedIn: false,
   flag: false,
   articledata: [],
-  articleimgs: [],
-  articletags: [],
   hashSearchList: '',
   userSearch: '',
 }

@@ -79,6 +79,7 @@ export default {
       longContent: '',
       imgs: [],
       img: '',
+      profile:'',
       tags: [],
       settings: {
         "dots": true,
@@ -123,7 +124,7 @@ export default {
     this.tags = this.articletags
   },
   computed: {
-    ...mapState(['flag','articledata','articleimgs','articletags'])
+    ...mapState(['flag','articledata'])
   },
   methods: {
     checkCommentInput() {

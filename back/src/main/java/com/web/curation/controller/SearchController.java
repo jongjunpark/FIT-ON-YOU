@@ -31,6 +31,7 @@ import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Board;
 import com.web.curation.model.Curation;
 import com.web.curation.model.ImageStore;
+import com.web.curation.model.Influencer;
 import com.web.curation.model.ResponseData;
 import com.web.curation.model.Search;
 import com.web.curation.model.SearchResultDTO;
@@ -59,6 +60,8 @@ public class SearchController {
 	ImageDao imageDao;
 	@Autowired
 	SearchService searchService;
+	@Autowired
+	InfluencerDao influDao;
 
 	@PostMapping("/")
 	@ApiOperation(value = "페이지 업로드")
@@ -92,6 +95,46 @@ public class SearchController {
 
 	}
 
+	@PostMapping("/{articleNo}")
+	public Object getArticle(@PathVariable int articleNo) {
+		Board board = boardDao.findBoardByArticleNo(articleNo);
+		List<ResponseData> result = new ArrayList<ResponseData>();
+		ResponseData data = new ResponseData();
+		data.setArticles(new Board());
+		data.setImgs(new ArrayList<>());
+		data.setTags(new ArrayList<>());
+		try {
+			List<ImageStore> imgs = imageDao.findImagestoreByArticleNoOrderByArticleNoDesc(board.getArticleNo());
+			data.setImgs(imgs);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			List<Articletag> tags = articleTagDao.findArticletagByArticleNoOrderByArticleNo(board.getArticleNo());
+			data.setTags(tags);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			String profile= userDao.findProfileImgByNickname(board.getArticleUser());
+			if(profile == null) {
+				Influencer temp = influDao.findInfluencerByNickname(board.getInflueUser());
+				board.setArticleUser(board.getArticleUser());
+				profile=temp.getProfile_img();
+			}
+			data.setProfile(profile);
+
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		data.setArticles(board);
+
+		result.add(data);
+
+		return new ResponseEntity<List<ResponseData>>(result, HttpStatus.OK);
+
+	}
+
 	@GetMapping("/user")
 	@ApiOperation(value = "유저 검색")
 	public Object searchUser(@Valid @RequestParam String username) {
@@ -111,62 +154,67 @@ public class SearchController {
 	}
 
 	// ariticleNo만 가져다쓰면됨 왜 모든 컬럼을 가져와야 작동하는 지 이해를 할수 없음 걍외우셈
-	   @GetMapping("/hash/{page}")
-	   @ApiOperation(value = "검색")
-	   public Object searchHash(@Valid @RequestParam String username, @Valid @RequestParam String findContent,@Valid @PathVariable int page) {
+	@GetMapping("/hash/{page}")
+	@ApiOperation(value = "검색")
+	public Object searchHash(@Valid @RequestParam String username, @Valid @RequestParam String findContent,
+			@Valid @PathVariable int page) {
 
-	      final BasicResponse result = new BasicResponse();
+		final BasicResponse result = new BasicResponse();
 
-	      StringTokenizer st = new StringTokenizer(findContent);
-	      List<String> list = new ArrayList<>();
+		StringTokenizer st = new StringTokenizer(findContent.trim());
+		List<String> list = new ArrayList<>();
 
-	      while (st.hasMoreTokens()) {
-	         String input = st.nextToken("#");
-	         list.add(input);
-	         
-	         Curation curation = new Curation();
-	         curation.setTagname(input);
-	         curation.setUsername(username);
-	         curationDao.save(curation);
-	      }
-	      int size = list.size();
-	      System.out.println(size);
-	      
-	      List<Curation> curationList = curationDao.getCurationByUsername(username);
-	      if (!curationList.isEmpty() && curationList.size() + list.size() >= 5) {
-	         int forSize = curationList.size() + list.size() - 5;
-	         for (int i = 0; i < (forSize > 5 ? 5 : forSize); i++) {
-	            curationDao.delete(curationList.get(i));
-	         }
-	      }
+		while (st.hasMoreTokens()) {
+			String tempinput = st.nextToken("#");
+			String input = tempinput.trim();
 
-	      List<Search> searchList = searchService.getArticles(page, list, list.size());
-	      List<SearchResultDTO> resultList = new ArrayList<>();
-	      for (Iterator<Search> iter = searchList.iterator(); iter.hasNext();) {
-	         Search search = iter.next();
-	         System.out.println(search.getArticleno());
-	         Optional<Board> board = boardDao.selectArticleno(search.getArticleno());
-	         List<ImageStore> imgList = imageDao.findImagestoreByArticleNoOrderByArticleNoDesc(search.getArticleno());
-	         SearchResultDTO searchResultDto = new SearchResultDTO(board.get());
-	         for (Iterator<ImageStore> imgiter = imgList.iterator(); imgiter.hasNext();) {
-	            ImageStore img = imgiter.next();
-	            searchResultDto.getImgList().add(img.getImageUrl());
-	         }
-	         searchResultDto.setUserImg(userDao.findProfileImgByNickname(searchResultDto.getArticleUser()));
-	         resultList.add(searchResultDto);
-	      }
+			if (input == "" || input == " " || input == null) {
+				continue;
+			}
 
-	      if (resultList.isEmpty()) {
-	         result.data = "검색된 태그가 존재하지 않습니다";
-	         result.object = resultList;
-	         result.status = true;
-	      } else {
-	         result.data = "success";
-	         result.object = resultList;
-	         result.status = true;
-	      }
+			list.add(input);
 
-	      return new ResponseEntity<>(result, HttpStatus.OK);
-	   }
-	
+			Curation curation = new Curation();
+			curation.setTagname(input);
+			curation.setUsername(username);
+			curationDao.save(curation);
+		}
+		int size = list.size();
+
+		List<Curation> curationList = curationDao.getCurationByUsername(username);
+		if (!curationList.isEmpty() && curationList.size() + list.size() >= 5) {
+			int forSize = curationList.size() + list.size() - 5;
+			for (int i = 0; i < (forSize > 5 ? 5 : forSize); i++) {
+				curationDao.delete(curationList.get(i));
+			}
+		}
+
+		List<Search> searchList = searchService.getArticles(page, list, list.size());
+		List<SearchResultDTO> resultList = new ArrayList<>();
+		for (Iterator<Search> iter = searchList.iterator(); iter.hasNext();) {
+			Search search = iter.next();
+			Optional<Board> board = boardDao.selectArticleno(search.getArticleno());
+			List<ImageStore> imgList = imageDao.findImagestoreByArticleNoOrderByArticleNoDesc(search.getArticleno());
+			SearchResultDTO searchResultDto = new SearchResultDTO(board.get());
+			for (Iterator<ImageStore> imgiter = imgList.iterator(); imgiter.hasNext();) {
+				ImageStore img = imgiter.next();
+				searchResultDto.getImgList().add(img.getImageUrl());
+			}
+			searchResultDto.setUserImg(userDao.findProfileImgByNickname(searchResultDto.getArticleUser()));
+			resultList.add(searchResultDto);
+		}
+
+		if (resultList.isEmpty()) {
+			result.data = "검색된 태그가 존재하지 않습니다";
+			result.object = resultList;
+			result.status = true;
+		} else {
+			result.data = "success";
+			result.object = resultList;
+			result.status = true;
+		}
+
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
 }

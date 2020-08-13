@@ -42,12 +42,6 @@ export default {
   setArticledata(state, data) {
     state.articledata = data;
   },
-  setArticleimgs(state, data) {
-    state.articleimgs = data;
-  },
-  setArticletags(state, data) {
-    state.articletags = data;
-  },
   setHashSearch(state, data) {
     let hashString = ''
     for (let i=0; i<data.length; i++) {
