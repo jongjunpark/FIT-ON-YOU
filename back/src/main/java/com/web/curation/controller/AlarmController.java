@@ -83,6 +83,19 @@ public class AlarmController {
 		
 		return result;
 	}
+	@GetMapping("/check")
+	public Object checkAlarm(@RequestParam String recevier) {
+		final BasicResponse result = new BasicResponse();
+		result.status=true;
+		if(alarmDao.checkAlarm(recevier)>0) {		
+			result.data="1"; 
+		}
+		else {		
+			result.data="0";
+		}
+		
+		return result;
+	}
 	
 	
 }
