@@ -2,7 +2,7 @@
   <div class='wrap-container'>
     <div class="user-search-box">
       <div class="user-search-icon-area">
-        <img src="#" alt="#">
+        <img src="../assets/images/default-user.png" alt="#">
       </div>
       <div class="user-search-text-area">
         <div class="user-search-username">Username</div>
@@ -95,17 +95,19 @@
 
 <script>
 import { mapState } from 'vuex'
+import axios from 'axios'
+
 export default {
   name: 'UserSearch',
-  mounted() {
-    this.defaultDark()
-  },
   computed: {
-    ...mapState(['flag'])
+    ...mapState(['flag', 'userSearch'])
   },
   watch: {
     flag() {
       this.defaultDark()
+    },
+    userSearch() {
+      this.getUserSearch()
     }
   },
   methods: {
@@ -126,7 +128,20 @@ export default {
         wrap.classList.remove('wrap-dark')
       }
     },
+    getUserSearch() {
+      axios.get(`https://i3b304.p.ssafy.io/api/search/user`,{
+      params: {
+        username: this.userSearch
+      },
+      }).then((data) => {
+        console.log(data, 2)
+      }).catch()
+    }
   },
+  mounted() {
+    this.defaultDark();
+    this.getUserSearch();
+  }
 }
 </script>
 

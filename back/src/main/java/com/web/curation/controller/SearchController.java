@@ -111,57 +111,62 @@ public class SearchController {
 	}
 
 	// ariticleNo만 가져다쓰면됨 왜 모든 컬럼을 가져와야 작동하는 지 이해를 할수 없음 걍외우셈
-	@GetMapping("/hash/{page}")
-	@ApiOperation(value = "검색")
-	public Object searchHash(@Valid @RequestParam String username, @Valid @RequestParam String findContent,@Valid @PathVariable int page) {
+	   @GetMapping("/hash/{page}")
+	   @ApiOperation(value = "검색")
+	   public Object searchHash(@Valid @RequestParam String username, @Valid @RequestParam String findContent,@Valid @PathVariable int page) {
 
-		final BasicResponse result = new BasicResponse();
+	      final BasicResponse result = new BasicResponse();
 
-		StringTokenizer st = new StringTokenizer(findContent);
-		List<String> list = new ArrayList<>();
+	      StringTokenizer st = new StringTokenizer(findContent);
+	      List<String> list = new ArrayList<>();
 
-		while (st.hasMoreTokens()) {
-			String input = st.nextToken("#");
-			System.out.println("input================>" + input);
-			list.add(input);
-		}
-		int size = list.size();
-		System.out.println(size);
+	      while (st.hasMoreTokens()) {
+	         String input = st.nextToken("#");
+	         list.add(input);
+	         
+	         Curation curation = new Curation();
+	         curation.setTagname(input);
+	         curation.setUsername(username);
+	         curationDao.save(curation);
+	      }
+	      int size = list.size();
+	      System.out.println(size);
+	      
+	      List<Curation> curationList = curationDao.getCurationByUsername(username);
+	      if (!curationList.isEmpty() && curationList.size() + list.size() >= 5) {
+	         int forSize = curationList.size() + list.size() - 5;
+	         for (int i = 0; i < (forSize > 5 ? 5 : forSize); i++) {
+	            curationDao.delete(curationList.get(i));
+	         }
+	      }
 
-		List<Curation> curationList = curationDao.getCurationByUsername(username);
-		if (!curationList.isEmpty() && curationList.size() + list.size() >= 5) {
-			int forSize = curationList.size() + list.size() - 5;
-			for (int i = 0; i < (forSize > 5 ? 5 : forSize); i++) {
-				curationDao.delete(curationList.get(i));
-			}
-		}
+	      List<Search> searchList = searchService.getArticles(page, list, list.size());
+	      List<SearchResultDTO> resultList = new ArrayList<>();
+	      for (Iterator<Search> iter = searchList.iterator(); iter.hasNext();) {
+	         Search search = iter.next();
+	         System.out.println(search.getArticleno());
+	         Optional<Board> board = boardDao.selectArticleno(search.getArticleno());
+	         List<ImageStore> imgList = imageDao.findImagestoreByArticleNoOrderByArticleNoDesc(search.getArticleno());
+	         SearchResultDTO searchResultDto = new SearchResultDTO(board.get());
+	         for (Iterator<ImageStore> imgiter = imgList.iterator(); imgiter.hasNext();) {
+	            ImageStore img = imgiter.next();
+	            searchResultDto.getImgList().add(img.getImageUrl());
+	         }
+	         searchResultDto.setUserImg(userDao.findProfileImgByNickname(searchResultDto.getArticleUser()));
+	         resultList.add(searchResultDto);
+	      }
 
-		List<Search> searchList = searchService.getArticles(page, list, list.size());
-		List<SearchResultDTO> resultList = new ArrayList<>();
-		for (Iterator<Search> iter = searchList.iterator(); iter.hasNext();) {
-			Search search = iter.next();
-			System.out.println(search.getArticleno());
-			Optional<Board> board = boardDao.selectArticleno(search.getArticleno());
-			List<ImageStore> imgList = imageDao.findImagestoreByArticleNoOrderByArticleNoDesc(search.getArticleno());
-			SearchResultDTO searchResultDto = new SearchResultDTO(board.get());
-			for (Iterator<ImageStore> imgiter = imgList.iterator(); imgiter.hasNext();) {
-				ImageStore img = imgiter.next();
-				searchResultDto.getImgList().add(img.getImageUrl());
-			}
-			resultList.add(searchResultDto);
-		}
+	      if (resultList.isEmpty()) {
+	         result.data = "검색된 태그가 존재하지 않습니다";
+	         result.object = resultList;
+	         result.status = true;
+	      } else {
+	         result.data = "success";
+	         result.object = resultList;
+	         result.status = true;
+	      }
 
-		if (resultList.isEmpty()) {
-			result.data = "검색된 태그가 존재하지 않습니다";
-			result.object = resultList;
-			result.status = true;
-		} else {
-			result.data = "success";
-			result.object = resultList;
-			result.status = true;
-		}
-
-		return new ResponseEntity<>(result, HttpStatus.OK);
-	}
+	      return new ResponseEntity<>(result, HttpStatus.OK);
+	   }
 	
 }
