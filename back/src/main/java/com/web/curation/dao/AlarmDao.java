@@ -56,5 +56,8 @@ public interface AlarmDao extends JpaRepository<Alarm, String>{
 	
 	Alarm findByTypeAndArticleNoAndFollower(String type, int articleNo, String Follower);
 	
+	@Query(value="select count(*) from alarm where recevier=:recevier and isRead=0 ",nativeQuery=true)
+	int checkAlarm(String recevier);
+	
 
 }
