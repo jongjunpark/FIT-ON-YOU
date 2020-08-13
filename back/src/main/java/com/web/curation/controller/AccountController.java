@@ -177,7 +177,7 @@ public class AccountController {
 			text.append("인증번호를 다른사람이 보지 않게 주의해 주세요.\n");
 //			text.append("핏온유 인증 페이지로 이동하기");
 //			text.append("http://localhost:8081/");
-
+			
 			MimeMessage message = emailSender.createMimeMessage();
 			try {
 				System.out.println(4);
@@ -189,7 +189,7 @@ public class AccountController {
 				emailSender.send(message);
 				result.put("userInfo", userDto);
 				result.put("certifNum", certificationNum);
-
+				System.out.println(certificationNum);
 			} catch (Exception e) {
 				System.out.println(5);
 				e.printStackTrace();
