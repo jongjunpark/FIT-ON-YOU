@@ -31,7 +31,7 @@
     
     <router-view/>
     
-    <div v-if='isLoggedIn' id="nav2" >
+    <div v-show='isLoggedIn' id="nav2" >
       <div class="bottom-nav">
         <div class='menu-bar-list'>
           <div class="menu-bar-select"></div>
