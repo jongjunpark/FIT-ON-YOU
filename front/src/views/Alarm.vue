@@ -7,7 +7,7 @@
             <div :class="isRead[alarm.isRead]">
               <img :src="alarm.user.profile_img" alt="" class="alarm-container-message-img" @click="goToUserPage(alarm.follower)">
               <i :class="alarmIcon[alarm.type-1]"></i>
-              <h4 class=""><span @click="goToUserPage(alarm.follower)">{{alarm.follower}}</span>
+              <h4 class="alarmclass"><span @click="goToUserPage(alarm.follower)">{{alarm.follower}}</span>
               {{alarmMsg[alarm.type-1]}}</h4>
               <h5 class="in-text">{{timeCal(alarm.createAt)}}</h5>
             </div>
@@ -34,7 +34,7 @@ export default {
                   'fas fa-heart heart-alarm'],
       alarmMsg:[
         '님이 회원님의 게시글에 댓글을 남겼습니다.', 
-        '님이 회원님을 팔로우하기 시작하였습니다',
+        '님이 회원님을 팔로우하기 시작하였습니다.',
         '님이 회원님의 사진에 좋아요 눌렀습니다.'
       ],
       alist :[],
@@ -52,6 +52,9 @@ export default {
     flag() {
       this.defaultDark()
     }
+  },
+  updated() {
+    this.defaultDark()
   },
   mounted() {
     this.defaultDark()
@@ -105,6 +108,7 @@ export default {
       const wrap = document.querySelector('.wrap')
       const READ = document.querySelectorAll('.alarm-container-message-read')
       const H4TAG = document.querySelectorAll('.alarm-container-message > h4')
+      const H5TAG = document.querySelectorAll('.alarm-container-message > h5')
       
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -119,6 +123,9 @@ export default {
         for (let i=0; i<H4TAG.length ; i++) {
           H4TAG[i].classList.add('font-dark')
         }
+        for (let i=0; i<H4TAG.length ; i++) {
+          H5TAG[i].classList.add('font-dark')
+        }
 
       } else {
         HTML.classList.remove('black')
@@ -128,6 +135,9 @@ export default {
         }
         for (let i=0; i<H4TAG.length ; i++) {
           H4TAG[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<H4TAG.length ; i++) {
+          H5TAG[i].classList.remove('font-dark')
         }
       }
     },

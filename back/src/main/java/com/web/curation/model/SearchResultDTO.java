@@ -18,6 +18,15 @@ public class SearchResultDTO {
 	private int favoriteCnt;
 	private List<String> imgList;
 	private String userImg;
+	
+
+	public String getUserImg() {
+		return userImg;
+	}
+
+	public void setUserImg(String userImg) {
+		this.userImg = userImg;
+	}
 
 	public SearchResultDTO(Board board) {
 		this.articleNo = board.getArticleNo();

@@ -102,3 +102,6 @@
 .alarm-container-message-read-dark {
 	color: #202020;
 }
+.alarmclass {
+	cursor: pointer;
+}
