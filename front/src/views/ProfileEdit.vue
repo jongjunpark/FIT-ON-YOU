@@ -48,11 +48,11 @@
         </div>
       </div>
       <div class="profile-btn-area">
-        <div v-if="isChange && isChange2" class="profile-user-change" @click="goSettings">
+        <div v-show="isChange && isChange2" class="profile-user-change" @click="goSettings">
           <span><i class="fas fa-user-cog fa-2x profile-setting-btn"></i> 계정설정</span>
         </div>
       </div>
-      <div class="profile-footer-area" v-if="isChange2 && isChange">
+      <div class="profile-footer-area" v-show="isChange2 && isChange">
         <div class="profile-user-btn">
           <i class="far fa-file-image mylist-icon"></i>
         </div>
@@ -88,6 +88,11 @@ export default {
       followedCnt :'',
       tempNickName:'' ,
       test:'',
+    }
+  },
+  watch: {
+    flag() {
+      this.defaultDark()
     }
   },
   mounted(){

@@ -74,7 +74,7 @@ export default {
               seconduser: this.nick
             }
             }).then((data)=>{
-              this.$router.push(`/directmessage/:${data.data.object.roomname}/:${element.followeduser}`)
+              this.$router.push(`/directmessage/${data.data.object.roomname}/${element.followeduser}`)
             })
               .catch(
               )

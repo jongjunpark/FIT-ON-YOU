@@ -83,78 +83,78 @@ Vue.use(VueRouter)
     path: '/find/password',
     name: 'FindPassword',
     component: FindPassword,
-    // beforeEnter(to, from, next) {
-    //   if (Vue.$cookies.isKey('auth-token')) {
-    //     next('/feed')
-    //   } else {
-    //     next()
-    //   }    }
+    beforeEnter(to, from, next) {
+      if (Vue.$cookies.isKey('auth-token')) {
+        next('/feed')
+      } else {
+        next()
+      }    }
   },
   {
     path: '/find/password/ok',
     name: 'FindPasswordOk',
     component: FindPasswordOk,
-    // beforeEnter(to, from, next) {
-    //   if (Vue.$cookies.isKey('auth-token')) {
-    //     next('/feed')
-    //   } else {
-    //     next()
-    //   }    }
+    beforeEnter(to, from, next) {
+      if (Vue.$cookies.isKey('auth-token')) {
+        next('/feed')
+      } else {
+        next()
+      }    }
   },
   {
     path: '/find/password/passwordchange',
     name: 'PasswordChange',
     component: PasswordChange,
-    // beforeEnter(to, from, next) {
-    //   if (Vue.$cookies.isKey('auth-token')) {
-    //     next('/feed')
-    //   } else {
-    //     next()
-    //   }    }
+    beforeEnter(to, from, next) {
+      if (Vue.$cookies.isKey('auth-token')) {
+        next('/feed')
+      } else {
+        next()
+      }    }
   },
   {
     path: '/profileedit',
     name: 'ProfileEdit',
     component: ProfileEdit,
-    // beforeEnter(to, from, next) {
-    //   if (!Vue.$cookies.isKey('auth-token')) {
-    //     next('/')
-    //   } else {
-    //     next()
-    //   }    }
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/')
+      } else {
+        next()
+      }    }
   },
   {
     path: '/settings',
     name: 'Settings',
     component: Settings,
-    // beforeEnter(to, from, next) {
-    //   if (!Vue.$cookies.isKey('auth-token')) {
-    //     next('/')
-    //   } else {
-    //     next()
-    //   }    }
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/')
+      } else {
+        next()
+      }    }
   },
   {
     path: '/newpassword',
     name: 'NewPassword',
     component: NewPassword,
-    // beforeEnter(to, from, next) {
-    //   if (!Vue.$cookies.isKey('auth-token')) {
-    //     next('/')
-    //   } else {
-    //     next()
-    //   }    }
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/')
+      } else {
+        next()
+      }    }
   },
   {
     path: '/directmessage/:roomname/:othername',
     name: 'DirectMessage',
     component: DirectMessage,
-    // beforeEnter(to, from, next) {
-    //   if (!Vue.$cookies.isKey('auth-token')) {
-    //     next('/')
-    //   } else {
-    //     next()
-    //   }    }
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/')
+      } else {
+        next()
+      }    }
   },
   {
     path: '/profileinform',
@@ -171,24 +171,24 @@ Vue.use(VueRouter)
     path: '/alarm',
     name: 'Alarm',
     component: Alarm,
-    // beforeEnter(to, from, next) {
-    //   if (!Vue.$cookies.isKey('auth-token')) {
-    //     next('/')
-    //   } else {
-    //     next()
-    //   }    }
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/')
+      } else {
+        next()
+      }    }
   },
   {
     path: '/dm',
     name: 'DM',
     component: DM,
-    // beforeEnter(to, from, next) {
-    //   if (!Vue.$cookies.isKey('auth-token')) {
-    //     next('/')
-    //   } else {
-    //     next()
-    //   }    
-    // }
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/')
+      } else {
+        next()
+      }    
+    }
   },
   {
     path: '/write',
@@ -206,13 +206,13 @@ Vue.use(VueRouter)
     path: '/otheruser/:nickname',
     name: 'OtherUser',
     component: OtherUser,
-    // beforeEnter(to, from, next) {
-    //   if (!Vue.$cookies.isKey('auth-token')) {
-    //     next('/')
-    //   } else {
-    //     next()
-    //   }   
-    //  }
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/')
+      } else {
+        next()
+      }   
+     }
   },
   // {
   //   path: '/socialjoin',
