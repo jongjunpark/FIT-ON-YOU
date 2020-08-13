@@ -221,7 +221,9 @@ export default {
   mounted() {
     this.goSearch()
     this.defaultDark()
-    axios.post("http://localhost:8080/api/search/").then((data)=>{
+
+
+    axios.post("https://i3b304.p.ssafy.io/api/search/").then((data)=>{
       this.articleList=data.data;
       console.log(this.articleList)
       this.setList();

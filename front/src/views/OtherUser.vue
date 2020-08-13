@@ -13,23 +13,26 @@
         <div class="profile-follow-box">
           <div class="profile-follow">
             <p class='profile-follow-head'>팔로워</p>
-            <p class='profile-follow-content'>123,456</p>
+            <p class='profile-follow-content'>{{followingCnt}}</p>
           </div>
           <div class="profile-follower">
             <p class='profile-follow-head'>팔로잉</p>
-            <p class='profile-follow-content'>123,456</p>
+            <p class='profile-follow-content'>{{followedCnt}}</p>
           </div>
         </div>
       </div>
       <div class="profile-edit-area">
-        <p class="other-nickname">UserName</p>
-        <p class="other-content">자기소개 입니다.</p>
+        <p class="other-nickname">{{nickname}}</p>
+        <p class="other-content">{{selfintro}}</p>
       </div>
       <div class="profile-btn-area">     
-        <div class="other-user-child">
-          <span><i class="fas fa-user profile-other-btn"></i> 팔로우</span>
+        <div v-show="isFollwed" class="other-user-child" @click="followAdd">
+          <span><i class="fas fa-user profile-other-btn" style="color: #fff"></i> 팔로우</span>
         </div>
-        <div class="other-user-child-DM">
+        <div v-show="!isFollwed" class="other-user-child-no" @click="followDelete">
+          <span><i class="fas fa-user profile-other-btn-no" style="color: black"></i> 팔로우 취소</span>
+        </div>
+        <div class="other-user-child-DM" @click="goChatting">
           <span><i class="fas fa-paper-plane profile-other-btn"></i> DM 보내기</span>
         </div>
       </div>
@@ -56,19 +59,20 @@ import { mapState } from 'vuex'
 import axios from 'axios'
 
 export default {
- name: 'OtherUser',
- data() {
-	return {
-    profileImg:false,
-    nickname:'',
-    selfintro:'자기소개 입니다.',
-    followingCnt:'',
-    followedCnt:'',
-
-
-	}
- },
- computed: {
+  name: 'OtherUser',
+  data() {
+    return {
+      profileImg: false,
+      nickname:'',
+      selfintro:'자기소개 입니다.',
+      followingCnt:'',
+      followedCnt:'',
+      nick: '',
+      isFollwed: true,
+      followNo: false,
+    }
+  },
+  computed: {
     ...mapState(['flag'])
   },
   watch: {
@@ -76,32 +80,52 @@ export default {
       this.defaultDark()
     }
   },
- mounted() {
-   this.defaultDark()
-   let ref=this;
-   let uNick=this.$route.params.nickname;
-   axios.get('http://localhost:8080/api/mypage/otheruser',{
-     params:{
-      nickname:uNick,
+  mounted() {
+    this.defaultDark()
+    let ref=this;
+    let uNick = this.$route.params.nickname;
+    this.nickname = uNick.substring(1,)
+    axios.get('https://i3b304.p.ssafy.io/api/mypage/otheruser',{
+      params:{
+      nickname: uNick,
     }
-   }).then((data)=>{
-     console.log(data);
-     ref.nickname=data.data.userinfo.nickname;
-     ref.profileImg=data.data.userinfo.profile_img;
-     if(data.data.userinfo.selfintroduce!=null){
-       ref.selfintro=data.data.userinfo.selfintroduce
-     }
-     ref.followedCnt=data.data.followedCnt
-     ref.followingCnt=data.data.followingCnt
-
+    }).then((data)=>{
+      console.log(data);
+      ref.nickname=data.data.userinfo.nickname;
+      ref.profileImg=data.data.userinfo.profile_img;
+      if(data.data.userinfo.selfintroduce!=null){
+        ref.selfintro=data.data.userinfo.selfintroduce
+      }
+      ref.followedCnt=data.data.followedCnt
+      ref.followingCnt=data.data.followingCnt
+    })
+    .catch(
+    )
+    let nickdata = this.$cookies.get('auth-nickname')
+    let uri = nickdata;
+    let uri_enc = encodeURIComponent(uri);
+    let uri_dec = decodeURIComponent(uri_enc);
+    let res = uri_dec;
+    this.nick = res
+    console.log(this.nickname, this.nick)
     
-   })
-   .catch(
-   )
+    axios.get('https://i3b304.p.ssafy.io/api/isfollowed',{
+      params:{
+      followedUser: this.nickname,
+      followingUser: this.nick
+    }
+    }).then((data) => {
+      if (data.data.object) {
+        this.isFollwed = false
+        this.followNo = data.data.object.followno
+      }
+    })
+    .catch(
+    )
 
- },
- methods: {
-   defaultDark() {
+  },
+  methods: {
+    defaultDark() {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.wrap')
@@ -133,6 +157,45 @@ export default {
         }
       }
     },
- },
+    goChatting() {
+      axios.get('https://i3b304.p.ssafy.io/api/chat/existroom',{
+      params:{
+        firstuser: this.nickname,
+        seconduser: this.nick
+      }
+      }).then((data)=>{
+        this.$router.push(`/directmessage/:${data.data.object.roomname}/:${this.nickname}`)
+      })
+        .catch(
+        )
+    },
+    followAdd() {
+      axios.get('https://i3b304.p.ssafy.io/api/follow/add',{
+      params:{
+        followedUser: this.nickname,
+        followingUser: this.nick
+      }
+      }).then((data) => {
+        this.isFollwed = false
+        console.log(data.data.object.followno)
+        this.followNo = data.data.object.followno
+      })
+        .catch(
+        )
+    },
+    followDelete() {
+      console.log(this.followNo)
+      axios.get('https://i3b304.p.ssafy.io/api/follow/delete',{
+      params:{
+        followNo: this.followNo,
+      }
+      }).then((data) => {
+        console.log(data.data)
+        this.isFollwed = true
+      })
+        .catch(
+        )
+    },
+  },
 }
 </script>

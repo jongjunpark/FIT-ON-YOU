@@ -1,7 +1,7 @@
 <template>
   <div class='wrap'>
     <div class='wrap-container wrap-join'>
-      <h1 class='join-logo'>Welcome</h1>
+      <h1 class='join-logo'>회원가입</h1>
       <div class="join-input-area">
         <label for="">이메일</label>
         <input @focus="activeInput" @blur='deactiveInputEmail' v-model='input.email' type="text" id='email-join' placeholder="example">
@@ -323,7 +323,7 @@ export default {
       }
     },
     checkNickname() {
-      axios.get('http://localhost:8080/api/account/checkNickname',{ 
+      axios.get('https://i3b304.p.ssafy.io/api/account/checkNickname',{ 
         params: {
           nickname: this.input.nickname
           }
@@ -471,7 +471,7 @@ export default {
         console.log("안됨");
         // ...
         });
-      axios.post('http://localhost:8080/api/account/signup',{
+      axios.post('https://i3b304.p.ssafy.io/api/account/signup',{
 
           email: this.input.email+'@'+this.input.url,
           password: this.input.password,
@@ -499,7 +499,7 @@ export default {
 
         frm.append("profile-img-edit", photoFile.files[0]);
         frm.append("nickname",this.nickname);
-        axios.post('http://localhost:8080/api/account/addProfileImg',frm,
+        axios.post('https://i3b304.p.ssafy.io/api/account/addProfileImg',frm,
         ).then( () =>{
           console.log("1");
 
@@ -546,7 +546,7 @@ export default {
          this.mailErrMsg = false;
          this.finalMail = false;
           if (this.mailSucMsg) {
-            axios.get('http://localhost:8080/api/account/checkDoubleEmail',{ 
+            axios.get('https://i3b304.p.ssafy.io/api/account/checkDoubleEmail',{ 
               params: {
                 email: this.input.email+'@'+this.input.url
                 }

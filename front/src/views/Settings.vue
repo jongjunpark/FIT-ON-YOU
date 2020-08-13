@@ -4,8 +4,8 @@
     <div class="settings-btn-area">
       <button class="btn change-password-btn settings-btn" @click="goPassword">비밀번호 변경</button>
       <button class="btn change-search-btn settings-btn">검색내역 지우기</button>
-      <button class="btn change-search-btn settings-btn">알림내역 지우기</button>
-      <button class="btn logout-btn settings-btn" @click="goLogout">로그아웃</button>
+      <button class="btn change-search-btn settings-btn" @click="deleteAllAlarm">알림내역 지우기</button>
+      <button class="btn logout-btn settings-btn" @click="goLogout" id="customBtn">로그아웃</button>
       <button class="btn signout-btn settings-btn" @click="leave">회원 탈퇴</button>
     </div>
   </div>
@@ -31,6 +31,7 @@ export default {
   },
   mounted() {
     this.defaultDark()
+    window.addEventListener("google-loaded", this.goLogout);
   },
   methods: {
     ...mapMutations(['setToken', 'setLoggedIn', 'setUser']),
@@ -42,10 +43,23 @@ export default {
       this.setToken(null)
       this.setLoggedIn(false)
       this.setUser(null)
-      this.$router.push('/')
+
+      this.$router.push('/');
     },
+
+
     goPassword() {
       this.$router.push('/newpassword')
+    },
+    deleteAllAlarm(){
+      let nickname=this.user.nickname
+      console.log(nickname,1);
+      const frm = new FormData();
+      frm.append('recevier',nickname);
+      axios.post('https://i3b304.p.ssafy.io/api/alarm/del',frm
+      )
+      .then(console.log("성공"))
+      .catch(console.log("실패"))
     },
 
     leave(){
@@ -55,7 +69,7 @@ export default {
       let nickname=this.user.nickname;
       console.log(nickname);
       formData.append('nickname',nickname);
-      axios.delete('http://localhost:8080/api/account/delete',{
+      axios.delete('https://i3b304.p.ssafy.io/api/account/delete',{
         data:formData,
         
       })
@@ -74,30 +88,6 @@ export default {
         }
       })
       .catch()
-    },
-    defaultDark() {
-      const Dark = this.$cookies.get('dark')
-      const HTML = document.querySelector('html')
-      const wrap = document.querySelector('.wrap')
-      const H1TAG = document.querySelectorAll('h1')
-
-      if (Dark === null) {
-        this.$cookies.set('dark', 'on')
-      }
-
-      if (Dark === 'off') {
-        HTML.classList.add('black')
-        wrap.classList.add('wrap-dark')
-        for (let i=0; i<H1TAG.length ; i++) {
-          H1TAG[i].classList.add('font-dark')
-        }
-      } else {
-        HTML.classList.remove('black')
-        wrap.classList.remove('wrap-dark')
-        for (let i=0; i<H1TAG.length ; i++) {
-          H1TAG[i].classList.remove('font-dark')
-        }
-      }
     },
   },
 }

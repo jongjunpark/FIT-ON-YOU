@@ -1,7 +1,7 @@
 <template>
   <div class='wrap'>
     <div class="wrap-container">
-      <p class='join-confirm-logo'>FIT ON U</p>
+      <p class='join-confirm-logo'>이용약관</p>
       <form action="" id="joinForm">
         <ul class="join_box">
           <li class="checkBox check01">
@@ -36,7 +36,7 @@
         </ul>
         <div class="join-confirm-btn-area">
           <div v-if="!(isCheck1&&isCheck2&&isCheck3)" class="join-confirm-agree-off join-confirm-btn">동의</div>
-          <div v-if="isCheck1&&isCheck2&&isCheck3" class="join-confirm-agree join-confirm-btn">동의</div>
+          <div v-if="isCheck1&&isCheck2&&isCheck3" class="join-confirm-agree join-confirm-btn" @click="socialjoin">동의</div>
           <div class="join-confirm-disagree join-confirm-btn">비동의</div>
         </div>
       </form>
@@ -45,8 +45,9 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState,mapGetters,mapMutations,mapActions} from 'vuex'
 import "../components/css/joinconfirm.css"
+import axios from 'axios'
 export default {
   name: 'JoinConfirm',
   data() {
@@ -65,6 +66,9 @@ export default {
     }
   },
   methods: {
+    ...mapGetters(['getUser']),
+    ...mapMutations(['setToken', 'setUser', 'setLoggedIn']),
+    ...mapActions(['AC_USER', 'sendUserInfo']),
     onBtn(num) {
       const CHECK1 = document.querySelector('.check-btn-1')
       const CHECK2 = document.querySelector('.check-btn-2')
@@ -163,6 +167,22 @@ export default {
           TEXTAREA[i].classList.remove('join-confirm-textarea-dark')
         }
       }
+    },
+    socialjoin(){
+      let ref=this;
+      let userData=this.getUser();
+      console.log(userData);
+      axios.post('https://i3b304.p.ssafy.io/api/account/social/1',userData)
+      .then((data)=>{
+        if(data.data.result.data=='success'){
+          ref.$cookies.set('auth-token', data.data.auth_token)
+          ref.setToken(data.data.auth_token)
+          ref.sendUserInfo();
+          ref.setLoggedIn(true)
+          ref.$router.push('/feed')
+        }
+      })
+      .catch()
     },
   }
 }

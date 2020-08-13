@@ -61,14 +61,14 @@ export default {
       }
     },
     findPassword(){
-      axios.get('http://localhost:8080/api/account/findPassword',{
+      axios.get('https://i3b304.p.ssafy.io/api/account/findPassword',{
         params:{
           email: this.email,
           pTime: this.birth
         }
       }).then(data => {
         console.log("성공")
-        console.dir(data)
+        console.log(data.data.certifNum)
         if (data.data.certifNum) {
           this.confirmPwd(data.data.certifNum)
           this.findUserPWd(data.data.userInfo)
