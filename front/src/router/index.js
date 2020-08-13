@@ -19,6 +19,7 @@ import FeedWrite from '../views/FeedWrite.vue'
 import OtherUser from '../views/OtherUser.vue'
 // import SocialJoin from '../views/SocialJoin.vue'
 import JoinConfirm from '../views/JoinConfirm.vue'
+import PageNotFound from '../views/PageNotFound.vue'
 
 Vue.use(VueRouter)
 
@@ -214,15 +215,19 @@ Vue.use(VueRouter)
       }   
      }
   },
-  // {
-  //   path: '/socialjoin',
-  //   name: 'SocialJoin',
-  //   component: SocialJoin,
-  // },
   {
     path: '/joinconfirm',
     name: 'JoinConfirm',
     component: JoinConfirm,
+  },
+  {
+    path: '*',
+    redirect: '/404'
+  },
+  {
+    path: '/404',
+    name: 'PageNotFound',
+    component: PageNotFound,
   }
     // beforeEnter(to, from, next) {
     //   if (!Vue.$cookies.isKey('auth-token')) {
