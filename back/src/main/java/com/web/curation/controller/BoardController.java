@@ -49,7 +49,6 @@ import com.web.curation.model.Likes;
 import com.web.curation.model.Search;
 import com.web.curation.model.Tag;
 import com.web.curation.model.User;
-import com.web.curation.model.UserDTO;
 import com.web.curation.service.user.BoardService;
 
 import io.swagger.annotations.ApiOperation;
