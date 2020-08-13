@@ -6,7 +6,7 @@
         <img v-show='!checked' @click="goHome" src="@/assets/images/my-logo2.png" alt="">
         <img v-show='checked' @click="goHome" src="@/assets/images/my-logo-dark2.png" alt="">
       </div>
-      <div class="nav-user" >
+      <div class="nav-user"  @click="readAlarm">
         <div @click='setUserBar' class="nav-user-img" v-show="isLoggedIn">
           <i class="fas fa-bars"></i>
         </div>
@@ -22,7 +22,7 @@
               </li>
               <li class="nav-user-icon user-bar-menu" @click="goAlarm">
                 <i class="user-bar-img fas fa-bell"></i>
-                <div class="ringring">new</div> 
+                <div v-show="isAlarm" class="ringring">new</div> 
               </li>
             </ul>
           </div>
@@ -72,6 +72,7 @@
 
 import "./assets/css/common.css";
 import "./assets/css/darkmode.scss";
+import axios from 'axios'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 // import axios from 'axios';
 
@@ -84,6 +85,7 @@ export default {
       checked: false,
       isDark: false,
       isAlarm: false,
+      myName: '',
     }
   },
   computed: {
@@ -344,8 +346,29 @@ export default {
       }
     },
     readAlarm() {
-      // axios 요청해서 true, false 반환
-      // if (data.data == true) { this.isAlarm = true } else { this.isAlarm = false }
+      if (this.$cookies.isKey('auth-nickname')) {
+        let nickdata = this.$cookies.get('auth-nickname')
+        let uri = nickdata;
+        let uri_enc = encodeURIComponent(uri);
+        let uri_dec = decodeURIComponent(uri_enc);
+        let res = uri_dec;
+        this.myName = res
+        axios.get('https://i3b304.p.ssafy.io/api/alarm/check',{
+          params:{
+          recevier: this.myName
+          }
+          })
+        .then((data) => {
+          console.log(data.data)
+          if (data.data.data == '1') {
+            this.isAlarm = true
+          }
+          else {
+            this.isAlarm = false
+          }
+        })
+        .catch()
+      }
     },
   }
 }
