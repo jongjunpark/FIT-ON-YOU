@@ -162,24 +162,7 @@ public class AccountController {
 		Optional<User> optUser = userDao.findUserByEmailAndBirth(email, time);
 		if (!optUser.isPresent()) {
 		} else {
-			Properties props = new Properties();
 			
-			String host="smtp.gmail.com";
-			String port="587";
-			String user="ouosssssssa@gmail.com";
-			String password="zzxx1122";
-			
-			props.put("mail.smtp.starttls.enable", "true");
-			props.put("mail.smtp.ssl.trust", host);
-			props.put("mail.smtp.auth", "true");
-			props.put("mail.smtp.host", host);
-			
-			if (port != null)
-			{
-				props.put("mail.smtp.port", port);
-				props.put("mail.smtp.socketFactory.port", port);
-				props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-			}
 			
 			UserDTO userDto = new UserDTO(optUser.get());
 

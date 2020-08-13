@@ -136,8 +136,12 @@ export default {
       
     },
     addHash() {
-      this.hashList.push(this.hashContent.slice(0,-1))
-      this.hashContent = ''
+      if (this.hashContent != ',') {
+        this.hashList.push(this.hashContent.slice(0,-1))
+        this.hashContent = ''
+      } else {
+        this.hashContent = ''
+      }
     },
     delHashItem(index) {
       this.hashList.splice(index, 1)

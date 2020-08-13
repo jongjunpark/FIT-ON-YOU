@@ -61,7 +61,7 @@ export default {
       }
     },
     findPassword(){
-      axios.get('https://i3b304.p.ssafy.io/api/account/findPassword',{
+      axios.get('http://localhost:8080/api/account/findPassword',{
         params:{
           email: this.email,
           pTime: this.birth
