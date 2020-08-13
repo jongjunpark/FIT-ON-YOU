@@ -326,24 +326,21 @@ public class BoardController {
 			articletag.setTagName(string);
 			articletagDao.save(articletag);
 		}
-		int idx = 0;
-		for (MultipartFile multipartFile : imgs) {
+		for (int i = 0; i < imgs.length; i++) {
 			ImageStore img = new ImageStore();
-			names[idx] = uuid.toString() + "_" + multipartFile.getOriginalFilename();
-			System.out.println(names[idx]);
+			names[i] = uuid.toString() + "_" + imgs[i].getOriginalFilename();
 			img.setArticleNo(articleNo);
-			File file = new File(path + names[idx]);
+			File file = new File(path + names[i]);
 			try {
-				multipartFile.transferTo(file);
+				imgs[i].transferTo(file);
 //	            String storePath="i3b304.p.ssafy.io/img/"+names[0];
-				String storePath = "../images/board/" + names[0];
+				String storePath = "../images/board/" + names[i];
 				img.setImageUrl(storePath);
-				System.out.println(storePath);
 				imageDao.save(img);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			idx++;
+			
 		}
 	}
 }
