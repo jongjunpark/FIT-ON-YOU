@@ -89,6 +89,7 @@
 
 .profile-follow-box .profile-follow {
   margin-bottom: 2vh ;
+  cursor: pointer;
 }
 
 .profile-follow-box .profile-follow-head{
@@ -262,6 +263,15 @@
   transition: all 0.3s ease;
   position: relative;
 }
+@media (max-width: 300px) {
+  .profile-user-btn .mylist-icon, 
+  .profile-user-btn .follower-icon, 
+  .profile-user-btn .following-icon, 
+  .profile-user-btn .bookmark-icon,
+  .profile-user-btn .curation-icon {
+    font-size: 3vh;
+  }
+}
 
 .profile-user-btn:hover .mylist-icon,
 .profile-user-btn:hover .follower-icon,
@@ -286,6 +296,11 @@
   padding: 0.4vh;
   border-radius: 50%;
   transition: all 0.3s ease;
+}
+@media (max-width: 300px) {
+  .profile-footer-area .follow-inner {
+    font-size: 0.5vh;
+  }
 }
 
 .profile-follow:hover {

@@ -4,8 +4,8 @@
       <div class="profile-nav">
         <div @click="goMyFeed" class="profile-nav-btn0 profile-nav-icon"><i class="far fa-file-image"></i></div>
         <div @click="goBookMark" class="profile-nav-btn1 profile-nav-icon"><i class="fas fa-bookmark"></i></div>
-        <div @click="goFollowing" class="profile-nav-btn2 profile-nav-icon"><i class="fas fa-user following"><i class="fas fa-arrow-right follow-inner"></i></i></div>
         <div @click="goFollower" class="profile-nav-btn3 profile-nav-icon"><i class="fas fa-user follower"><i class="fas fa-arrow-left follow-inner"></i></i></div>
+        <div @click="goFollowing" class="profile-nav-btn2 profile-nav-icon"><i class="fas fa-user following"><i class="fas fa-arrow-right follow-inner"></i></i></div>
         <div @click="goCuration" class="profile-nav-btn4 profile-nav-icon"><i class="fas fa-check curation"></i></div>
         <div @click="goBack" class="profile-nav-btn5 profile-nav-icon profile-nav-back"><i class="fas fa-reply"></i></div>
         <div class="profile-nav-select"></div>
