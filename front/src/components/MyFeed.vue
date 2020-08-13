@@ -49,10 +49,14 @@
 
 <script>
 import { mapState } from 'vuex'
+import axios from 'axios'
 export default {
   name: 'MyFeed',
-  mounted() {
-    this.defaultDark()
+  data(){
+    return{
+      myboards:[],
+
+    }
   },
   computed: {
     ...mapState(['flag'])
@@ -62,6 +66,23 @@ export default {
       this.defaultDark()
     }
   },
+  mounted(){
+    this.defaultDark()
+    let data = this.$cookies.get('auth-nickname');
+    let uri = data;
+    let uri_enc = encodeURIComponent(uri);
+    let uri_dec = decodeURIComponent(uri_enc);
+    let res = uri_dec;
+    axios.get('https://i3b304.p.ssafy.io/api/mypage/myboard',{
+      params:{
+        nickname:res,
+      }
+    })
+    .then((data)=>{
+      console.log(data,"myfeed");
+    })
+  },
+
   methods: {
     defaultDark() {
       const Dark = this.$cookies.get('dark')
