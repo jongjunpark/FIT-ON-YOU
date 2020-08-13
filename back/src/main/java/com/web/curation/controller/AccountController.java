@@ -162,24 +162,7 @@ public class AccountController {
 		Optional<User> optUser = userDao.findUserByEmailAndBirth(email, time);
 		if (!optUser.isPresent()) {
 		} else {
-			Properties props = new Properties();
 			
-			String host="smtp.gmail.com";
-			String port="587";
-			String user="ouosssssssa@gmail.com";
-			String password="zzxx1122";
-			
-			props.put("mail.smtp.starttls.enable", "true");
-			props.put("mail.smtp.ssl.trust", host);
-			props.put("mail.smtp.auth", "true");
-			props.put("mail.smtp.host", host);
-			
-			if (port != null)
-			{
-				props.put("mail.smtp.port", port);
-				props.put("mail.smtp.socketFactory.port", port);
-				props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-			}
 			
 			UserDTO userDto = new UserDTO(optUser.get());
 
@@ -194,7 +177,7 @@ public class AccountController {
 			text.append("인증번호를 다른사람이 보지 않게 주의해 주세요.\n");
 //			text.append("핏온유 인증 페이지로 이동하기");
 //			text.append("http://localhost:8081/");
-
+			
 			MimeMessage message = emailSender.createMimeMessage();
 			try {
 				System.out.println(4);
@@ -206,7 +189,7 @@ public class AccountController {
 				emailSender.send(message);
 				result.put("userInfo", userDto);
 				result.put("certifNum", certificationNum);
-
+				System.out.println(certificationNum);
 			} catch (Exception e) {
 				System.out.println(5);
 				e.printStackTrace();
