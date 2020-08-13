@@ -154,11 +154,17 @@ public class SearchController {
 
 		final BasicResponse result = new BasicResponse();
 
-		StringTokenizer st = new StringTokenizer(findContent);
+		StringTokenizer st = new StringTokenizer(findContent.trim());
 		List<String> list = new ArrayList<>();
 
 		while (st.hasMoreTokens()) {
-			String input = st.nextToken("#");
+			String tempinput = st.nextToken("#");
+			String input = tempinput.trim();
+
+			if (input == "" || input == " " || input == null) {
+				continue;
+			}
+
 			list.add(input);
 
 			Curation curation = new Curation();
@@ -167,7 +173,6 @@ public class SearchController {
 			curationDao.save(curation);
 		}
 		int size = list.size();
-		System.out.println(size);
 
 		List<Curation> curationList = curationDao.getCurationByUsername(username);
 		if (!curationList.isEmpty() && curationList.size() + list.size() >= 5) {
@@ -181,7 +186,6 @@ public class SearchController {
 		List<SearchResultDTO> resultList = new ArrayList<>();
 		for (Iterator<Search> iter = searchList.iterator(); iter.hasNext();) {
 			Search search = iter.next();
-			System.out.println(search.getArticleno());
 			Optional<Board> board = boardDao.selectArticleno(search.getArticleno());
 			List<ImageStore> imgList = imageDao.findImagestoreByArticleNoOrderByArticleNoDesc(search.getArticleno());
 			SearchResultDTO searchResultDto = new SearchResultDTO(board.get());
@@ -195,7 +199,7 @@ public class SearchController {
 
 		if (resultList.isEmpty()) {
 			result.data = "검색된 태그가 존재하지 않습니다";
-			result.object = null;
+			result.object = resultList;
 			result.status = true;
 		} else {
 			result.data = "success";
