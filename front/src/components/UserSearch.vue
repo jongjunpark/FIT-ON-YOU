@@ -105,6 +105,9 @@ export default {
   watch: {
     flag() {
       this.defaultDark()
+    },
+    userSearch() {
+      this.getUserSearch()
     }
   },
   methods: {
@@ -125,17 +128,20 @@ export default {
         wrap.classList.remove('wrap-dark')
       }
     },
-  mounted() {
-    this.defaultDark();
-    axios.get(`https://i3b304.p.ssafy.io/api/search/user`,{
+    getUserSearch() {
+      axios.get(`https://i3b304.p.ssafy.io/api/search/user`,{
       params: {
         username: this.userSearch
       },
-    }).then((data) => {
-      console.log(data, 2)
-    }).catch()
+      }).then((data) => {
+        console.log(data, 2)
+      }).catch()
+    }
   },
-  },
+  mounted() {
+    this.defaultDark();
+    this.getUserSearch();
+  }
 }
 </script>
 

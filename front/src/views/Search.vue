@@ -35,8 +35,8 @@
       <SearchModal v-if="showModal" @close="showModal= false"/>
      
     </div>
-    <HashSearch v-if="isHashResult"></HashSearch>
-    <UserSearch v-if="isUserResult"></UserSearch>
+    <UserSearch v-if="isUserResult"/>
+    <HashSearch v-if="isHashResult"/>
   </div>
 </template>
 
@@ -223,7 +223,7 @@ export default {
     this.defaultDark()
     axios.post("http://localhost:8080/api/search/").then((data)=>{
       this.articleList=data.data;
-    //  console.log(this.articleList)
+      console.log(this.articleList)
       this.setList();
     })
   }

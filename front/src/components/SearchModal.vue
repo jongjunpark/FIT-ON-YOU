@@ -73,6 +73,7 @@ export default {
   data() {
     return {
       username: '',
+      userprofileimg: '',
       time: '',
       content: '',
       longContent: '',
