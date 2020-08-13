@@ -11,19 +11,19 @@
           </div>
         </div>
         <div class="profile-follow-box">
-          <div class="profile-follow">
+          <div class="profile-follow" @click='goFollower'>
             <p class='profile-follow-head'>팔로워</p>
-            <p class='profile-follow-content'>{{followingCnt}}</p>
+            <p class='profile-follow-content'>{{ followedCnt }}</p>
           </div>
-          <div class="profile-follower">
+          <div class="profile-follow" @click='goFollowing'>
             <p class='profile-follow-head'>팔로잉</p>
-            <p class='profile-follow-content'>{{followedCnt}}</p>
+            <p class='profile-follow-content'>{{ followingCnt }}</p>
           </div>
         </div>
       </div>
       <div class="profile-edit-area">
-        <p class="other-nickname">{{nickname}}</p>
-        <p class="other-content">{{selfintro}}</p>
+        <p class="other-nickname">{{ nickname }}</p>
+        <p class="other-content">{{ selfintro }}</p>
       </div>
       <div class="profile-btn-area">     
         <div v-show="isFollwed" class="other-user-child" @click="followAdd">
@@ -37,15 +37,18 @@
         </div>
       </div>
       <div class="profile-footer-area">
-        <div class="profile-user-btn">
+        <div class="profile-user-btn" @click='goMyFeed'>
           <i class="far fa-file-image mylist-icon"></i>
         </div>
-        <div class="profile-user-btn">
-          <i class="fas fa-user follower-icon"><i class="fas fa-arrow-right follow-inner"></i></i>
-        </div>
-        <div class="profile-user-btn">
+        <div class="profile-user-btn" @click='goFollower'>
           <i class="fas fa-user following-icon"><i class="fas fa-arrow-left follow-inner"></i></i>
         </div>  
+        <div class="profile-user-btn" @click='goFollowing'>
+          <i class="fas fa-user follower-icon"><i class="fas fa-arrow-right follow-inner"></i></i>
+        </div>
+        <div class="profile-user-btn" @click='goCuration'>
+          <i class="fas fa-check curation-icon"></i>
+        </div>   
       </div>
     </div>
     
@@ -55,7 +58,7 @@
 <script>
 import "../components/css/profileedit.css"
 import "../components/css/otheruser.css"
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import axios from 'axios'
 
 export default {
@@ -84,7 +87,7 @@ export default {
     this.defaultDark()
     let ref=this;
     let uNick = this.$route.params.nickname;
-    this.nickname = uNick.substring(1,)
+    this.nickname = uNick
     axios.get('https://i3b304.p.ssafy.io/api/mypage/otheruser',{
       params:{
       nickname: uNick,
@@ -125,6 +128,7 @@ export default {
 
   },
   methods: {
+    ...mapMutations(['setMyFeed','setBookMark','setFollower', 'setFollowing', 'setCuration']),
     defaultDark() {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
@@ -157,6 +161,26 @@ export default {
         }
       }
     },
+    goMyFeed() {
+      this.setMyFeed();
+      this.$router.push('/profileinform')
+    },
+    goBookMark() {
+      this.setBookMark();
+      this.$router.push('/profileinform')
+    },
+    goFollowing() {
+      this.setFollowing();
+      this.$router.push('/profileinform')
+    },
+    goFollower() {
+      this.setFollower();
+      this.$router.push('/profileinform')
+    },
+    goCuration() {
+      this.setCuration();
+      this.$router.push('/profileinform')
+    },
     goChatting() {
       axios.get('https://i3b304.p.ssafy.io/api/chat/existroom',{
       params:{
@@ -164,7 +188,7 @@ export default {
         seconduser: this.nick
       }
       }).then((data)=>{
-        this.$router.push(`/directmessage/:${data.data.object.roomname}/:${this.nickname}`)
+        this.$router.push(`/directmessage/${data.data.object.roomname}/${this.nickname}`)
       })
         .catch(
         )
@@ -179,6 +203,7 @@ export default {
         this.isFollwed = false
         console.log(data.data.object.followno)
         this.followNo = data.data.object.followno
+        this.followedCnt = this.followedCnt + 1
       })
         .catch(
         )
@@ -192,6 +217,7 @@ export default {
       }).then((data) => {
         console.log(data.data)
         this.isFollwed = true
+        this.followedCnt = this.followedCnt - 1
       })
         .catch(
         )

@@ -6,7 +6,7 @@
         <div class="search-more-box">
           <header class="search-more-user-data">
             <div class="search-more-user-profile">
-              <img src="userProfile">
+              <img :src="profile">
             </div>
             <div class="search-more-article-head">
               <p class='search-more-username'>{{ username }}</p>
@@ -48,6 +48,7 @@ import { mapState } from 'vuex'
 import VueSlickCarousel from 'vue-slick-carousel'
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
+import axios from 'axios'
 
 function timeForToday(value) {
         const today = new Date();
@@ -79,6 +80,7 @@ export default {
       longContent: '',
       imgs: [],
       img: '',
+      profile:'',
       tags: [],
       settings: {
         "dots": true,
@@ -105,25 +107,28 @@ export default {
   },
   mounted() {
     this.defaultDark()
-    if (this.articledata.articleUser) {
-      this.username = this.articledata.articleUser
-    } else {
-      this.username = this.articledata.influeUser
-    }
-    this.time = timeForToday(this.articledata.articleDate)
-    if (this.articledata.content.length>60) {
-      for (let i=0; i<60; i++) {
-        this.longContent += this.articledata.content[i]
+    let articleNo = this.articledata
+    axios.post(`https://i3b304.p.ssafy.io/api/search/${articleNo}`).then((response)=>{
+      console.log(response.data)
+      this.username = response.data[0].articles.articleUser
+      this.time = timeForToday(response.data[0].articles.articleDate)
+      if (response.data[0].articles.content.length>60) {
+        for (let i=0; i<60; i++) {
+          this.longContent += response.data[0].articles.content[i]
+        }
+        this.longContent += ' ....'
+      } else {
+        this.content = response.data[0].articles.content
       }
-      this.longContent += ' ....'
-    } else {
-      this.content = this.articledata.content
-    }
-    this.imgs = this.articleimgs
-    this.tags = this.articletags
+      this.imgs = response.data[0].imgs
+      this.tags = response.data[0].tags
+      this.profile = response.data[0].profile
+      });
+
+    
   },
   computed: {
-    ...mapState(['flag','articledata','articleimgs','articletags'])
+    ...mapState(['flag','articledata'])
   },
   methods: {
     checkCommentInput() {

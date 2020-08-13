@@ -13,11 +13,14 @@ const state = {
   authToken: '',
   isLoggedIn: false,
   flag: false,
-  articledata: [],
-  articleimgs: [],
-  articletags: [],
+  articledata: '',
   hashSearchList: '',
   userSearch: '',
+  isMyFeed: false,
+  isBookMark: false,
+  isFollowing: false,
+  isFollower: false,
+  isCuration: false,
 }
 
 Vue.use(Vuex)

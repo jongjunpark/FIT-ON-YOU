@@ -28,5 +28,30 @@ public class Search {
 	
 	@ApiModelProperty(required = true)
 	int articleno;
+
+	public int getTagno() {
+		return tagno;
+	}
+
+	public void setTagno(int tagno) {
+		this.tagno = tagno;
+	}
+
+	public String getTagname() {
+		return tagname;
+	}
+
+	public void setTagname(String tagname) {
+		this.tagname = tagname;
+	}
+
+	public int getArticleno() {
+		return articleno;
+	}
+
+	public void setArticleno(int articleno) {
+		this.articleno = articleno;
+	}
+	
 	
 }

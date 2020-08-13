@@ -47,9 +47,7 @@ public class AlarmController {
 		Map<String,Object> resultMap= new HashMap<>();
 		
 		List<Alarm> list=alarmDao.findByRecevierAndIsReadOrderByAlramNoDesc(nickname);
-		for(Alarm a : list) {
-			a.getUser().setPassword("");
-		}
+	
 		int cnt=list.size();
 		if(cnt!=0) {
 			resultMap.put("result",1);
@@ -82,6 +80,19 @@ public class AlarmController {
 		
 		result.status=true;
 		result.data="success";
+		
+		return result;
+	}
+	@GetMapping("/check")
+	public Object checkAlarm(@RequestParam String recevier) {
+		final BasicResponse result = new BasicResponse();
+		result.status=true;
+		if(alarmDao.checkAlarm(recevier)>0) {		
+			result.data="1"; 
+		}
+		else {		
+			result.data="0";
+		}
 		
 		return result;
 	}

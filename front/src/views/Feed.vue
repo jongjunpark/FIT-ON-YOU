@@ -7,13 +7,16 @@
       <div v-show="isInfluNav" class="influ-nav-box">
         <div class="influ-nav">
           <VueSlickCarousel v-bind="settings">
-            <div v-for="influ in influencer" :key="influ.nickname">
-              <div class="influ-box">
-                <div class="influ-icon">
-                  <img :src="influ.profile_img">
-                </div>
-              </div>
-            </div>
+            <div class='feed-influ-carousel1'></div>
+            <div class='feed-influ-carousel2'></div>
+            <div class='feed-influ-carousel3'></div>
+            <div class='feed-influ-carousel4'></div>
+            <div class='feed-influ-carousel5'></div>
+            <div class='feed-influ-carousel6'></div>
+            <div class='feed-influ-carousel7'></div>
+            <div class='feed-influ-carousel8'></div>
+            <div class='feed-influ-carousel9'></div>
+            <div class='feed-influ-carousel10'></div>
           </VueSlickCarousel>
         </div>
       </div>
@@ -29,18 +32,23 @@
           </div>
           <div class="feed-article-head">
             <p class='feed-username'>{{feed.articleUser}}</p>
-            <p class='feed-article-date'>{{feed.articleDate}}</p>
+            <p class='feed-article-date'>{{feed.articleDate}}</p>         
           </div>
         </header>
         <section class="feed-content">
-          <VueSlickCarousel v-bind="settings2">
+          <VueSlickCarousel v-bind="settings2" v-if="feed.images[1]">
             <article class="feed-content-img" v-for="imgs in feed.images" :key="imgs.src">
               <img :src="imgs.src">
             </article>
           </VueSlickCarousel>
+          <div v-else>
+            <article v-for="image in feed.images" :key="image.src" class="feed-content-img">
+              <img :src="image.src">
+            </article>
+          </div>
           <div class="feed-btn-box">
             <div class='feed-btn-left'>
-              
+             
               <i :class="'fas fa-heart '+likeicon[likeStates[index]]" 
               @click="clickLike(feed.articleNo,likeStates[index],index,$event)"></i>
               <i :id="'show-modal'+ feed.articleNo" @click="clickComment(feed.articleNo,feed.articleUser)" class="fas fa-comment-alt"></i>
@@ -161,13 +169,20 @@ export default {
   
     clickLike(articleNo,flag,index,e) {
       let ref=this
+
+      let data = this.$cookies.get('auth-nickname');
+      let uri = data;
+      let uri_enc = encodeURIComponent(uri);
+      let uri_dec = decodeURIComponent(uri_enc);
+      let res = uri_dec;
+
       if(flag==0){
         this.likeStates[index]=1
         e.target.classList.add('heart')
         this.modal = true
         axios.post('https://i3b304.p.ssafy.io/api/board/likes',{
             articleNo:articleNo,
-            nickname:this.user.nickname
+            nickname:res
           })
           .then(console.log("좋아요"))
           .catch()
@@ -178,7 +193,7 @@ export default {
         axios.delete('https://i3b304.p.ssafy.io/api/board/likes',{
           data:{
             articleNo:articleNo,
-            nickname:this.user.nickname
+            nickname:res
           }
         })
         .then(console.log(ref.likeStates[index],"좋아요 취소"))
@@ -193,12 +208,19 @@ export default {
     },
     clickBookMark(articleNo,flag,index,e) {
       let ref=this
+
+      let data = this.$cookies.get('auth-nickname');
+      let uri = data;
+      let uri_enc = encodeURIComponent(uri);
+      let uri_dec = decodeURIComponent(uri_enc);
+      let res = uri_dec;
+
       if(flag==0){
         this.bookmarkStates[index]=1
         e.target.classList.add('mark')
         axios.post('https://i3b304.p.ssafy.io/api/board/bookmark',{
             bookedArticle:articleNo,
-            bookUser:this.user.nickname
+            bookUser:res
           })
           .then(console.log("북마크 등록"))
           .catch()
@@ -209,7 +231,7 @@ export default {
         axios.delete('https://i3b304.p.ssafy.io/api/board/bookmark',{
           data:{
             bookedArticle:articleNo,
-            bookUser:this.user.nickname
+            bookUser:res
           }
         })
         .then(console.log(ref.bookmarkStates[index],"북마크 취소"))
@@ -332,7 +354,7 @@ export default {
 
             $state.loaded();
             ref.limit+=1;
-            console.log(ref.limit,123123123)
+            console.log(ref.limit)
             if(ref.mainfeed.length/10==0){
               $state.loaded();
             }
@@ -356,8 +378,7 @@ export default {
     let uri_enc = encodeURIComponent(uri);
     let uri_dec = decodeURIComponent(uri_enc);
     let res = uri_dec;
-    
-    
+
     const formData = new FormData();
     
     formData.append('nickname',res);
@@ -426,9 +447,24 @@ export default {
     });
     axios.post("https://i3b304.p.ssafy.io/api/board/influencer").then((data)=>{
         this.influencer=data.data;
-        console.log(this.influencer)
-      });
 
+        for (let i=0; i<data.data.length; i++) {  
+          const CAROUSELL = document.querySelector(`.feed-influ-carousel${i+1}`)
+          const INFLUBOX = document.createElement('div')
+          const INFLUICON = document.createElement('div')
+          const INFLUIMG = document.createElement('img')
+          INFLUBOX.classList.add('influ-box')
+          INFLUICON.classList.add('influ-icon')
+          INFLUIMG.setAttribute("src", data.data[i].profile_img)
+  
+          INFLUICON.appendChild(INFLUIMG)
+          INFLUBOX.appendChild(INFLUICON)
+          CAROUSELL.appendChild(INFLUBOX)
+        }
+
+        console.log(this.influencer,'influ')
+      });
+    console.log(this.mainfeed, '메인피드')
     console.log(this.likeStates,'좋아요리스트');
     console.log(this.bookmarkStates,'북마크리스트');
   }
@@ -437,7 +473,7 @@ export default {
 }
 
 </script>
-<style scoped>
+<style>
 @media (min-width: 1200px) {
   .wrap {
   max-width: 440px !important;
@@ -481,7 +517,7 @@ export default {
 } */
 .open-influ-nav {
   position: fixed;
-  top: 60px;
+  top: 8vh;
   left: 50%;
   transform: translate(-50%, 0);
   width: 50px;

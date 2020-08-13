@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,11 +13,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.web.curation.dao.ArticletagDao;
 import com.web.curation.dao.BoardDao;
+import com.web.curation.dao.BoardTwoDao;
 import com.web.curation.dao.FollowDao;
 import com.web.curation.dao.ImageDao;
 import com.web.curation.dao.UserDao;
+import com.web.curation.model.Articletag;
 import com.web.curation.model.BasicResponse;
+import com.web.curation.model.BoardDTO;
 import com.web.curation.model.ImageStore;
 import com.web.curation.model.User;
 
@@ -44,6 +49,12 @@ public class MyPageController {
 	private FollowDao followDao;
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private BoardTwoDao boardTwoDao;
+	
+	@Autowired
+	private ArticletagDao articletagDao;
 	
 
 	@ApiOperation(value="마이페이지 누를 시 팔로우 숫자")
@@ -142,4 +153,29 @@ public class MyPageController {
 		
 		return resultMap;
 	}
+	
+	
+	@GetMapping("/boardone")
+	public Object getBoard(@RequestParam int articleNo , @RequestParam String nickname) {
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		final BasicResponse result = new BasicResponse();
+		
+		BoardDTO board = boardTwoDao.getBoard(articleNo, nickname);
+		List<Articletag> tags = articletagDao.findArticletagByArticleNoOrderByArticleNo(articleNo);
+		List<ImageStore> images= imageDao.findImagestoreByArticleNoOrderByArticleNoDesc(articleNo);
+		String profImg = userDao.findProfileImgByNickname(board.getArticleUser());
+		
+		result.status=true;
+		result.data="success";
+		
+		resultMap.put("result",result);
+		resultMap.put("board",board);
+		resultMap.put("tags",tags);
+		resultMap.put("images",images);
+		resultMap.put("profileImg",profImg);
+		
+		return resultMap;
+	}
+
 }

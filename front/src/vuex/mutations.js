@@ -42,12 +42,6 @@ export default {
   setArticledata(state, data) {
     state.articledata = data;
   },
-  setArticleimgs(state, data) {
-    state.articleimgs = data;
-  },
-  setArticletags(state, data) {
-    state.articletags = data;
-  },
   setHashSearch(state, data) {
     let hashString = ''
     for (let i=0; i<data.length; i++) {
@@ -59,5 +53,30 @@ export default {
     let data_enc = encodeURIComponent(data);
     let data_dec = decodeURIComponent(data_enc);
     state.userSearch = data_dec
-  }
+  },
+  setMyFeed(state) {
+    state.isMyFeed = true; state.isBookMark = false;
+    state.isFollower = false; state.isFollowing = false;
+    state.isCuration = false;
+  },
+  setBookMark(state) {
+    state.isMyFeed = false; state.isBookMark = true;
+    state.isFollower = false; state.isFollowing = false;
+    state.isCuration = false;
+  },
+  setFollower(state) {
+    state.isMyFeed = false; state.isBookMark = false;
+    state.isFollower = true; state.isFollowing = false;
+    state.isCuration = false;
+  },
+  setFollowing(state) {
+    state.isMyFeed = false; state.isBookMark = false;
+    state.isFollower = false; state.isFollowing = true;
+    state.isCuration = false;
+  },
+  setCuration(state) {
+    state.isMyFeed = false; state.isBookMark = false;
+    state.isFollower = false; state.isFollowing = false;
+    state.isCuration = true;
+  },
 }

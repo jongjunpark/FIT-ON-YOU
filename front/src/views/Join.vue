@@ -447,11 +447,6 @@ export default {
       } else {
         this.profileImg = null
       }
-      Swal.fire(
-        '환영해요!',
-        '자신만의 패션을 뽐내보세요!',
-        'success'
-      )
       console.log("email=========>"+this.input.email);
       console.log("paa=========>"+this.input);
       const test1 = this.input.email
@@ -504,13 +499,17 @@ export default {
           console.log("1");
 
 
-          this.$router.go('/feed')
+          setTimeout(() => {
+            this.$router.go('/feed')
+          }, 1000);
           
         })
         .catch(function(){
           console.log("2");
         });
-      } else {this.$router.go('/feed')}
+      } else {setTimeout(() => {
+            this.$router.go('/feed')
+          }, 1000);}
 
     },
     notTab() {
