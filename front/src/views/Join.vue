@@ -499,13 +499,17 @@ export default {
           console.log("1");
 
 
-          this.$router.go('/feed')
+          setTimeout(() => {
+            this.$router.go('/feed')
+          }, 1000);
           
         })
         .catch(function(){
           console.log("2");
         });
-      } else {this.$router.go('/feed')}
+      } else {setTimeout(() => {
+            this.$router.go('/feed')
+          }, 1000);}
 
     },
     notTab() {
