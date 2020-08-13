@@ -31,6 +31,7 @@ import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Board;
 import com.web.curation.model.Curation;
 import com.web.curation.model.ImageStore;
+import com.web.curation.model.Influencer;
 import com.web.curation.model.ResponseData;
 import com.web.curation.model.Search;
 import com.web.curation.model.SearchResultDTO;
@@ -59,6 +60,8 @@ public class SearchController {
 	ImageDao imageDao;
 	@Autowired
 	SearchService searchService;
+	@Autowired
+	InfluencerDao influDao;
 
 	@PostMapping("/")
 	@ApiOperation(value = "페이지 업로드")
@@ -87,6 +90,39 @@ public class SearchController {
 
 			result.add(data);
 		}
+
+		return new ResponseEntity<List<ResponseData>>(result, HttpStatus.OK);
+
+	}
+
+	@PostMapping("/{articleNo}")
+	public Object getArticle(@RequestParam int articleNo) {
+		Board board = boardDao.findBoardByArticleNo(articleNo);
+		List<ResponseData> result = new ArrayList<ResponseData>();
+		ResponseData data = new ResponseData();
+		data.setArticles(new Board());
+		data.setImgs(new ArrayList<>());
+		data.setTags(new ArrayList<>());
+		try {
+			List<ImageStore> imgs = imageDao.findImagestoreByArticleNoOrderByArticleNoDesc(board.getArticleNo());
+			data.setImgs(imgs);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			List<Articletag> tags = articleTagDao.findArticletagByArticleNoOrderByArticleNo(board.getArticleNo());
+			data.setTags(tags);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			String profile= userDao.findProfileImgByNickname(board.getArticleUser());
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		data.setArticles(board);
+
+		result.add(data);
 
 		return new ResponseEntity<List<ResponseData>>(result, HttpStatus.OK);
 

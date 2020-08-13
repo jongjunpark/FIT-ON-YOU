@@ -7,10 +7,10 @@
         <img v-show='checked' @click="goHome" src="@/assets/images/my-logo-dark2.png" alt="">
       </div>
       <div class="nav-user" >
-        <div @click='setUserBar' class="nav-user-img">
+        <div @click='setUserBar' class="nav-user-img" v-show="isLoggedIn">
           <i class="fas fa-bars"></i>
         </div>
-        <transition name='slide-user-bar'>
+        <transition name='slide-user-bar' v-show="isLoggedIn">
           <div v-show="isUserIcon" class="user-bar">
             <ul class='user-bar-list'>
               <li class="nav-user-icon user-bar-menu"  @click="goProfile">
@@ -22,6 +22,7 @@
               </li>
               <li class="nav-user-icon user-bar-menu" @click="goAlarm">
                 <i class="user-bar-img fas fa-bell"></i>
+                <div class="ringring">new</div> 
               </li>
             </ul>
           </div>
@@ -31,7 +32,7 @@
     
     <router-view/>
     
-    <div v-if='isLoggedIn' id="nav2" >
+    <div v-show='isLoggedIn' id="nav2" >
       <div class="bottom-nav">
         <div class='menu-bar-list'>
           <div class="menu-bar-select"></div>
@@ -82,6 +83,7 @@ export default {
       isUserIcon: false,
       checked: false,
       isDark: false,
+      isAlarm: false,
     }
   },
   computed: {
@@ -340,7 +342,11 @@ export default {
         }
         this.checked = false
       }
-    }, 
+    },
+    readAlarm() {
+      // axios 요청해서 true, false 반환
+      // if (data.data == true) { this.isAlarm = true } else { this.isAlarm = false }
+    },
   }
 }
 </script>

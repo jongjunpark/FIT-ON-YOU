@@ -13,17 +13,17 @@
         <div class="profile-follow-box">
           <div class="profile-follow">
             <p class='profile-follow-head'>팔로워</p>
-            <p class='profile-follow-content'>{{followingCnt}}</p>
+            <p class='profile-follow-content'>{{ followedCnt }}</p>
           </div>
           <div class="profile-follower">
             <p class='profile-follow-head'>팔로잉</p>
-            <p class='profile-follow-content'>{{followedCnt}}</p>
+            <p class='profile-follow-content'>{{ followingCnt }}</p>
           </div>
         </div>
       </div>
       <div class="profile-edit-area">
-        <p class="other-nickname">{{nickname}}</p>
-        <p class="other-content">{{selfintro}}</p>
+        <p class="other-nickname">{{ nickname }}</p>
+        <p class="other-content">{{ selfintro }}</p>
       </div>
       <div class="profile-btn-area">     
         <div v-show="isFollwed" class="other-user-child" @click="followAdd">
@@ -84,7 +84,7 @@ export default {
     this.defaultDark()
     let ref=this;
     let uNick = this.$route.params.nickname;
-    this.nickname = uNick.substring(1,)
+    this.nickname = uNick
     axios.get('https://i3b304.p.ssafy.io/api/mypage/otheruser',{
       params:{
       nickname: uNick,
@@ -164,7 +164,7 @@ export default {
         seconduser: this.nick
       }
       }).then((data)=>{
-        this.$router.push(`/directmessage/:${data.data.object.roomname}/:${this.nickname}`)
+        this.$router.push(`/directmessage/${data.data.object.roomname}/${this.nickname}`)
       })
         .catch(
         )
@@ -179,6 +179,7 @@ export default {
         this.isFollwed = false
         console.log(data.data.object.followno)
         this.followNo = data.data.object.followno
+        this.followedCnt = this.followedCnt + 1
       })
         .catch(
         )
@@ -192,6 +193,7 @@ export default {
       }).then((data) => {
         console.log(data.data)
         this.isFollwed = true
+        this.followedCnt = this.followedCnt - 1
       })
         .catch(
         )

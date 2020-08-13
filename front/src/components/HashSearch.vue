@@ -104,6 +104,7 @@ export default {
         username: this.loginUserName,
       },
       }).then((data) => {
+        console.log(data)
         console.log(data.object)
       }).catch()
     }

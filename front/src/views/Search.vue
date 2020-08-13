@@ -28,7 +28,7 @@
 
       <div class="search-box" v-for="(feed,index) in feedList" :key="`feed-${index}`">
         <div class="search-inner-box" v-for="article in feedList[index]" :key="article.articles.articleNo">
-          <div @click="onModal(article.articles, article.imgs, article.tags)" class="search-inner-btn">자세히</div>
+          <div @click="onModal(article.articles)" class="search-inner-btn">자세히</div>
           <img v-if='article.imgs[0]' :src="article.imgs[0].imageUrl" :id="index">
         </div>
       </div>
@@ -51,7 +51,7 @@ import axios from 'axios'
 export default {
   name: 'Search',
   computed: {
-    ...mapState(['flag', 'articledata', 'articleimgs', 'articletags'])
+    ...mapState(['flag', 'articledata'])
   },
   components: {
     HashSearch,
@@ -91,7 +91,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setArticledata', 'setArticleimgs', 'setArticletags', 'setHashSearch', 'setUserSearch']),
+    ...mapMutations(['setArticledata', 'setHashSearch', 'setUserSearch']),
     goSearch() {
         const selectBar = document.querySelector('.menu-bar-select')
         const newsFeed = document.querySelector('.fa-newspaper')
@@ -212,10 +212,12 @@ export default {
         this.tempList = []
       }
     },
-    onModal(data, imgs, tags) {
-      this.setArticledata(data);
-      this.setArticleimgs(imgs);
-      this.setArticletags(tags);
+    onModal(data) {
+      let articleNo = data.articleNo;
+      axios.post(`https://i3b304.p.ssafy.io/${articleNo}`).then((response)=>{
+        console.log(response);
+        this.setArticledata=response;
+      })
       this.showModal = true
     },
     setHashList() {

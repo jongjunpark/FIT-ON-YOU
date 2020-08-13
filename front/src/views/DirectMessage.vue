@@ -182,8 +182,8 @@ export default {
     },
   },
   created(){
-    this.roomname = this.$route.params.roomname.substring(1,);
-    this.othername = this.$route.params.othername.substring(1,);
+    this.roomname = this.$route.params.roomname
+    this.othername = this.$route.params.othername
     console.log(this.roomname)
     console.log(this.othername)
     this.fetchMessage();

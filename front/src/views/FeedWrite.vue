@@ -207,7 +207,7 @@ export default {
         } else {
           this.feedImg.push(URL.createObjectURL(photoFile.files[i]))
           this.photo.push(photoFile.files[i]);
-
+          console.log(this.photo, 'upload')
         }
       }
     },
@@ -228,6 +228,8 @@ export default {
     delFeedImg(num) {
       let idx = num-1
       this.feedImg.splice(idx, 1)
+      this.photo.splice(idx, 1)
+      console.log(this.photo, 'delete')
     },
     addWriteHash() {
       this.writeHashList.push(this.writeHashContent.slice(0,-1))

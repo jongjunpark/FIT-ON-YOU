@@ -198,6 +198,7 @@ span {
   margin-bottom: 2vh;
   cursor: pointer;
   color: white;
+  position: relative;
 }
 
 .user-bar {
@@ -619,4 +620,19 @@ i {
 	100% {
     opacity: 1;  
   }
+}
+
+.ringring {
+  color: white;
+  position: absolute;
+  border-radius: 2vh;
+  background-color: #EB0056;
+  width: 3.3vh;
+  height: 2.3vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  right: 0;
+  font-size: 1.5vh;
 }
