@@ -80,8 +80,8 @@ public class CommentController {
 		comment.setWriter(writer);
 		comment.setContent(content);
 		
-		Comment rescmt = new Comment();
-		rescmt=commentDao.save(comment);
+		
+		Comment rescmt=commentDao.save(comment);
 		if(rescmt==null) {
 			result.data="fail";
 			
@@ -103,13 +103,15 @@ public class CommentController {
 			}
 			resultMap.put("rescmt",rescmt);
 		}
+		
+		System.out.println(rescmt.getCreateAt());
 		result.status=true;
 		resultMap.put("result",result);
 		
 		return resultMap;
 	}
 	
-	@DeleteMapping
+	@PostMapping("/del")
 	public Object delComment(@RequestParam int commentNo) {
 		final BasicResponse result = new BasicResponse();
 		

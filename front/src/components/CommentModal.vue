@@ -17,9 +17,11 @@
               <div class="comment-article">
                 <div class="comment-article-head">
                   <div class="comment-username comment-text">{{comment.writer}}</div>
-                  <div class="comment-update-time comment-text">10시간전</div>
+                  <div class="comment-update-time comment-text">{{timeCal(comment.createAt)}}</div>
                 </div>
-                <div class="comment-content comment-text">{{comment.content}}</div>
+                <div class="comment-content comment-text">{{comment.content}}
+                  <i v-if="comment.user.nickname=nickname"
+                    @click="deleteComment(comment.commentNo,index)"></i></div>
               </div>
             </div>
           </div>
@@ -39,6 +41,7 @@
 <script>
 import { mapState } from 'vuex'
 import axios from 'axios'
+import time from '../utils/timecal.js'
 
 export default {
   name: 'CommentModal',
@@ -51,10 +54,19 @@ export default {
       comment_content: '',
       commentList: [],
       profileList:[],
+      nickname:'',
+
     }
   },
   mounted(){
     let ref=this;
+
+    let data = this.$cookies.get('auth-nickname');
+    let uri = data;
+    let uri_enc = encodeURIComponent(uri);
+    let uri_dec = decodeURIComponent(uri_enc);
+    this.nickname = uri_dec;
+
     axios.get('https://i3b304.p.ssafy.io/api/comment',{
       params:{
         articleNo: this.modalArticleNo,
@@ -75,6 +87,9 @@ export default {
    
   },
   methods: {
+    timeCal(val){
+      return time.timeForToday(val);
+    },
    
     checkCommentInput() {
       const INPUTBTN = document.querySelector('.fa-check-circle')
@@ -99,6 +114,7 @@ export default {
       frm.append("content", this.comment_content);
       frm.append("articleUser",this.modalArticleUser);
       console.log(this.modalArticleNo);
+      let today=new Date();
 
       axios.post('https://i3b304.p.ssafy.io/api/comment',frm
       )
@@ -110,7 +126,8 @@ export default {
           content:data.data.rescmt.content,
           user:{
             profile_img:ref.user.profile_img,
-          }
+          },
+          createAt:today,
         }
         ref.commentList.push(tmp);
         ref.comment_content='';
@@ -119,6 +136,20 @@ export default {
       .catch(()=>{
         console.log("fail");
       })
+    },
+
+    deleteComment(commentNo,index){
+      
+      let frm=new FormData();
+      frm.append('commentNo',commentNo);
+      axios.post('https://i3b304.p.ssafy.io/api/comment/del',frm)
+      .then(()=>{
+        this.commentList.splice(index,1);
+        this.profileList.splice(index,1);
+
+      })
+      .catch()
+
     },
     
   }
