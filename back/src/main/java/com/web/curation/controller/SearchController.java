@@ -117,6 +117,8 @@ public class SearchController {
 		}
 		try {
 			String profile= userDao.findProfileImgByNickname(board.getArticleUser());
+			data.setProfile(profile);
+
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
