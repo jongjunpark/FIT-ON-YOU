@@ -96,7 +96,7 @@ public class SearchController {
 	}
 
 	@PostMapping("/{articleNo}")
-	public Object getArticle(@RequestParam int articleNo) {
+	public Object getArticle(@PathVariable int articleNo) {
 		Board board = boardDao.findBoardByArticleNo(articleNo);
 		List<ResponseData> result = new ArrayList<ResponseData>();
 		ResponseData data = new ResponseData();
@@ -117,6 +117,11 @@ public class SearchController {
 		}
 		try {
 			String profile= userDao.findProfileImgByNickname(board.getArticleUser());
+			if(profile == null) {
+				Influencer temp = influDao.findInfluencerByNickname(board.getInflueUser());
+				board.setArticleUser(board.getArticleUser());
+				profile=temp.getProfile_img();
+			}
 			data.setProfile(profile);
 
 		}catch(Exception e) {
