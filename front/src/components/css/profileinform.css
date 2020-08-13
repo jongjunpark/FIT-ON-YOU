@@ -16,7 +16,7 @@
   background-color: #5AAEFF;
   border-radius: 0.8vh;
   height: 5px;
-  width: 20%;
+  width: 17%;
   transition: all 0.5s;
 }
 
@@ -41,7 +41,7 @@
 
 .profile-nav .profile-nav-icon {
   /* margin-right: 1%; */
-  width: 20%;
+  width: 17%;
   height: 6vh;
   display: flex;
   justify-content: center;
@@ -67,7 +67,8 @@
 .profile-nav .profile-nav-btn0:hover ~ .go-myfeed-menu,
 .profile-nav .profile-nav-btn1:hover ~ .go-bookmark-menu,
 .profile-nav .profile-nav-btn2:hover ~ .go-following-menu,
-.profile-nav .profile-nav-btn3:hover ~ .go-follower-menu {
+.profile-nav .profile-nav-btn3:hover ~ .go-follower-menu,
+.profile-nav .profile-nav-btn4:hover ~ .go-curation-menu {
   transform: translateY(5px)
 }
 
@@ -124,15 +125,19 @@
 }
 
 .go-bookmark-menu {
-  left: 22.3% !important;
+  left: 18% !important;
 }
 
 .go-following-menu {
-  left: 44.6% !important;
+  left: 36% !important;
 }
 
 .go-follower-menu {
-  left: 66.9% !important;
+  left: 54% !important;
+}
+
+.go-curation-menu {
+  left: 72% !important;
 }
 
 /* .test-content-box {

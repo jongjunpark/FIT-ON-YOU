@@ -16,6 +16,11 @@ const state = {
   articledata: [],
   hashSearchList: '',
   userSearch: '',
+  isMyFeed: false,
+  isBookMark: false,
+  isFollowing: false,
+  isFollower: false,
+  isCuration: false,
 }
 
 Vue.use(Vuex)

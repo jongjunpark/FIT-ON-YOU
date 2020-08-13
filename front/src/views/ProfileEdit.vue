@@ -53,18 +53,21 @@
         </div>
       </div>
       <div class="profile-footer-area" v-show="isChange2 && isChange">
-        <div class="profile-user-btn">
+        <div class="profile-user-btn" @click='goMyFeed'>
           <i class="far fa-file-image mylist-icon"></i>
         </div>
-        <div class="profile-user-btn">
+        <div class="profile-user-btn" @click='goBookMark'>
           <i class="fas fa-bookmark bookmark-icon"></i>
         </div>
-        <div class="profile-user-btn">
+        <div class="profile-user-btn" @click='goFollowing'>
           <i class="fas fa-user follower-icon"><i class="fas fa-arrow-right follow-inner"></i></i>
         </div>
-        <div class="profile-user-btn">
+        <div class="profile-user-btn" @click='goFollower'>
           <i class="fas fa-user following-icon"><i class="fas fa-arrow-left follow-inner"></i></i>
-        </div>       
+        </div>
+        <div class="profile-user-btn" @click='goCuration'>
+          <i class="fas fa-check curation-icon"></i>
+        </div>    
       </div>
     </div>
   </div>
@@ -125,7 +128,7 @@ export default {
     ...mapState(['isLoggedIn', 'user', 'flag'])
   },
   methods: {
-    ...mapMutations(['setUserIntro','setUserNick','setToken']),
+    ...mapMutations(['setUserIntro','setUserNick','setToken','setMyFeed','setBookMark','setFollower','setCuration']),
     ...mapActions(['sendUserInfo']),
     setProfileImg() {
       let ref=this;
@@ -142,8 +145,26 @@ export default {
         ref.profileImg=ref.user.profileImg;
       })
       .catch()
-
-
+    },
+    goMyFeed() {
+      this.setMyFeed();
+      this.$router.push('/profileinform')
+    },
+    goBookMark() {
+      this.setBookMark();
+      this.$router.push('/profileinform')
+    },
+    goFollowing() {
+      this.setFollowing();
+      this.$router.push('/profileinform')
+    },
+    goFollower() {
+      this.setFollower();
+      this.$router.push('/profileinform')
+    },
+    goCuration() {
+      this.setCuration();
+      this.$router.push('/profileinform')
     },
     changeNickName() {
       const wrapContainer = document.querySelector('.wrap-container')

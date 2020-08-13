@@ -254,7 +254,8 @@
 .profile-user-btn .mylist-icon, 
 .profile-user-btn .follower-icon, 
 .profile-user-btn .following-icon, 
-.profile-user-btn .bookmark-icon {
+.profile-user-btn .bookmark-icon,
+.profile-user-btn .curation-icon {
   color: grey;
   margin: 0;
   font-size: 4vh;
@@ -265,7 +266,8 @@
 .profile-user-btn:hover .mylist-icon,
 .profile-user-btn:hover .follower-icon,
 .profile-user-btn:hover .following-icon,
-.profile-user-btn:hover .bookmark-icon {
+.profile-user-btn:hover .bookmark-icon,
+.profile-user-btn:hover .curation-icon {
   color: #5AAEFF;
 }
 
