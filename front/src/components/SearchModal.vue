@@ -79,6 +79,7 @@ export default {
       longContent: '',
       imgs: [],
       img: '',
+      profile:'',
       tags: [],
       settings: {
         "dots": true,
