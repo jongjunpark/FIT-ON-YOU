@@ -32,7 +32,7 @@
           <img v-if='article.imgs[0]' :src="article.imgs[0].imageUrl" :id="index">
         </div>
       </div>
-      <SearchModal v-if="showModal" @close="showModal= false"/>
+      <SearchModal  v-if="showModal" @close="showModal= false"/>
      
     </div>
     <UserSearch v-if="isUserResult"/>
@@ -213,12 +213,7 @@ export default {
       }
     },
     onModal(data) {
-      
-      let articleNo = data.articleNo;
-      axios.post(`https://i3b304.p.ssafy.io/api/search/${articleNo}`).then((response)=>{
-        console.log(response);
-        this.setArticledata=response.data;
-      })
+      this.setArticledata(data.articleNo);
       this.showModal = true
     },
     setHashList() {

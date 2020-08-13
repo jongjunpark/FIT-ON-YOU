@@ -54,11 +54,10 @@ export default {
     }
   },
   mounted(){
-    this.defaultDark()
     let ref=this;
     axios.get('https://i3b304.p.ssafy.io/api/comment',{
       params:{
-        articleNo:this.modalArticleNo,
+        articleNo: this.modalArticleNo,
       }
     })
     .then((res)=>{
@@ -73,9 +72,7 @@ export default {
     comment_content() {
       this.checkCommentInput();
     },
-    flag() {
-      this.defaultDark()
-    }
+   
   },
   methods: {
    

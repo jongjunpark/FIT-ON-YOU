@@ -13,7 +13,7 @@ const state = {
   authToken: '',
   isLoggedIn: false,
   flag: false,
-  articledata: [],
+  articledata: '',
   hashSearchList: '',
   userSearch: '',
 }
