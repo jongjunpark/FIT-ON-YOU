@@ -209,10 +209,11 @@ export default {
       }
     },
     onModal(data) {
+      
       let articleNo = data.articleNo;
-      axios.post(`https://i3b304.p.ssafy.io/${articleNo}`).then((response)=>{
+      axios.post(`https://i3b304.p.ssafy.io/api/search/${articleNo}`).then((response)=>{
         console.log(response);
-        this.setArticledata=response;
+        this.setArticledata=response.data;
       })
       this.showModal = true
     },

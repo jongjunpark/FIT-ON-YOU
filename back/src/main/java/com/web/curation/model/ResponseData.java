@@ -10,6 +10,9 @@ public class ResponseData {
 	private Board articles;
 	private List<ImageStore> imgs;
 	private List<Articletag> tags;
+	private String profile;
+	
+	
 	public Board getArticles() {
 		return articles;
 	}
