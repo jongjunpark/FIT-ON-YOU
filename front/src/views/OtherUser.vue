@@ -46,9 +46,6 @@
         <div class="profile-user-btn" @click='goFollowing'>
           <i class="fas fa-user follower-icon"><i class="fas fa-arrow-right follow-inner"></i></i>
         </div>
-        <div class="profile-user-btn" @click='goCuration'>
-          <i class="fas fa-check curation-icon"></i>
-        </div>   
       </div>
     </div>
     
@@ -128,7 +125,7 @@ export default {
 
   },
   methods: {
-    ...mapMutations(['setMyFeed','setBookMark','setFollower', 'setFollowing', 'setCuration']),
+    ...mapMutations(['setMyFeed','setBookMark','setFollower', 'setFollowing', 'setCuration', 'setIsMe', 'setOtherUser']),
     defaultDark() {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
@@ -163,22 +160,20 @@ export default {
     },
     goMyFeed() {
       this.setMyFeed();
-      this.$router.push('/profileinform')
-    },
-    goBookMark() {
-      this.setBookMark();
+      this.setIsMe(false);
+      this.setOtherUser(this.$route.params.nickname);
       this.$router.push('/profileinform')
     },
     goFollowing() {
       this.setFollowing();
+      this.setIsMe(false);
+      this.setOtherUser(this.$route.params.nickname);
       this.$router.push('/profileinform')
     },
     goFollower() {
       this.setFollower();
-      this.$router.push('/profileinform')
-    },
-    goCuration() {
-      this.setCuration();
+      this.setIsMe(false);
+      this.setOtherUser(this.$route.params.nickname);
       this.$router.push('/profileinform')
     },
     goChatting() {

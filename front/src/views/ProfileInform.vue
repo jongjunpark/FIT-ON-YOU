@@ -3,10 +3,12 @@
     <div class='wrap-container'>
       <div class="profile-nav">
         <div @click="goMyFeed" class="profile-nav-btn0 profile-nav-icon"><i class="far fa-file-image"></i></div>
-        <div @click="goBookMark" class="profile-nav-btn1 profile-nav-icon"><i class="fas fa-bookmark"></i></div>
+        <div v-show="isMe" @click="goBookMark" class="profile-nav-btn1 profile-nav-icon"><i class="fas fa-bookmark"></i></div>
+        <div v-show="!isMe" class="profile-nav-fake-icon"></div>
         <div @click="goFollower" class="profile-nav-btn3 profile-nav-icon"><i class="fas fa-user follower"><i class="fas fa-arrow-left follow-inner"></i></i></div>
+        <div v-show="!isMe" class="profile-nav-fake-icon"></div>
         <div @click="goFollowing" class="profile-nav-btn2 profile-nav-icon"><i class="fas fa-user following"><i class="fas fa-arrow-right follow-inner"></i></i></div>
-        <div @click="goCuration" class="profile-nav-btn4 profile-nav-icon"><i class="fas fa-check curation"></i></div>
+        <div v-show="isMe" @click="goCuration" class="profile-nav-btn4 profile-nav-icon"><i class="fas fa-check curation"></i></div>
         <div @click="goBack" class="profile-nav-btn5 profile-nav-icon profile-nav-back"><i class="fas fa-reply"></i></div>
         <div class="profile-nav-select"></div>
       </div>
@@ -47,7 +49,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['flag', 'isMyFeed', 'isBookMark', 'isFollowing', 'isFollower', 'isCuration']),
+    ...mapState(['flag', 'isMyFeed', 'isBookMark', 'isFollowing', 'isFollower', 'isCuration', 'isMe']),
   },
   methods: {
     ...mapMutations(['setMyFeed','setBookMark','setFollower','setFollowing', 'setCuration']),
@@ -102,11 +104,19 @@ export default {
       following.style.color = '#5AAEFF'; following.children[0].style.backgroundColor = '#5AAEFF';
       follower.style.color = 'grey'; follower.children[0].style.backgroundColor = 'grey';
       curation.style.color = 'grey'
-      selectBar.classList.add('go-following-menu')
-      selectBar.classList.remove('go-myfeed-menu')
-      selectBar.classList.remove('go-bookmark-menu')
-      selectBar.classList.remove('go-follower-menu')
-      selectBar.classList.remove('go-curation-menu')
+      if(this.isMe) {
+        selectBar.classList.add('go-following-menu')
+        selectBar.classList.remove('go-myfeed-menu')
+        selectBar.classList.remove('go-bookmark-menu')
+        selectBar.classList.remove('go-follower-menu')
+        selectBar.classList.remove('go-curation-menu')
+      } else {
+        selectBar.classList.remove('go-following-menu')
+        selectBar.classList.remove('go-myfeed-menu')
+        selectBar.classList.remove('go-bookmark-menu')
+        selectBar.classList.remove('go-follower-menu')
+        selectBar.classList.add('go-curation-menu')
+      }
     },
     goFollower() {
       this.setFollower();

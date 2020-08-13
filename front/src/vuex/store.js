@@ -21,6 +21,8 @@ const state = {
   isFollowing: false,
   isFollower: false,
   isCuration: false,
+  isMe: false,
+  otherUserName: '',
 }
 
 Vue.use(Vuex)
