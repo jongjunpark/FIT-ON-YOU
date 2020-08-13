@@ -14,7 +14,8 @@ import com.web.curation.model.Alarm;
 public interface AlarmDao extends JpaRepository<Alarm, String>{
 	
 	
-	@Query(value="select * from alarm a, user u where recevier=:recevier and a.follower=u.nickname order by a.alramNo desc",nativeQuery=true)
+	@Query(value="select a.alramNo, a.type, a.recevier, a.follower, ifnull(a.articleNo, -1) as articleNo , a.isread, a.createAt, u.* from alarm a, user u " + 
+			"where recevier=:recevier and a.follower=u.nickname order by a.alramNo desc;",nativeQuery=true)
 	List<Alarm> findByRecevierAndIsReadOrderByAlramNoDesc(String recevier);
 	
 //	@Modifying

@@ -24,4 +24,12 @@ public interface BoardTwoDao extends JpaRepository<BoardDTO,String>{
 					" from board b where b.articleUser in (select followingUser from follow f where f.followedUser=:nickname) order by articleNo desc",
 			nativeQuery=true)
 	Page<BoardDTO> getMainFeedList(Pageable pageable, @Param("nickname") String nickname);
+	
+	
+	
+	@Query(value="select b.*," + 
+			" (select count(*) from likes l where b.articleNo=l.articleNo and l.nickname=:nickname) as likechk," + 
+			" (select count(*) from bookmark m where b.articleNo=m.bookedArticle and m.bookUser=:nickname) as markchk" + 
+			" from board b where b.articleNo=:articleNo ", nativeQuery=true)
+	BoardDTO getBoard(int articleNo, String nickname);
 }

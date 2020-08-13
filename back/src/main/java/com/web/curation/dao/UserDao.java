@@ -57,4 +57,6 @@ public interface UserDao extends JpaRepository<User, String> {
     @Query(value="select profile_img from user where nickname=:nickname", nativeQuery=true)
     String findProfileImgByNickname(String nickname);
     
+ 
+    
 }	
