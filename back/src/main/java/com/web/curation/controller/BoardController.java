@@ -50,6 +50,7 @@ import com.web.curation.model.Search;
 import com.web.curation.model.Tag;
 import com.web.curation.model.User;
 import com.web.curation.model.UserDTO;
+import com.web.curation.request.ReturnCuratedContent;
 import com.web.curation.service.user.BoardService;
 
 import io.swagger.annotations.ApiOperation;
@@ -90,21 +91,21 @@ public class BoardController {
 	InfluencerDao influencerDao;
 	@Autowired
 	TagDao tagDao;
-	
+
 	@Autowired
 	BoardTwoDao boardTwoDao;
-	
+
 	@Autowired
 	BoardService boardService;
-	
-	
+
+	// articleNo, img만 return
 	@GetMapping("/api/board/curation")
 	@ApiOperation(value = "큐레이션 기능")
 	public Object curatedContents(String username) {
 		System.out.println(1);
 		final BasicResponse result = new BasicResponse();
 		List<Curation> curationList = curationDao.getCurationByUsername(username);
-		List<Board> boardList = new ArrayList<>();
+		List<ReturnCuratedContent> returnCuratedContentList = new ArrayList<>();
 
 		if (!curationList.isEmpty()) {// 안비어 있을경우
 			int size = curationList.size();
@@ -119,16 +120,18 @@ public class BoardController {
 
 			int contentsSize = contents.size();
 			for (int c = 0; c < contentsSize; c++) {
-				Board newBoard = boardDao.findBoardByArticleNo(contents.get(c).getArticleno());
-
-				if (newBoard != null) {
-					boardList.add(newBoard);
-				}
+				int articleNo = contents.get(c).getArticleno();
+				String imgUrl = imageDao.findImagestoreByArticleNoOrderByArticleNoDesc(articleNo).get(0).getImageUrl();
+				ReturnCuratedContent returnCuratedContent = new ReturnCuratedContent();
+				returnCuratedContent.setArticleNo(articleNo);
+				returnCuratedContent.setImgUrl(imgUrl);
+				System.out.println(returnCuratedContent);
+				returnCuratedContentList.add(returnCuratedContent);
 			}
 
 			result.data = "success";
 			result.status = true;
-			result.object = boardList;
+			result.object = returnCuratedContentList;
 		} else {// 큐레이션이 비어있을 경우
 				// 팔로우 의 새 게시글을 보여준다
 		}
@@ -162,11 +165,11 @@ public class BoardController {
 	};
 
 	@PostMapping("/newsfeed/{page}")
-	public Object getFollowArticle(@RequestParam String nickname,@PathVariable int page) {
+	public Object getFollowArticle(@RequestParam String nickname, @PathVariable int page) {
 
-		List<BoardDTO> result = boardService.getMainFeedList(page,nickname);
-		for(BoardDTO r : result) {
-			System.out.print(r.getArticleNo()+" ");
+		List<BoardDTO> result = boardService.getMainFeedList(page, nickname);
+		for (BoardDTO r : result) {
+			System.out.print(r.getArticleNo() + " ");
 		}
 		System.out.println();
 		return result;
@@ -234,7 +237,7 @@ public class BoardController {
 					result.status = true;
 					result.data = "success";
 				}
-				
+
 				boardDao.increFvCnt(likes.getArticleNo());
 			}
 		} else {
@@ -302,8 +305,10 @@ public class BoardController {
 		return result;
 
 	}
-	@PostMapping(value="/upload")
-	public void addArticle(@RequestParam("imgdata") MultipartFile[] imgs, @RequestParam("nickname") String nickname, @RequestParam("content") String content, @RequestParam("tags") String[] tags) {
+
+	@PostMapping(value = "/upload")
+	public void addArticle(@RequestParam("imgdata") MultipartFile[] imgs, @RequestParam("nickname") String nickname,
+			@RequestParam("content") String content, @RequestParam("tags") String[] tags) {
 		String path = "/var/www/html/dist/images/board/";
 		// String path ="https://i3b304.p.ssafy.io/dist/images/board/";
 
