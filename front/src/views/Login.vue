@@ -76,11 +76,11 @@
       <p v-if='errormsgEmail' class='err-msg login-err-msg'>이메일이 존재하지 않습니다.</p>
       <p v-if='errormsgPwd' class='err-msg login-err-msg'>비밀번호가 틀렸습니다.</p>
       <div class='login-input-area'>
-        <input v-model='email' @keyup.enter='checkLoginInf' @keyup="checkLoginBtn" type="text" class='login-email non-text'>
+        <input @keydown.enter="loginHandler" v-model='email' @keyup.enter='checkLoginInf' @keyup="checkLoginBtn" type="text" class='login-email non-text'>
         <label class='login-email-label' for="login-email">이메일</label>
       </div>
       <div class='login-input-area'>
-        <input v-model='password' @keyup.enter='checkLoginInf' @keyup="checkLoginBtn" type="password" class='login-password non-text'>
+        <input @keydown.enter="loginHandler" v-model='password' @keyup.enter='checkLoginInf' @keyup="checkLoginBtn" type="password" class='login-password non-text'>
         <label class='login-password-label' for="login-password">비밀번호</label>
       </div>
       <div class="login-checkbox-area">
