@@ -1,6 +1,8 @@
 package com.web.curation.controller;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -411,5 +413,56 @@ public class AccountController {
 		
 		return result;
 	}
+	
+	@GetMapping("/tetest")
+	public Object test() {
+		
+		
+		
+		
+		File file = new File("temp.txt");
+	      try {
+	         FileReader fr = new FileReader(file);
+	         BufferedReader bufReader = new BufferedReader(fr);
+	         String line = "";
+	         StringTokenizer st= null;
+	         while ((line = bufReader.readLine()) != null) {
+	            st= new StringTokenizer(line);
+	            String prev= st.nextToken();
+	            String cur = st.nextToken();
+	            User user= new User();
+	            
+	            String uuid;
+	            do {
+	            	uuid = new String(UUID.randomUUID().toString().substring(0,8));
+	            	uuid +="@naver.com";
+	            }while(userDao.findUserByEmail(uuid).isPresent());
+	            user.setEmail(uuid);
+	            user.setNickname(prev);
+	            user.setProfile_img(cur);
+	            
+	            userDao.save(user);
+	            
+	            
+	            
+	         }
+	         bufReader.close();
+
+	         
+
+	      } catch (Exception e) {
+	         System.out.println(e);
+	      }
+
+		
+		
+		
+		
+		
+		
+		return 0;
+	}
+	
+	
 	
 }
