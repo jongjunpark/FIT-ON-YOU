@@ -79,4 +79,10 @@ export default {
     state.isFollower = false; state.isFollowing = false;
     state.isCuration = true;
   },
+  setIsMe(state, data) {
+    state.isMe = data
+  },
+  setOtherUser(state, data) {
+    state.otherUserName = data
+  }
 }

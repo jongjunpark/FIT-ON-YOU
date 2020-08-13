@@ -54,6 +54,11 @@
   cursor: pointer;
 }
 
+.profile-nav .profile-nav-fake-icon {
+  width: 17%;
+  background-color: transparent;
+}
+
 .profile-nav .profile-nav-icon:hover {
   box-shadow: inset 4px 4px 6px -1px rgba(0,0,0,0.2),
   inset -4px -4px 6px -1px rgba(255,255,255,0.1),
