@@ -95,4 +95,7 @@
 
 .feed-content .feed-content-tag {
   font-weight: 700;
+  display: flex;
+  margin-right: 1vh;
+  flex-wrap: wrap;
 }

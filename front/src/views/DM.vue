@@ -105,8 +105,6 @@ export default {
               this.lastMessage=allMessages;
               console.dir(this.lastMessage);
               
-              var Time = ((new Date() - new Date(this.lastMessage.createdAt.seconds*1000)) / (1000 * 60))
-              
               const H3 = document.createElement('h3')
               const H5message = document.createElement('h5')
               const H5date = document.createElement('h5')
