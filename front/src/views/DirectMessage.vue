@@ -59,6 +59,7 @@ var db = firebase.firestore();
 window.db = db;
 
 db.settings({
+  
 });
 
 export default {
@@ -117,6 +118,7 @@ export default {
     },
     fetchMessage(){
       db.collection(this.roomname).orderBy('createdAt').onSnapshot((querySnapshot)=>{
+        
         let allMessages = [];
         querySnapshot.forEach(doc=>{
           allMessages.push(doc.data());
