@@ -338,20 +338,17 @@ export default {
         this.$router.go('/feed')
     },
     sendRecellData(){
-      let dataforms = new FormData();
-      console.log(this.commuPhoto)
-      dataforms.append("imgdata",this.commuPhoto);
-      dataforms.append("nickname",this.$cookies.get('auth-nickname'));
-      dataforms.append("content", this.commuContent);
-      dataforms.append("price",this.commuPrice);
-      dataforms.append("size",this.commuSize)
+      let dataform = new FormData();
       
-      axios.post("https://i3b304.p.ssafy.io/api/recell/upload",dataforms).then(
+      dataform.append("img",this.commuPhoto);
+      dataform.append("nickname",this.$cookies.get('auth-nickname'));
+      dataform.append("content", this.commuContent);
+      dataform.append("price",this.commuPrice);
+      dataform.append("size",this.commuSize)
+      
+      axios.post("https://i3b304.p.ssafy.io/api/recell/upload",dataform).then(
         console.log('success'))
-        Swal.fire(
-          '성공적인 판매를 기원해요!',
-        )
-        this.$router.go('/community')
+        
       },
     writeFormChange() {
       this.isCommu = !this.isCommu
