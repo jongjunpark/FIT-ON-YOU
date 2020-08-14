@@ -1,19 +1,25 @@
 <template>
   <div class='bookmark-container'>
     <div class="bookmark-search-inner-box" v-for="bookMark in bookMarkList" :key="bookMark.articleNo">
-      <img :src="bookMark.articleUrl" :alt="`articleNo : ${bookMark.articleNo}`">
+      <img :src="bookMark.imageUrl" :alt="`articleNo : ${bookMark.articleNo}`"  @click="onModal(bookMark.articleNo)">
     </div>
+    <SearchModal  v-if="showModal" @close="showModal= false"/>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState ,mapMutations} from 'vuex'
+import SearchModal from '../components/SearchModal.vue'
 import axios from 'axios'
 export default {
   name: 'BookMark',
+  components:{
+    SearchModal
+  },
   data(){
     return{
       bookMarkList:[],
+      showModal:false,
     }
   },
   mounted() {
@@ -21,7 +27,7 @@ export default {
     this.getBookMark()
   },
   computed: {
-    ...mapState(['flag'])
+    ...mapState(['flag','articledata'])
   },
   watch: {
     flag() {
@@ -29,6 +35,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setArticledata']),
     defaultDark() {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
@@ -59,9 +66,13 @@ export default {
       })
       .then((data)=>{
         console.log(data,"bookmark");
-        this.bookMarkList = data.data.myBoards
+        this.bookMarkList = data.data.bmImgList
       })
-    }
+    },
+    onModal(articleNo) {
+      this.setArticledata(articleNo);
+      this.showModal = true
+    },
   },
 }
 </script>

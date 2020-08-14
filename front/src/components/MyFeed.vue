@@ -1,24 +1,30 @@
 <template>
   <div class='myfeed-container'>
     <div class="myfeed-search-inner-box" v-for="myFeed in myFeedList" :key="myFeed.articleNo">
-      <img :src="myFeed.articleUrl" :alt="`articleNo : ${myFeed.articleNo}`">
+      <img :src="myFeed.imageUrl" :alt="`articleNo : ${myFeed.articleNo}`" @click="onModal(myFeed.articleNo)">
     </div>
+    <SearchModal  v-if="showModal" @close="showModal= false"/>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState ,mapMutations} from 'vuex'
+import SearchModal from '../components/SearchModal.vue'
 import axios from 'axios'
 export default {
   name: 'MyFeed',
+  components:{
+    SearchModal
+  },
   data(){
     return{
       myFeedList:[],
       username:'',
+      showModal:false,
     }
   },
   computed: {
-    ...mapState(['flag', 'isMe', 'otherUserName'])
+    ...mapState(['flag', 'isMe', 'otherUserName','articledata'])
   },
   watch: {
     flag() {
@@ -31,6 +37,7 @@ export default {
   },
 
   methods: {
+    ...mapMutations(['setArticledata']),
     defaultDark() {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
@@ -69,7 +76,11 @@ export default {
         this.myFeedList = data.data.myBoards
         console.log(this.myFeedList)
       })
-    }
+    },
+    onModal(articleNo) {
+      this.setArticledata(articleNo);
+      this.showModal = true
+    },
   },
 }
 </script>
