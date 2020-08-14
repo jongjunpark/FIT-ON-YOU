@@ -1,3 +1,18 @@
+.write-toggle-btn {
+  position: fixed;
+  top: 15vh;
+  right: 5vh;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: blue;
+  z-index: 10000;
+}
+
+.write-feed-box, .write-commu-box {
+  width: 100%;
+}
+
 .write-img-box {
   position: relative;
   width: 100%;
@@ -10,6 +25,36 @@
   }
 }
 
+.write-commu-img-box {
+  width: 100%;
+  margin-top: 3vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.write-commu-img-box .write-commu-upload {
+  position: relative;
+  width: 30%;
+  padding-top: 40%;
+}
+
+.write-commu-img {
+  position: absolute;
+  top: 0; bottom: 0; left: 0; right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.write-commu-img img {
+  width: 100%;
+  height: 100%;
+}
+
+.write-commu-img img:hover {
+  opacity: 0.7;
+}
+
 .write-img-box .write-hanger-img {
   position: absolute;
   top: 0; bottom: 0; left: 0; right: 0;
@@ -17,7 +62,8 @@
   height: 100%;
 }
 
-.write-img-box .write-upload-btn {
+.write-img-box .write-upload-btn,
+.write-commu-img-box .write-upload-btn {
   position: absolute;
   top: 50%; 
   left: 50%;
@@ -46,15 +92,18 @@
   clip: rect(0, 0, 0, 0);
 }
 
-.write-img-box .write-upload-btn:hover {
+.write-img-box .write-upload-btn:hover,
+.write-commu-img-box .write-upload-btn:hover {
   background-color: black;
 }
 
-.write-img-box .write-upload-btn:hover .fa-images{
+.write-img-box .write-upload-btn:hover .fa-images,
+.write-commu-img-box .write-upload-btn:hover .fa-images{
   color: white;
   transition: all 0.3s;
 }
-.write-img-box .write-upload-btn:hover .fa-plus{
+.write-img-box .write-upload-btn:hover .fa-plus,
+.write-commu-img-box .write-upload-btn:hover .fa-plus{
   color: white;
   transition: all 0.3s;
 }
@@ -133,6 +182,16 @@
   color: black
 }
 
+.write-commu-img .cancle-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  font-size: 5vh;
+  color: black
+}
+
 .write-cloth-hanger .write-uploaded-img .fa-plus {
   position: absolute;
   top: 50%;
@@ -155,6 +214,10 @@
 }
 
 .cancle-img:hover ~ .feed-img{
+  opacity: 0.7;
+}
+
+.cancle-img:hover ~ .write-commu-image{
   opacity: 0.7;
 }
 
@@ -199,10 +262,7 @@
 }
 
 .write-btn-box {
-  position: absolute;
-  top: 75vh;
   width: 100%;
-  padding: 0 30px;
 }
 
 .btn.write-btn {
