@@ -158,6 +158,12 @@ span {
   height: 5.5vh;
   cursor: pointer;
 }
+@media (max-width: 300px) {
+  #nav .nav-logo {
+    width: 7vh;
+    height: 5vh;
+  }
+}
 
 #nav .nav-logo .fa-hat-cowboy {
   font-size: 5vh;

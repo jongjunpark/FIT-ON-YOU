@@ -1,95 +1,20 @@
 <template>
   <div class='wrap-container'>
-    <div class="user-search-box">
+    <div v-show="userResultList" class="user-search-box" v-for="user in userResultList" :key="user.nickname">
       <div class="user-search-icon-area">
-        <img src="../assets/images/default-user.png" alt="#">
+        <img v-show="user.profile_img" @click="goProfile(user.nickname)" :src="user.profile_img" :alt="user.nickname">
+        <img v-show="!user.profile_img&&user.gender=='Male'" @click="goProfile(user.nickname)" src="../assets/images/default-user.png" alt="">
+        <img v-show="!user.profile_img&&user.gender=='Female'" @click="goProfile(user.nickname)" src="../assets/images/default-user-female.png" alt="">
       </div>
       <div class="user-search-text-area">
-        <div class="user-search-username">Username</div>
-        <div class="user-search-userintro">한줄소개</div>
+        <div @click="goProfile(user.nickname)" class="user-search-username">{{ user.nickname }}</div>
+        <div v-show="!user.selfintroduce" class="user-search-nonuserintro">{{ user.selfintroduce }}</div>
+        <div v-show="user.selfintroduce" class="user-search-userintro">{{ user.selfintroduce }}1</div>
       </div>
     </div>
-    <div class="user-search-box">
-      <div class="user-search-icon-area">
-        <img src="#" alt="#">
+    <div v-show="!userResultList" class='user-search-not-result'>
+        <p>일치하는 검색결과가 없습니다.</p>
       </div>
-      <div class="user-search-text-area">
-        <div class="user-search-username">Username</div>
-        <div class="user-search-userintro">한줄소개</div>
-      </div>
-    </div>
-    <div class="user-search-box">
-      <div class="user-search-icon-area">
-        <img src="#" alt="#">
-      </div>
-      <div class="user-search-text-area">
-        <div class="user-search-username">Username</div>
-        <div class="user-search-userintro">한줄소개</div>
-      </div>
-    </div>
-    <div class="user-search-box">
-      <div class="user-search-icon-area">
-        <img src="#" alt="#">
-      </div>
-      <div class="user-search-text-area">
-        <div class="user-search-username">Username</div>
-        <div class="user-search-userintro">한줄소개</div>
-      </div>
-    </div>
-    <div class="user-search-box">
-      <div class="user-search-icon-area">
-        <img src="#" alt="#">
-      </div>
-      <div class="user-search-text-area">
-        <div class="user-search-username">Username</div>
-        <div class="user-search-userintro">한줄소개</div>
-      </div>
-    </div>
-    <div class="user-search-box">
-      <div class="user-search-icon-area">
-        <img src="#" alt="#">
-      </div>
-      <div class="user-search-text-area">
-        <div class="user-search-username">Username</div>
-        <div class="user-search-userintro">한줄소개</div>
-      </div>
-    </div>
-    <div class="user-search-box">
-      <div class="user-search-icon-area">
-        <img src="#" alt="#">
-      </div>
-      <div class="user-search-text-area">
-        <div class="user-search-username">Username</div>
-        <div class="user-search-userintro">한줄소개</div>
-      </div>
-    </div>
-    <div class="user-search-box">
-      <div class="user-search-icon-area">
-        <img src="#" alt="#">
-      </div>
-      <div class="user-search-text-area">
-        <div class="user-search-username">Username</div>
-        <div class="user-search-userintro">한줄소개</div>
-      </div>
-    </div>
-    <div class="user-search-box">
-      <div class="user-search-icon-area">
-        <img src="#" alt="#">
-      </div>
-      <div class="user-search-text-area">
-        <div class="user-search-username">Username</div>
-        <div class="user-search-userintro">한줄소개</div>
-      </div>
-    </div>
-    <div class="user-search-box">
-      <div class="user-search-icon-area">
-        <img src="#" alt="#">
-      </div>
-      <div class="user-search-text-area">
-        <div class="user-search-username">Username</div>
-        <div class="user-search-userintro">한줄소개</div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -99,6 +24,11 @@ import axios from 'axios'
 
 export default {
   name: 'UserSearch',
+  data() {
+    return {
+      userResultList: [],
+    }
+  },
   computed: {
     ...mapState(['flag', 'userSearch'])
   },
@@ -135,8 +65,13 @@ export default {
       },
       }).then((data) => {
         console.log(data, 2)
+        this.userResultList = data.data.object
+        console.log(this.userResultList)
       }).catch()
-    }
+    },
+    goProfile(name) {
+      this.$router.push(`/otheruser/${name}`)
+    },
   },
   mounted() {
     this.defaultDark();
@@ -159,16 +94,13 @@ export default {
 .user-search-box {
   width: 100%;
   height: 8vh;
-  background-color: grey;
   display: flex;
-  border-bottom: 1px solid red;
   position: relative;
   margin: 1.5vh 0;
 }
 
 .user-search-box .user-search-icon-area {
   height: 100%;
-  background-color: burlywood;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -183,12 +115,12 @@ export default {
 .user-search-box .user-search-icon-area img {
   width: 7vh;
   height: 7vh;
-  background-color: black;
   border-radius: 50%;
+  border: 0.5px solid black;
+  cursor: pointer;
 }
 
 .user-search-box .user-search-text-area {
-  background-color: cornflowerblue;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -203,15 +135,32 @@ export default {
   font-weight: 700;
   height: 50%;
   width: 100%;
+  cursor: pointer;
 }
 
 .user-search-text-area .user-search-userintro {
-  font-size: 1.7vh;
+  font-size: 1.5vh;
+  color: grey;
   display: flex;
   align-items: center;
-  background-color: rgb(166, 248, 186);
   font-weight: 500;
   height: 50%;
   width: 100%;
+  padding-bottom: 1vh;
+}
+
+.user-search-text-area .user-search-nonuserintro {
+  height: 20%;
+  width: 100%;
+}
+
+.user-search-not-result {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 20vh;
+  font-size: 2.5vh;
+  font-weight: 700;
 }
 </style>
