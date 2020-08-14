@@ -119,7 +119,7 @@ public class SearchController {
 			String profile= userDao.findProfileImgByNickname(board.getArticleUser());
 			if(profile == null) {
 				Influencer temp = influDao.findInfluencerByNickname(board.getInflueUser());
-				board.setArticleUser(board.getArticleUser());
+				board.setArticleUser(board.getInflueUser());
 				profile=temp.getProfile_img();
 			}
 			data.setProfile(profile);

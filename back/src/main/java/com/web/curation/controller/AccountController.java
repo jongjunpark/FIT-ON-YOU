@@ -112,7 +112,7 @@ public class AccountController {
 	@PostMapping("/account/signup")
 	@ApiOperation(value = "회원가입")
 	public Object signup(@Valid @RequestBody SignupRequest request) {
-		Map<String,Object> resultMap=new HashMap<>();
+		Map<String, Object> resultMap = new HashMap<>();
 		// 이메일, 닉네임 중복처리 필수
 		// 회원가입단을 생성해 보세요.
 		final BasicResponse result = new BasicResponse();
@@ -131,7 +131,6 @@ public class AccountController {
 		user.setGender(request.getGender());
 		user.setPassword(request.getPassword());
 		user.setSelfintroduce(null);
-		user.setProfile_img(request.getProfile_img());
 		if (userDao.findUserByNickname(user.getNickname()).isPresent()
 				|| userDao.findUserByEmail(user.getEmail()).isPresent()) {
 			result.status = true;
@@ -144,11 +143,11 @@ public class AccountController {
 			} else {
 				result.status = true;
 				result.data = "success";
-				resultMap.put("result",result);
+				resultMap.put("result", result);
 				String token = jwtService.create(new UserDTO(user));
-				resultMap.put("auth_token",token);
-				resultMap.put("data",user);
-				
+				resultMap.put("auth_token", token);
+				resultMap.put("data", user);
+
 			}
 		}
 		return new ResponseEntity<>(resultMap, HttpStatus.OK);
@@ -164,8 +163,7 @@ public class AccountController {
 		Optional<User> optUser = userDao.findUserByEmailAndBirth(email, time);
 		if (!optUser.isPresent()) {
 		} else {
-			
-			
+
 			UserDTO userDto = new UserDTO(optUser.get());
 
 			String to = userDto.getEmail();
@@ -179,7 +177,7 @@ public class AccountController {
 			text.append("인증번호를 다른사람이 보지 않게 주의해 주세요.\n");
 //			text.append("핏온유 인증 페이지로 이동하기");
 //			text.append("http://localhost:8081/");
-			
+
 			MimeMessage message = emailSender.createMimeMessage();
 			try {
 				System.out.println(4);
@@ -201,39 +199,38 @@ public class AccountController {
 	}
 
 	@PostMapping(value = "/account/addProfileImg")
-   @ApiOperation(value = "가입하기")
+	@ApiOperation(value = "가입하기")
 
-   public Object addProfileImg(@RequestParam("profile-img-edit") MultipartFile img, @RequestParam String nickname) {
-      Map<String,Object> resultMap=new HashMap<>();
-      final BasicResponse result = new BasicResponse();
-      // 이 path는 로컬에선 일단 각자 경로로 테스트
-      String path ="/var/www/html/dist/images/profile/";
-      UUID uuid = UUID.randomUUID();
-      String savedName = uuid.toString()+"_"+img.getOriginalFilename();
-      File file = new File(path + savedName);
-      try {
-         img.transferTo(file);
-         String storePath="../images/profile/"+savedName;
-         if(userDao.updateProfileImg(storePath, nickname)==1) {
-            result.data="success";
-            UserDTO userDTO = new UserDTO(userDao.findUserByNickname(nickname).get());
-            String Token = jwtService.create(userDTO);
-            resultMap.put("auth_token",Token);
-            
-         }
-         else {
-            result.data="fail";
-         }
-         System.out.println(storePath);
-      } catch (Exception e) {
-         e.printStackTrace();
-      }
-      
-      
-      resultMap.put("result",result);
-      System.out.println(img);
-      return resultMap;
-   }
+	public Object addProfileImg(@RequestParam("profile-img-edit") MultipartFile img, @RequestParam String nickname) {
+		Map<String, Object> resultMap = new HashMap<>();
+		final BasicResponse result = new BasicResponse();
+		// 이 path는 로컬에선 일단 각자 경로로 테스트
+		String path = "/var/www/html/dist/images/profile/";
+		UUID uuid = UUID.randomUUID();
+		String savedName = uuid.toString() + "_" + img.getOriginalFilename();
+		File file = new File(path + savedName);
+		try {
+			img.transferTo(file);
+			String storePath = "../images/profile/" + savedName;
+			if (userDao.updateProfileImg(storePath, nickname) == 1) {
+				result.data = "success";
+				UserDTO userDTO = new UserDTO(userDao.findUserByNickname(nickname).get());
+				userDao.updateProfileImg(storePath, nickname);
+				String Token = jwtService.create(userDTO);
+				resultMap.put("auth_token", Token);
+
+			} else {
+				result.data = "fail";
+			}
+			System.out.println(storePath);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		resultMap.put("result", result);
+		System.out.println(img);
+		return resultMap;
+	}
 
 	@GetMapping("/account/checkDoubleEmail")
 	@ApiOperation(value = "이메일 중복검사")
@@ -255,7 +252,7 @@ public class AccountController {
 	@GetMapping("/account/checkNickname")
 	@ApiOperation(value = "닉네임 중복검사")
 	public Object findNick(@Valid @RequestParam String nickname) {
-		
+
 		final BasicResponse result = new BasicResponse();
 
 		Optional<User> optUser = userDao.findUserByNickname(nickname);
@@ -264,205 +261,186 @@ public class AccountController {
 			result.data = "non exist";
 		} else {// 있는 경우
 			result.status = true;
-			result.data = "exist"; 
-			result.object = optUser.get(); 
+			result.data = "exist";
+			result.object = optUser.get();
 		}
 		return result;
 	}
-	
+
 	@PostMapping("/account/changePassword")
 	@ApiOperation(value = "새 비밀번호 설정")
-	public Object changePwd(@Valid @RequestParam("email") String email,@Valid @RequestParam("password") String password) {
+	public Object changePwd(@Valid @RequestParam("email") String email,
+			@Valid @RequestParam("password") String password) {
 		Map<String, Object> resultMap = new HashMap<>();
-		System.out.println(email+ " "+password);
+		System.out.println(email + " " + password);
 		final BasicResponse result = new BasicResponse();
-		try{
+		try {
 			userDao.updatePassword(password, email);
-			result.status=true;
-			result.data="success";
+			result.status = true;
+			result.data = "success";
 			UserDTO userDTO = new UserDTO(userDao.findUserByEmail(email).get());
 			String Token = jwtService.create(userDTO);
-			resultMap.put("auth_token",Token);
-			
+			resultMap.put("auth_token", Token);
+
+		} catch (Exception e) {
+			result.status = true;
+			result.data = "fail";
+			resultMap.put("result", result);
 		}
-		catch (Exception e){
-			result.status=true;
-			result.data="fail";
-			resultMap.put("result",result);
-		}
-		
+
 		return resultMap;
 	}
+
 	@GetMapping("/account/token")
-	public Map<String, Object> getUserByToken(@RequestParam String jwt){
+	public Map<String, Object> getUserByToken(@RequestParam String jwt) {
 		System.out.println(jwt);
 		Map<String, Object> resultMap = new HashMap<>();
 		try {
 			jwtService.checkValid(jwt); // 토큰이 유효한지 검사
 
-			resultMap.put("userInfo",jwtService.get(jwt)); // 토큰에 담긴 정보 담기
-			resultMap.put("result",1);
-			
-		}catch(Exception e){
-			resultMap.put("result",0);
+			resultMap.put("userInfo", jwtService.get(jwt)); // 토큰에 담긴 정보 담기
+			resultMap.put("result", 1);
+
+		} catch (Exception e) {
+			resultMap.put("result", 0);
 		}
 		return resultMap;
 	}
-	
-	
+
 	@PostMapping("/account/nickchange")
 	@ApiOperation(value = "닉네임 변경")
-	public Object changeNick(@Valid @RequestParam("prev") String prev,@Valid @RequestParam("cur") String cur) {
-		Map<String,Object> resultMap=new HashMap<>();
-		System.out.println(prev+ " "+cur);
+	public Object changeNick(@Valid @RequestParam("prev") String prev, @Valid @RequestParam("cur") String cur) {
+		Map<String, Object> resultMap = new HashMap<>();
+		System.out.println(prev + " " + cur);
 		final BasicResponse result = new BasicResponse();
-		if(userDao.updateNickname(prev, cur)==1) {
-			result.data="success";
-			result.object=cur;
+		if (userDao.updateNickname(prev, cur) == 1) {
+			result.data = "success";
+			result.object = cur;
 			UserDTO userDTO = new UserDTO(userDao.findUserByNickname(cur).get());
 			String Token = jwtService.create(userDTO);
-			resultMap.put("auth_token",Token);
+			resultMap.put("auth_token", Token);
+		} else {
+			result.data = "fail";
 		}
-		else {
-			result.data="fail";
-		}
-		result.status=true;
-		resultMap.put("result",result);
-		
+		result.status = true;
+		resultMap.put("result", result);
+
 		return resultMap;
 	}
+
 	@PostMapping("/account/social/{type}")
-	@ApiOperation(value="소셜 로그인시 회원가입 처리")
+	@ApiOperation(value = "소셜 로그인시 회원가입 처리")
 	public Object socialjoin(@RequestBody User user, @PathVariable int type) {
-		
-		System.out.println(user.getNickname()+" "+user.getEmail()+" "+type);
+
+		System.out.println(user.getNickname() + " " + user.getEmail() + " " + type);
 		final BasicResponse result = new BasicResponse();
-		Map<String,Object> resultMap=new HashMap<>();
-		
-		if(type==0) {  // 소셜 로그인시 
-			Optional<User> u=userDao.findUserByEmail(user.getEmail());
-			if(u.isPresent()) {   
-				
-				result.data="1";  // 이미 존재하면 1
+		Map<String, Object> resultMap = new HashMap<>();
+
+		if (type == 0) { // 소셜 로그인시
+			Optional<User> u = userDao.findUserByEmail(user.getEmail());
+			if (u.isPresent()) {
+
+				result.data = "1"; // 이미 존재하면 1
 				UserDTO userDTO = new UserDTO(u.get());
-				resultMap.put("userinfo",userDTO);
+				resultMap.put("userinfo", userDTO);
 				String Token = jwtService.create(userDTO);
-				resultMap.put("auth_token",Token);
-				
+				resultMap.put("auth_token", Token);
+
+			} else {
+				result.data = "0"; // 존재하지 않는경우 0
 			}
-			else {
-				result.data="0";  // 존재하지 않는경우 0
-			}
-			
-		}		
-		if(type==1) {   // 약관 페이지에서 넘어온 경우
-			
-			result.data="success";
+
+		}
+		if (type == 1) { // 약관 페이지에서 넘어온 경우
+
+			result.data = "success";
 			String uuid;
 			do {
-				uuid = new String(UUID.randomUUID().toString().substring(0,8));
-			}while(userDao.findById(uuid).isPresent());
+				uuid = new String(UUID.randomUUID().toString().substring(0, 8));
+			} while (userDao.findById(uuid).isPresent());
 			user.setNickname(uuid);
-			
+
 			userDao.save(user);
-			
+
 			UserDTO userDTO = new UserDTO(user);
 			String Token = jwtService.create(userDTO);
-			resultMap.put("auth_token",Token);
-			
+			resultMap.put("auth_token", Token);
+
 		}
-		result.status=true; 
+		result.status = true;
 		resultMap.put("result", result);
-		
+
 		return resultMap;
 	}
-	
-	
+
 	@PutMapping("/account/selfintro")
-	@ApiOperation(value="한줄 자기소개 수정")
+	@ApiOperation(value = "한줄 자기소개 수정")
 	public Object selfintro(@RequestParam String nickname, @RequestParam String selfintroduce) {
-		Map<String,Object> resultMap = new HashMap<>();
+		Map<String, Object> resultMap = new HashMap<>();
 		final BasicResponse result = new BasicResponse();
-		if(userDao.updateSelfintro(selfintroduce, nickname)==1) {
-			result.data="success";
-			result.object=selfintroduce;
+		if (userDao.updateSelfintro(selfintroduce, nickname) == 1) {
+			result.data = "success";
+			result.object = selfintroduce;
 			UserDTO userDTO = new UserDTO(userDao.findUserByNickname(nickname).get());
 			String Token = jwtService.create(userDTO);
-			resultMap.put("auth_token",Token);
+			resultMap.put("auth_token", Token);
+		} else {
+			result.data = "false";
 		}
-		else {
-			result.data="false";
-		}
-		result.status=true;
-		resultMap.put("result",result);
-		
+		result.status = true;
+		resultMap.put("result", result);
+
 		return resultMap;
 	}
-	
+
 	@DeleteMapping("/account/delete")
-	@ApiOperation(value="회원 탈퇴")
+	@ApiOperation(value = "회원 탈퇴")
 	public Object delUser(@RequestParam String nickname) {
 		final BasicResponse result = new BasicResponse();
-		if(userDao.deleteUser(nickname)==1) {
-			result.data="success";
+		if (userDao.deleteUser(nickname) == 1) {
+			result.data = "success";
+		} else {
+			result.data = "fail";
 		}
-		else {
-			result.data="fail";
-		}
-		result.status=true;
-		
+		result.status = true;
+
 		return result;
 	}
-	
+
 	@GetMapping("/tetest")
 	public Object test() {
-		
-		
-		
-		
+
 		File file = new File("temp.txt");
-	      try {
-	         FileReader fr = new FileReader(file);
-	         BufferedReader bufReader = new BufferedReader(fr);
-	         String line = "";
-	         StringTokenizer st= null;
-	         while ((line = bufReader.readLine()) != null) {
-	            st= new StringTokenizer(line);
-	            String prev= st.nextToken();
-	            String cur = st.nextToken();
-	            User user= new User();
-	            
-	            String uuid;
-	            do {
-	            	uuid = new String(UUID.randomUUID().toString().substring(0,8));
-	            	uuid +="@naver.com";
-	            }while(userDao.findUserByEmail(uuid).isPresent());
-	            user.setEmail(uuid);
-	            user.setNickname(prev);
-	            user.setProfile_img(cur);
-	            
-	            userDao.save(user);
-	            
-	            
-	            
-	         }
-	         bufReader.close();
+		try {
+			FileReader fr = new FileReader(file);
+			BufferedReader bufReader = new BufferedReader(fr);
+			String line = "";
+			StringTokenizer st = null;
+			while ((line = bufReader.readLine()) != null) {
+				st = new StringTokenizer(line);
+				String prev = st.nextToken();
+				String cur = st.nextToken();
+				User user = new User();
 
-	         
+				String uuid;
+				do {
+					uuid = new String(UUID.randomUUID().toString().substring(0, 8));
+					uuid += "@naver.com";
+				} while (userDao.findUserByEmail(uuid).isPresent());
+				user.setEmail(uuid);
+				user.setNickname(prev);
+				user.setProfile_img(cur);
 
-	      } catch (Exception e) {
-	         System.out.println(e);
-	      }
+				userDao.save(user);
 
-		
-		
-		
-		
-		
-		
+			}
+			bufReader.close();
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
 		return 0;
 	}
-	
-	
-	
+
 }
