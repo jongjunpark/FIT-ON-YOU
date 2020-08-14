@@ -206,7 +206,7 @@ public class AccountController {
 		// 이 path는 로컬에선 일단 각자 경로로 테스트
 		String path = "/var/www/html/dist/images/profile/";
 		System.out.println(nickname);
-		String savedName = nickname+"_" + img.getOriginalFilename();
+		String savedName = nickname + "_" + img.getOriginalFilename();
 		File file = new File(path + savedName);
 		try {
 			img.transferTo(file);
@@ -215,7 +215,7 @@ public class AccountController {
 			if (userDao.updateProfileImg(storePath, nickname) == 1) {
 				result.data = "success";
 				UserDTO userDTO = new UserDTO(userDao.findUserByNickname(nickname).get());
-				System.out.println("profile 주소: "+userDTO.getProfile_img());
+				System.out.println("profile 주소: " + userDTO.getProfile_img());
 				String Token = jwtService.create(userDTO);
 				resultMap.put("auth_token", Token);
 
@@ -293,7 +293,6 @@ public class AccountController {
 
 	@GetMapping("/account/token")
 	public Map<String, Object> getUserByToken(@RequestParam String jwt) {
-		System.out.println(jwt);
 		Map<String, Object> resultMap = new HashMap<>();
 		try {
 			jwtService.checkValid(jwt); // 토큰이 유효한지 검사
