@@ -376,4 +376,43 @@ export default {
 .btn-space:focus {
 	outline: none;
 }
+
+@media (min-width:1200px) {
+  .container {
+    max-width: 1185px;
+  }
+}
+
+@media (min-width:960px) {
+  .container {
+    max-width: 900px;
+  }
+}
+
+.container {
+	width: 100%;
+	padding: 12px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.row {
+	display: flex;
+	flex-wrap: wrap;
+	flex: 1 1 auto;
+	margin-right: -12px;
+	margin-left: -12px;
+}
+
+@media (min-width:960px) {
+  .col-md-6 {
+	flex: 0 0 50%;
+	max-width: 50%;
+  }
+}
+
+.col-md-6 {
+	width: 100%;
+	padding: 12px;
+}
 </style>
