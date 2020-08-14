@@ -38,7 +38,7 @@ public class RecellController {
 	RecellDao recellDao;
 
 	@PostMapping(value="/upload")
-	public void addArticle(@RequestParam("img") MultipartFile imgs, @RequestParam("nickname") String nickname,
+	public void addRecell(@RequestParam("recellimg") MultipartFile recellimg, @RequestParam("nickname") String nickname,
 			@RequestParam("content") String content, @RequestParam("price") String price,
 			@RequestParam("size") String size) {
 		String path = "/var/www/html/dist/images/board/";
@@ -49,7 +49,7 @@ public class RecellController {
 		recell.setRecellContent(content);
 		recell.setRecellPrice(price);
 		recell.setRecellSize(size);
-		String name = nickname + "_recell_" + imgs.getOriginalFilename();
+		String name = nickname + "_recell_" + recellimg.getOriginalFilename();
 		String storePath = "../images/board/" + name;
 		recell.setRecellImage(storePath);
 		System.out.println(recell.toString());
@@ -61,7 +61,7 @@ public class RecellController {
 		img.setArticleNo(recellNo);
 		File file = new File(path + name);
 		try {
-			imgs.transferTo(file);
+			recellimg.transferTo(file);
 			img.setImageUrl(storePath);
 			imageDao.save(img);
 		} catch (Exception e) {

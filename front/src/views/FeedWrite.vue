@@ -69,7 +69,7 @@
         <div class="write-commu-upload">
           <label v-show="!commuImg" class="write-upload-btn" for='feed-img-edit'>
             <i class="far fa-images"><i class="fas fa-plus"></i></i>
-            <input class="imgdata" type="file" id="feed-img-edit" accept="image/*" @change="setCommuImg">
+            <input type= "file" id="feed-img-edit" accept="image/*" @change="setCommuImg">
           </label>
           <div class="write-commu-img" @mouseover="onCancelBtn" @mouseout="offCancleBtn">
             <i @click='delCommuImg' v-show='commuImg&&isCommuCancle' class="far fa-times-circle cancle-img"></i>
@@ -340,7 +340,7 @@ export default {
     sendRecellData(){
       let dataform = new FormData();
       
-      dataform.append("img",this.commuPhoto);
+      dataform.append("recellimg",this.commuPhoto);
       dataform.append("nickname",this.$cookies.get('auth-nickname'));
       dataform.append("content", this.commuContent);
       dataform.append("price",this.commuPrice);

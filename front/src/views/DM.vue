@@ -125,7 +125,7 @@ export default {
               } else {
                 H5message.innerHTML = this.lastMessage.message.substring(0, 8) + '..'
               }
-              var Time = ((new Date() - new Date(this.lastMessage.createdAt.seconds*1000)) / (1000 * 60))
+              Time = ((new Date() - new Date(this.lastMessage.createdAt.seconds*1000)) / (1000 * 60))
 
               if (Time < 60) {
                 H5date.innerHTML = Math.floor(Time / 1) + '분전'
