@@ -1,16 +1,41 @@
 .commu-margin-box {
   margin-top: 4vh;
 }
-.search-box {
-  display: flex;
-  justify-content: center;
+
+.community-container {
   width: 100%;
+  height: 80vh;
+  flex-direction: row !important;
+  overflow: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+}
+
+.community-container::-webkit-scrollbar{
+  width: 0;
+  height: 0;
 }
 
 .search-inner-box {
-  width: 33%;
-  padding-top: 33%;
-  margin: 1px;
+  width: 32.5%;
+  height: 0;
+  padding-top: 32.5%;
+  margin: 0.3vw;
   background-color: grey;
   position: relative
+}
+@media (min-width:1200px) {
+  .search-inner-box {
+    margin: 1px;
+  }
+}
+
+.search-inner-box img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
 }

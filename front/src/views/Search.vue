@@ -147,25 +147,29 @@ export default {
       this.hashList.splice(index, 1)
     },
     onHashResult() {
-      this.hashList.push(this.hashContent)
-      this.setHashSearch(this.hashList);
-      if(this.isHashResult) {
-        this.isHashResult = false
-        this.isHashResult = true
-      } else {
-        this.isDefault = false
-        this.isUserResult = false
-        this.isHashResult = true
+      if (this.hashContent || this.hashList.length>0) {
+        this.hashList.push(this.hashContent)
+        this.setHashSearch(this.hashList);
+        if(this.isHashResult) {
+          this.isHashResult = false
+          this.isHashResult = true
+        } else {
+          this.isDefault = false
+          this.isUserResult = false
+          this.isHashResult = true
+        }
+        this.hashContent = ''
+        this.hashList = []
       }
-      this.hashContent = ''
-      this.hashList = []
     },
     onUserResult() {
-      this.setUserSearch(this.userContent);
-      this.isDefault = false
-      this.isHashResult = false
-      this.isUserResult = true
-      this.userContent = ''
+      if (this.userContent) {
+        this.setUserSearch(this.userContent);
+        this.isDefault = false
+        this.isHashResult = false
+        this.isUserResult = true
+        this.userContent = ''
+      }
     },
     defaultDark() {
       const Dark = this.$cookies.get('dark')
