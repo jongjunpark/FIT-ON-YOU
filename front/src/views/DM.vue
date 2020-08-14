@@ -32,6 +32,7 @@ export default {
   },
   mounted() {
     this.defaultDark()
+    this.getLastMessage();
   },
   computed: {
     ...mapState(['flag'])
@@ -90,6 +91,8 @@ export default {
         }
         }).then((data)=>{
           let ARRAY = data.data.object
+          console.log('ARRAY')
+          console.dir(ARRAY)
           ARRAY.forEach(element => {
             console.log(element.roomname)
             db.collection(element.roomname).orderBy('createdAt','desc').limit(1).onSnapshot((querySnapshot)=>{
@@ -101,7 +104,9 @@ export default {
 
               this.lastMessage=allMessages;
               console.dir(this.lastMessage);
-              const Time = ((new Date() - new Date(this.lastMessage.createdAt.seconds*1000)) / (1000 * 60))
+              
+              var Time = ((new Date() - new Date(this.lastMessage.createdAt.seconds*1000)) / (1000 * 60))
+              
               const H3 = document.createElement('h3')
               const H5message = document.createElement('h5')
               const H5date = document.createElement('h5')
@@ -149,7 +154,10 @@ export default {
               DIVUNDER.appendChild(H5date)
 
 
-              DIVUPPER.appendChild(DIVUNDER)
+              if (DIVUPPER) {
+                DIVUPPER.appendChild(DIVUNDER)
+              }
+              console.log(DIVUPPER);
               DIVUNDER.addEventListener('click', () => {
                 let Next;
                 if (element.firstuser == this.nickname) {
@@ -169,7 +177,7 @@ export default {
                     .catch(
                     )
               })
-              this.defaultDark()
+              
               
             });
           });
@@ -186,7 +194,7 @@ export default {
     let uri_dec = decodeURIComponent(uri_enc);
     let res = uri_dec;
     this.nickname = res
-    this.getLastMessage();
+    
   }
 
 }
