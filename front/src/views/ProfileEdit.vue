@@ -149,27 +149,27 @@ export default {
     goMyFeed() {
       this.setMyFeed();
       this.setIsMe(true);
-      this.$router.push('/profileinform')
+      this.$router.push('/profileinform').catch(()=>{})
     },
     goBookMark() {
       this.setBookMark();
       this.setIsMe(true);
-      this.$router.push('/profileinform')
+      this.$router.push('/profileinform').catch(()=>{})
     },
     goFollowing() {
       this.setFollowing();
       this.setIsMe(true);
-      this.$router.push('/profileinform')
+      this.$router.push('/profileinform').catch(()=>{})
     },
     goFollower() {
       this.setFollower();
       this.setIsMe(true);
-      this.$router.push('/profileinform')
+      this.$router.push('/profileinform').catch(()=>{})
     },
     goCuration() {
       this.setCuration();
       this.setIsMe(true);
-      this.$router.push('/profileinform')
+      this.$router.push('/profileinform').catch(()=>{})
     },
     changeNickName() {
       const wrapContainer = document.querySelector('.wrap-container')
@@ -275,7 +275,7 @@ export default {
 
     },
     goSettings() {
-      this.$router.push('/settings')
+      this.$router.push('/settings').catch(()=>{})
     },
     defaultDark() {
       const Dark = this.$cookies.get('dark')

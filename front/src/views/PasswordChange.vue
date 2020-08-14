@@ -123,7 +123,7 @@ export default {
           '',
           'success'
         )
-        this.$router.push('/feed')
+        this.$router.push('/feed').catch(()=>{})
       })
       .catch(data => {
         console.log(data)

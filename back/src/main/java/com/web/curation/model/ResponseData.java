@@ -31,5 +31,12 @@ public class ResponseData {
 	public void setTags(List<Articletag> tags) {
 		this.tags = tags;
 	}
+	public String getProfile() {
+		return profile;
+	}
+	public void setProfile(String profile) {
+		this.profile = profile;
+	}
+	
 	
 }

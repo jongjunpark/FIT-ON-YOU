@@ -130,7 +130,7 @@ export default {
       })
     },
     goDM() {
-      this.$router.go(-1)
+      this.$router.go(-1).catch(()=>{})
     },
     defaultDark() {
       const Dark = this.$cookies.get('dark')

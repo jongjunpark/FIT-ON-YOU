@@ -164,7 +164,7 @@ export default {
                   }
                   }).then(()=>{
 
-                    this.$router.push(`/directmessage/${element.roomname}/${Next}`)
+                    this.$router.push(`/directmessage/${element.roomname}/${Next}`).catch(()=>{})
                   })
                     .catch(
                     )
