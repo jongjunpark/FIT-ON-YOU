@@ -53,7 +53,7 @@ public class RecellController {
 
 	@PostMapping(value = "/upload")
 	public void addArticle(@RequestParam("imgdata") MultipartFile imgs, @RequestParam("nickname") String nickname,
-			@RequestParam("content") String content, @RequestParam("price") String price) {
+			@RequestParam("content") String content, @RequestParam("price") String price, @RequestParam("size") String size) {
 		String path = "/var/www/html/dist/images/board/";
 		// String path ="https://i3b304.p.ssafy.io/dist/images/board/";
 
@@ -64,6 +64,7 @@ public class RecellController {
 		recell.setRecellUser(nickname);
 		recell.setRecellContent(content);
 		recell.setRecellPrice(price);
+		recell.setRecellSize(size);
 
 		int recellNo = recellDao.getCountRecell().get(0);
 		ImageStore img = new ImageStore();
