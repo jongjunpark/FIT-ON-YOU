@@ -43,7 +43,7 @@ export default {
       this.setLoggedIn(false)
       this.setUser(null)
 
-      this.$router.push('/');
+      this.$router.push('/').catch(()=>{});
     },
     defaultDark() {
       const Dark = this.$cookies.get('dark')
@@ -87,7 +87,7 @@ export default {
 
 
     goPassword() {
-      this.$router.push('/newpassword')
+      this.$router.push('/newpassword').catch(()=>{})
     },
     deleteAllAlarm(){
       let nickname=this.user.nickname
@@ -119,7 +119,7 @@ export default {
           ref.setToken(null)
           ref.setLoggedIn(false)
           ref.setUser(null)
-          ref.$router.push('/')
+          ref.$router.push('/').catch(()=>{})
         }
         else{
           console.log("fail..");

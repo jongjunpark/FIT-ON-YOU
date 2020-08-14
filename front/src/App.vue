@@ -167,9 +167,9 @@ export default {
       selectBar.classList.remove('go-second-menu')
       selectBar.classList.remove('go-first-menu')
       if (this.$route.name === 'Community') {
-        this.$router.go(this.$router.currentRoute)
+        this.$router.go(this.$router.currentRoute).catch(()=>{})
       } else {
-        this.$router.push("/community")
+        this.$router.push("/community").catch(()=>{})
       }
     },
     goHome() {
@@ -177,30 +177,30 @@ export default {
         if(this.$route.name === 'Feed') {
           this.$router.go(this.$router.currentRoute)
         } else {
-          this.$router.push("/feed")
+          this.$router.push("/feed").catch(()=>{})
         }
       } else {
         if(this.$route.name === 'Login') {
           this.$router.go(this.$router.currentRoute)
         } else {
-          this.$router.push("/")
+          this.$router.push("/").catch(()=>{})
         }
       }
     },
     goProfile() {
       this.isUserIcon = false;
-      this.$router.push('/profileedit')
+      this.$router.push('/profileedit').catch(()=>{})
     },
     goWrite() {
-      this.$router.push('/write')
+      this.$router.push('/write').catch(()=>{})
     },
     goDM() {
       this.isUserIcon = false;
-      this.$router.push('/dm')
+      this.$router.push('/dm').catch(()=>{})
     },
     goAlarm() {
       this.isUserIcon = false;
-      this.$router.push('/alarm')
+      this.$router.push('/alarm').catch(()=>{})
     },
     darkOn() {
       // const HTML = document.querySelector('html')

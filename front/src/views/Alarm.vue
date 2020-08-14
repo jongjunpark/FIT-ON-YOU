@@ -142,7 +142,7 @@ export default {
       }
     },
     goToUserPage(nickname){
-      this.$router.push(`/otheruser/${nickname}`)
+      this.$router.push(`/otheruser/${nickname}`).catch(()=>{})
     },
     
   },

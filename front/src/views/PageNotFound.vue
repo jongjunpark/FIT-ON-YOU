@@ -290,7 +290,7 @@ export default {
 	},
 	methods: {
 		goHome() {
-			this.$router.push('/feed')
+			this.$router.push('/feed').catch(()=>{})
 		},
 		defaultDark() {
       const Dark = this.$cookies.get('dark')

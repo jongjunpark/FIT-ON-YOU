@@ -72,7 +72,7 @@ export default {
         if (data.data.certifNum) {
           this.confirmPwd(data.data.certifNum)
           this.findUserPWd(data.data.userInfo)
-          this.$router.push("/find/password/ok")
+          this.$router.push("/find/password/ok").catch(()=>{})
         } else {
           Swal.fire({
           icon: 'error',
@@ -87,7 +87,7 @@ export default {
     },
     // checkInput() {
     //   // this.errMsg = true
-    //   this.$router.push("/find/password/ok")
+    //   this.$router.push("/find/password/ok").catch(()=>{})
     // },
     checkEmailValidate() {
       if (this.email.length >= 0 && !EmailValidator.validate(this.email))

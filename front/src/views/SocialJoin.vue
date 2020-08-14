@@ -215,7 +215,7 @@ export default {
         )
         this.setLoggedIn(true);
         this.sendUserInfo();
-        this.$router.push('/feed')
+        this.$router.push('/feed').catch(()=>{})
       })
       .catch(function(){
         // console.log(data.data.data)

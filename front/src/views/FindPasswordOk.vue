@@ -49,7 +49,7 @@ export default {
   methods: {
     ...mapMutations(['confirmPwd', 'findUserPWd']),
     pushLogin() {
-      this.$router.push("/")
+      this.$router.push("/").catch(()=>{})
     },
     startTimer(duration, display) {
       var timer = duration, minutes, seconds;
@@ -95,7 +95,7 @@ export default {
       console.log(1)
       if (this.uuid == this.certifNum && !this.remaintime) {
         console.log(2)
-        this.$router.push("/find/password/passwordchange")
+        this.$router.push("/find/password/passwordchange").catch(()=>{})
       } else {
         Swal.fire({
           icon: 'error',

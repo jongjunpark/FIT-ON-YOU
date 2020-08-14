@@ -179,7 +179,7 @@ export default {
           ref.setToken(data.data.auth_token)
           ref.sendUserInfo();
           ref.setLoggedIn(true)
-          ref.$router.push('/feed')
+          ref.$router.push('/feed').catch(()=>{})
         }
       })
       .catch()

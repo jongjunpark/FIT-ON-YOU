@@ -162,19 +162,19 @@ export default {
       this.setMyFeed();
       this.setIsMe(false);
       this.setOtherUser(this.$route.params.nickname);
-      this.$router.push('/profileinform')
+      this.$router.push('/profileinform').catch(()=>{})
     },
     goFollowing() {
       this.setFollowing();
       this.setIsMe(false);
       this.setOtherUser(this.$route.params.nickname);
-      this.$router.push('/profileinform')
+      this.$router.push('/profileinform').catch(()=>{})
     },
     goFollower() {
       this.setFollower();
       this.setIsMe(false);
       this.setOtherUser(this.$route.params.nickname);
-      this.$router.push('/profileinform')
+      this.$router.push('/profileinform').catch(()=>{})
     },
     goChatting() {
       axios.get('https://i3b304.p.ssafy.io/api/chat/existroom',{
