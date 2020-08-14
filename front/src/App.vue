@@ -3,13 +3,14 @@
     <div class="nav-base"></div>
     <div id="nav">
       <div class="nav-logo">
-        <i @click='goHome' class="fas fa-hat-cowboy"></i>
+        <img v-show='!checked' @click="goHome" src="@/assets/images/my-logo2.png" alt="">
+        <img v-show='checked' @click="goHome" src="@/assets/images/my-logo-dark2.png" alt="">
       </div>
-      <div class="nav-user" >
-        <div @click='setUserBar' class="nav-user-img">
+      <div class="nav-user"  @click="readAlarm">
+        <div @click='setUserBar' class="nav-user-img" v-show="isLoggedIn">
           <i class="fas fa-bars"></i>
         </div>
-        <transition name='slide-user-bar'>
+        <transition name='slide-user-bar' v-show="isLoggedIn">
           <div v-show="isUserIcon" class="user-bar">
             <ul class='user-bar-list'>
               <li class="nav-user-icon user-bar-menu"  @click="goProfile">
@@ -21,6 +22,7 @@
               </li>
               <li class="nav-user-icon user-bar-menu" @click="goAlarm">
                 <i class="user-bar-img fas fa-bell"></i>
+                <div v-show="isAlarm" class="ringring">new</div> 
               </li>
             </ul>
           </div>
@@ -30,7 +32,7 @@
     
     <router-view/>
     
-    <div v-if="isLoggedIn" id="nav2" >
+    <div v-show='isLoggedIn' id="nav2" >
       <div class="bottom-nav">
         <div class='menu-bar-list'>
           <div class="menu-bar-select"></div>
@@ -58,8 +60,19 @@
 </template>
 
 <script>
+
+// window.onbeforeunload = function() {
+//   const ROLE = window.$cookies.get('still')
+//   if (ROLE == 'on') {
+//     window.$cookies.remove('auth-nickname')
+//     window.$cookies.remove('auth-token')
+//     window.$cookies.remove('still')
+//   }
+// }
+
 import "./assets/css/common.css";
 import "./assets/css/darkmode.scss";
+import axios from 'axios'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 // import axios from 'axios';
 
@@ -70,6 +83,9 @@ export default {
     return {
       isUserIcon: false,
       checked: false,
+      isDark: false,
+      isAlarm: false,
+      myName: '',
     }
   },
   computed: {
@@ -151,9 +167,9 @@ export default {
       selectBar.classList.remove('go-second-menu')
       selectBar.classList.remove('go-first-menu')
       if (this.$route.name === 'Community') {
-        this.$router.go(this.$router.currentRoute)
+        this.$router.go(this.$router.currentRoute).catch(()=>{})
       } else {
-        this.$router.push("/community")
+        this.$router.push("/community").catch(()=>{})
       }
     },
     goHome() {
@@ -161,30 +177,30 @@ export default {
         if(this.$route.name === 'Feed') {
           this.$router.go(this.$router.currentRoute)
         } else {
-          this.$router.push("/feed")
+          this.$router.push("/feed").catch(()=>{})
         }
       } else {
         if(this.$route.name === 'Login') {
           this.$router.go(this.$router.currentRoute)
         } else {
-          this.$router.push("/")
+          this.$router.push("/").catch(()=>{})
         }
       }
     },
     goProfile() {
       this.isUserIcon = false;
-      this.$router.push('/profileedit')
+      this.$router.push('/profileedit').catch(()=>{})
     },
     goWrite() {
-      this.$router.push('/write')
+      this.$router.push('/write').catch(()=>{})
     },
     goDM() {
       this.isUserIcon = false;
-      this.$router.push('/dm')
+      this.$router.push('/dm').catch(()=>{})
     },
     goAlarm() {
       this.isUserIcon = false;
-      this.$router.push('/alarm')
+      this.$router.push('/alarm').catch(()=>{})
     },
     darkOn() {
       // const HTML = document.querySelector('html')
@@ -299,7 +315,7 @@ export default {
       const HTML = document.querySelector('html')
       const NAV = document.querySelector('#nav')
       const NAVBASE = document.querySelector('.nav-base')
-      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
+      // const NAVLOGO = document.querySelector('.fa-hat-cowboy')
       const HAMBURGER = document.querySelector('.fa-bars')
       const USERBAR = document.querySelectorAll('.nav-user-icon')
 
@@ -311,7 +327,7 @@ export default {
         HTML.classList.add('black')
         NAV.classList.add('nav-dark')
         NAVBASE.classList.add('nav-dark')
-        NAVLOGO.classList.add('nav-logo-dark')
+        // NAVLOGO.classList.add('nav-logo-dark')
         HAMBURGER.classList.add('fa-bars-dark')
         for (let i=0; i<USERBAR.length; i++) {
           USERBAR[i].classList.add('user-bar-dark')
@@ -321,14 +337,39 @@ export default {
         HTML.classList.remove('black')
         NAV.classList.remove('nav-dark')
         NAVBASE.classList.remove('nav-dark')
-        NAVLOGO.classList.remove('nav-logo-dark')
+        // NAVLOGO.classList.remove('nav-logo-dark')
         HAMBURGER.classList.remove('fa-bars-dark')
         for (let i=0; i<USERBAR.length; i++) {
           USERBAR[i].classList.remove('user-bar-dark')
         }
         this.checked = false
       }
-    }, 
+    },
+    readAlarm() {
+      if (this.$cookies.isKey('auth-nickname')) {
+        let nickdata = this.$cookies.get('auth-nickname')
+        let uri = nickdata;
+        let uri_enc = encodeURIComponent(uri);
+        let uri_dec = decodeURIComponent(uri_enc);
+        let res = uri_dec;
+        this.myName = res
+        axios.get('https://i3b304.p.ssafy.io/api/alarm/check',{
+          params:{
+          recevier: this.myName
+          }
+          })
+        .then((data) => {
+          console.log(data.data)
+          if (data.data.data == '1') {
+            this.isAlarm = true
+          }
+          else {
+            this.isAlarm = false
+          }
+        })
+        .catch()
+      }
+    },
   }
 }
 </script>

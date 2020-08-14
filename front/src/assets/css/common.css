@@ -154,7 +154,9 @@ span {
 
 
 #nav .nav-logo {
-
+  width: 9vh;
+  height: 5.5vh;
+  cursor: pointer;
 }
 
 #nav .nav-logo .fa-hat-cowboy {
@@ -162,6 +164,11 @@ span {
   margin: 0;
   color: #262626;
   transition: 0.3s ease;
+}
+
+#nav .nav-logo img {
+  width:100%;
+  height: 100%;
 }
 
 #nav .nav-user{
@@ -191,6 +198,7 @@ span {
   margin-bottom: 2vh;
   cursor: pointer;
   color: white;
+  position: relative;
 }
 
 .user-bar {
@@ -387,10 +395,130 @@ align-items: center;
 }
 
 .main-logo {
-  margin: 5vh 0;
+  margin: 3vh 0;
+  width: 40vh;
+  height: 18vh;
   font-weight: 900;
   font-size: 6vh;
+  transform: skew(-15deg);
+  position: relative;
 }
+
+.main-logo #logo, .main-logo #logo2 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) !important;
+  width: 100vw;
+  padding: 30px;
+  animation: fill 0.5s ease forwards 2.5s;
+}
+/* @media (min-width:450px) {
+  .main-logo #logo, .main-logo #logo2 {
+    width: 120%;
+  }
+} */
+
+.main-logo #logo2 {
+  animation: fill-white 0.5s ease forwards 2.5s !important;
+}
+
+/* .animated-logo path:nth-child(1) {
+  stroke-dasharray: 403;
+  stroke-dashoffset: 403;
+  animation: line-anim 1s ease forwards;
+}
+
+.animated-logo path:nth-child(2) {
+  stroke-dasharray: 229;
+  stroke-dashoffset: 229;
+  animation: line-anim 1s ease forwards 0.3s;
+}
+
+.animated-logo path:nth-child(3) {
+  stroke-dasharray: 340;
+  stroke-dashoffset: 340;
+  animation: line-anim 1s ease forwards 0.6s;
+}
+
+.animated-logo path:nth-child(4) {
+  stroke-dasharray: 460;
+  stroke-dashoffset: 460;
+  animation: line-anim 1s ease forwards 0.9s;
+}
+
+.animated-logo path:nth-child(5) {
+  stroke-dasharray: 539;
+  stroke-dashoffset: 539;
+  animation: line-anim 1s ease forwards 1.2s;
+}
+
+.animated-logo path:nth-child(6) {
+  stroke-dasharray: 456;
+  stroke-dashoffset: 456;
+  animation: line-anim 1s ease forwards 1.5s;
+} */
+.animated-logo path:nth-child(1) {
+  stroke-dasharray: 513;
+  stroke-dashoffset: 513;
+  animation: line-anim 1s ease forwards;
+}
+
+.animated-logo path:nth-child(2) {
+  stroke-dasharray: 287;
+  stroke-dashoffset: 287;
+  animation: line-anim 1s ease forwards 0.3s;
+}
+
+.animated-logo path:nth-child(3) {
+  stroke-dasharray: 439;
+  stroke-dashoffset: 439;
+  animation: line-anim 1s ease forwards 0.6s;
+}
+
+.animated-logo path:nth-child(4) {
+  stroke-dasharray: 633;
+  stroke-dashoffset: 633;
+  animation: line-anim 1s ease forwards 0.9s;
+}
+
+.animated-logo path:nth-child(5) {
+  stroke-dasharray: 658;
+  stroke-dashoffset: 658;
+  animation: line-anim 1s ease forwards 1.2s;
+}
+
+.animated-logo path:nth-child(6) {
+  stroke-dasharray: 580;
+  stroke-dashoffset: 580;
+  animation: line-anim 1s ease forwards 1.5s;
+}
+
+@keyframes line-anim {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes fill {
+  from {
+    fill: transparent;
+  }
+  to {
+    fill: black;
+  }
+}
+
+@keyframes fill-white {
+  from {
+    fill: transparent;
+  }
+  to {
+    fill: #fff;
+  }
+}
+
+
 
 .err-msg {
   margin: 0 0 0 2.5vh !important;
@@ -492,4 +620,19 @@ i {
 	100% {
     opacity: 1;  
   }
+}
+
+.ringring {
+  color: white;
+  position: absolute;
+  border-radius: 2vh;
+  background-color: #EB0056;
+  width: 3.3vh;
+  height: 2.3vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  right: 0;
+  font-size: 1.5vh;
 }

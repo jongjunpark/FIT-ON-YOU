@@ -1,32 +1,24 @@
 <template>
   <div class='wrap'>
-    <div class='wrap-container'>
-      <div class="commu-margin-box"></div>
-      <div class="search-box">
-        <div class="search-inner-box"></div>
-        <div class="search-inner-box"></div>
-        <div class="search-inner-box"></div>
-      </div>
-      <div class="search-box">
-        <div class="search-inner-box"></div>
-        <div class="search-inner-box"></div>
-        <div class="search-inner-box"></div>
-      </div>
-      <div class="search-box">
-        <div class="search-inner-box"></div>
-        <div class="search-inner-box"></div>
-        <div class="search-inner-box"></div>
-      </div>
-      <div class="search-box">
-        <div class="search-inner-box"></div>
-        <div class="search-inner-box"></div>
-        <div class="search-inner-box"></div>
-      </div>
-      <div class="search-box">
-        <div class="search-inner-box"></div>
-        <div class="search-inner-box"></div>
-        <div class="search-inner-box"></div>
-      </div>
+    <div class='wrap-container community-container'>
+      <div class="search-inner-box"><img src="" alt=""></div>
+      <div class="search-inner-box"><img src="" alt=""></div>
+      <div class="search-inner-box"><img src="" alt=""></div>
+      <div class="search-inner-box"><img src="" alt=""></div>
+      <div class="search-inner-box"><img src="" alt=""></div>
+      <div class="search-inner-box"><img src="" alt=""></div>
+      <div class="search-inner-box"><img src="" alt=""></div>
+      <div class="search-inner-box"><img src="" alt=""></div>
+      <div class="search-inner-box"><img src="" alt=""></div>
+      <div class="search-inner-box"><img src="" alt=""></div>
+      <div class="search-inner-box"><img src="" alt=""></div>
+      <div class="search-inner-box"><img src="" alt=""></div>
+      <div class="search-inner-box"><img src="" alt=""></div>
+      <div class="search-inner-box"><img src="" alt=""></div>
+      <div class="search-inner-box"><img src="" alt=""></div>
+      <div class="search-inner-box"><img src="" alt=""></div>
+      <div class="search-inner-box"><img src="" alt=""></div>
+      <div class="search-inner-box"><img src="" alt=""></div>
     </div>
   </div>
 </template>

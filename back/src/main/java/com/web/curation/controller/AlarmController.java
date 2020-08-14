@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,9 +47,7 @@ public class AlarmController {
 		Map<String,Object> resultMap= new HashMap<>();
 		
 		List<Alarm> list=alarmDao.findByRecevierAndIsReadOrderByAlramNoDesc(nickname);
-		for(Alarm a : list) {
-			a.getUser().setPassword("");
-		}
+	
 		int cnt=list.size();
 		if(cnt!=0) {
 			resultMap.put("result",1);
@@ -60,15 +59,39 @@ public class AlarmController {
 		}
 		return resultMap;
 	}
-	@PutMapping
-	public Object isRead(@Valid @RequestParam int alramNo) {
+	@PostMapping
+	public Object isRead(@RequestParam List<Integer> alramNo) {
 		final BasicResponse result = new BasicResponse();
-		if(alarmDao.isReadByAlarmNo(alramNo)==1) {
-			result.status=true;
-			result.data="success";
-		}else {
-			result.status=true;
-			result.data="fail";
+		System.out.println(alramNo.size());
+		
+		alarmDao.isRead(alramNo);
+		result.status=true;
+		result.data="success";
+
+		
+		return result;
+	}
+	
+	@PostMapping("/del")
+	public Object allDelete(@Valid @RequestParam String recevier) {
+		final BasicResponse result = new BasicResponse();
+		System.out.println(recevier);
+		alarmDao.allDel(recevier);
+		
+		result.status=true;
+		result.data="success";
+		
+		return result;
+	}
+	@GetMapping("/check")
+	public Object checkAlarm(@RequestParam String recevier) {
+		final BasicResponse result = new BasicResponse();
+		result.status=true;
+		if(alarmDao.checkAlarm(recevier)>0) {		
+			result.data="1"; 
+		}
+		else {		
+			result.data="0";
 		}
 		
 		return result;

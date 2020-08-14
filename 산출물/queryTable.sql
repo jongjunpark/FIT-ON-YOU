@@ -22,7 +22,7 @@ create table `influencer`(
     primary key(nickname)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-create table `Board` (
+create table `board` (
 	`articleNo` int auto_increment not null,
     `content` varchar(500),
     `articleDate` datetime default current_timestamp(),
@@ -43,7 +43,7 @@ create table `likes`(
     foreign key (articleNo) references Board(articleNo) on delete cascade
 )Engine=InnoDB Default Charset = utf8mb4;
 
-create table `imageStore`(
+create table `imagestore`(
 	`imageNo` int auto_increment not null,
 	`articleNo` int,
     `imageUrl` varchar(300) not null,
@@ -82,7 +82,7 @@ create table `recellboard`(
     foreign key(recellUser) references user(nickname) on delete cascade
     )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-create table `directMessage`(
+create table `directmessage`(
 	`recevier` varchar(20) not null,
     `caller` varchar(20) not null,
     `content` varchar(1000),
@@ -122,7 +122,7 @@ create table `tag` (
     )Engine = InnoDB default Charset = utf8mb4;
     
 
-create table `articleTag`(
+create table `articletag`(
 	`tagNo` int auto_increment not null,
     `tagName` varchar(100),
     `articleNo` int,
@@ -138,3 +138,5 @@ create table `curation`(
     foreign key(username) references user(nickname) on delete cascade,
     foreign key(tagname) references articleTag(tagName)
 )engine=InnoDB default charset=utf8mb4;
+
+

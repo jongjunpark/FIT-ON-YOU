@@ -23,10 +23,36 @@ public class ImageStore {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int imageNo;
 	
+	public int getImageNo() {
+		return imageNo;
+	}
+
+	public void setImageNo(int imageNo) {
+		this.imageNo = imageNo;
+	}
+
+	public int getArticleNo() {
+		return articleNo;
+	}
+
+	public void setArticleNo(int articleNo) {
+		this.articleNo = articleNo;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+		
+	}
+
 	@NotNull
 	private int articleNo;
 	
 	@NotNull
 	@Column(name="imageUrl")
 	private String imageUrl;
+	
 }

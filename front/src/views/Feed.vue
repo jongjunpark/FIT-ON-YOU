@@ -7,13 +7,16 @@
       <div v-show="isInfluNav" class="influ-nav-box">
         <div class="influ-nav">
           <VueSlickCarousel v-bind="settings">
-            <div v-for="influ in influencer" :key="influ.nickname">
-              <div class="influ-box">
-                <div class="influ-icon">
-                  <img :src="influ.profile_img">
-                </div>
-              </div>
-            </div>
+            <div class='feed-influ-carousel1'></div>
+            <div class='feed-influ-carousel2'></div>
+            <div class='feed-influ-carousel3'></div>
+            <div class='feed-influ-carousel4'></div>
+            <div class='feed-influ-carousel5'></div>
+            <div class='feed-influ-carousel6'></div>
+            <div class='feed-influ-carousel7'></div>
+            <div class='feed-influ-carousel8'></div>
+            <div class='feed-influ-carousel9'></div>
+            <div class='feed-influ-carousel10'></div>
           </VueSlickCarousel>
         </div>
       </div>
@@ -22,25 +25,30 @@
     <CommentModal v-if="showModal" @close="showModal= false" :modalArticleNo="modalArticleNo" :modalArticleUser="modalArticleUser"/>
 
     <div class='wrap feed-wrap'>
-      <div class='wrap-container' v-for="feed in mainfeed" :key="feed.articleUser">
+      <div class='wrap-container' v-for="(feed,index) in mainfeed" :key="index">
         <header class="feed-user-data">
           <div class="feed-user-profile" @click="goUserProfile(feed.articleUser)">
             <img :src="feed.userProfile">
           </div>
           <div class="feed-article-head">
             <p class='feed-username'>{{feed.articleUser}}</p>
-            <p class='feed-article-date'>{{feed.articleDate}}</p>
+            <p class='feed-article-date'>{{feed.articleDate}}</p>         
           </div>
         </header>
         <section class="feed-content">
-          <VueSlickCarousel v-bind="settings2">
+          <VueSlickCarousel v-bind="settings2" v-if="feed.images[1]">
             <article class="feed-content-img" v-for="imgs in feed.images" :key="imgs.src">
               <img :src="imgs.src">
             </article>
           </VueSlickCarousel>
+          <div v-else>
+            <article v-for="image in feed.images" :key="image.src" class="feed-content-img">
+              <img :src="image.src">
+            </article>
+          </div>
           <div class="feed-btn-box">
             <div class='feed-btn-left'>
-              
+             
               <i :class="'fas fa-heart '+likeicon[likeStates[index]]" 
               @click="clickLike(feed.articleNo,likeStates[index],index,$event)"></i>
               <i :id="'show-modal'+ feed.articleNo" @click="clickComment(feed.articleNo,feed.articleUser)" class="fas fa-comment-alt"></i>
@@ -56,6 +64,9 @@
         </section>
       </div>
       <div class="margin-box"></div>
+      <infinite-loading @infinite="infiniteHandler" spinner="spiral">
+        <div slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</div>
+      </infinite-loading>
     </div>
   </div>
 </template>
@@ -68,6 +79,7 @@ import "../components/css/feed.css"
 import axios from 'axios'
 import CommentModal from '../components/CommentModal.vue'
 import { mapState, mapActions  } from 'vuex'
+import InfiniteLoading from 'vue-infinite-loading'
 
 function timeForToday(value) {
         const today = new Date();
@@ -123,11 +135,13 @@ export default {
       modalArticleUser:'',
       likeicon:['','heart'],
       markicon:['','mark'],
+      limit:1,
     }
   },
   components: { 
     VueSlickCarousel,
-    CommentModal
+    CommentModal,
+    InfiniteLoading,
   },
   computed:{
     ...mapState(['user', 'flag']),
@@ -155,13 +169,20 @@ export default {
   
     clickLike(articleNo,flag,index,e) {
       let ref=this
+
+      let data = this.$cookies.get('auth-nickname');
+      let uri = data;
+      let uri_enc = encodeURIComponent(uri);
+      let uri_dec = decodeURIComponent(uri_enc);
+      let res = uri_dec;
+
       if(flag==0){
         this.likeStates[index]=1
         e.target.classList.add('heart')
         this.modal = true
-        axios.post('http://localhost:8080/api/board/likes',{
+        axios.post('https://i3b304.p.ssafy.io/api/board/likes',{
             articleNo:articleNo,
-            nickname:this.user.nickname
+            nickname:res
           })
           .then(console.log("좋아요"))
           .catch()
@@ -169,10 +190,10 @@ export default {
       else if(flag==1){
         this.likeStates[index]=0
         e.target.classList.remove('heart')
-        axios.delete('http://localhost:8080/api/board/likes',{
+        axios.delete('https://i3b304.p.ssafy.io/api/board/likes',{
           data:{
             articleNo:articleNo,
-            nickname:this.user.nickname
+            nickname:res
           }
         })
         .then(console.log(ref.likeStates[index],"좋아요 취소"))
@@ -187,12 +208,19 @@ export default {
     },
     clickBookMark(articleNo,flag,index,e) {
       let ref=this
+
+      let data = this.$cookies.get('auth-nickname');
+      let uri = data;
+      let uri_enc = encodeURIComponent(uri);
+      let uri_dec = decodeURIComponent(uri_enc);
+      let res = uri_dec;
+
       if(flag==0){
         this.bookmarkStates[index]=1
         e.target.classList.add('mark')
-        axios.post('http://localhost:8080/api/board/bookmark',{
+        axios.post('https://i3b304.p.ssafy.io/api/board/bookmark',{
             bookedArticle:articleNo,
-            bookUser:this.user.nickname
+            bookUser:res
           })
           .then(console.log("북마크 등록"))
           .catch()
@@ -200,10 +228,10 @@ export default {
       else if(flag==1){
         this.bookmarkStates[index]=0
         e.target.classList.remove('mark')
-        axios.delete('http://localhost:8080/api/board/bookmark',{
+        axios.delete('https://i3b304.p.ssafy.io/api/board/bookmark',{
           data:{
             bookedArticle:articleNo,
-            bookUser:this.user.nickname
+            bookUser:res
           }
         })
         .then(console.log(ref.bookmarkStates[index],"북마크 취소"))
@@ -244,6 +272,102 @@ export default {
         INFLUNAV.classList.remove('nav-influ-dark')
       }
     },
+    infiniteHandler($state){
+      let ref=this;
+      console.log("바닥에 닿음",ref.limit);
+
+      let nickdata = this.$cookies.get('auth-nickname')
+      let uri = nickdata;
+      let uri_enc = encodeURIComponent(uri);
+      let uri_dec = decodeURIComponent(uri_enc);
+      let res = uri_dec;
+
+
+      const frm = new FormData();
+      frm.append('nickname',res);
+      frm.append('page',ref.limit);
+      axios.post('https://i3b304.p.ssafy.io/api/board/newsfeed/'+ref.limit,frm)
+      .then((data)=>{
+        setTimeout(() => {
+          if(data.data.length){
+            
+            console.log("success")
+            console.log(data)
+            this.feedlist=data.data;
+            console.log(typeof(this.feedlist))
+            for (let index = 0; index < this.feedlist.length; index++) {
+              let feeddata={tags:[],
+                            images:[],
+                            content:"",
+                            articleUser:"",
+                            userProfile:"",}
+
+              const el = this.feedlist[index];
+
+              let follow = new FormData();
+
+              follow.append('follow',el.articleUser);
+
+              axios.post("https://i3b304.p.ssafy.io/api/board/profileimg",follow).then((proff)=>{
+                feeddata.userProfile=proff.data.profile_img;
+              });
+
+              const articleNo = new FormData();
+              articleNo.append('articleNo',el.articleNo);
+
+              axios.post("https://i3b304.p.ssafy.io/api/board/images",articleNo).then((img)=>{
+                const imgs = img.data;
+                const imglist = [];
+                for (let i = 0; i < imgs.length; i++) {
+                  const el2= imgs[i];
+                  imglist.push({src:el2.imageUrl});  
+                }
+                if(this.feedlist[index].articleUser!=null){
+                  feeddata.images=imglist;
+                  feeddata.content=this.feedlist[index].content;
+                  feeddata.articleDate= timeForToday(this.feedlist[index].articleDate);
+                  feeddata.articleUser= this.feedlist[index].articleUser;
+                  feeddata.articleNo=this.feedlist[index].articleNo;
+                }else{
+                  feeddata.url=imglist;
+                  feeddata.content=this.feedlist[index].content;
+                  feeddata.articleDate= timeForToday(this.feedlist[index].articleDate);
+                  feeddata.articleUser= this.feedlist[index].influeUser;
+                  feeddata.articleNo=this.feedlist[index].articleNo;
+              }
+              
+            });
+              axios.post("https://i3b304.p.ssafy.io/api/board/tags",articleNo).then((tag)=>{
+              const tags = tag.data;
+              const taglist = [];
+              for (let i = 0; i < tags.length; i++) {
+                  const el2= tags[i];
+                  taglist.push({tagname:el2.tagName});  
+                }
+                  feeddata.tags=taglist;
+              });
+            
+              this.mainfeed.push(feeddata)
+              ref.likeStates.push(this.feedlist[index].likechk);
+              ref.bookmarkStates.push(this.feedlist[index].markchk);
+            }
+
+            $state.loaded();
+            ref.limit+=1;
+            console.log(ref.limit)
+            if(ref.mainfeed.length/10==0){
+              $state.loaded();
+            }
+      
+
+          }
+          else{
+            $state.complete();
+          }
+        }, 1000);
+      })
+      .catch()
+    },
   },
   mounted() {
     this.onNewsFeed()
@@ -254,13 +378,12 @@ export default {
     let uri_enc = encodeURIComponent(uri);
     let uri_dec = decodeURIComponent(uri_enc);
     let res = uri_dec;
-    
-    
+
     const formData = new FormData();
     
     formData.append('nickname',res);
-
-    axios.post("http://localhost:8080/api/board/newsfeed",formData).then((data)=>{
+    // formData.append('pageNum',ref.limit),
+    axios.post("https://i3b304.p.ssafy.io/api/board/newsfeed/0",formData).then((data)=>{
       console.log("success")
       console.log(data)
       this.feedlist=data.data;
@@ -278,14 +401,14 @@ export default {
 
         follow.append('follow',el.articleUser);
 
-        axios.post("http://localhost:8080/api/board/profileimg",follow).then((proff)=>{
+        axios.post("https://i3b304.p.ssafy.io/api/board/profileimg",follow).then((proff)=>{
           feeddata.userProfile=proff.data.profile_img;
         });
 
         const articleNo = new FormData();
         articleNo.append('articleNo',el.articleNo);
 
-        axios.post("http://localhost:8080/api/board/images",articleNo).then((img)=>{
+        axios.post("https://i3b304.p.ssafy.io/api/board/images",articleNo).then((img)=>{
           const imgs = img.data;
           const imglist = [];
           for (let i = 0; i < imgs.length; i++) {
@@ -307,7 +430,7 @@ export default {
         }
         
       });
-        axios.post("http://localhost:8080/api/board/tags",articleNo).then((tag)=>{
+        axios.post("https://i3b304.p.ssafy.io/api/board/tags",articleNo).then((tag)=>{
         const tags = tag.data;
         const taglist = [];
         for (let i = 0; i < tags.length; i++) {
@@ -320,23 +443,37 @@ export default {
         this.mainfeed.push(feeddata)
         ref.likeStates.push(this.feedlist[index].likechk);
         ref.bookmarkStates.push(this.feedlist[index].markchk);
-  }
-  });
-  console.log(this.mainfeed)
-  axios.post("http://localhost:8080/api/board/influencer").then((data)=>{
-      this.influencer=data.data;
-      console.log(this.influencer)
+      }
     });
+    axios.post("https://i3b304.p.ssafy.io/api/board/influencer").then((data)=>{
+        this.influencer=data.data;
 
-  console.log(this.likeStates,'좋아요리스트');
-  console.log(this.bookmarkStates,'북마크리스트');
+        for (let i=0; i<data.data.length; i++) {  
+          const CAROUSELL = document.querySelector(`.feed-influ-carousel${i+1}`)
+          const INFLUBOX = document.createElement('div')
+          const INFLUICON = document.createElement('div')
+          const INFLUIMG = document.createElement('img')
+          INFLUBOX.classList.add('influ-box')
+          INFLUICON.classList.add('influ-icon')
+          INFLUIMG.setAttribute("src", data.data[i].profile_img)
+  
+          INFLUICON.appendChild(INFLUIMG)
+          INFLUBOX.appendChild(INFLUICON)
+          CAROUSELL.appendChild(INFLUBOX)
+        }
+
+        console.log(this.influencer,'influ')
+      });
+    console.log(this.mainfeed, '메인피드')
+    console.log(this.likeStates,'좋아요리스트');
+    console.log(this.bookmarkStates,'북마크리스트');
   }
 
   
 }
 
 </script>
-<style scoped>
+<style>
 @media (min-width: 1200px) {
   .wrap {
   max-width: 440px !important;
@@ -380,7 +517,7 @@ export default {
 } */
 .open-influ-nav {
   position: fixed;
-  top: 60px;
+  top: 8vh;
   left: 50%;
   transform: translate(-50%, 0);
   width: 50px;

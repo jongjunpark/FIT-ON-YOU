@@ -49,7 +49,7 @@ export default {
   methods: {
     ...mapMutations(['confirmPwd', 'findUserPWd']),
     pushLogin() {
-      this.$router.push("/")
+      this.$router.push("/").catch(()=>{})
     },
     startTimer(duration, display) {
       var timer = duration, minutes, seconds;
@@ -76,7 +76,7 @@ export default {
       display = document.querySelector('#time');
       this.startTimer(fiveMinutes, display);
       this.remaintime = false;
-      axios.get('http://i3b304.p.ssafy.io:8080/api/account/findPassword',{
+      axios.get('https://i3b304.p.ssafy.io/api/account/findPassword',{
         params:{
           email: this.pwdUser.email,
           pTime: this.pwdUser.birth.substring(0, 4) + this.pwdUser.birth.substring(5, 7) + this.pwdUser.birth.substring(8, 10) 
@@ -95,7 +95,7 @@ export default {
       console.log(1)
       if (this.uuid == this.certifNum && !this.remaintime) {
         console.log(2)
-        this.$router.push("/find/password/passwordchange")
+        this.$router.push("/find/password/passwordchange").catch(()=>{})
       } else {
         Swal.fire({
           icon: 'error',

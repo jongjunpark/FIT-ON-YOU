@@ -111,7 +111,7 @@ export default {
       formData.append('email',this.pwdUser.email);
       formData.append('password',this.passwordConfirm);
 
-      axios.post('http://i3b304.p.ssafy.io:8080/api/account/changePassword',
+      axios.post('https://i3b304.p.ssafy.io/api/account/changePassword',
         formData).then(data => {
         console.log(data)
         this.$cookies.set('auth-token', data.data.auth_token)
@@ -123,7 +123,7 @@ export default {
           '',
           'success'
         )
-        this.$router.push('/feed')
+        this.$router.push('/feed').catch(()=>{})
       })
       .catch(data => {
         console.log(data)

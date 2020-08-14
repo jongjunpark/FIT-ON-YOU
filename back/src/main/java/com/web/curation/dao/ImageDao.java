@@ -16,17 +16,19 @@ public interface ImageDao extends JpaRepository<ImageStore, String>{
 	
 	@Query(value="select i.imageurl, i.articleno, i.imageno " + 
 			"from board b, imagestore i " + 
-			"where b.articleuser = :nickname " + 
+			"where b.articleuser = :nickname and b.articleno = i.articleno " + 
 			"group by i.articleno "
 			+ "order by i.articleno desc", nativeQuery = true)
 	List<ImageStore> myBoardList(String nickname);
 	
 	@Query(value="select i.imageUrl , i.articleno, i.imageno " + 
 			" from board b, bookmark m, imagestore i " + 
-			" where b.articleno=m.bookedarticle and m.bookuser=:nickname " + 
+			" where b.articleno=m.bookedarticle and m.bookuser=:nickname and b.articleno=i.articleno " + 
 			" group by i.articleno "
 			+" order by i.articleno desc", nativeQuery=true)
 	List<ImageStore> bookMarkImgList(@Param("nickname") String nickname);
 	
 	List<ImageStore> findImagestoreByArticleNoOrderByArticleNoDesc(int num);
+	
+
 }

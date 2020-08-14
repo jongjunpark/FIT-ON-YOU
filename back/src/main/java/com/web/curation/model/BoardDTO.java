@@ -82,4 +82,22 @@ public class BoardDTO {
 	
 	private int likechk;
 	private int markchk;
+
+	public int getLikechk() {
+		return likechk;
+	}
+
+	public void setLikechk(int likechk) {
+		this.likechk = likechk;
+	}
+
+	public int getMarkchk() {
+		return markchk;
+	}
+
+	public void setMarkchk(int markchk) {
+		this.markchk = markchk;
+	}
+	
+	
 }

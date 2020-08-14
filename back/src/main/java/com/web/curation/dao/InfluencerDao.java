@@ -8,10 +8,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.web.curation.model.ImageStore;
 import com.web.curation.model.Influencer;
 
 public interface InfluencerDao extends JpaRepository<Influencer, String> {
 
 	@Query(value = "select * from influencer", nativeQuery = true)
 	List<Influencer> AllInfluencers();
+	
+	Influencer findInfluencerByNickname(String nickname);
+	
+
 }

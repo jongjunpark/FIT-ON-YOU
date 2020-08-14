@@ -27,44 +27,47 @@
           </label>
         </div>
         <div class="profile-follow-box">
-          <div class="profile-follow">
+          <div class="profile-follow" @click='goFollower'>
             <p class='profile-follow-head'>팔로워</p>
             <p class='profile-follow-content'>{{ followedCnt }}</p>
           </div>
-          <div class="profile-follower">
+          <div class="profile-follow" @click='goFollowing'>
             <p class='profile-follow-head'>팔로잉</p>
             <p class='profile-follow-content'>{{ followingCnt }}</p>
           </div>
         </div>
       </div>
       <div class="profile-edit-area">
-        <p v-show="isChange && isChange2" class="my-nickname" @click="changeNickName">{{ user.nickname }}닉
+        <p v-show="isChange && isChange2" class="my-nickname" @click="changeNickName">{{nickname }}
           <img src="../assets/images/edit.png" alt="" class="profile-edit-img">
         </p>
         <div v-show="isChange2 && isChange" class="profile-edit-content" @click="changeContent">
-          <p class='my-content'>{{user.selfintroduce}}소개
+          <p class='my-content'>{{content}}
             <img src="../assets/images/edit.png" alt="" class="profile-edit-img">
           </p>
         </div>
       </div>
       <div class="profile-btn-area">
-        <div v-if="isChange && isChange2" class="profile-user-change" @click="goSettings">
+        <div v-show="isChange && isChange2" class="profile-user-change" @click="goSettings">
           <span><i class="fas fa-user-cog fa-2x profile-setting-btn"></i> 계정설정</span>
         </div>
       </div>
-      <div class="profile-footer-area" v-if="isChange2 && isChange">
-        <div class="profile-user-btn">
+      <div class="profile-footer-area" v-show="isChange2 && isChange">
+        <div class="profile-user-btn" @click='goMyFeed'>
           <i class="far fa-file-image mylist-icon"></i>
         </div>
-        <div class="profile-user-btn">
+        <div class="profile-user-btn" @click='goBookMark'>
           <i class="fas fa-bookmark bookmark-icon"></i>
         </div>
-        <div class="profile-user-btn">
+        <div class="profile-user-btn" @click='goFollower'>
+          <i class="fas fa-user following-icon"><i class="fas fa-arrow-left follow-inner"></i></i>
+        </div>
+        <div class="profile-user-btn" @click='goFollowing'>
           <i class="fas fa-user follower-icon"><i class="fas fa-arrow-right follow-inner"></i></i>
         </div>
-        <div class="profile-user-btn">
-          <i class="fas fa-user following-icon"><i class="fas fa-arrow-left follow-inner"></i></i>
-        </div>       
+        <div class="profile-user-btn" @click='goCuration'>
+          <i class="fas fa-check curation-icon"></i>
+        </div>    
       </div>
     </div>
   </div>
@@ -73,7 +76,7 @@
 <script>
 import "../components/css/profileedit.css"
 import axios from 'axios'
-import { mapState,mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
   name: 'ProfileEdit',
@@ -93,7 +96,7 @@ export default {
   watch: {
     flag() {
       this.defaultDark()
-    },
+    }
   },
   mounted(){
     this.defaultDark()
@@ -105,29 +108,27 @@ export default {
     let res = uri_dec;
     this.tempNickName=res;
     this.nickname=res;
-    axios.get('http://localhost:8080/api/mypage/',{
+    axios.get('https://i3b304.p.ssafy.io/api/mypage/',{
       params:{nickname:res}
     })
     .then((data)=>{
+      console.log(data);
       ref.followedCnt=data.data.followedCnt;
       ref.followingCnt=data.data.followingCnt;
+      ref.nickname=data.data.userinfo.nickname;
+      ref.content=data.data.userinfo.selfintroduce;
+      if(data.data.userinfo.profile_img){
+        ref.profileImg=data.data.userinfo.profile_img;
+      }
     })
     .catch()
+  },
 
-  },
-  beforeUpdate(){
-    this.profileImg=this.user.profile_img;
-  },
   computed: {
     ...mapState(['isLoggedIn', 'user', 'flag'])
   },
-  watch: {
-    flag() {
-      this.defaultDark()
-    }
-  },
   methods: {
-    ...mapMutations(['setUserIntro','setUserNick','setToken']),
+    ...mapMutations(['setUserIntro','setUserNick','setToken','setMyFeed','setBookMark','setFollower','setFollowing','setCuration','setIsMe']),
     ...mapActions(['sendUserInfo']),
     setProfileImg() {
       let ref=this;
@@ -135,7 +136,7 @@ export default {
       var photoFile = document.getElementById("profile-img-edit");
       frm.append("profile-img-edit", photoFile.files[0]);
       frm.append("nickname",this.nickname);
-      axios.post('http://localhost:8080/api/account/addProfileImg',frm)
+      axios.post('https://i3b304.p.ssafy.io/api/account/addProfileImg',frm)
       .then((data)=>{
         console.log(data)
         ref.$cookies.set('auth-token', data.data.auth_token)
@@ -144,8 +145,31 @@ export default {
         ref.profileImg=ref.user.profileImg;
       })
       .catch()
-
-
+    },
+    goMyFeed() {
+      this.setMyFeed();
+      this.setIsMe(true);
+      this.$router.push('/profileinform').catch(()=>{})
+    },
+    goBookMark() {
+      this.setBookMark();
+      this.setIsMe(true);
+      this.$router.push('/profileinform').catch(()=>{})
+    },
+    goFollowing() {
+      this.setFollowing();
+      this.setIsMe(true);
+      this.$router.push('/profileinform').catch(()=>{})
+    },
+    goFollower() {
+      this.setFollower();
+      this.setIsMe(true);
+      this.$router.push('/profileinform').catch(()=>{})
+    },
+    goCuration() {
+      this.setCuration();
+      this.setIsMe(true);
+      this.$router.push('/profileinform').catch(()=>{})
     },
     changeNickName() {
       const wrapContainer = document.querySelector('.wrap-container')
@@ -184,7 +208,7 @@ export default {
       const formData=new FormData();
       formData.append("prev",this.tempNickName);
       formData.append("cur",this.nickname);
-      axios.post('http://localhost:8080/api/account/nickchange',formData)
+      axios.post('https://i3b304.p.ssafy.io/api/account/nickchange',formData)
       .then((data)=>{
         console.log(data);
         if(data.data.result.data=="success"){
@@ -239,7 +263,7 @@ export default {
       const formData = new FormData();
       formData.append("nickname",this.nickname);
       formData.append("selfintroduce",this.content);
-      axios.put('http://localhost:8080/api/account/selfintro',formData)
+      axios.put('https://i3b304.p.ssafy.io/api/account/selfintro',formData)
       .then((data)=>{
         console.log(data);
         ref.$cookies.set('auth-token', data.data.auth_token)
@@ -251,7 +275,7 @@ export default {
 
     },
     goSettings() {
-      this.$router.push('/settings')
+      this.$router.push('/settings').catch(()=>{})
     },
     defaultDark() {
       const Dark = this.$cookies.get('dark')

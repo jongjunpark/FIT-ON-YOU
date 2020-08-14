@@ -6,18 +6,19 @@
         <div class="in-img">
           <img src="../assets/images/default-user.png" alt="" class="in-img-profile">
         </div>
-        <p class="back-btn-name">kidcozyboy</p>
+        <p class="back-btn-name">{{ othername }}</p>
       </div>
       <div class="message-content-wrap">
         <div class="message-content">
          <div v-for="message in messages" :key="message.id">
-          <div v-show='message.senduser == authUser.nickname' class="user-me">
-            <p class="user-me-content">{{message.senduser}}</p>x`x`
-            <p class="in-user-content">{{message.message}}</p>
+          <div v-show='message.senduser == nick' class="user-me">
+            <p class="user-me-content">{{ message.message }}</p>
           </div>
-          <div v-show='message.senduser != authUser.nickname' class="user-opponent">
-            <p class="user-me-content">{{message.senduser}}</p>
-            <p class="in-user-content">{{message.message}}</p>
+          <div v-show='message.senduser != nick' class="user-opponent">
+            <!-- <p class="user-me-content">{{ message.senduser }}</p> -->
+            <!-- 이미지 보여주기 -->
+            <img src="../assets/images/default-user.png" alt="" class="in-img-content">
+            <p class="in-user-content">{{ message.message }}</p>
           </div>
          </div>         
       </div>
@@ -25,7 +26,7 @@
       <div class="input-message">
         <input type="textarea" name="" id="" class="input-message-in" placeholder="메세지 보내기..." v-model="text" @keyup.enter="saveMessage">
       </div>
-      <button class="butn" @click="saveMessage">↑</button>
+        <button class="butn" @click="saveMessage">↑</button>
     </div>
   </div>
 </template>
@@ -68,26 +69,54 @@ export default {
       messages:[],
       authUser:{},
       roomname:'',
+      nick: '',
+      othername: '',
     }
   },
   computed: {
-    ...mapState(['user'])
+    ...mapState(['user' ,'flag'])
   },
+  updated() {
+    this.goDown()
+    this.defaultDark()
+  },
+  watch: {
+    flag() {
+      this.defaultDark()
+    }
+  },
+
   methods: {
- 
     saveMessage(){
       //save to firestore
-      db.collection(`chat`).add({
+      db.collection(this.roomname).add({
         message: this.text,
-        createdAt: new Date(),
+        createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
         senduser: this.user.nickname,
       })
+      
+      //  if (this.text !== '') {
+      // //save to firestore
+      //   var divParent = document.querySelector('.direct-message-content');
+      // db.collection(`chat`).add({
+      //   divParent.className = 'direct-message-content';
+      //   message: this.text,
+
+      //   createdAt: new Date(),
+      //   var div = document.createElement('div');
+      //   senduser: this.user.nickname,
+      //   div.className = 'user-me'; 
+      // })
+
+      //   var p = document.createElement('p');
+      //   p.className = 'user-me-content';
+      //   p.innerText = this.text;
 
       console.log(this.user);
       this.text = null;
     },
     fetchMessage(){
-      db.collection('chat').orderBy('createdAt').onSnapshot((querySnapshot)=>{
+      db.collection(this.roomname).orderBy('createdAt').onSnapshot((querySnapshot)=>{
         let allMessages = [];
         querySnapshot.forEach(doc=>{
           allMessages.push(doc.data());
@@ -95,16 +124,13 @@ export default {
 
         this.messages=allMessages;
         console.dir(this.messages);
+        this.goDown()
+        this.defaultDark()
+        
       })
     },
-    getInfiniteChat() {
-      setInterval(this.chatListFunction, 3000);
-    },
-    chatListFunction() {
-      console.log('1');
-    },
     goDM() {
-      this.$router.push('/dm')
+      this.$router.go(-1).catch(()=>{})
     },
     defaultDark() {
       const Dark = this.$cookies.get('dark')
@@ -151,13 +177,26 @@ export default {
         }
       }
     },
+    goDown() {
+      document.querySelector('.message-content-wrap').scrollTop = document.querySelector('.message-content-wrap').scrollHeight;
+    },
   },
   created(){
-      this.fetchMessage();
-      this.authUser = this.user;
+    this.roomname = this.$route.params.roomname
+    this.othername = this.$route.params.othername
+    console.log(this.roomname)
+    console.log(this.othername)
+    this.fetchMessage();
   },
   mounted(){
-      this.roomname = this.$route.params;
+    this.defaultDark()  
+    this.goDown()
+    let nickdata = this.$cookies.get('auth-nickname')
+    let uri = nickdata;
+    let uri_enc = encodeURIComponent(uri);
+    let uri_dec = decodeURIComponent(uri_enc);
+    let res = uri_dec;
+    this.nick = res
   }
 }
 </script>

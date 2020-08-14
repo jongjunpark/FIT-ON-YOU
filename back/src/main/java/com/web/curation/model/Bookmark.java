@@ -21,6 +21,30 @@ public class Bookmark {
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // 기본키 매핑 db에서 자동증분으로 설정
 	private int bookmarkNo;
 	
+	public int getBookmarkNo() {
+		return bookmarkNo;
+	}
+
+	public void setBookmarkNo(int bookmarkNo) {
+		this.bookmarkNo = bookmarkNo;
+	}
+
+	public int getBookedArticle() {
+		return bookedArticle;
+	}
+
+	public void setBookedArticle(int bookedArticle) {
+		this.bookedArticle = bookedArticle;
+	}
+
+	public String getBookUser() {
+		return bookUser;
+	}
+
+	public void setBookUser(String bookUser) {
+		this.bookUser = bookUser;
+	}
+
 	@NotNull
 	private int bookedArticle;
 	

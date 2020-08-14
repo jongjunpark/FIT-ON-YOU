@@ -1,5 +1,8 @@
 package com.web.curation.model;
 
+import java.time.LocalDateTime;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -26,12 +29,65 @@ public class Comment {
 	@NotNull
 	private String writer;
 	
+	public int getCommentNo() {
+		return commentNo;
+	}
+
+	public void setCommentNo(int commentNo) {
+		this.commentNo = commentNo;
+	}
+
+	public String getWriter() {
+		return writer;
+	}
+
+	public void setWriter(String writer) {
+		this.writer = writer;
+	}
+
+	public int getArticleNo() {
+		return articleNo;
+	}
+
+	public void setArticleNo(int articleNo) {
+		this.articleNo = articleNo;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	public LocalDateTime getCreateAt() {
+		return createAt;
+	}
+
+	public void setCreateAt(LocalDateTime createAt) {
+		this.createAt = createAt;
+	}
+
 	@NotNull
 	private int articleNo;
 	
 	private String content;
 	
+	@Column(insertable = false, updatable = false) // 일기전용시 false
+	private LocalDateTime createAt;
+	
 	@ManyToOne(optional=false)
 	@JoinColumn(name="writer", referencedColumnName="nickname",insertable=false, updatable=false)
 	private User user;
+	
+	
 }

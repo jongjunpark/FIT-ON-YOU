@@ -17,15 +17,19 @@
               <div class="comment-article">
                 <div class="comment-article-head">
                   <div class="comment-username comment-text">{{comment.writer}}</div>
-                  <div class="comment-update-time comment-text">10시간전</div>
+                  <div class="comment-update-time comment-text">{{timeCal(comment.createAt)}}</div>
                 </div>
-                <div class="comment-content comment-text">{{comment.content}}</div>
+                <div class="comment-content comment-text">{{comment.content}}
+                  <i v-if="comment.user.nickname=nickname"
+                    @click="deleteComment(comment.commentNo,index)"></i></div>
               </div>
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <div class="comment-my-icon"></div>
+          <div class="comment-my-icon">
+            <img class="comment-user-icon" :src="user.profile_img">
+          </div>
           <input @input="comment_content = $event.target.value" class='comment-input' type="text" placeholder="댓글을 입력해 주세요.">
           <i class="fas fa-check-circle" @click="addComment"></i>
         </div>
@@ -37,7 +41,7 @@
 <script>
 import { mapState } from 'vuex'
 import axios from 'axios'
-import { mapState } from 'vuex'
+import time from '../utils/timecal.js'
 
 export default {
   name: 'CommentModal',
@@ -50,14 +54,22 @@ export default {
       comment_content: '',
       commentList: [],
       profileList:[],
+      nickname:'',
+
     }
   },
   mounted(){
-    this.defaultDark()
     let ref=this;
-    axios.get('http://localhost:8080/api/comment',{
+
+    let data = this.$cookies.get('auth-nickname');
+    let uri = data;
+    let uri_enc = encodeURIComponent(uri);
+    let uri_dec = decodeURIComponent(uri_enc);
+    this.nickname = uri_dec;
+
+    axios.get('https://i3b304.p.ssafy.io/api/comment',{
       params:{
-        articleNo:this.modalArticleNo,
+        articleNo: this.modalArticleNo,
       }
     })
     .then((res)=>{
@@ -68,71 +80,17 @@ export default {
     .catch()
 
   },
-  computed: {
-    ...mapState(['flag'])
-  },
   watch: {
     comment_content() {
       this.checkCommentInput();
     },
-    flag() {
-      this.defaultDark()
-    }
+   
   },
   methods: {
-    defaultDark() {
-      const Dark = this.$cookies.get('dark')
-      const HTML = document.querySelector('html')
-      const wrap = document.querySelector('.wrap')
-      const NAV = document.querySelector('#nav')
-      const NAVBASE = document.querySelector('.nav-base')
-      const NAVLOGO = document.querySelector('.fa-hat-cowboy')
-      const INPUT = document.querySelectorAll('input')
-      const TEXTAREA = document.querySelectorAll('textarea')
-      const COMMENT_HEAD = document.querySelector('.modal-head')
-      const ARROW_ICON = document.querySelector('.fa-arrow-left')
-      const COMMENT_BODY = document.querySelector('.modal-container')
-      const COMMENT_FOOTER = document.querySelector('.modal-footer')
-
-      if (Dark === null) {
-        this.$cookies.set('dark', 'on')
-      }
-
-      if (Dark === 'off') {
-        HTML.classList.add('black')
-        wrap.classList.add('wrap-dark')
-        NAV.classList.add('nav-dark')
-        NAVBASE.classList.add('nav-dark')
-        NAVLOGO.classList.add('nav-logo-dark')
-        COMMENT_HEAD.classList.add('comment-head-dark')
-        ARROW_ICON.classList.add('comment-back-dark')
-        COMMENT_BODY.classList.add('comment-head-dark')
-        COMMENT_FOOTER.classList.add('comment-head-dark')
-        for (let i=0; i<INPUT.length ; i++) {
-          INPUT[i].classList.add('comment-input-dark')
-        }
-        for (let i=0; i<TEXTAREA.length ; i++) {
-          TEXTAREA[i].classList.add('textarea-dark')
-        }
-      } else {
-        HTML.classList.remove('black')
-        wrap.classList.remove('wrap-dark')
-        NAV.classList.remove('nav-dark')
-        NAVBASE.classList.remove('nav-dark')
-        NAVLOGO.classList.remove('nav-logo-dark')
-        COMMENT_HEAD.classList.remove('comment-head-dark')
-        ARROW_ICON.classList.remove('comment-back-dark')
-        COMMENT_BODY.classList.remove('comment-head-dark')
-        COMMENT_FOOTER.classList.remove('comment-head-dark')
-        for (let i=0; i<INPUT.length ; i++) {
-          INPUT[i].classList.remove('comment-input-dark')
-        }
-        for (let i=0; i<TEXTAREA.length ; i++) {
-          TEXTAREA[i].classList.remove('textarea-dark')
-        }
-        
-      }
+    timeCal(val){
+      return time.timeForToday(val);
     },
+   
     checkCommentInput() {
       const INPUTBTN = document.querySelector('.fa-check-circle')
       if (this.comment_content) {
@@ -156,8 +114,9 @@ export default {
       frm.append("content", this.comment_content);
       frm.append("articleUser",this.modalArticleUser);
       console.log(this.modalArticleNo);
+      let today=new Date();
 
-      axios.post('http://localhost:8080/api/comment',frm
+      axios.post('https://i3b304.p.ssafy.io/api/comment',frm
       )
       .then((data)=>{
         let tmp={
@@ -167,7 +126,8 @@ export default {
           content:data.data.rescmt.content,
           user:{
             profile_img:ref.user.profile_img,
-          }
+          },
+          createAt:today,
         }
         ref.commentList.push(tmp);
         ref.comment_content='';
@@ -177,39 +137,21 @@ export default {
         console.log("fail");
       })
     },
-    defaultDark() {
-      const Dark = this.$cookies.get('dark')
-      const HTML = document.querySelector('html')
-      const INPUT = document.querySelectorAll('input')
-      const COMMENT_HEAD = document.querySelector('.modal-head')
-      const ARROW_ICON = document.querySelector('.fa-arrow-left')
-      const COMMENT_BODY = document.querySelector('.modal-container')
-      const COMMENT_FOOTER = document.querySelector('.modal-footer')
 
-      if (Dark === null) {
-        this.$cookies.set('dark', 'on')
-      }
+    deleteComment(commentNo,index){
+      
+      let frm=new FormData();
+      frm.append('commentNo',commentNo);
+      axios.post('https://i3b304.p.ssafy.io/api/comment/del',frm)
+      .then(()=>{
+        this.commentList.splice(index,1);
+        this.profileList.splice(index,1);
 
-      if (Dark === 'off') {
-        HTML.classList.add('black')
-        COMMENT_HEAD.classList.add('comment-head-dark')
-        ARROW_ICON.classList.add('comment-back-dark')
-        COMMENT_BODY.classList.add('comment-head-dark')
-        COMMENT_FOOTER.classList.add('comment-head-dark')
-        for (let i=0; i<INPUT.length ; i++) {
-          INPUT[i].classList.add('comment-input-dark')
-        }
-      } else {
-        HTML.classList.remove('black')
-        COMMENT_HEAD.classList.remove('comment-head-dark')
-        ARROW_ICON.classList.remove('comment-back-dark')
-        COMMENT_BODY.classList.remove('comment-head-dark')
-        COMMENT_FOOTER.classList.remove('comment-head-dark')
-        for (let i=0; i<INPUT.length ; i++) {
-          INPUT[i].classList.remove('comment-input-dark')
-        }
-      }
+      })
+      .catch()
+
     },
+    
   }
 }
 </script>

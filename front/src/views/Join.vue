@@ -1,7 +1,7 @@
 <template>
   <div class='wrap'>
     <div class='wrap-container wrap-join'>
-      <h1 class='join-logo'>Welcome</h1>
+      <h1 class='join-logo'>회원가입</h1>
       <div class="join-input-area">
         <label for="">이메일</label>
         <input @focus="activeInput" @blur='deactiveInputEmail' v-model='input.email' type="text" id='email-join' placeholder="example">
@@ -323,7 +323,7 @@ export default {
       }
     },
     checkNickname() {
-      axios.get('http://i3b304.p.ssafy.io:8080/api/account/checkNickname',{ 
+      axios.get('https://i3b304.p.ssafy.io/api/account/checkNickname',{ 
         params: {
           nickname: this.input.nickname
           }
@@ -443,35 +443,23 @@ export default {
       var frm = new FormData();
       var photoFile = document.getElementById("profile-img-edit");
       if (photoFile.files[0]) {
-        this.profileImg = "C:\\Users\\multicampus\\Desktop\\picture\\" + photoFile.files[0].name
+        console.log(photoFile.files[0].name)
+        this.profileImg = "../images/profile/"+this.input.nickname+"_"+photoFile.files[0].name
       } else {
         this.profileImg = null
       }
-      Swal.fire(
-        '환영해요!',
-        '자신만의 패션을 뽐내보세요!',
-        'success'
-      )
-      console.log("email=========>"+this.input.email);
-      console.log("paa=========>"+this.input);
       const test1 = this.input.email
       const test2 = this.input.password
-       console.log("email=========>"+test1);
-      console.log("paa=========>"+test2);
        firebase.auth().createUserWithEmailAndPassword(test1.toString(), test2.toString()).then(()=>{
-          console.log("됨");
         }).catch((error) => {
         // Handle Errors here.
-        console.log(this.input.email);
-        console.log(this.input.password);
         var errorCode = error.code;
         var errorMessage = error.message;
         console.log(errorCode);
         console.log(errorMessage);
-        console.log("안됨");
         // ...
         });
-      axios.post('http://localhost:8080/api/account/signup',{
+      axios.post('https://i3b304.p.ssafy.io/api/account/signup',{
 
           email: this.input.email+'@'+this.input.url,
           password: this.input.password,
@@ -496,29 +484,24 @@ export default {
         // console.log(data.data.data)
       });
       if (photoFile.files[0]) {
-
         frm.append("profile-img-edit", photoFile.files[0]);
-        frm.append("nickname",this.nickname);
-        axios.post('http://i3b304.p.ssafy.io:8080/api/account/addProfileImg',frm,
+        frm.append("nickname",this.input.nickname);
+        axios.post('https://i3b304.p.ssafy.io/api/account/addProfileImg',frm,
         ).then( () =>{
           console.log("1");
 
-          firebase.auth().signInWithEmailAndPassword('fjsdklahfjsdhfl@naver.com', 'Zz12357822456a').catch(function(error) {
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          // ...
-          console.log(errorCode);
-          console.log(errorMessage);
-          });
 
-          this.$router.go('/feed')
+          setTimeout(() => {
+            this.$router.go('/feed').catch(()=>{})
+          }, 1000);
           
         })
         .catch(function(){
           console.log("2");
         });
-      } else {this.$router.go('/feed')}
+      } else {setTimeout(() => {
+            this.$router.go('/feed').catch(()=>{})
+          }, 1000);}
 
     },
     notTab() {
@@ -554,7 +537,7 @@ export default {
          this.mailErrMsg = false;
          this.finalMail = false;
           if (this.mailSucMsg) {
-            axios.get('http://i3b304.p.ssafy.io:8080/api/account/checkDoubleEmail',{ 
+            axios.get('https://i3b304.p.ssafy.io/api/account/checkDoubleEmail',{ 
               params: {
                 email: this.input.email+'@'+this.input.url
                 }
@@ -603,11 +586,11 @@ export default {
       const H1TAG = document.querySelectorAll('h1')
       const LABEL = document.querySelectorAll('label')
       const SPAN = document.querySelectorAll('span')
-      const PTAG = document.querySelectorAll('p')
+      const USERNAME = document.querySelector('.join-profile-username')
       const INPUT = document.querySelectorAll('input')
       const TEXTAREA = document.querySelectorAll('textarea')
 
-      const BACKBTN = document.querySelector('.join-profile-back-btn')
+      // const BACKBTN = document.querySelector('.join-profile-back-btn')
       const SKIP = document.querySelector('.join-skip-btn')
       const CANCLEIMG = document.querySelector('.cancle-img')
       
@@ -633,13 +616,11 @@ export default {
         for (let i=0; i<SPAN.length ; i++) {
           SPAN[i].classList.add('font-dark')
         }
-        for (let i=0; i<PTAG.length ; i++) {
-          PTAG[i].classList.add('font-dark')
-        }
 
-        BACKBTN.classList.add('join-profile-back-btn-dark')
+        // BACKBTN.classList.add('join-profile-back-btn-dark')
         SKIP.classList.add('join-skip-btn-dark')
         CANCLEIMG.classList.add('join-cancle-img-dark')
+        USERNAME.classList.add('font-dark')
 
       } else {
         HTML.classList.remove('black')
@@ -659,13 +640,11 @@ export default {
         for (let i=0; i<SPAN.length ; i++) {
           SPAN[i].classList.remove('font-dark')
         }
-        for (let i=0; i<PTAG.length ; i++) {
-          PTAG[i].classList.remove('font-dark')
-        }
         
-        BACKBTN.classList.remove('join-profile-back-btn-dark')
+        // BACKBTN.classList.remove('join-profile-back-btn-dark')
         SKIP.classList.remove('join-skip-btn-dark')
         CANCLEIMG.classList.remove('join-cancle-img-dark')
+        USERNAME.classList.remove('font-dark')
       }
     },
   }
