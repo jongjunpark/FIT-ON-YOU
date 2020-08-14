@@ -34,5 +34,6 @@ public class Recell {
 	private String recellImage;
 	private String recellContent;
 	private Date recellDate;
+	private String recellSize;
 	
 	}
