@@ -268,8 +268,6 @@ export default {
       const CommuPhotoFile = document.getElementById('feed-img-edit')
       this.commuImg += URL.createObjectURL(CommuPhotoFile.files[0])
       this.commuPhoto.push(CommuPhotoFile.files[0])
-      console.log(this.commuPhoto, 'upload')
-      console.log(this.commuImg)
     },
     onCancelBtn(num) {
       if (num === 1){
@@ -339,16 +337,14 @@ export default {
     },
     sendRecellData(){
       let dataform = new FormData();
-      
-      dataform.append("recellimg",this.commuPhoto);
+      dataform.append("recellimg",this.commuPhoto[0]);
       dataform.append("nickname",this.$cookies.get('auth-nickname'));
       dataform.append("content", this.commuContent);
       dataform.append("price",this.commuPrice);
       dataform.append("size",this.commuSize)
       
-      axios.post("https://i3b304.p.ssafy.io/api/recell/upload",dataform).then(
+      axios.post("https://i3b304.p.ssafy.io/api/recell/upload", dataform).then(
         console.log('success'))
-        
       },
     writeFormChange() {
       this.isCommu = !this.isCommu
