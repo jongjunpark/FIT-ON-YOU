@@ -70,7 +70,7 @@ export default {
       }).catch()
     },
     goProfile(name) {
-      this.$router.push(`/otheruser/${name}`)
+      this.$router.push(`/otheruser/${name}`).catch(() => {})
     },
   },
   mounted() {
