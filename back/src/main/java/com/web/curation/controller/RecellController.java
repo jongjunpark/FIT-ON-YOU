@@ -1,6 +1,7 @@
 package com.web.curation.controller;
 
 import java.io.File;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -43,13 +44,13 @@ public class RecellController {
 			@RequestParam("size") String size) {
 		String path = "/var/www/html/dist/images/board/";
 		// String path ="https://i3b304.p.ssafy.io/dist/images/board/";
-
+		UUID uuid = UUID.randomUUID();
 		Recell recell = new Recell();
 		recell.setRecellUser(nickname);
 		recell.setRecellContent(content);
 		recell.setRecellPrice(price);
 		recell.setRecellSize(size);
-		String name = nickname + "_recell_" + recellimg.getOriginalFilename();
+		String name = uuid.toString() + "_recell_" + recellimg.getOriginalFilename();
 		String storePath = "../images/board/" + name;
 		recell.setRecellImage(storePath);
 		System.out.println(recell.toString());

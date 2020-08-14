@@ -2,6 +2,7 @@ package com.web.curation.model;
 
 
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -33,7 +34,8 @@ public class Recell {
 	private String recellPrice;
 	private String recellImage;
 	private String recellContent;
-	private Date recellDate;
+	@Column(insertable = false, updatable = false) // 일기전용시 false
+	private LocalDateTime recellDate;
 	private String recellSize;
 	
 	}
