@@ -91,7 +91,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setArticledata', 'setHashSearch', 'setUserSearch']),
+    ...mapMutations(['setArticledata', 'setHashSearch', 'setUserSearch', 'setIsSelectBar']),
     goSearch() {
         const selectBar = document.querySelector('.menu-bar-select')
         const newsFeed = document.querySelector('.fa-newspaper')
@@ -225,6 +225,7 @@ export default {
     },
   },
   mounted() {
+    this.setIsSelectBar(true)
     this.goSearch()
     this.defaultDark()
 
@@ -234,6 +235,9 @@ export default {
       console.log(this.articleList)
       this.setList();
     })
+  },
+  beforeDestroy() { 
+    this.setIsSelectBar(false)
   }
 }
 </script>

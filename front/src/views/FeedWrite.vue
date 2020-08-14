@@ -95,7 +95,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import axios from 'axios';
 import "../components/css/feedwrite.css"
 import Swal from 'sweetalert2'
@@ -160,9 +160,11 @@ export default {
     }
   },
   mounted() {
+    this.setIsWrite(false)
     this.defaultDark()
   },
   methods: {
+    ...mapMutations(['setIsWrite']),
     defaultDark() {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
@@ -350,6 +352,9 @@ export default {
       this.isCommu = !this.isCommu
     }
 
+  },
+  beforeDestroy() { 
+    this.setIsWrite(true)
   }
 }
 </script>

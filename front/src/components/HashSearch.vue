@@ -84,6 +84,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
+  flex-direction: row;
 }
 
 .hash-container::-webkit-scrollbar {
