@@ -492,7 +492,7 @@ export default {
 
 
           setTimeout(() => {
-            this.$router.go('/feed').catch(()=>{})
+            this.$router.go('/feed')
           }, 1000);
           
         })
@@ -500,7 +500,7 @@ export default {
           console.log("2");
         });
       } else {setTimeout(() => {
-            this.$router.go('/feed').catch(()=>{})
+            this.$router.go('/feed')
           }, 1000);}
 
     },
