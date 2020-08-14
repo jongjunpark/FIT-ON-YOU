@@ -443,27 +443,20 @@ export default {
       var frm = new FormData();
       var photoFile = document.getElementById("profile-img-edit");
       if (photoFile.files[0]) {
-        this.profileImg = "C:\\Users\\multicampus\\Desktop\\picture\\" + photoFile.files[0].name
+        console.log(photoFile.files[0].name)
+        this.profileImg = "../images/profile/"+this.input.nickname+"_"+photoFile.files[0].name
       } else {
         this.profileImg = null
       }
-      console.log("email=========>"+this.input.email);
-      console.log("paa=========>"+this.input);
       const test1 = this.input.email
       const test2 = this.input.password
-       console.log("email=========>"+test1);
-      console.log("paa=========>"+test2);
        firebase.auth().createUserWithEmailAndPassword(test1.toString(), test2.toString()).then(()=>{
-          console.log("됨");
         }).catch((error) => {
         // Handle Errors here.
-        console.log(this.input.email);
-        console.log(this.input.password);
         var errorCode = error.code;
         var errorMessage = error.message;
         console.log(errorCode);
         console.log(errorMessage);
-        console.log("안됨");
         // ...
         });
       axios.post('https://i3b304.p.ssafy.io/api/account/signup',{
@@ -491,9 +484,8 @@ export default {
         // console.log(data.data.data)
       });
       if (photoFile.files[0]) {
-
         frm.append("profile-img-edit", photoFile.files[0]);
-        frm.append("nickname",this.nickname);
+        frm.append("nickname",this.input.nickname);
         axios.post('https://i3b304.p.ssafy.io/api/account/addProfileImg',frm,
         ).then( () =>{
           console.log("1");

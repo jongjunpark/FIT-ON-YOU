@@ -99,9 +99,8 @@ export default {
                 allMessages = doc.data();
               })
 
-              this.lastMessage=allMessages;
-              console.dir(this.lastMessage);
-              const Time = ((new Date() - new Date(this.lastMessage.createdAt.seconds*1000)) / (1000 * 60))
+              this.lastMessage=allMessages;      
+              
               const H3 = document.createElement('h3')
               const H5message = document.createElement('h5')
               const H5date = document.createElement('h5')
@@ -120,7 +119,7 @@ export default {
               } else {
                 H5message.innerHTML = this.lastMessage.message.substring(0, 8) + '..'
               }
-              
+              var Time = ((new Date() - new Date(this.lastMessage.createdAt.seconds*1000)) / (1000 * 60))
 
               if (Time < 60) {
                 H5date.innerHTML = Math.floor(Time / 1) + '분전'
