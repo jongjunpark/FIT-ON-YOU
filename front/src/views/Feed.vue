@@ -60,7 +60,12 @@
             </div>
           </div>
           <header class='feed-content-head'>{{feed.content}}</header>
-          <aside class='feed-content-tag'><span v-for="ta in feed.tags" :key="ta.tagname">{{ta.tagname}}</span></aside>
+          <aside class='feed-content-tag'>
+            <div v-for="ta in feed.tags" :key="ta.tagname">
+              <p v-show="ta.tagname[0]==='#'">{{ ta.tagname }}</p>
+              <p v-show="ta.tagname[0]!=='#'">#{{ ta.tagname }}</p>
+            </div>
+          </aside>
         </section>
       </div>
       <div class="margin-box"></div>
@@ -340,9 +345,10 @@ export default {
               axios.post("https://i3b304.p.ssafy.io/api/board/tags",articleNo).then((tag)=>{
               const tags = tag.data;
               const taglist = [];
+              console.log(tag, '태그리스트')
               for (let i = 0; i < tags.length; i++) {
                   const el2= tags[i];
-                  taglist.push({tagname:el2.tagName});  
+                  taglist.push({tagname:el2.tagName});     
                 }
                   feeddata.tags=taglist;
               });

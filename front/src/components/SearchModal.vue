@@ -34,7 +34,12 @@
             </div>
             <p v-show="content" class='search-more-content-head'>{{ content }}</p>
             <p v-show="longContent" class='search-more-content-head'>{{ longContent }}</p>
-            <p v-for="tag in tags" :key="tag.id" class='search-more-content-tag'>{{ tag.tagName }}</p>
+            <div class='search-more-content-tag'>
+              <div v-for="tag in tags" :key="tag.id">
+                <p class='search-more-content-tag-name' v-show="tag.tagName[0]==='#'">{{ tag.tagName }}</p>
+                <p class='search-more-content-tag-name' v-show="tag.tagName[0]!=='#'">#{{ tag.tagName }}</p>
+              </div>
+            </div>
           </section>
         </div>
 
@@ -431,7 +436,13 @@ export default {
 .search-more-content .search-more-content-tag {
   font-weight: 700;
   font-size: 1.7vh;
+  display: flex;
   margin-left: 1vh;
+  flex-wrap: wrap;
+}
+
+.search-more-content .search-more-content-tag .search-more-content-tag-name{
+  margin-right: 1vh;
 }
 
 .search-modal-wrap-dark {
