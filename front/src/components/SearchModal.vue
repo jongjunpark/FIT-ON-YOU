@@ -26,10 +26,10 @@
             </div>
             <div class="search-more-btn-box">
               <div class='search-more-btn-left'>
-                <i class="fas fa-heart"></i>
+                <i :class="'fas fa-heart '+likeicon[likechk]" @click="clickLike(articleNo,likechk,$event)"></i>
               </div>
               <div class='search-more-btn-right'>
-                <i class="fas fa-bookmark"></i>
+                <i :class="'fas fa-bookmark '+markicon[markchk]" @click="clickBookMark(articleNo,markchk,$event)"></i>
               </div>
             </div>
             <p v-show="content" class='search-more-content-head'>{{ content }}</p>
@@ -92,6 +92,11 @@ export default {
         "slidesToShow": 1,
         "slidesToScroll": 1
       },
+      likechk :'',
+      markchk :'',
+      likeicon:['','heart'],
+      markicon:['','mark'],
+      articleNo:'',
     }
   },
   components: {
@@ -107,22 +112,34 @@ export default {
   },
   mounted() {
     this.defaultDark()
+    this.articleNo=this.articledata
+
     let articleNo = this.articledata
-    axios.post(`https://i3b304.p.ssafy.io/api/search/${articleNo}`).then((response)=>{
+    let data = this.$cookies.get('auth-nickname');
+    let uri = data;
+    let uri_enc = encodeURIComponent(uri);
+    let uri_dec = decodeURIComponent(uri_enc);
+    let res = uri_dec;
+    let frm = new FormData();
+    frm.append('nickname',res);
+    axios.post(`http://localhost:8080/api/search/${articleNo}`,frm)
+    .then((response)=>{
       console.log(response.data)
-      this.username = response.data[0].articles.articleUser
-      this.time = timeForToday(response.data[0].articles.articleDate)
-      if (response.data[0].articles.content.length>60) {
+      this.username = response.data[0].aarticles.articleUser
+      this.time = timeForToday(response.data[0].aarticles.articleDate)
+      if (response.data[0].aarticles.content.length>60) {
         for (let i=0; i<60; i++) {
-          this.longContent += response.data[0].articles.content[i]
+          this.longContent += response.data[0].aarticles.content[i]
         }
         this.longContent += ' ....'
       } else {
-        this.content = response.data[0].articles.content
+        this.content = response.data[0].aarticles.content
       }
       this.imgs = response.data[0].imgs
       this.tags = response.data[0].tags
       this.profile = response.data[0].profile
+      this.likechk=response.data[0].aarticles.likechk;
+      this.markchk=response.data[0].aarticles.markchk;
       });
 
     
@@ -163,6 +180,81 @@ export default {
         }
       }
     },
+
+    clickLike(articleNo,flag,e) {
+      let ref=this
+
+      let data = this.$cookies.get('auth-nickname');
+      let uri = data;
+      let uri_enc = encodeURIComponent(uri);
+      let uri_dec = decodeURIComponent(uri_enc);
+      let res = uri_dec;
+
+      if(flag==0){
+        this.likechk=1
+        e.target.classList.add('heart')
+        this.modal = true
+        axios.post('http://localhost:8080/api/board/likes',{
+            articleNo:articleNo,
+            nickname:res
+          })
+          .then(console.log("좋아요"))
+          .catch()
+      }
+      else if(flag==1){
+        this.likechk=0
+        e.target.classList.remove('heart')
+        axios.delete('http://localhost:8080/api/board/likes',{
+          data:{
+            articleNo:articleNo,
+            nickname:res
+          }
+        })
+        .then(console.log(ref.likechk,"좋아요 취소"))
+        .catch()
+      }
+      
+    },
+    clickComment(articleNo,articleUser) {
+      this.modalArticleNo=articleNo;
+      this.modalArticleUser=articleUser;
+      this.showModal = true
+    },
+    clickBookMark(articleNo,flag,index,e) {
+      let ref=this
+
+      let data = this.$cookies.get('auth-nickname');
+      let uri = data;
+      let uri_enc = encodeURIComponent(uri);
+      let uri_dec = decodeURIComponent(uri_enc);
+      let res = uri_dec;
+
+      if(flag==0){
+        this.markchk=1
+        e.target.classList.add('mark')
+        axios.post('http://localhost:8080/api/board/bookmark',{
+            bookedArticle:articleNo,
+            bookUser:res
+          })
+          .then(console.log("북마크 등록"))
+          .catch()
+      }
+      else if(flag==1){
+        this.markchk=0
+        e.target.classList.remove('mark')
+        axios.delete('http://localhost:8080/api/board/bookmark',{
+          data:{
+            bookedArticle:articleNo,
+            bookUser:res
+          }
+        })
+        .then(console.log(ref.markchk,"북마크 취소"))
+        .catch()
+      }
+
+    },
+
+
   }
 }
 </script>
@@ -344,5 +436,12 @@ export default {
 
 .search-modal-wrap-dark {
   background-color: #272727 !important;
+}
+
+.heart{
+  color:crimson;
+}
+.mark{
+  color:gold;
 }
 </style>

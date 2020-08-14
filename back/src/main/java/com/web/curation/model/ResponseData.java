@@ -11,7 +11,7 @@ public class ResponseData {
 	private List<ImageStore> imgs;
 	private List<Articletag> tags;
 	private String profile;
-	
+	private BoardDTO aarticles;
 	
 	public Board getArticles() {
 		return articles;
@@ -19,6 +19,14 @@ public class ResponseData {
 	public void setArticles(Board articles) {
 		this.articles = articles;
 	}
+	
+	public BoardDTO getAarticles() {
+		return aarticles;
+	}
+	public void setAarticles(BoardDTO aarticles) {
+		this.aarticles=aarticles;
+	}
+	
 	public List<ImageStore> getImgs() {
 		return imgs;
 	}

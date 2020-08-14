@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dao.ArticletagDao;
 import com.web.curation.dao.BoardDao;
+import com.web.curation.dao.BoardTwoDao;
 import com.web.curation.dao.CurationDao;
 import com.web.curation.dao.ImageDao;
 import com.web.curation.dao.InfluencerDao;
@@ -29,6 +30,7 @@ import com.web.curation.dao.UserDao;
 import com.web.curation.model.Articletag;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Board;
+import com.web.curation.model.BoardDTO;
 import com.web.curation.model.Curation;
 import com.web.curation.model.ImageStore;
 import com.web.curation.model.Influencer;
@@ -62,6 +64,8 @@ public class SearchController {
 	SearchService searchService;
 	@Autowired
 	InfluencerDao influDao;
+	@Autowired
+	BoardTwoDao boardTwoDao;
 
 	@PostMapping("/")
 	@ApiOperation(value = "페이지 업로드")
@@ -96,11 +100,11 @@ public class SearchController {
 	}
 
 	@PostMapping("/{articleNo}")
-	public Object getArticle(@PathVariable int articleNo) {
-		Board board = boardDao.findBoardByArticleNo(articleNo);
+	public Object getArticle(@PathVariable int articleNo, @RequestParam String nickname) {
+		BoardDTO board = boardTwoDao.getBoard(articleNo, nickname);
 		List<ResponseData> result = new ArrayList<ResponseData>();
 		ResponseData data = new ResponseData();
-		data.setArticles(new Board());
+		data.setAarticles(new BoardDTO());
 		data.setImgs(new ArrayList<>());
 		data.setTags(new ArrayList<>());
 		try {
@@ -127,7 +131,7 @@ public class SearchController {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		data.setArticles(board);
+		data.setAarticles(board);
 
 		result.add(data);
 
