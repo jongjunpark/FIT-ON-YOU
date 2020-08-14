@@ -9,7 +9,8 @@
           <input v-model='uuid' type="text" class="uuid" placeholder="인증번호를 입력해주세요.">
           <span id="time">03:00</span>
         </div>
-        <div class='btn go-login-btn' @click="changePwd">확인</div>
+        <div v-show="!onTime" class='btn go-login-btn' @click="changePwd">확인</div>
+        <div v-show="onTime" class='btn non-login-btn'>확인</div>
         <div class='btn re-submit-btn' @click="retry">다시보내기</div>
       </div>
     </div>
@@ -29,6 +30,7 @@ export default {
       uuid: '',
       reTime: '',
       remaintime: false,
+      onTime: false,
     }
   },
   watch: {
@@ -65,6 +67,7 @@ export default {
       if (--timer <= 0) {
         display.textContent = '00' + ":" + '00';
         this.remaintime = true;
+        this.onTime = true;
         clearInterval(this.reTime);
       }
     }, 1000);
