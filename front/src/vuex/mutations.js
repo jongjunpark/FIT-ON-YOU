@@ -84,5 +84,11 @@ export default {
   },
   setOtherUser(state, data) {
     state.otherUserName = data
+  },
+  setIsWrite(state, data) {
+    state.isWrite = data
+  },
+  setIsSelectBar(state, data) {
+    state.isSelectBar = data
   }
 }

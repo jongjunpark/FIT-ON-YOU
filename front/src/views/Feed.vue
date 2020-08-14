@@ -83,7 +83,7 @@ import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 import "../components/css/feed.css"
 import axios from 'axios'
 import CommentModal from '../components/CommentModal.vue'
-import { mapState, mapActions  } from 'vuex'
+import { mapState, mapActions, mapMutations  } from 'vuex'
 import InfiniteLoading from 'vue-infinite-loading'
 
 function timeForToday(value) {
@@ -159,6 +159,7 @@ export default {
   
   methods: {
     ...mapActions(['sendUserInfo', 'setLoggedIn', 'setToken']),
+    ...mapMutations(['setIsSelectBar']),
     onNewsFeed() {
       const selectBar = document.querySelector('.menu-bar-select')
       const newsFeed = document.querySelector('.fa-newspaper')
@@ -376,6 +377,7 @@ export default {
     },
   },
   mounted() {
+    this.setIsSelectBar(true)
     this.onNewsFeed()
     this.defaultDark()
     let ref=this;
@@ -473,9 +475,10 @@ export default {
     console.log(this.mainfeed, '메인피드')
     console.log(this.likeStates,'좋아요리스트');
     console.log(this.bookmarkStates,'북마크리스트');
+  },
+  beforeDestroy() { 
+    this.setIsSelectBar(false)
   }
-
-  
 }
 
 </script>
