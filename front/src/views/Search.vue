@@ -23,6 +23,21 @@
           {{ hash }}
         </div>
       </transition-group>
+      <transition-group v-show="userContent" name='fade' tag="div" class="search-user-group" mode="in-out">
+        <div class='search-user-item' v-for='user in userList' :key='user.nickname' @click='goProfile(user.nickname)'>
+          <div class="search-user-img">
+            <img v-show="user.profile_img" :src="user.profile_img" alt="">
+            <img v-show="!user.profile_img&&user.gender=='Male'" src="../assets/images/default-user.png" alt="">
+            <img v-show="!user.profile_img&&user.gender=='Female'" src="../assets/images/default-user-female.png" alt="">
+          </div>
+          <div class="search-user-content">
+            <div class="search-user-name">{{ user.nickname }}</div>
+            <div v-show="!user.selfintroduce" class="search-user-nonuserintro">{{ user.selfintroduce }}</div>
+            <div v-show="user.selfintroduce" class="search-user-intro">{{ user.selfintroduce }}</div>
+          </div>
+        </div>
+        <div v-show="userListLength > 0" @click="onUserResult" class='search-user-more' key='0'>{{ userListLength }}개 더보기</div>
+      </transition-group>
     </div>
     <div v-if="isDefault" class='search-container'>
 
@@ -76,6 +91,8 @@ export default {
       hashList: [],
       hashString: '',
       userContent: '',
+      userList: [],
+      userListLength: 0,
       isDefault: true,
       isHashResult: false,
       isUserResult: false,
@@ -95,10 +112,14 @@ export default {
     },
     flag() {
       this.defaultDark()
+    },
+    userContent() {
+      this.inUserSearch()
+      console.log(this.userList)
     }
   },
   methods: {
-    ...mapMutations(['setArticledata', 'setHashSearch', 'setUserSearch']),
+    ...mapMutations(['setArticledata', 'setHashSearch', 'setUserSearch', 'setIsSelectBar']),
     goSearch() {
         const selectBar = document.querySelector('.menu-bar-select')
         const newsFeed = document.querySelector('.fa-newspaper')
@@ -154,25 +175,29 @@ export default {
       this.hashList.splice(index, 1)
     },
     onHashResult() {
-      this.hashList.push(this.hashContent)
-      this.setHashSearch(this.hashList);
-      if(this.isHashResult) {
-        this.isHashResult = false
-        this.isHashResult = true
-      } else {
-        this.isDefault = false
-        this.isUserResult = false
-        this.isHashResult = true
+      if (this.hashContent || this.hashList.length>0) {
+        this.hashList.push(this.hashContent)
+        this.setHashSearch(this.hashList);
+        if(this.isHashResult) {
+          this.isHashResult = false
+          this.isHashResult = true
+        } else {
+          this.isDefault = false
+          this.isUserResult = false
+          this.isHashResult = true
+        }
+        this.hashContent = ''
+        this.hashList = []
       }
-      this.hashContent = ''
-      this.hashList = []
     },
     onUserResult() {
-      this.setUserSearch(this.userContent);
-      this.isDefault = false
-      this.isHashResult = false
-      this.isUserResult = true
-      this.userContent = ''
+      if (this.userContent) {
+        this.setUserSearch(this.userContent);
+        this.isDefault = false
+        this.isHashResult = false
+        this.isUserResult = true
+        this.userContent = ''
+      }
     },
     defaultDark() {
       const Dark = this.$cookies.get('dark')
@@ -260,6 +285,7 @@ export default {
 
   },
   mounted() {
+    this.setIsSelectBar(true)
     this.goSearch()
     this.defaultDark()
 
@@ -270,6 +296,9 @@ export default {
       this.setList();
       this.articleList=[];
     })
+  },
+  beforeDestroy() { 
+    this.setIsSelectBar(false)
   }
 }
 </script>

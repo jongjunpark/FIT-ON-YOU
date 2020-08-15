@@ -1,49 +1,11 @@
 <template>
-  <div class='wrap-container'>
-    <div class="hash-search-box">
-      <div class="hash-search-inner-box">
-        <img src="$" alt="">
+  <div class='wrap-container hash-container'>
+      <div v-show="hashResultList" class="hash-search-inner-box" v-for="hash in hashResultList" :key="hash.articleNo">
+        <img :src="hash.imgList[0]" :alt="`articleNo : ${hash.articleNo}`">
       </div>
-      <div class="hash-search-inner-box">
-        <img src="$" alt="">
+      <div v-show="hashResultList.length===0" class='hash-search-not-result'>
+        <p>일치하는 검색결과가 없습니다.</p>
       </div>
-      <div class="hash-search-inner-box">
-        <img src="#" alt="">
-      </div>
-    </div>
-    <div class="hash-search-box">
-      <div class="hash-search-inner-box">
-        <img src="#" alt="">
-      </div>
-      <div class="hash-search-inner-box">
-        <img src="#" alt="">
-      </div>
-      <div class="hash-search-inner-box">
-        <img src="#" alt="">
-      </div>
-    </div>
-    <div class="hash-search-box">
-      <div class="hash-search-inner-box">
-        <img src="#" alt="">
-      </div>
-      <div class="hash-search-inner-box">
-        <img src="#" alt="">
-      </div>
-      <div class="hash-search-inner-box">
-        <img src="#" alt="">
-      </div>
-    </div>
-    <div class="hash-search-box">
-      <div class="hash-search-inner-box">
-        <img src="#" alt="">
-      </div>
-      <div class="hash-search-inner-box">
-        <img src="#" alt="">
-      </div>
-      <div class="hash-search-inner-box">
-        <img src="#" alt="">
-      </div>
-    </div>
   </div>
 </template>
 
@@ -56,16 +18,7 @@ export default {
   data() {
     return {
       scrollDown: 0,
-      hashList: [],
-      username: '',
-      userprofileimg: '',
-      time: '',
-      content: '',
-      longContent: '',
-      imgs: [],
-      img: '',
-      tags: [],
-      loginUserName: '',
+      hashResultList: [],
     }
   },
   computed: {
@@ -104,8 +57,9 @@ export default {
         username: this.loginUserName,
       },
       }).then((data) => {
-        console.log(data)
-        console.log(data.object)
+        this.hashResultList = data.data.object
+        console.log(data.data)
+        console.log(this.hashResultList, 'rr')
       }).catch()
     }
   },
@@ -123,18 +77,33 @@ export default {
 </script>
 
 <style scoped>
-.hash-search-box {
-  display: flex;
-  justify-content: center;
+.hash-container {
   width: 100%;
+  height: 70vh;
+  overflow: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  flex-direction: row;
+}
+
+.hash-container::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 .hash-search-inner-box {
-  width: 33%;
-  padding-top: 33%;
-  margin: 1px;
+  width: 32.5%;
+  height: 0;
+  padding-top: 32.5%;
+  margin: 0.3vw;
   background-color: grey;
   position: relative
+}
+@media (min-width:1200px) {
+  .hash-search-inner-box {
+    margin: 1px;
+  }
 }
 
 .hash-search-inner-box img {
@@ -144,5 +113,15 @@ export default {
   right: 0;
   width: 100%;
   height: 100%;
+}
+
+.hash-search-not-result {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 20vh;
+  font-size: 2.5vh;
+  font-weight: 700;
 }
 </style>

@@ -59,6 +59,7 @@ var db = firebase.firestore();
 window.db = db;
 
 db.settings({
+  
 });
 
 export default {
@@ -117,6 +118,7 @@ export default {
     },
     fetchMessage(){
       db.collection(this.roomname).orderBy('createdAt').onSnapshot((querySnapshot)=>{
+        
         let allMessages = [];
         querySnapshot.forEach(doc=>{
           allMessages.push(doc.data());
@@ -130,7 +132,7 @@ export default {
       })
     },
     goDM() {
-      this.$router.go(-1).catch(()=>{})
+      this.$router.go(-1)
     },
     defaultDark() {
       const Dark = this.$cookies.get('dark')

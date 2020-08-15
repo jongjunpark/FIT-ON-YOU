@@ -23,6 +23,7 @@
                   <i v-if="comment.user.nickname=nickname"
                     @click="deleteComment(comment.commentNo,index)"></i></div>
               </div>
+              <i class="fas fa-times comment-del-icon"></i>
             </div>
           </div>
         </div>
@@ -307,6 +308,7 @@ export default {
   /* background-color: grey; */
   margin: 10px 0;
   height: 40px;
+  position: relative;
 }
 
 .comment-my-icon {
@@ -323,6 +325,13 @@ export default {
   display: flex;
   flex-direction: column;
   margin-left: 10px;
+}
+
+.comment-del-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 2vh;
 }
 
 .comment-article-head {

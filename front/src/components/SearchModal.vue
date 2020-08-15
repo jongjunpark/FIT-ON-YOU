@@ -34,7 +34,12 @@
             </div>
             <p v-show="content" class='search-more-content-head'>{{ content }}</p>
             <p v-show="longContent" class='search-more-content-head'>{{ longContent }}</p>
-            <p v-for="tag in tags" :key="tag.id" class='search-more-content-tag'>{{ tag.tagName }}</p>
+            <div class='search-more-content-tag'>
+              <div v-for="tag in tags" :key="tag.id">
+                <p class='search-more-content-tag-name' v-show="tag.tagName[0]==='#'">{{ tag.tagName }}</p>
+                <p class='search-more-content-tag-name' v-show="tag.tagName[0]!=='#'">#{{ tag.tagName }}</p>
+              </div>
+            </div>
           </section>
         </div>
 
@@ -122,7 +127,7 @@ export default {
     let res = uri_dec;
     let frm = new FormData();
     frm.append('nickname',res);
-    axios.post(`http://localhost:8080/api/search/${articleNo}`,frm)
+    axios.post(`https://i3b304.p.ssafy.io/api/search/${articleNo}`,frm)
     .then((response)=>{
       console.log(response.data)
       this.username = response.data[0].aarticles.articleUser
@@ -194,7 +199,7 @@ export default {
         this.likechk=1
         e.target.classList.add('heart')
         this.modal = true
-        axios.post('http://localhost:8080/api/board/likes',{
+        axios.post('https://i3b304.p.ssafy.io/api/board/likes',{
             articleNo:articleNo,
             nickname:res
           })
@@ -204,7 +209,7 @@ export default {
       else if(flag==1){
         this.likechk=0
         e.target.classList.remove('heart')
-        axios.delete('http://localhost:8080/api/board/likes',{
+        axios.delete('https://i3b304.p.ssafy.io/api/board/likes',{
           data:{
             articleNo:articleNo,
             nickname:res
@@ -232,7 +237,7 @@ export default {
       if(flag==0){
         this.markchk=1
         e.target.classList.add('mark')
-        axios.post('http://localhost:8080/api/board/bookmark',{
+        axios.post('https://i3b304.p.ssafy.io/api/board/bookmark',{
             bookedArticle:articleNo,
             bookUser:res
           })
@@ -242,7 +247,7 @@ export default {
       else if(flag==1){
         this.markchk=0
         e.target.classList.remove('mark')
-        axios.delete('http://localhost:8080/api/board/bookmark',{
+        axios.delete('https://i3b304.p.ssafy.io/api/board/bookmark',{
           data:{
             bookedArticle:articleNo,
             bookUser:res
@@ -433,7 +438,13 @@ export default {
 .search-more-content .search-more-content-tag {
   font-weight: 700;
   font-size: 1.7vh;
+  display: flex;
   margin-left: 1vh;
+  flex-wrap: wrap;
+}
+
+.search-more-content .search-more-content-tag .search-more-content-tag-name{
+  margin-right: 1vh;
 }
 
 .search-modal-wrap-dark {

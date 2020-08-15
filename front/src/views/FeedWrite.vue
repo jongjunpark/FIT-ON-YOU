@@ -1,71 +1,104 @@
 <template>
   <div class="wrap">
+    <div @click='writeFormChange' class="write-toggle-btn"></div>
     <div class='wrap-container'>
-      <div class="write-img-box">
-        <img class="write-hanger-img" src="../assets/images/hanger.png" alt="">
-        <label v-if="!feedImg[0]" class="write-upload-btn" for='feed-img-edit0'>
-          <i class="far fa-images"><i class="fas fa-plus"></i></i>
-          <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit0" accept="image/*" @change="setFeedImg(0)">
-        </label>
+      <div class='write-feed-box' v-show="!isCommu">
+        <div class="write-img-box">
+          <img class="write-hanger-img" src="../assets/images/hanger.png" alt="">
+          <label v-if="!feedImg[0]" class="write-upload-btn" for='feed-img-edit0'>
+            <i class="far fa-images"><i class="fas fa-plus"></i></i>
+            <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit0" accept="image/*" @change="setFeedImg(0)">
+          </label>
+        </div>
+        <div class="write-cloth-box">
+          <div class="write-cloth-hanger">
+            <img class="write-cloth-hanger-img first-feed-img" src="../assets/images/cloth-hanger.png" alt="">
+            <div @mouseover="onCancelBtn(1)" @mouseout="offCancleBtn" class="write-uploaded-img first-feed-img">
+              <i @click='delFeedImg(1)' v-show='feedImg[0]&&isCancle1' class="far fa-times-circle cancle-img"></i>
+              <img v-if="feedImg[0]" class='feed-img' :src="feedImg[0]" alt="">
+              <label for="feed-img-edit1" class='feed-more-label'>
+                <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit1" accept="image/*" @change="setFeedImg(1)">
+              </label>
+            </div>
+          </div>
+          <div class="write-cloth-hanger">
+            <img class="write-cloth-hanger-img second-feed-img" src="../assets/images/cloth-hanger.png" alt="">
+            <div @mouseover="onCancelBtn(2)" @mouseout="offCancleBtn" class="write-uploaded-img second-feed-img">
+              <i @click='delFeedImg(2)' v-show='feedImg[1]&&isCancle2' class="far fa-times-circle cancle-img"></i>
+              <img v-if="feedImg[1]" class='feed-img' :src="feedImg[1]" alt="">
+              <label for="feed-img-edit2" class='feed-more-label'>
+                <i v-if="feedImg[0] && !feedImg[1]" class="fas fa-plus"></i>
+                <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit2" accept="image/*" @change="setFeedImg(2)">
+              </label>
+            </div>
+          </div>
+          <div class="write-cloth-hanger">
+            <img class="write-cloth-hanger-img third-feed-img" src="../assets/images/cloth-hanger.png" alt="">
+            <div @mouseover="onCancelBtn(3)" @mouseout="offCancleBtn" class="write-uploaded-img third-feed-img">
+              <i @click='delFeedImg(3)' v-show='feedImg[2]&&isCancle3' class="far fa-times-circle cancle-img"></i>
+              <img v-if="feedImg[2]" class='feed-img' :src="feedImg[2]" alt="">
+              <label for="feed-img-edit3" class='feed-more-label'>
+                <i v-if="feedImg[0] && !feedImg[2]" class="fas fa-plus"></i>
+                <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit3" accept="image/*" @change="setFeedImg(3)">
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="write-content-box">
+          <p class='write-content-head'>내용</p>
+          <textarea @input="writeContent = $event.target.value" cols="30" rows="3" placeholder="내용"></textarea>
+          <p class='write-hash-head'>태그</p>
+          <input @input="writeHashContent = $event.target.value" v-model='writeHashContent' @keyup.188="addWriteHash" type="text" placeholder="태그">
+          <transition-group name='fade' tag="div" class="write-hash-group" mode="in-out">
+            <div class='write-hash-item' v-for='(hash, index) in writeHashList' :key='`hash-${index}`'>
+              <div @click='delWriteHashItem(index)' class="write-hash-item-close-btn"><i class="fas fa-times"></i></div>
+              {{ hash }}
+            </div>
+          </transition-group>
+        </div>
+        <div class="write-btn-box">
+          <div v-if="!isWriteBtn" class="btn write-btn">작성하기</div>
+          <div v-if="isWriteBtn" class="btn write-btn on-write-btn" @click="sendBoardData">작성하기</div>
+        </div>
       </div>
-      <div class="write-cloth-box">
-        <div class="write-cloth-hanger">
-          <img class="write-cloth-hanger-img first-feed-img" src="../assets/images/cloth-hanger.png" alt="">
-          <div @mouseover="onCancelBtn(1)" @mouseout="offCancleBtn" class="write-uploaded-img first-feed-img">
-            <i @click='delFeedImg(1)' v-show='feedImg[0]&&isCancle1' class="far fa-times-circle cancle-img"></i>
-            <img v-if="feedImg[0]" class='feed-img' :src="feedImg[0]" alt="">
-            <label for="feed-img-edit1" class='feed-more-label'>
-              <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit1" accept="image/*" @change="setFeedImg(1)">
-            </label>
-          </div>
-        </div>
-        <div class="write-cloth-hanger">
-          <img class="write-cloth-hanger-img second-feed-img" src="../assets/images/cloth-hanger.png" alt="">
-          <div @mouseover="onCancelBtn(2)" @mouseout="offCancleBtn" class="write-uploaded-img second-feed-img">
-            <i @click='delFeedImg(2)' v-show='feedImg[1]&&isCancle2' class="far fa-times-circle cancle-img"></i>
-            <img v-if="feedImg[1]" class='feed-img' :src="feedImg[1]" alt="">
-            <label for="feed-img-edit2" class='feed-more-label'>
-              <i v-if="feedImg[0] && !feedImg[1]" class="fas fa-plus"></i>
-              <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit2" accept="image/*" @change="setFeedImg(2)">
-            </label>
-          </div>
-        </div>
-        <div class="write-cloth-hanger">
-          <img class="write-cloth-hanger-img third-feed-img" src="../assets/images/cloth-hanger.png" alt="">
-          <div @mouseover="onCancelBtn(3)" @mouseout="offCancleBtn" class="write-uploaded-img third-feed-img">
-            <i @click='delFeedImg(3)' v-show='feedImg[2]&&isCancle3' class="far fa-times-circle cancle-img"></i>
-            <img v-if="feedImg[2]" class='feed-img' :src="feedImg[2]" alt="">
-            <label for="feed-img-edit3" class='feed-more-label'>
-              <i v-if="feedImg[0] && !feedImg[2]" class="fas fa-plus"></i>
-              <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit3" accept="image/*" @change="setFeedImg(3)">
-            </label>
+    </div>
+
+
+    <div v-if="isCommu">
+      <div class="write-commu-img-box">
+        <div class="write-commu-upload">
+          <label v-show="!commuImg" class="write-upload-btn" for='feed-img-edit'>
+            <i class="far fa-images"><i class="fas fa-plus"></i></i>
+            <input type= "file" id="feed-img-edit" accept="image/*" @change="setCommuImg">
+          </label>
+          <div class="write-commu-img" @mouseover="onCancelBtn" @mouseout="offCancleBtn">
+            <i @click='delCommuImg' v-show='commuImg&&isCommuCancle' class="far fa-times-circle cancle-img"></i>
+            <img v-show="commuImg" class="write-commu-image" :src="commuImg" alt="">
           </div>
         </div>
       </div>
       <div class="write-content-box">
         <p class='write-content-head'>내용</p>
-        <textarea @input="writeContent = $event.target.value" cols="30" rows="3" placeholder="내용"></textarea>
-        <p class='write-hash-head'>태그</p>
-        <input @input="writeHashContent = $event.target.value" v-model='writeHashContent' @keyup.188="addWriteHash" type="text" placeholder="태그">
-        <transition-group name='fade' tag="div" class="write-hash-group" mode="in-out">
-          <div class='write-hash-item' v-for='(hash, index) in writeHashList' :key='`hash-${index}`'>
-            <div @click='delWriteHashItem(index)' class="write-hash-item-close-btn"><i class="fas fa-times"></i></div>
-            {{ hash }}
-          </div>
-        </transition-group>
+        <textarea @input="commuContent = $event.target.value" cols="30" rows="3" placeholder="내용"></textarea>
+        <p class='write-content-head'>가격</p>
+        <textarea @input="commuPrice = $event.target.value" cols="30" rows="3" placeholder="내용"></textarea>
+        <p class='write-content-head'>사이즈</p>
+        <textarea @input="commuSize = $event.target.value" cols="30" rows="3" placeholder="내용"></textarea>
       </div>
       <div class="write-btn-box">
-        <div v-if="!isWriteBtn" class="btn write-btn">작성하기</div>
-        <div v-if="isWriteBtn" class="btn write-btn on-write-btn" @click="sendBoardData">작성하기</div>
-      </div>
+          <div v-if="!isCommuBtn" class="btn write-btn">작성하기</div>
+          <div v-if="isCommuBtn" class="btn write-btn on-write-btn" @click="sendRecellData">작성하기</div>
+        </div>
     </div>
+
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import axios from 'axios';
 import "../components/css/feedwrite.css"
+import Swal from 'sweetalert2'
 
 export default {
   
@@ -75,15 +108,23 @@ export default {
   },
   data() {
     return {
-      photo :[],
+      photo : [],
+      commuPhoto: [],
       feedImg : [],
+      commuImg: '',
       isCancle1: false,
       isCancle2: false,
       isCancle3: false,
+      isCommuCancle: false,
       writeHashContent: '',
       writeHashList: [],
       writeContent: '',
+      commuContent: '',
+      commuPrice: '',
+      commuSize: '',
       isWriteBtn: false,
+      isCommuBtn: false,
+      isCommu: false,
     }
   },
   watch: {
@@ -104,12 +145,26 @@ export default {
     },
     flag() {
       this.defaultDark()
+    },
+    commuImg() {
+      this.checkCommuForm()
+    },
+    commuContent() {
+      this.checkCommuForm()
+    },
+    commuPrice() {
+      this.checkCommuForm()
+    },
+    commuSize() {
+      this.checkCommuForm()
     }
   },
   mounted() {
+    this.setIsWrite(false)
     this.defaultDark()
   },
   methods: {
+    ...mapMutations(['setIsWrite']),
     defaultDark() {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
@@ -211,6 +266,11 @@ export default {
         }
       }
     },
+    setCommuImg() {
+      const CommuPhotoFile = document.getElementById('feed-img-edit')
+      this.commuImg += URL.createObjectURL(CommuPhotoFile.files[0])
+      this.commuPhoto.push(CommuPhotoFile.files[0])
+    },
     onCancelBtn(num) {
       if (num === 1){
         this.isCancle1 = true
@@ -218,18 +278,24 @@ export default {
         this.isCancle2 = true
       } else if (num === 3) {
         this.isCancle3 = true
+      } else {
+        this.isCommuCancle = true
       }
     },
     offCancleBtn() {
       this.isCancle1 = false
       this.isCancle2 = false
       this.isCancle3 = false
+      this.isCommuCancle = false
     },
     delFeedImg(num) {
       let idx = num-1
       this.feedImg.splice(idx, 1)
       this.photo.splice(idx, 1)
       console.log(this.photo, 'delete')
+    },
+    delCommuImg() {
+      this.commuImg = ''
     },
     addWriteHash() {
       this.writeHashList.push(this.writeHashContent.slice(0,-1))
@@ -245,6 +311,13 @@ export default {
         this.isWriteBtn = false
       }
     },
+    checkCommuForm() {
+      if (this.commuImg && this.commuContent && this.commuPrice && this.commuSize) {
+        this.isCommuBtn = true
+      } else {
+        this.isCommuBtn = false
+      }
+    },
     sendBoardData(){
       let dataforms = new FormData();
       console.log(this.photo)
@@ -257,9 +330,34 @@ export default {
      
       axios.post("https://i3b304.p.ssafy.io/api/board/upload",dataforms).then(
         console.log('success'))
+        Swal.fire(
+        '환영해요!',
+        '자신만의 패션을 뽐내보세요!',
+        'success'
+        )
+        this.$router.go('/feed')
     },
-    
+    sendRecellData(){
+      let dataform = new FormData();
+      dataform.append("recellimg",this.commuPhoto[0]);
+      dataform.append("nickname",this.$cookies.get('auth-nickname'));
+      dataform.append("content", this.commuContent);
+      dataform.append("price",this.commuPrice);
+      dataform.append("size",this.commuSize)
+      
+      axios.post("https://i3b304.p.ssafy.io/api/recell/upload", dataform).then(
+        console.log('success'))
+      },
+    writeFormChange() {
+      this.isCommu = !this.isCommu
+    }
 
+  },
+  beforeDestroy() { 
+    this.setIsWrite(true)
   }
 }
 </script>
+<style scoped>
+
+</style>

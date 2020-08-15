@@ -158,6 +158,12 @@ span {
   height: 5.5vh;
   cursor: pointer;
 }
+@media (max-width: 300px) {
+  #nav .nav-logo {
+    width: 7vh;
+    height: 5vh;
+  }
+}
 
 #nav .nav-logo .fa-hat-cowboy {
   font-size: 5vh;
@@ -343,6 +349,10 @@ span {
   color: grey;
 }
 
+.nav-menu-icon .menu-bar-non {
+  color: gray !important;
+}
+
 .write-icon .write-icon-img {
   font-size: 2.5vh;
   margin: 0;
@@ -423,41 +433,6 @@ align-items: center;
   animation: fill-white 0.5s ease forwards 2.5s !important;
 }
 
-/* .animated-logo path:nth-child(1) {
-  stroke-dasharray: 403;
-  stroke-dashoffset: 403;
-  animation: line-anim 1s ease forwards;
-}
-
-.animated-logo path:nth-child(2) {
-  stroke-dasharray: 229;
-  stroke-dashoffset: 229;
-  animation: line-anim 1s ease forwards 0.3s;
-}
-
-.animated-logo path:nth-child(3) {
-  stroke-dasharray: 340;
-  stroke-dashoffset: 340;
-  animation: line-anim 1s ease forwards 0.6s;
-}
-
-.animated-logo path:nth-child(4) {
-  stroke-dasharray: 460;
-  stroke-dashoffset: 460;
-  animation: line-anim 1s ease forwards 0.9s;
-}
-
-.animated-logo path:nth-child(5) {
-  stroke-dasharray: 539;
-  stroke-dashoffset: 539;
-  animation: line-anim 1s ease forwards 1.2s;
-}
-
-.animated-logo path:nth-child(6) {
-  stroke-dasharray: 456;
-  stroke-dashoffset: 456;
-  animation: line-anim 1s ease forwards 1.5s;
-} */
 .animated-logo path:nth-child(1) {
   stroke-dasharray: 513;
   stroke-dashoffset: 513;

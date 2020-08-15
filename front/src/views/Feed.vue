@@ -60,7 +60,12 @@
             </div>
           </div>
           <header class='feed-content-head'>{{feed.content}}</header>
-          <aside class='feed-content-tag'><span v-for="ta in feed.tags" :key="ta.tagname">{{ta.tagname}}</span></aside>
+          <aside class='feed-content-tag'>
+            <div v-for="ta in feed.tags" :key="ta.tagname">
+              <p v-show="ta.tagname[0]==='#'">{{ ta.tagname }}</p>
+              <p v-show="ta.tagname[0]!=='#'">#{{ ta.tagname }}</p>
+            </div>
+          </aside>
         </section>
       </div>
       <div class="margin-box"></div>
@@ -78,7 +83,7 @@ import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 import "../components/css/feed.css"
 import axios from 'axios'
 import CommentModal from '../components/CommentModal.vue'
-import { mapState, mapActions  } from 'vuex'
+import { mapState, mapActions, mapMutations  } from 'vuex'
 import InfiniteLoading from 'vue-infinite-loading'
 
 function timeForToday(value) {
@@ -154,6 +159,7 @@ export default {
   
   methods: {
     ...mapActions(['sendUserInfo', 'setLoggedIn', 'setToken']),
+    ...mapMutations(['setIsSelectBar']),
     onNewsFeed() {
       const selectBar = document.querySelector('.menu-bar-select')
       const newsFeed = document.querySelector('.fa-newspaper')
@@ -356,9 +362,10 @@ export default {
               axios.post("https://i3b304.p.ssafy.io/api/board/tags",articleNo).then((tag)=>{
               const tags = tag.data;
               const taglist = [];
+              console.log(tag, '태그리스트')
               for (let i = 0; i < tags.length; i++) {
                   const el2= tags[i];
-                  taglist.push({tagname:el2.tagName});  
+                  taglist.push({tagname:el2.tagName});     
                 }
                   feeddata.tags=taglist;
               });
@@ -390,6 +397,7 @@ export default {
 
   },
   mounted() {
+    this.setIsSelectBar(true)
     this.onNewsFeed()
     this.defaultDark()
     let ref=this;
@@ -490,7 +498,9 @@ export default {
     console.log(this.likeStates,'좋아요리스트');
     console.log(this.bookmarkStates,'북마크리스트');
   },
-
+  beforeDestroy() { 
+    this.setIsSelectBar(false)
+  }
 }
 
 </script>
