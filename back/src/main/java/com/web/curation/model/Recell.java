@@ -37,6 +37,7 @@ public class Recell {
 	@Column(insertable = false, updatable = false) // 일기전용시 false
 	private LocalDateTime recellDate;
 	private String recellSize;
+	private String roomname;
 	public int getRecellNo() {
 		return recellNo;
 	}
@@ -67,12 +68,7 @@ public class Recell {
 	public void setRecellContent(String recellContent) {
 		this.recellContent = recellContent;
 	}
-	public Date getRecellDate() {
-		return recellDate;
-	}
-	public void setRecellDate(Date recellDate) {
-		this.recellDate = recellDate;
-	}
+	
 	public String getRecellSize() {
 		return recellSize;
 	}
