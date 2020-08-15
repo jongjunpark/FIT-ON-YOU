@@ -35,7 +35,7 @@ public class Recell {
 	private String recellImage;
 	private String recellContent;
 	@Column(insertable = false, updatable = false) // 일기전용시 false
-	private LocalDateTime recellDate;
+	private Date recellDate;
 	private String recellSize;
 	private String roomname;
 	public int getRecellNo() {

@@ -32,27 +32,26 @@
 </template>
 
 <script>
-import "../components/css/directmessage.css"
-import { mapState } from "vuex"
+import {mapState}from 'vuex'
 import firebase from 'firebase'
 
 // Required for side-effects
 require("firebase/firestore");
 
-// Your web app's Firebase configuration
-var firebaseConfig = {
-  apiKey: "AIzaSyCPKM_f3wVIMx9PG9A62_c7ObfSShrqXBQ",
-  authDomain: "vue-firestore-704a4.firebaseapp.com",
-  databaseURL: "https://vue-firestore-704a4.firebaseio.com",
-  projectId: "vue-firestore-704a4",
-  storageBucket: "vue-firestore-704a4.appspot.com",
-  messagingSenderId: "880449748292",
-  appId: "1:880449748292:web:c13cb68cfd9815dff16b11",
-  measurementId: "G-HX35ED5RHD"
-};
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-firebase.analytics();
+ // Your web app's Firebase configuration
+  var firebaseConfig2 = {
+     apiKey: "AIzaSyCOTjsP9K6NHMWKjRs38rRoUL_jjCpftB0",
+    authDomain: "vue-resell-openchatting.firebaseapp.com",
+    databaseURL: "https://vue-resell-openchatting.firebaseio.com",
+    projectId: "vue-resell-openchatting",
+    storageBucket: "vue-resell-openchatting.appspot.com",
+    messagingSenderId: "798044170825",
+    appId: "1:798044170825:web:858223bf10501aa1b7ed98",
+    measurementId: "G-N6S13DGQ9W"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig2,"secondary");
+  firebase.analytics();
 
 var db = firebase.firestore();
 
@@ -63,7 +62,7 @@ db.settings({
 });
 
 export default {
-  name: 'DirectMessage',
+  name: 'ResellMessage',
   data() {
     return {
       text: '',
@@ -89,36 +88,17 @@ export default {
 
   methods: {
     saveMessage(){
-      //save to firestore
+      //save to fires'tore
       db.collection(this.roomname).add({
         message: this.text,
         createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
         senduser: this.user.nickname,
       })
-      
-      //  if (this.text !== '') {
-      // //save to firestore
-      //   var divParent = document.querySelector('.direct-message-content');
-      // db.collection(`chat`).add({
-      //   divParent.className = 'direct-message-content';
-      //   message: this.text,
-
-      //   createdAt: new Date(),
-      //   var div = document.createElement('div');
-      //   senduser: this.user.nickname,
-      //   div.className = 'user-me'; 
-      // })
-
-      //   var p = document.createElement('p');
-      //   p.className = 'user-me-content';
-      //   p.innerText = this.text;
-
       console.log(this.user);
       this.text = null;
     },
     fetchMessage(){
       db.collection(this.roomname).orderBy('createdAt').onSnapshot((querySnapshot)=>{
-       
         let allMessages = [];
         querySnapshot.forEach(doc=>{
           allMessages.push(doc.data());
