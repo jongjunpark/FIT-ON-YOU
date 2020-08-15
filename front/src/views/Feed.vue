@@ -375,6 +375,9 @@ export default {
       .catch()
     },
   },
+  created() {
+    
+  },
   mounted() {
     this.onNewsFeed()
     this.defaultDark()
@@ -384,29 +387,24 @@ export default {
     let uri_enc = encodeURIComponent(uri);
     let uri_dec = decodeURIComponent(uri_enc);
     let res = uri_dec;
-
     const formData = new FormData();
-    
     formData.append('nickname',res);
     // formData.append('pageNum',ref.limit),
-    axios.post("https://i3b304.p.ssafy.io/api/board/newsfeed/0",formData).then((data)=>{
-      console.log("success")
-      console.log(data)
+    axios.post('https://i3b304.p.ssafy.io/api/board/newsfeed/0',formData).then((data)=>{
       this.feedlist=data.data;
-      console.log(typeof(this.feedlist))
       for (let index = 0; index < this.feedlist.length; index++) {
-        let feeddata={tags:[],
-                      images:[],
-                      content:"",
-                      articleUser:"",
-                      userProfile:"",}
+        let feeddata = {
+          tags:[],
+          images:[],
+          content:"",
+          articleUser:"",
+          userProfile:"",
+        }
 
         const el = this.feedlist[index];
-
         let follow = new FormData();
-
         follow.append('follow',el.articleUser);
-
+        
         axios.post("https://i3b304.p.ssafy.io/api/board/profileimg",follow).then((proff)=>{
           feeddata.userProfile=proff.data.profile_img;
         });
@@ -433,9 +431,8 @@ export default {
             feeddata.articleDate= timeForToday(this.feedlist[index].articleDate);
             feeddata.articleUser= this.feedlist[index].influeUser;
             feeddata.articleNo=this.feedlist[index].articleNo;
-        }
-        
-      });
+          }
+        });
         axios.post("https://i3b304.p.ssafy.io/api/board/tags",articleNo).then((tag)=>{
         const tags = tag.data;
         const taglist = [];
@@ -445,31 +442,32 @@ export default {
           }
             feeddata.tags=taglist;
         });
-       
+        
         this.mainfeed.push(feeddata)
         ref.likeStates.push(this.feedlist[index].likechk);
         ref.bookmarkStates.push(this.feedlist[index].markchk);
       }
     });
+
     axios.post("https://i3b304.p.ssafy.io/api/board/influencer").then((data)=>{
-        this.influencer=data.data;
+      this.influencer=data.data;
 
-        for (let i=0; i<data.data.length; i++) {  
-          const CAROUSELL = document.querySelector(`.feed-influ-carousel${i+1}`)
-          const INFLUBOX = document.createElement('div')
-          const INFLUICON = document.createElement('div')
-          const INFLUIMG = document.createElement('img')
-          INFLUBOX.classList.add('influ-box')
-          INFLUICON.classList.add('influ-icon')
-          INFLUIMG.setAttribute("src", data.data[i].profile_img)
-  
-          INFLUICON.appendChild(INFLUIMG)
-          INFLUBOX.appendChild(INFLUICON)
-          CAROUSELL.appendChild(INFLUBOX)
-        }
+      for (let i=0; i<data.data.length; i++) {  
+        const CAROUSELL = document.querySelector(`.feed-influ-carousel${i+1}`)
+        const INFLUBOX = document.createElement('div')
+        const INFLUICON = document.createElement('div')
+        const INFLUIMG = document.createElement('img')
+        INFLUBOX.classList.add('influ-box')
+        INFLUICON.classList.add('influ-icon')
+        INFLUIMG.setAttribute("src", data.data[i].profile_img)
 
-        console.log(this.influencer,'influ')
-      });
+        INFLUICON.appendChild(INFLUIMG)
+        INFLUBOX.appendChild(INFLUICON)
+        CAROUSELL.appendChild(INFLUBOX)
+      }
+
+      console.log(this.influencer,'influ')
+    });
     console.log(this.mainfeed, '메인피드')
     console.log(this.likeStates,'좋아요리스트');
     console.log(this.bookmarkStates,'북마크리스트');
