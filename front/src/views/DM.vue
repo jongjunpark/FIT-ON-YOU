@@ -175,6 +175,9 @@ export default {
                     .catch(
                     )
               })
+              if (DIVUPPER) {
+                this.defaultDark()
+              }
               
               
             });

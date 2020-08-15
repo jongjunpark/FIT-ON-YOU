@@ -20,6 +20,9 @@ import OtherUser from '../views/OtherUser.vue'
 // import SocialJoin from '../views/SocialJoin.vue'
 import JoinConfirm from '../views/JoinConfirm.vue'
 import PageNotFound from '../views/PageNotFound.vue'
+import ResellMessage from '../views/ResellMessage.vue'
+
+
 
 Vue.use(VueRouter)
 
@@ -202,6 +205,18 @@ Vue.use(VueRouter)
         next()
       }
     }
+  },
+  {
+    path: '/resellMessage',
+    name: 'resell',
+    component: ResellMessage,
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/')
+      } else {
+        next()
+      }
+    }
   }, 
   {
     path: '/otheruser/:nickname',
@@ -228,7 +243,20 @@ Vue.use(VueRouter)
     path: '/404',
     name: 'PageNotFound',
     component: PageNotFound,
-  }
+  },
+  {
+    path: '/resellmessage/:roomname/:othername',
+    name: 'ResellMessage',
+    component: ResellMessage,
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/')
+      } else {
+        next()
+      }   
+     }
+  },
+  
     // beforeEnter(to, from, next) {
     //   if (!Vue.$cookies.isKey('auth-token')) {
     //     next('/')
