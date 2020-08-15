@@ -1,10 +1,12 @@
 package com.web.curation.controller;
 
 import java.io.File;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,8 +17,10 @@ import com.web.curation.dao.ImageDao;
 import com.web.curation.dao.RecellDao;
 import com.web.curation.dao.UserDao;
 import com.web.curation.model.BasicResponse;
+import com.web.curation.model.BoardDTO;
 import com.web.curation.model.ImageStore;
 import com.web.curation.model.Recell;
+import com.web.curation.service.user.BoardService;
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -37,6 +41,14 @@ public class RecellController {
 	UserDao userDao;
 	@Autowired
 	RecellDao recellDao;
+	@Autowired
+	BoardService boardService;
+	
+	@PostMapping("/newsfeed/{page}")
+	public Object getFollowArticle(@PathVariable int page) {
+		List<Recell> result = boardService.getRecellList(page);
+		return result;
+	}
 
 	@PostMapping(value="/upload")
 	public void addRecell(@RequestParam("recellimg") MultipartFile recellimg, @RequestParam("nickname") String nickname,
