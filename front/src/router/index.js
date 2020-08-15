@@ -158,7 +158,7 @@ Vue.use(VueRouter)
       }    }
   },
   {
-    path: '/profileinform',
+    path: '/profileinform/:name',
     name: 'ProfileInform',
     component: ProfileInform,
     beforeEnter(to, from, next) {
