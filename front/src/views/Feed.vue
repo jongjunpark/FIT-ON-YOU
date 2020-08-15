@@ -7,16 +7,14 @@
       <div v-show="isInfluNav" class="influ-nav-box">
         <div class="influ-nav">
           <VueSlickCarousel v-bind="settings">
-            <div class='feed-influ-carousel1'></div>
-            <div class='feed-influ-carousel2'></div>
-            <div class='feed-influ-carousel3'></div>
-            <div class='feed-influ-carousel4'></div>
-            <div class='feed-influ-carousel5'></div>
-            <div class='feed-influ-carousel6'></div>
-            <div class='feed-influ-carousel7'></div>
-            <div class='feed-influ-carousel8'></div>
-            <div class='feed-influ-carousel9'></div>
-            <div class='feed-influ-carousel10'></div>
+            <div v-for="influ in influencer" :key="influ.nickname">
+              <div class="influ-box">
+                <div class="influ-icon">
+                  <img :src="influ.profile_img">
+                </div>
+              </div>
+            </div>
+            <span></span>
           </VueSlickCarousel>
         </div>
       </div>
@@ -254,6 +252,9 @@ export default {
         INFLUBTN.innerHTML = '∧'
       }
     },
+    goProfile(name) {
+      this.$router.push(`/otheruser/${name}`)
+    },
     defaultDark() {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
@@ -376,6 +377,11 @@ export default {
     },
   },
   mounted() {
+    console.log(window.location.href)
+    console.log(window.location.hostname)
+    console.log(window.location.pathname)
+    console.log(window.location.protocol)
+
     this.onNewsFeed()
     this.defaultDark()
     let ref=this;
@@ -448,20 +454,25 @@ export default {
 
     axios.post("https://i3b304.p.ssafy.io/api/board/influencer").then((data)=>{
       this.influencer=data.data;
+      console.log(this.influencer)
 
-      for (let i=0; i<data.data.length; i++) {  
-        const CAROUSELL = document.querySelector(`.feed-influ-carousel${i+1}`)
-        const INFLUBOX = document.createElement('div')
-        const INFLUICON = document.createElement('div')
-        const INFLUIMG = document.createElement('img')
-        INFLUBOX.classList.add('influ-box')
-        INFLUICON.classList.add('influ-icon')
-        INFLUIMG.setAttribute("src", data.data[i].profile_img)
+      // for (let i=0; i<data.data.length; i++) {  
+      //   const CAROUSELL = document.querySelector(`.feed-influ-carousel${i+1}`)
+      //   const INFLUBOX = document.createElement('div')
+      //   const INFLUICON = document.createElement('div')
+      //   const INFLUIMG = document.createElement('img')
+      //   const INFLUNAME = document.createElement('span')
+      //   INFLUBOX.classList.add('influ-box')
+      //   INFLUICON.classList.add('influ-icon')
+      //   INFLUIMG.setAttribute("src", data.data[i].profile_img)
+      //   INFLUNAME.innerHTML = data.data[i].nickname
+      //   INFLUNAME.classList.add('influ-name')
 
-        INFLUICON.appendChild(INFLUIMG)
-        INFLUBOX.appendChild(INFLUICON)
-        CAROUSELL.appendChild(INFLUBOX)
-      }
+      //   INFLUICON.appendChild(INFLUIMG)
+      //   INFLUBOX.appendChild(INFLUICON)
+      //   CAROUSELL.appendChild(INFLUBOX)
+      //   INFLUBOX.appendChild(INFLUNAME)
+      // }
     });
     console.log(this.mainfeed, '메인피드')
     console.log(this.likeStates,'좋아요리스트');
@@ -569,7 +580,9 @@ export default {
 
 .influ-box {
   display: flex;
-  justify-content: center;  
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .influ-icon {
@@ -591,6 +604,10 @@ export default {
   width: 100%;
   height: 100%;
   border-radius: 50%;
+}
+
+.influ-name {
+  font-size: 1.5vh
 }
 
 .slide-influ-nav-enter-active, .slide-influ-nav-leave-active {
