@@ -263,7 +263,7 @@ export default {
 
     infiniteHandler($state){
       let ref=this;
-      axios.post('http://localhost:8080/api/search/all/'+ref.limit)
+      axios.post('https://i3b304.p.ssafy.io/api/search/all/'+ref.limit)
       .then((data)=>{
         setTimeout(() => {
           if(data.data.object.length){
@@ -290,7 +290,7 @@ export default {
     this.defaultDark()
 
 
-    axios.post("http://localhost:8080/api/search/all/0").then((data)=>{
+    axios.post("https://i3b304.p.ssafy.io/api/search/all/0").then((data)=>{
       this.articleList=data.data.object;
       console.log(this.articleList)
       this.setList();
