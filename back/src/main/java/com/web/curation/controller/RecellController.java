@@ -50,6 +50,7 @@ public class RecellController {
 		recell.setRecellContent(content);
 		recell.setRecellPrice(price);
 		recell.setRecellSize(size);
+		recell.setRoomname(uuid.toString());
 		String name = uuid.toString() + "_recell_" + recellimg.getOriginalFilename();
 		String storePath = "../images/board/" + name;
 		recell.setRecellImage(storePath);
