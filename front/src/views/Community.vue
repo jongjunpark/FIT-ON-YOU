@@ -37,6 +37,12 @@ export default {
       this.defaultDark()
     }
   },
+  data(){
+    return{
+      tempList:[],
+      recellList:[],
+    }
+  },
   methods: {
     ...mapMutations(['setIsSelectBar']),
     goCommunity() {
@@ -80,7 +86,25 @@ export default {
     this.setIsSelectBar(true)
     this.goCommunity()
     this.defaultDark()
-  },
+
+     axios.post("https://i3b304.p.ssafy.io/api/recell/newsfeed/0",formData).then((data)=>{
+      console.log("success")
+      console.log(data)
+      this.tempList=data.data;
+      for (let index = 0; index < this.tempList.length; index++) {
+        let feeddata={
+          recellNo:this.tempList[index].recellNo,
+          content:this.tempList[index].recellContent,
+          price:this.tempList[index].recellPrice,
+          imgurl:this.tempList[index].recellImage,
+          date:this.tempList[index].recellDate,
+          size:this.tempList[index].recellSize,
+          roomname:this.tempList[index].roomname
+          }
+        this.recellList.push(feeddata);
+        }
+      })
+    },
   beforeDestroy() { 
     this.setIsSelectBar(false)
   }
