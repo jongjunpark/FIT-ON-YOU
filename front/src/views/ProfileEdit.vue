@@ -149,12 +149,12 @@ export default {
     goMyFeed() {
       this.setMyFeed();
       this.setIsMe(true);
-      this.$router.push(`/profileinform/${this.$route.params.nickname}`).catch(()=>{})
+      this.$router.push(`/profileinform/${this.nickname}`).catch(()=>{})
     },
     goBookMark() {
       this.setBookMark();
       this.setIsMe(true);
-      this.$router.push(`/profileinform/${this.$route.params.nickname}`).catch(()=>{})
+      this.$router.push(`/profileinform/${this.nickname}`).catch(()=>{})
     },
     goFollowing() {
       this.setFollowing();
@@ -169,7 +169,7 @@ export default {
     goCuration() {
       this.setCuration();
       this.setIsMe(true);
-      this.$router.push(`/profileinform/${this.$route.params.nickname}`).catch(()=>{})
+      this.$router.push(`/profileinform/${this.nickname}`).catch(()=>{})
     },
     changeNickName() {
       const wrapContainer = document.querySelector('.wrap-container')
