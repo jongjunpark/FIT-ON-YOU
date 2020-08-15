@@ -1,24 +1,8 @@
 <template>
   <div class='wrap'>
     <div class='wrap-container community-container'>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
+      <div class="search-inner-box" v-for="(article,index) in recellList" :key="`recell-${index}`">
+        <img :src="article.imgurl" alt=""></div>
     </div>
   </div>
 </template>
@@ -26,7 +10,7 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import "../components/css/community.css"
-
+import axios from 'axios'
 export default {
   name: 'Community',
   computed: {
@@ -87,7 +71,7 @@ export default {
     this.goCommunity()
     this.defaultDark()
 
-     axios.post("https://i3b304.p.ssafy.io/api/recell/newsfeed/0",formData).then((data)=>{
+     axios.post("https://i3b304.p.ssafy.io/api/recell/newsfeed/0").then((data)=>{
       console.log("success")
       console.log(data)
       this.tempList=data.data;
