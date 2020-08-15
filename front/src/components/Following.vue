@@ -13,6 +13,7 @@ export default {
   data() {
     return {
       nick: '',
+      name: '',
     }
   },
   mounted() {
@@ -24,9 +25,11 @@ export default {
     let res = uri_dec;
     this.nick = res
     
+    this.name = this.$route.params.name
+    
     axios.get('https://i3b304.p.ssafy.io/api/follow/forFollowing',{
       params:{
-      userName: this.nick,
+      userName: this.name,
     }
     }).then((data) => {
       const ARRAYFOLLOW = data.data
@@ -58,8 +61,10 @@ export default {
         FollowingBox.classList.add('following-box')
 
         FollowingIcon.appendChild(FollowingImg)
-        FollowingBtnArea.appendChild(FollowingBtn)
-        FollowingBtnArea.appendChild(DMBTN)
+        if (!(this.nick == element.followeduser)) {
+          FollowingBtnArea.appendChild(FollowingBtn)
+          FollowingBtnArea.appendChild(DMBTN)
+          }
         FollowingText.appendChild(FollowingUser)
         FollowingText.appendChild(FollowingBtnArea)
 
@@ -71,7 +76,7 @@ export default {
           axios.get('https://i3b304.p.ssafy.io/api/chat/existroom',{
             params:{
               firstuser: element.followeduser,
-              seconduser: this.nick
+              seconduser: this.name
             }
             }).then((data)=>{
               this.$router.push(`/directmessage/${data.data.object.roomname}/${element.followeduser}`).catch(()=>{})
@@ -98,7 +103,7 @@ export default {
             axios.get('https://i3b304.p.ssafy.io/api/follow/add',{
               params:{
                 followedUser: element.followeduser,
-                followingUser: this.nick
+                followingUser: this.name
               }
               }).then((data) => {
                 FollowingBtn.classList.remove('btn-cancel-ok')

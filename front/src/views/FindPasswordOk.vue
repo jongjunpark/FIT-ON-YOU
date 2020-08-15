@@ -37,7 +37,7 @@ export default {
     }
   },
   mounted() {
-    var fiveMinutes = 5,
+    var fiveMinutes = 60 * 3,
     display = document.querySelector('#time');
     this.startTimer(fiveMinutes, display);
     this.defaultDark()

@@ -12,6 +12,7 @@ export default {
   data() {
     return {
       nick: '',
+      name: '',
     }
   },
   mounted() {
@@ -21,10 +22,13 @@ export default {
     let uri_dec = decodeURIComponent(uri_enc);
     let res = uri_dec;
     this.nick = res
+    
+
+    this.name = this.$route.params.name
 
     axios.get('https://i3b304.p.ssafy.io/api/follow/forFollower',{
       params:{
-      userName: this.nick,
+      userName: this.name,
     }
     }).then((data) => {
       const ARRAYFOLLOW = data.data
@@ -54,8 +58,10 @@ export default {
         FollowerBox.classList.add('follower-box')
 
         FollowerIcon.appendChild(FollowerImg)
-        FollowerBtnArea.appendChild(FollowerBtn)
-        FollowerBtnArea.appendChild(DMBTN)
+        if (!(this.nick == element.followinguser)) {
+          FollowerBtnArea.appendChild(FollowerBtn)
+          FollowerBtnArea.appendChild(DMBTN)
+          }
         FollowerText.appendChild(FollowerUser)
         FollowerText.appendChild(FollowerBtnArea)
 
@@ -67,7 +73,7 @@ export default {
           axios.get('https://i3b304.p.ssafy.io/api/chat/existroom',{
             params:{
               firstuser: element.followinguser,
-              seconduser: this.nick
+              seconduser: this.name
             }
             }).then((data)=>{
               this.$router.push(`/directmessage/${data.data.object.roomname}/${element.followinguser}`).catch(()=>{})
@@ -80,7 +86,7 @@ export default {
         axios.get('https://i3b304.p.ssafy.io/api/isfollowed',{
           params:{
           followedUser: element.followinguser,
-          followingUser: this.nick
+          followingUser: this.name
         }
         }).then((data) => {
           if (!data.data.object) {
@@ -112,7 +118,7 @@ export default {
               axios.get('https://i3b304.p.ssafy.io/api/follow/add',{
                 params:{
                   followedUser: element.followinguser,
-                  followingUser: this.nick
+                  followingUser: this.name
                 }
                 }).then((data) => {
                   FollowerBtn.classList.remove('btn-cancel-Ok')

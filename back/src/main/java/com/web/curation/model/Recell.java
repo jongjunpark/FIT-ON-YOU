@@ -75,6 +75,19 @@ public class Recell {
 	public void setRecellSize(String recellSize) {
 		this.recellSize = recellSize;
 	}
+	public LocalDateTime getRecellDate() {
+		return recellDate;
+	}
+	public void setRecellDate(LocalDateTime recellDate) {
+		this.recellDate = recellDate;
+	}
+	public String getRoomname() {
+		return roomname;
+	}
+	public void setRoomname(String roomname) {
+		this.roomname = roomname;
+	}
+	
 	
 	
 	}

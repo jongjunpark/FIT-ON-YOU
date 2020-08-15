@@ -149,27 +149,27 @@ export default {
     goMyFeed() {
       this.setMyFeed();
       this.setIsMe(true);
-      this.$router.push('/profileinform').catch(()=>{})
+      this.$router.push(`/profileinform/${this.nickname}`).catch(()=>{})
     },
     goBookMark() {
       this.setBookMark();
       this.setIsMe(true);
-      this.$router.push('/profileinform').catch(()=>{})
+      this.$router.push(`/profileinform/${this.nickname}`).catch(()=>{})
     },
     goFollowing() {
       this.setFollowing();
       this.setIsMe(true);
-      this.$router.push('/profileinform').catch(()=>{})
+      this.$router.push(`/profileinform/${this.nickname}`).catch(()=>{})
     },
     goFollower() {
       this.setFollower();
       this.setIsMe(true);
-      this.$router.push('/profileinform').catch(()=>{})
+      this.$router.push(`/profileinform/${this.nickname}`).catch(()=>{})
     },
     goCuration() {
       this.setCuration();
       this.setIsMe(true);
-      this.$router.push('/profileinform').catch(()=>{})
+      this.$router.push(`/profileinform/${this.nickname}`).catch(()=>{})
     },
     changeNickName() {
       const wrapContainer = document.querySelector('.wrap-container')
@@ -192,6 +192,28 @@ export default {
       wrapBottom.classList.remove('profile-opacity-wrap')
       hidden.style.zIndex = -1000
       this.isChange = true;
+
+      let ref=this;
+      let data = this.$cookies.get('auth-nickname');
+      let uri = data;
+      let uri_enc = encodeURIComponent(uri);
+      let uri_dec = decodeURIComponent(uri_enc);
+      let res = uri_dec;
+      this.tempNickName=res;
+      this.nickname=res;
+      axios.get('https://i3b304.p.ssafy.io/api/mypage/',{
+      params:{nickname:res}
+      })
+      .then((data)=>{
+        console.log(data);
+        ref.followedCnt=data.data.followedCnt;
+        ref.followingCnt=data.data.followingCnt;
+        ref.nickname=data.data.userinfo.nickname;
+        ref.content=data.data.userinfo.selfintroduce;
+        if(data.data.userinfo.profile_img){
+          ref.profileImg=data.data.userinfo.profile_img;
+        }
+      })
     },
     change() {
       let ref=this;
