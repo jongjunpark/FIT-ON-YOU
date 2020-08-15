@@ -35,19 +35,22 @@
     <div v-show='isLoggedIn' id="nav2" >
       <div class="bottom-nav">
         <div class='menu-bar-list'>
-          <div class="menu-bar-select"></div>
+          <div v-show="isSelectBar" class="menu-bar-select"></div>
           <div @click="goNewsFeed" class="nav-menu-icon">
-            <i class="menu-bar-img far fa-newspaper"></i>
+            <i v-show="isSelectBar" class="menu-bar-img far fa-newspaper"></i>
+            <i v-show="!isSelectBar" class="menu-bar-img far fa-newspaper menu-bar-non"></i>
           </div>
           <div @click="goSearch" class="nav-menu-icon">
-            <i class="menu-bar-img fas fa-search"></i>
+            <i v-show="isSelectBar" class="menu-bar-img fas fa-search"></i>
+            <i v-show="!isSelectBar" class="menu-bar-img fas fa-search menu-bar-non"></i>
           </div>
           <div @click="goCommunity" class="nav-menu-icon">
-            <i class="menu-bar-img fas fa-users"></i>
+            <i v-show="isSelectBar" class="menu-bar-img fas fa-users"></i>
+            <i v-show="!isSelectBar" class="menu-bar-img fas fa-users menu-bar-non"></i>
           </div>
         </div>
       </div>
-      <div @click='goWrite' class="write-icon">
+      <div v-show="isWrite" @click='goWrite' class="write-icon">
         <i class="write-icon-img fas fa-pen"></i>
       </div>
     </div>
@@ -89,7 +92,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['authToken', 'isLoggedIn', 'user', 'flag']),
+    ...mapState(['authToken', 'isLoggedIn', 'user', 'flag', 'isWrite', 'isSelectBar']),
     ...mapGetters([])
   },
   watch: {
@@ -102,7 +105,7 @@ export default {
   },
  
   mounted() {
-     if (this.$cookies.isKey('auth-token')) {
+    if (this.$cookies.isKey('auth-token')) {
       this.setLoggedIn(true);
       this.setToken(this.$cookies.get('auth-token'));
       this.sendUserInfo();
@@ -370,6 +373,6 @@ export default {
         .catch()
       }
     },
-  }
+  },
 }
 </script>

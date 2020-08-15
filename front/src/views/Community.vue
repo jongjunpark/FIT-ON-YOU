@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import "../components/css/community.css"
 
 export default {
@@ -38,6 +38,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setIsSelectBar']),
     goCommunity() {
       const selectBar = document.querySelector('.menu-bar-select')
       const newsFeed = document.querySelector('.fa-newspaper')
@@ -76,8 +77,12 @@ export default {
     },
   },
   mounted() {
+    this.setIsSelectBar(true)
     this.goCommunity()
     this.defaultDark()
+  },
+  beforeDestroy() { 
+    this.setIsSelectBar(false)
   }
 }
 </script>
