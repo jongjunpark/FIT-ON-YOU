@@ -16,6 +16,6 @@ public interface RecellDao extends JpaRepository<Recell, String> {
 	@Query(value="select recellNo from recellboard order by recellNo desc",nativeQuery = true)
 	List<Integer> getCountRecell();	
 	
-	@Query(value = "select * from recell order by recellNo desc",nativeQuery=true)
+	@Query(value = "select * from recellboard order by recellNo desc",nativeQuery=true)
 	List<Recell> getRecellList();
 }
