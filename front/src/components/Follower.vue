@@ -166,6 +166,9 @@ export default {
         }
       }
     },
+    goToUserPage(nickname){
+      this.$router.push(`/otheruser/${nickname}`).catch(()=>{})
+    },
   },
 }
 </script>

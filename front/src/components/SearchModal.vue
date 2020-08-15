@@ -5,11 +5,11 @@
       <div class="search-modal-wrap">
         <div class="search-more-box">
           <header class="search-more-user-data">
-            <div class="search-more-user-profile">
+            <div class="search-more-user-profile" @click="goToUserPage(username)">
               <img :src="profile">
             </div>
             <div class="search-more-article-head">
-              <p class='search-more-username'>{{ username }}</p>
+              <p class='search-more-username' @click="goToUserPage(username)">{{ username }}</p>
               <p class='search-more-article-date'>{{ time }}</p>
             </div>
           </header>
@@ -220,7 +220,7 @@ export default {
       this.modalArticleUser=articleUser;
       this.showModal = true
     },
-    clickBookMark(articleNo,flag,index,e) {
+    clickBookMark(articleNo,flag,e) {
       let ref=this
 
       let data = this.$cookies.get('auth-nickname');
@@ -253,7 +253,9 @@ export default {
       }
 
     },
-
+    goToUserPage(nickname){
+      this.$router.push(`/otheruser/${nickname}`).catch(()=>{})
+    },
 
   }
 }

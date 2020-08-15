@@ -2,6 +2,8 @@ package com.web.curation.dao;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -29,6 +31,11 @@ public interface ImageDao extends JpaRepository<ImageStore, String>{
 	List<ImageStore> bookMarkImgList(@Param("nickname") String nickname);
 	
 	List<ImageStore> findImagestoreByArticleNoOrderByArticleNoDesc(int num);
+	
+	@Query(value="select imageno, imageUrl, articleNo from imagestore group by articleno order by articleno desc ",
+			countQuery="select count(a.articleno) from (select articleno from imagestore group by articleno) a ",
+			nativeQuery=true)
+	Page<ImageStore> getAllSearchList(Pageable pageable);
 	
 
 }
