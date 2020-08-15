@@ -23,6 +23,21 @@
           {{ hash }}
         </div>
       </transition-group>
+      <transition-group v-show="userContent" name='fade' tag="div" class="search-user-group" mode="in-out">
+        <div class='search-user-item' v-for='user in userList' :key='user.nickname' @click='goProfile(user.nickname)'>
+          <div class="search-user-img">
+            <img v-show="user.profile_img" :src="user.profile_img" alt="">
+            <img v-show="!user.profile_img&&user.gender=='Male'" src="../assets/images/default-user.png" alt="">
+            <img v-show="!user.profile_img&&user.gender=='Female'" src="../assets/images/default-user-female.png" alt="">
+          </div>
+          <div class="search-user-content">
+            <div class="search-user-name">{{ user.nickname }}</div>
+            <div v-show="!user.selfintroduce" class="search-user-nonuserintro">{{ user.selfintroduce }}</div>
+            <div v-show="user.selfintroduce" class="search-user-intro">{{ user.selfintroduce }}</div>
+          </div>
+        </div>
+        <div v-show="userListLength > 0" @click="onUserResult" class='search-user-more' key='0'>{{ userListLength }}개 더보기</div>
+      </transition-group>
     </div>
     <div v-if="isDefault" class='wrap-container search-container'>
 
@@ -70,6 +85,8 @@ export default {
       hashList: [],
       hashString: '',
       userContent: '',
+      userList: [],
+      userListLength: 0,
       isDefault: true,
       isHashResult: false,
       isUserResult: false,
@@ -88,6 +105,10 @@ export default {
     },
     flag() {
       this.defaultDark()
+    },
+    userContent() {
+      this.inUserSearch()
+      console.log(this.userList)
     }
   },
   methods: {
@@ -223,6 +244,25 @@ export default {
     setHashList() {
       this.hashString += `#${this.hashList[this.hashList.length-1]} `
     },
+    inUserSearch() {
+      axios.get(`https://i3b304.p.ssafy.io/api/search/user`,{
+      params: {
+        username: this.userContent
+      },
+      }).then((data) => {
+        console.log(data, '실시간유저')
+        if(data.data.object.length>5) {
+          this.userList = data.data.object.splice(0,5)
+          this.userListLength = data.data.object.length - 5
+        } else {
+          this.userList = data.data.object
+          this.userListLength = 0
+        }
+      }).catch()
+    },
+    goProfile(name) {
+      this.$router.push(`/otheruser/${name}`)
+    }
   },
   mounted() {
     this.setIsSelectBar(true)
