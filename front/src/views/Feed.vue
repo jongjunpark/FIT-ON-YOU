@@ -375,9 +375,6 @@ export default {
       .catch()
     },
   },
-  created() {
-    
-  },
   mounted() {
     this.onNewsFeed()
     this.defaultDark()
@@ -465,8 +462,6 @@ export default {
         INFLUBOX.appendChild(INFLUICON)
         CAROUSELL.appendChild(INFLUBOX)
       }
-
-      console.log(this.influencer,'influ')
     });
     console.log(this.mainfeed, '메인피드')
     console.log(this.likeStates,'좋아요리스트');
