@@ -27,11 +27,11 @@
     <div class='wrap feed-wrap'>
       <div class='wrap-container' v-for="(feed,index) in mainfeed" :key="index">
         <header class="feed-user-data">
-          <div class="feed-user-profile" @click="goUserProfile(feed.articleUser)">
+          <div class="feed-user-profile" @click="goToUserPage(feed.articleUser)">
             <img :src="feed.userProfile">
           </div>
           <div class="feed-article-head">
-            <p class='feed-username'>{{feed.articleUser}}</p>
+            <p class='feed-username' @click="goToUserPage(feed.articleUser)">{{feed.articleUser}}</p>
             <p class='feed-article-date'>{{feed.articleDate}}</p>         
           </div>
         </header>
@@ -50,7 +50,7 @@
             <div class='feed-btn-left'>
              
               <i :class="'fas fa-heart '+likeicon[likeStates[index]]" 
-              @click="clickLike(feed.articleNo,likeStates[index],index,$event)"></i>
+              @click="clickLike(feed.articleNo,likeStates[index],index,$event)"></i>{{feed.favoriteCnt}}
               <i :id="'show-modal'+ feed.articleNo" @click="clickComment(feed.articleNo,feed.articleUser)" class="fas fa-comment-alt"></i>
 
             </div>
@@ -69,7 +69,7 @@
         </section>
       </div>
       <div class="margin-box"></div>
-      <infinite-loading @infinite="infiniteHandler" spinner="spiral">
+      <infinite-loading @infinite="infiniteHandler" spinner="spinner">
         <div slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</div>
       </infinite-loading>
     </div>
@@ -154,7 +154,7 @@ export default {
   watch: {
     flag() {
       this.defaultDark()
-    }
+    },
   },
   
   methods: {
@@ -186,6 +186,17 @@ export default {
         this.likeStates[index]=1
         e.target.classList.add('heart')
         this.modal = true
+
+        // let tmp=this.feedlist[index]
+        // tmp.favoriteCnt++;
+
+        // this.$set(this.feedlist,index,tmp);
+
+        // this.feedlist=this.feeedlist.filter(function (articleNo){
+        //   if()
+        // })
+        
+
         axios.post('https://i3b304.p.ssafy.io/api/board/likes',{
             articleNo:articleNo,
             nickname:res
@@ -196,6 +207,9 @@ export default {
       else if(flag==1){
         this.likeStates[index]=0
         e.target.classList.remove('heart')
+        
+        this.feedlist.splice(this.feedlist[index].favoriteCnt,1,this.feedlist[index].favoriteCnt-1)
+
         axios.delete('https://i3b304.p.ssafy.io/api/board/likes',{
           data:{
             articleNo:articleNo,
@@ -306,7 +320,9 @@ export default {
                             images:[],
                             content:"",
                             articleUser:"",
-                            userProfile:"",}
+                            userProfile:"",
+                            favoriteCnt:"",
+                            }
 
               const el = this.feedlist[index];
 
@@ -375,6 +391,10 @@ export default {
       })
       .catch()
     },
+    goToUserPage(nickname){
+      this.$router.push(`/otheruser/${nickname}`).catch(()=>{})
+    },
+
   },
   mounted() {
     this.setIsSelectBar(true)
@@ -401,7 +421,9 @@ export default {
                       images:[],
                       content:"",
                       articleUser:"",
-                      userProfile:"",}
+                      userProfile:"",
+                      favoriteCnt:"",
+                      }
 
         const el = this.feedlist[index];
 
@@ -435,8 +457,8 @@ export default {
             feeddata.articleDate= timeForToday(this.feedlist[index].articleDate);
             feeddata.articleUser= this.feedlist[index].influeUser;
             feeddata.articleNo=this.feedlist[index].articleNo;
-        }
-        
+          }
+          feeddata.favoriteCnt=this.feedlist[index].favoriteCnt;
       });
         axios.post("https://i3b304.p.ssafy.io/api/board/tags",articleNo).then((tag)=>{
         const tags = tag.data;

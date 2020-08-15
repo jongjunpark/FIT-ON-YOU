@@ -39,17 +39,21 @@
         <div v-show="userListLength > 0" @click="onUserResult" class='search-user-more' key='0'>{{ userListLength }}개 더보기</div>
       </transition-group>
     </div>
-    <div v-if="isDefault" class='wrap-container search-container'>
+    <div v-if="isDefault" class='search-container'>
 
       <div class="search-box" v-for="(feed,index) in feedList" :key="`feed-${index}`">
-        <div class="search-inner-box" v-for="article in feedList[index]" :key="article.articles.articleNo">
-          <div @click="onModal(article.articles)" class="search-inner-btn">자세히</div>
-          <img v-if='article.imgs[0]' :src="article.imgs[0].imageUrl" :id="index">
+        <div class="search-inner-box" v-for="article in feedList[index]" :key="article.articleno">
+          <div @click="onModal(article.articleNo)" class="search-inner-btn">자세히</div>
+          <img v-if='article.imageUrl' :src="article.imageUrl" :id="index">
         </div>
       </div>
-      <SearchModal  v-if="showModal" @close="showModal= false"/>
-     
+      <infinite-loading @infinite="infiniteHandler" spinner="spinner" force-use-infinite-wrapper=".search-container">
+        <div slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</div>
+      </infinite-loading>
     </div>
+
+    <SearchModal  v-if="showModal" @close="showModal= false"/>
+     
     <UserSearch v-if="isUserResult"/>
     <HashSearch v-if="isHashResult"/>
   </div>
@@ -60,6 +64,7 @@ import { mapState,mapMutations } from 'vuex'
 import HashSearch from '../components/HashSearch.vue'
 import UserSearch from '../components/UserSearch.vue'
 import SearchModal from '../components/SearchModal.vue'
+import InfiniteLoading from 'vue-infinite-loading'
 import '../components/css/search.css'
 import axios from 'axios'
 
@@ -72,6 +77,7 @@ export default {
     HashSearch,
     UserSearch,
     SearchModal,
+    InfiniteLoading,
   },
   data() {
     return {
@@ -94,6 +100,7 @@ export default {
       tempList: [],
       feedList: [],
       showModal: false,
+      limit:1,
     }
   },
   watch: {
@@ -230,39 +237,52 @@ export default {
     },
     setList() {
       for (let i=0; i<this.articleList.length/3; i++) {
-        for (let j=0; j<3; j++) {
-          this.tempList.push(this.articleList[j+i*3])
+        if(this.articleList.length%3==0){
+          for (let j=0; j<3; j++) {
+            this.tempList.push(this.articleList[j+i*3])
+          }
+        }
+        else{
+          if(i==this.articleList.length-1){
+            for(let j=0;j<this.articleList.length;j++){
+              this.tempList.push(this.articleList[j+i*3])
+            }
+          }
         }
         this.feedList.push(this.tempList)
         this.tempList = []
       }
     },
-    onModal(data) {
-      this.setArticledata(data.articleNo);
+    onModal(articleNo) {
+      this.setArticledata(articleNo);
       this.showModal = true
     },
     setHashList() {
       this.hashString += `#${this.hashList[this.hashList.length-1]} `
     },
-    inUserSearch() {
-      axios.get(`https://i3b304.p.ssafy.io/api/search/user`,{
-      params: {
-        username: this.userContent
-      },
-      }).then((data) => {
-        console.log(data, '실시간유저')
-        if(data.data.object.length>5) {
-          this.userList = data.data.object.splice(0,5)
-          this.userListLength = data.data.object.length - 5
-        } else {
-          this.userList = data.data.object
-          this.userListLength = 0
-        }
-      }).catch()
+
+    infiniteHandler($state){
+      let ref=this;
+      axios.post('http://localhost:8080/api/search/all/'+ref.limit)
+      .then((data)=>{
+        setTimeout(() => {
+          if(data.data.object.length){
+            ref.articleList=data.data.object;
+            ref.setList();
+            ref.articleList=[];
+
+            $state.loaded();
+            ref.limit+=1;
+          }
+          else{
+            $state.complete();
+
+          }
+        }, 1000);
+      })
+      .catch()
     },
-    goProfile(name) {
-      this.$router.push(`/otheruser/${name}`)
-    }
+
   },
   mounted() {
     this.setIsSelectBar(true)
@@ -270,10 +290,11 @@ export default {
     this.defaultDark()
 
 
-    axios.post("https://i3b304.p.ssafy.io/api/search/").then((data)=>{
-      this.articleList=data.data;
+    axios.post("http://localhost:8080/api/search/all/0").then((data)=>{
+      this.articleList=data.data.object;
       console.log(this.articleList)
       this.setList();
+      this.articleList=[];
     })
   },
   beforeDestroy() { 
