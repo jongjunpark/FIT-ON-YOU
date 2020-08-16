@@ -27,9 +27,9 @@
         </div>
         <div class="modal-footer">
           <div class="comment-my-icon">
-            <img class="comment-user-icon" :src="user.profile_img">
+            <img class="comment-user-icon" :src="myProfileImg">
           </div>
-          <input @input="comment_content = $event.target.value" class='comment-input' type="text" placeholder="댓글을 입력해 주세요.">
+          <input @input="comment_content = $event.target.value" class='comment-input' type="text" placeholder="댓글을 입력해 주세요." v-model="comment_content">
           <i class="fas fa-check-circle" @click="addComment"></i>
         </div>
       </div>
@@ -54,7 +54,7 @@ export default {
       commentList: [],
       profileList:[],
       nickname:'',
-
+      myProfileImg:'',
     }
   },
   mounted(){
@@ -65,16 +65,16 @@ export default {
     let uri_enc = encodeURIComponent(uri);
     let uri_dec = decodeURIComponent(uri_enc);
     this.nickname = uri_dec;
-
     axios.get('https://i3b304.p.ssafy.io/api/comment',{
       params:{
         articleNo: this.modalArticleNo,
+        nickname:this.nickname,
       }
     })
     .then((res)=>{
       console.log(res,2)
       ref.commentList=res.data.commentli;
-
+      if(res.data.myprofile) ref.myProfileImg=res.data.myprofile;      
     })
     .catch()
 
@@ -124,7 +124,7 @@ export default {
           articleNo:data.data.rescmt.articleNo,
           content:data.data.rescmt.content,
           user:{
-            profile_img:ref.user.profile_img,
+            profile_img:ref.myProfileImg
           },
           createAt:today,
         }
