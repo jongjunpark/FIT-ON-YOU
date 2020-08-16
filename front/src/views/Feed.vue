@@ -369,7 +369,8 @@ export default {
                   feeddata.articleDate= timeForToday(this.feedlist[index].articleDate);
                   feeddata.articleUser= this.feedlist[index].influeUser;
                   feeddata.articleNo=this.feedlist[index].articleNo;
-              }
+               }
+               feeddata.favoriteCnt=this.feedlist[index].favoriteCnt;
               
             });
               axios.post("https://i3b304.p.ssafy.io/api/board/tags",articleNo).then((tag)=>{
