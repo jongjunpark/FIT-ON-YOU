@@ -175,7 +175,9 @@ export default {
                   ref.setLoggedIn(true)
                   ref.AC_USER(data.data.userinfo);
 
-                  ref.$router.push('/feed').catch(()=>{})
+                  setTimeout(() => {
+                    ref.$router.push('/feed')
+                  }, 100)
                 }
                 else if (data.data.result.data=="0"){
                   ref.AC_USER(userData);
@@ -231,7 +233,9 @@ export default {
                   ref.setToken(data.data.auth_token)
                   ref.sendUserInfo();
                   ref.setLoggedIn(true)
-                  ref.$router.push('/feed').catch(()=>{})
+                  setTimeout(() => {
+                    ref.$router.push('/feed')
+                  }, 100)
                 }
                 else if (data.data.result.data=="0"){
                   ref.AC_USER(userData);
@@ -311,8 +315,9 @@ export default {
           } else {
             this.$cookies.set('still', 'off')
           }
-
-          this.$router.push('/feed').catch(()=>{})
+          setTimeout(() => {
+            this.$router.push('/feed')
+          }, 100)
         }
         // 이메일 없음
         else if(response.data.result==-1){

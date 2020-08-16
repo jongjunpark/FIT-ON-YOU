@@ -193,12 +193,13 @@ export default {
   },
   created(){
     let nickdata = this.$cookies.get('auth-nickname')
+    console.log(nickdata,'nick0')
     let uri = nickdata;
     let uri_enc = encodeURIComponent(uri);
     let uri_dec = decodeURIComponent(uri_enc);
     let res = uri_dec;
     this.nickname = res
-    
+    console.log(this.nickname,'nick')
   }
 
 }
