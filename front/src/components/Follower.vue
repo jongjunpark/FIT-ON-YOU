@@ -12,7 +12,6 @@ export default {
   data() {
     return {
       nick: '',
-      name: '',
     }
   },
   mounted() {
@@ -22,17 +21,15 @@ export default {
     let uri_dec = decodeURIComponent(uri_enc);
     let res = uri_dec;
     this.nick = res
-    
 
-    this.name = this.$route.params.name
-
-    axios.get('https://i3b304.p.ssafy.io/api/follow/forFollower',{
+    axios.get('http://localhost:8080/api/follow/forFollower',{
       params:{
-      userName: this.name,
+      userName: this.nick,
     }
     }).then((data) => {
-      const ARRAYFOLLOW = data.data
-      ARRAYFOLLOW.forEach(element => {
+      const ARRAYFOLLOW = data.data.result
+      const PRFIMGS = data.data.prfimgs;
+      ARRAYFOLLOW.forEach((element,index) => {
         const FollowerBox = document.createElement('div')
         const FollowerIcon = document.createElement('div')
         const FollowerImg = document.createElement('img')
@@ -54,14 +51,13 @@ export default {
         FollowerUser.innerHTML = element.followinguser
         FollowerText.classList.add('follower-text-area')
         FollowerIcon.classList.add('follower-icon-area')
-        FollowerImg.src = "/images/default-user.png"
+        if(PRFIMGS[index]=="-1") FollowerImg.src = "/images/default-user.png"
+        else FollowerImg.src=PRFIMGS[index];
         FollowerBox.classList.add('follower-box')
 
         FollowerIcon.appendChild(FollowerImg)
-        if (!(this.nick == element.followinguser)) {
-          FollowerBtnArea.appendChild(FollowerBtn)
-          FollowerBtnArea.appendChild(DMBTN)
-          }
+        FollowerBtnArea.appendChild(FollowerBtn)
+        FollowerBtnArea.appendChild(DMBTN)
         FollowerText.appendChild(FollowerUser)
         FollowerText.appendChild(FollowerBtnArea)
 
@@ -69,11 +65,16 @@ export default {
         FollowerBox.appendChild(FollowerText)
         Father.appendChild(FollowerBox)
 
+        FollowerImg.addEventListener('click',()=>{
+          this.$router.push(`/otheruser/${element.followinguser}`).catch(()=>{})
+        });
+
+
         DMBTN.addEventListener('click', () => {
           axios.get('https://i3b304.p.ssafy.io/api/chat/existroom',{
             params:{
               firstuser: element.followinguser,
-              seconduser: this.name
+              seconduser: this.nick
             }
             }).then((data)=>{
               this.$router.push(`/directmessage/${data.data.object.roomname}/${element.followinguser}`).catch(()=>{})
@@ -86,7 +87,7 @@ export default {
         axios.get('https://i3b304.p.ssafy.io/api/isfollowed',{
           params:{
           followedUser: element.followinguser,
-          followingUser: this.name
+          followingUser: this.nick
         }
         }).then((data) => {
           if (!data.data.object) {
@@ -118,7 +119,7 @@ export default {
               axios.get('https://i3b304.p.ssafy.io/api/follow/add',{
                 params:{
                   followedUser: element.followinguser,
-                  followingUser: this.name
+                  followingUser: this.nick
                 }
                 }).then((data) => {
                   FollowerBtn.classList.remove('btn-cancel-Ok')
@@ -171,9 +172,6 @@ export default {
           USERPEOPLE[i].classList.remove('follower-username-dark')
         }
       }
-    },
-    goToUserPage(nickname){
-      this.$router.push(`/otheruser/${nickname}`).catch(()=>{})
     },
   },
 }

@@ -177,5 +177,5 @@ public class MyPageController {
 		
 		return resultMap;
 	}
-
+	
 }

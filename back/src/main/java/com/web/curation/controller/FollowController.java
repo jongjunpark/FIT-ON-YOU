@@ -1,8 +1,10 @@
 package com.web.curation.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.web.curation.dao.AlarmDao;
 import com.web.curation.dao.FollowDao;
+import com.web.curation.dao.UserDao;
 import com.web.curation.model.BasicResponse;
 import com.web.curation.model.Follow;
 import com.web.curation.model.FollowDTO;
@@ -31,6 +34,8 @@ public class FollowController {
 	FollowDao followDao;
 	@Autowired
 	private AlarmDao alarmDao;
+	@Autowired 
+	private UserDao userDao;
 
 	@GetMapping("/follow/add")
 	@ApiOperation(value = "팔로우 추가")
@@ -64,22 +69,38 @@ public class FollowController {
 
 	@GetMapping("/follow/forFollowing")
 	@ApiOperation(value = "내가 팔로우한 사람들 리스트")
-	public List<Follow> myFollowList(@Valid @RequestParam String userName) {
-		List<Follow> result = new ArrayList();
+	public Object myFollowList(@Valid @RequestParam String userName) {
+		Map<String, Object> resultMap=new HashMap<>();
+		List<Follow> result = new ArrayList<>();
 		result = followDao.getFollowByFollowinguser(userName);
 
 		if (result.isEmpty()) {
 			System.out.println("값 없음");
 		} else {
 			System.out.println("값 있음");
+		} 
+		
+		List<String> prfimgs = new ArrayList<>();
+		for(int i=0;i<result.size();i++) {
+			String tmp = userDao.findProfileImgByNickname(result.get(i).getFolloweduser());
+			if(tmp==null || tmp.equals("")) {
+				tmp="-1";
+			}
+			prfimgs.add(tmp);
 		}
-
-		return result;
+		
+		
+		resultMap.put("result",result);
+		resultMap.put("prfimgs",prfimgs);	
+		
+		
+		return resultMap;
 	}
 
 	@GetMapping("/follow/forFollower")
 	@ApiOperation(value = "나를 팔로우한 사람들 보여줄 리스트")
-	public List<FollowDTO> followerList(@Valid @RequestParam String userName) {
+	public Object followerList(@Valid @RequestParam String userName) {
+		Map<String, Object> resultMap=new HashMap<>();
 		List<FollowDTO> result = new ArrayList<>();
 		List<Follow> followedList = followDao.getFollowByFolloweduser(userName);
 		//나를 팔로우한 사람 목록 점부 가져오기
@@ -104,7 +125,20 @@ public class FollowController {
 			}
 			
 		}
-		return result;
+		
+		List<String> prfimgs = new ArrayList<>();
+		for(int i=0;i<result.size();i++) {
+			String tmp = userDao.findProfileImgByNickname(result.get(i).getFollowinguser());
+			if(tmp==null || tmp.equals("")) {
+				tmp="-1";
+			}
+			prfimgs.add(tmp);
+		}
+		
+		resultMap.put("result",result);
+		resultMap.put("prfimgs",prfimgs);
+		
+		return resultMap;
 	}
 
 	@GetMapping("/follow/delete")
