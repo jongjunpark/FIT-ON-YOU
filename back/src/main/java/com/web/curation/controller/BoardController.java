@@ -282,7 +282,7 @@ public class BoardController {
 		return user;
 	}
 
-	@PostMapping("/influencer")
+	@GetMapping("/influencer")
 	public List<Influencer> getInfluencer() {
 		Random random = new Random();
 		List<Influencer> temp = influencerDao.AllInfluencers();
