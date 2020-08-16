@@ -22,7 +22,7 @@ export default {
     let res = uri_dec;
     this.nick = res
 
-    axios.get('http://localhost:8080/api/follow/forFollower',{
+    axios.get('https://i3b304.p.ssafy.io/api/follow/forFollower',{
       params:{
       userName: this.nick,
     }
