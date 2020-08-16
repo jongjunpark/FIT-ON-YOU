@@ -73,7 +73,8 @@
 .profile-nav .profile-nav-btn1:hover ~ .go-bookmark-menu,
 .profile-nav .profile-nav-btn2:hover ~ .go-following-menu,
 .profile-nav .profile-nav-btn3:hover ~ .go-follower-menu,
-.profile-nav .profile-nav-btn4:hover ~ .go-curation-menu {
+.profile-nav .profile-nav-btn4:hover ~ .go-curation-menu,
+.profile-nav .profile-false:hover ~ .go-curation-menu {
   transform: translateY(5px)
 }
 
