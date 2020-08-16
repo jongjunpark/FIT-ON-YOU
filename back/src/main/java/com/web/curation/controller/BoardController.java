@@ -168,10 +168,6 @@ public class BoardController {
 	public Object getFollowArticle(@RequestParam String nickname, @PathVariable int page) {
 
 		List<BoardDTO> result = boardService.getMainFeedList(page, nickname);
-		for (BoardDTO r : result) {
-			System.out.print(r.getArticleNo() + " ");
-		}
-		System.out.println();
 		return result;
 	}
 
@@ -286,7 +282,7 @@ public class BoardController {
 		return user;
 	}
 
-	@PostMapping("/influencer")
+	@GetMapping("/influencer")
 	public List<Influencer> getInfluencer() {
 		Random random = new Random();
 		List<Influencer> temp = influencerDao.AllInfluencers();

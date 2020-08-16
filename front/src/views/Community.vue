@@ -1,32 +1,16 @@
 <template>
   <div class='wrap'>
     <div class='wrap-container community-container'>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
-      <div class="search-inner-box"><img src="" alt=""></div>
+      <div class="search-inner-box" v-for="(article,index) in recellList" :key="`recell-${index}`">
+        <img :src="article.imgurl" alt=""></div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import "../components/css/community.css"
-
+import axios from 'axios'
 export default {
   name: 'Community',
   computed: {
@@ -37,7 +21,15 @@ export default {
       this.defaultDark()
     }
   },
+  data(){
+    return{
+      tempList:[],
+      recellList:[],
+      limit:'1'
+    }
+  },
   methods: {
+    ...mapMutations(['setIsSelectBar']),
     goCommunity() {
       const selectBar = document.querySelector('.menu-bar-select')
       const newsFeed = document.querySelector('.fa-newspaper')
@@ -49,6 +41,38 @@ export default {
       selectBar.classList.add('go-third-menu')
       selectBar.classList.remove('go-second-menu')
       selectBar.classList.remove('go-first-menu')
+    },
+    
+    infiniteHandler($state){
+      let ref=this;
+      axios.post('https://i3b304.p.ssafy.io/api/recell/all/'+ref.limit)
+      .then((data)=>{
+        setTimeout(() => {
+          if(data.data.object.length){
+            ref.tempList=data.data.object;
+            for (let index = 0; index < ref.tempList.length; index++) {
+              let feeddata={
+              recellNo:ref.tempList[index].recellNo,
+              content:ref.tempList[index].recellContent,
+              price:ref.tempList[index].recellPrice,
+              imgurl:ref.tempList[index].recellImage,
+              date:ref.tempList[index].recellDate,
+              size:ref.tempList[index].recellSize,
+              roomname:ref.tempList[index].roomname
+              }
+            this.recellList.push(feeddata);
+            }
+            ref.tempList=[];
+
+            $state.loaded();
+            ref.limit+=1;
+          }
+          else{
+            $state.complete();
+          }
+        }, 1000);
+      })
+      .catch()
     },
     defaultDark() {
       const Dark = this.$cookies.get('dark')
@@ -76,8 +100,31 @@ export default {
     },
   },
   mounted() {
+    this.setIsSelectBar(true)
     this.goCommunity()
     this.defaultDark()
+
+     axios.post("https://i3b304.p.ssafy.io/api/recell/newsfeed/0").then((data)=>{
+      console.log("success")
+      console.log(data)
+      this.tempList=data.data;
+      for (let index = 0; index < this.tempList.length; index++) {
+        let feeddata={
+          recellNo:this.tempList[index].recellNo,
+          content:this.tempList[index].recellContent,
+          price:this.tempList[index].recellPrice,
+          imgurl:this.tempList[index].recellImage,
+          date:this.tempList[index].recellDate,
+          size:this.tempList[index].recellSize,
+          roomname:this.tempList[index].roomname
+          }
+        this.recellList.push(feeddata);
+        }
+      this.tempList=[];
+      })
+    },
+  beforeDestroy() { 
+    this.setIsSelectBar(false)
   }
 }
 </script>

@@ -38,6 +38,7 @@ import com.web.curation.model.ResponseData;
 import com.web.curation.model.Search;
 import com.web.curation.model.SearchResultDTO;
 import com.web.curation.model.User;
+import com.web.curation.service.user.BoardService;
 import com.web.curation.service.user.SearchService;
 
 import io.swagger.annotations.ApiOperation;
@@ -66,37 +67,19 @@ public class SearchController {
 	InfluencerDao influDao;
 	@Autowired
 	BoardTwoDao boardTwoDao;
+	
+	@Autowired
+	BoardService boardService;
 
-	@PostMapping("/")
+	@PostMapping("/all/{page}")
 	@ApiOperation(value = "페이지 업로드")
-	public Object uploadBoard() {
-		List<Board> temp = boardDao.getList();
-		List<ResponseData> result = new ArrayList<ResponseData>();
-		for (Board board : temp) {
-			ResponseData data = new ResponseData();
-			data.setArticles(new Board());
-			data.setImgs(new ArrayList<>());
-			data.setTags(new ArrayList<>());
-
-			try {
-				List<ImageStore> imgs = imageDao.findImagestoreByArticleNoOrderByArticleNoDesc(board.getArticleNo());
-				data.setImgs(imgs);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			try {
-				List<Articletag> tags = articleTagDao.findArticletagByArticleNoOrderByArticleNo(board.getArticleNo());
-				data.setTags(tags);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			data.setArticles(board);
-
-			result.add(data);
-		}
-
-		return new ResponseEntity<List<ResponseData>>(result, HttpStatus.OK);
-
+	public Object uploadBoard(@PathVariable int page) {
+		final BasicResponse result = new BasicResponse();
+		result.status=true;
+		result.data="success";
+		result.object=boardService.getAllSearchList(page);
+		
+		return result;
 	}
 
 	@PostMapping("/{articleNo}")

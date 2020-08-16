@@ -269,6 +269,113 @@
   opacity: 0;
 }
 
+.search-user-group {
+  position: absolute;
+  top: 8vh;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 120%;
+  border-radius: 0.8vh;
+  background-color: white;
+  box-shadow: 0 6px 12px 0 rgba(0,0,0,0.25);
+  display: flex;
+  flex-direction: column;
+}
+
+.search-user-group .search-user-item {
+  width: 100%;
+  height: 7vh;
+  border-bottom: 1px solid grey;
+  display: flex;
+  cursor: pointer;
+  padding: 1vh;
+  transition: all 0.2s ease;
+}
+@media (max-width: 449px) {
+  .search-user-group .search-user-item {
+    padding: 0.5vh
+  }
+}
+
+.search-user-group .search-user-more {
+  width: 100%;
+  height: 3.5vh;
+  font-size: 1.8vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: black;
+}
+
+.search-user-group .search-user-item:hover,
+.search-user-group .search-user-more:hover {
+  background-color: rgba(0,0,0,0.1);
+}
+
+.search-user-item .search-user-img {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 1vh;
+}
+
+.search-user-img img {
+  width: 5vh;
+  height: 5vh;
+  border-radius: 50%;
+  border: 0.5px solid rgba(0,0,0,0.4);
+}
+
+.search-user-item .search-user-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.search-user-content .search-user-name {
+  font-size: 2vh;
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  height: 50%;
+  width: 100%;
+  color: black;
+}
+
+.search-user-content .serch-user-intro {
+  font-size: 1.5vh;
+  color: grey;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  height: 50%;
+  width: 100%;
+  padding-bottom: 1vh;
+}
+@media(max-width:300px) {
+  .search-user-group .search-user-more {
+    font-size: 1.3vh;
+  }
+  .search-user-content .search-user-name {
+    font-size: 1.5vh;
+  }
+  .search-user-content .serch-user-intro {
+    font-size: 1vh;
+  }
+}
+
+
+.user-search-not-result {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  padding-top: 20vh;
+}
+
 .search-input-dark {
   border-bottom: 1px solid !important;
   color: #ebebeb !important;

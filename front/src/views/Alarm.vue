@@ -3,29 +3,41 @@
     <div class="wrap-container-alarm">
       <div class="alarm-container-wrap">
         <div class="alarm-container">
-          <div v-for="(alarm,index) in alist" :key="index">
-            <div :class="isRead[alarm.isRead]">
-              <img :src="alarm.user.profile_img" alt="" class="alarm-container-message-img" @click="goToUserPage(alarm.follower)">
-              <i :class="alarmIcon[alarm.type-1]"></i>
-              <h4 class="alarmclass"><span @click="goToUserPage(alarm.follower)">{{alarm.follower}}</span>
-              {{alarmMsg[alarm.type-1]}}</h4>
-              <h5 class="in-text">{{timeCal(alarm.createAt)}}</h5>
+          <div v-if="alist!=null && alist.length>0">
+            <div v-for="(alarm,index) in alist" :key="index">
+              <div :class="isRead[alarm.isRead]">
+                <img :src="alarm.user.profile_img" alt="" class="alarm-container-message-img" @click="goToUserPage(alarm.follower)">
+                <i :class="alarmIcon[alarm.type-1]"></i>
+                <h4 class="alarmclass"><span @click="goToUserPage(alarm.follower)">{{alarm.follower}}</span>
+                {{alarmMsg[alarm.type-1][0]}}
+                <span @click="onModal(alarm.articleNo)">{{alarmMsg[alarm.type-1][1]}}</span>
+                {{alarmMsg[alarm.type-1][2]}}</h4>
+                <h5 class="in-text">{{timeCal(alarm.createAt)}}</h5>
+              </div>
             </div>
           </div>
+          <div v-else>
+            알림 내역이 없습니다.. :)
+          </div> 
 
         </div>
       </div>
     </div>
+    <SearchModal  v-if="showModal" @close="showModal= false"/>
   </div>
 </template>
 
 <script>
 import "../components/css/alarm.css"
 import axios from 'axios'
-import { mapState } from 'vuex'
+import { mapState,mapMutations } from 'vuex'
 import time from '../utils/timecal.js'
+import SearchModal from '../components/SearchModal.vue'
 export default {
   name: 'Alarm',
+  components:{
+    SearchModal,
+  },
   data() {
     //댓글 1 팔로우 2 좋아요 3
     return {
@@ -33,16 +45,16 @@ export default {
                   'fas fa-user-circle user-alarm',
                   'fas fa-heart heart-alarm'],
       alarmMsg:[
-        '님이 회원님의 게시글에 댓글을 남겼습니다.', 
-        '님이 회원님을 팔로우하기 시작하였습니다.',
-        '님이 회원님의 사진에 좋아요 눌렀습니다.'
+        ['님이 회원님의 ','게시글','에 댓글을 남겼습니다.'],
+        ['님이 회원님을 ','팔로우','하기 시작하였습니다'],
+        ['님이 회원님의 ','사진','에 좋아요를 눌렀습니다.'],
       ],
       alist :[],
       isRead:[
         'alarm-container-message-read',
         'alarm-container-message'
-      ]
-      
+      ],
+      showModal:false,
     }
   },
   computed: {
@@ -80,7 +92,7 @@ export default {
 
   beforeUpdate(){
     let ref=this;
-    if(ref.alist.length>0){
+    if(ref.alist!=null && ref.alist.length>0){
       let flag=false;
       const frm = new FormData();
       for(let i=0;i<ref.alist.length;i++){
@@ -92,13 +104,14 @@ export default {
       if(flag){
         axios.post('https://i3b304.p.ssafy.io/api/alarm',frm)
         .then(
-          console.log("성공")
+
         )
         .catch()
       }
     }
   },
   methods: {
+    ...mapMutations(['setArticledata']),
     timeCal(val){
       return time.timeForToday(val);
     },
@@ -144,7 +157,13 @@ export default {
     goToUserPage(nickname){
       this.$router.push(`/otheruser/${nickname}`).catch(()=>{})
     },
-    
+    onModal(articleNo) {
+      if(articleNo==-1 || articleNo==null) return
+      else{
+        this.setArticledata(articleNo);
+        this.showModal = true
+      }
+    },
   },
 }
 </script>

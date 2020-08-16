@@ -22,13 +22,14 @@ export default {
     let res = uri_dec;
     this.nick = res
 
-    axios.get('https://i3b304.p.ssafy.io/api/follow/forFollower',{
+    axios.get('http://localhost:8080/api/follow/forFollower',{
       params:{
       userName: this.nick,
     }
     }).then((data) => {
-      const ARRAYFOLLOW = data.data
-      ARRAYFOLLOW.forEach(element => {
+      const ARRAYFOLLOW = data.data.result
+      const PRFIMGS = data.data.prfimgs;
+      ARRAYFOLLOW.forEach((element,index) => {
         const FollowerBox = document.createElement('div')
         const FollowerIcon = document.createElement('div')
         const FollowerImg = document.createElement('img')
@@ -50,7 +51,8 @@ export default {
         FollowerUser.innerHTML = element.followinguser
         FollowerText.classList.add('follower-text-area')
         FollowerIcon.classList.add('follower-icon-area')
-        FollowerImg.src = "/images/default-user.png"
+        if(PRFIMGS[index]=="-1") FollowerImg.src = "/images/default-user.png"
+        else FollowerImg.src=PRFIMGS[index];
         FollowerBox.classList.add('follower-box')
 
         FollowerIcon.appendChild(FollowerImg)
@@ -62,6 +64,11 @@ export default {
         FollowerBox.appendChild(FollowerIcon)
         FollowerBox.appendChild(FollowerText)
         Father.appendChild(FollowerBox)
+
+        FollowerImg.addEventListener('click',()=>{
+          this.$router.push(`/otheruser/${element.followinguser}`).catch(()=>{})
+        });
+
 
         DMBTN.addEventListener('click', () => {
           axios.get('https://i3b304.p.ssafy.io/api/chat/existroom',{

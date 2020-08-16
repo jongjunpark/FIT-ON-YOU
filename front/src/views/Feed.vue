@@ -25,11 +25,11 @@
     <div class='wrap feed-wrap'>
       <div class='wrap-container' v-for="(feed,index) in mainfeed" :key="index">
         <header class="feed-user-data">
-          <div class="feed-user-profile" @click="goUserProfile(feed.articleUser)">
+          <div class="feed-user-profile" @click="goToUserPage(feed.articleUser)">
             <img :src="feed.userProfile">
           </div>
           <div class="feed-article-head">
-            <p class='feed-username'>{{feed.articleUser}}</p>
+            <p class='feed-username' @click="goToUserPage(feed.articleUser)">{{feed.articleUser}}</p>
             <p class='feed-article-date'>{{feed.articleDate}}</p>         
           </div>
         </header>
@@ -48,7 +48,7 @@
             <div class='feed-btn-left'>
              
               <i :class="'fas fa-heart '+likeicon[likeStates[index]]" 
-              @click="clickLike(feed.articleNo,likeStates[index],index,$event)"></i>
+              @click="clickLike(feed.articleNo,likeStates[index],index,$event)"></i>{{feed.favoriteCnt}}
               <i :id="'show-modal'+ feed.articleNo" @click="clickComment(feed.articleNo,feed.articleUser)" class="fas fa-comment-alt"></i>
 
             </div>
@@ -67,7 +67,7 @@
         </section>
       </div>
       <div class="margin-box"></div>
-      <infinite-loading @infinite="infiniteHandler" spinner="spiral">
+      <infinite-loading @infinite="infiniteHandler" spinner="spinner">
         <div slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</div>
       </infinite-loading>
     </div>
@@ -81,7 +81,7 @@ import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 import "../components/css/feed.css"
 import axios from 'axios'
 import CommentModal from '../components/CommentModal.vue'
-import { mapState, mapActions  } from 'vuex'
+import { mapState, mapActions, mapMutations  } from 'vuex'
 import InfiniteLoading from 'vue-infinite-loading'
 
 function timeForToday(value) {
@@ -152,11 +152,12 @@ export default {
   watch: {
     flag() {
       this.defaultDark()
-    }
+    },
   },
   
   methods: {
     ...mapActions(['sendUserInfo', 'setLoggedIn', 'setToken']),
+    ...mapMutations(['setIsSelectBar']),
     onNewsFeed() {
       const selectBar = document.querySelector('.menu-bar-select')
       const newsFeed = document.querySelector('.fa-newspaper')
@@ -183,6 +184,17 @@ export default {
         this.likeStates[index]=1
         e.target.classList.add('heart')
         this.modal = true
+
+
+        this.mainfeed[index].favoriteCnt++;
+
+        // let tmp=this.mainfeed[index]
+        // tmp.favoriteCnt++;
+
+        // this.$set(this.mainfeed,index,tmp);
+
+        
+
         axios.post('https://i3b304.p.ssafy.io/api/board/likes',{
             articleNo:articleNo,
             nickname:res
@@ -193,6 +205,9 @@ export default {
       else if(flag==1){
         this.likeStates[index]=0
         e.target.classList.remove('heart')
+        
+        this.mainfeed[index].favoriteCnt--
+
         axios.delete('https://i3b304.p.ssafy.io/api/board/likes',{
           data:{
             articleNo:articleNo,
@@ -306,7 +321,9 @@ export default {
                             images:[],
                             content:"",
                             articleUser:"",
-                            userProfile:"",}
+                            userProfile:"",
+                            favoriteCnt:"",
+                            }
 
               const el = this.feedlist[index];
 
@@ -375,8 +392,13 @@ export default {
       })
       .catch()
     },
+    goToUserPage(nickname){
+      this.$router.push(`/otheruser/${nickname}`).catch(()=>{})
+    },
+
   },
   mounted() {
+    this.setIsSelectBar(true)
     this.onNewsFeed()
     this.defaultDark()
     let ref=this;
@@ -391,13 +413,13 @@ export default {
     axios.post('https://i3b304.p.ssafy.io/api/board/newsfeed/0',formData).then((data)=>{
       this.feedlist=data.data;
       for (let index = 0; index < this.feedlist.length; index++) {
-        let feeddata = {
-          tags:[],
-          images:[],
-          content:"",
-          articleUser:"",
-          userProfile:"",
-        }
+        let feeddata={tags:[],
+                      images:[],
+                      content:"",
+                      articleUser:"",
+                      userProfile:"",
+                      favoriteCnt:"",
+                      }
 
         const el = this.feedlist[index];
         let follow = new FormData();
@@ -431,7 +453,7 @@ export default {
             feeddata.articleNo=this.feedlist[index].articleNo;
           }
           feeddata.favoriteCnt=this.feedlist[index].favoriteCnt;
-        });
+      });
         axios.post("https://i3b304.p.ssafy.io/api/board/tags",articleNo).then((tag)=>{
         const tags = tag.data;
         const taglist = [];
@@ -447,6 +469,22 @@ export default {
         ref.bookmarkStates.push(this.feedlist[index].markchk);
       }
     });
+    axios.get("https://i3b304.p.ssafy.io/api/board/influencer").then((data)=>{
+        this.influencer=data.data;
+
+        for (let i=0; i<data.data.length; i++) {  
+          const CAROUSELL = document.querySelector(`.feed-influ-carousel${i+1}`)
+          const INFLUBOX = document.createElement('div')
+          const INFLUICON = document.createElement('div')
+          const INFLUIMG = document.createElement('img')
+          INFLUBOX.classList.add('influ-box')
+          INFLUICON.classList.add('influ-icon')
+          INFLUIMG.setAttribute("src", data.data[i].profile_img)
+  
+          INFLUICON.appendChild(INFLUIMG)
+          INFLUBOX.appendChild(INFLUICON)
+          CAROUSELL.appendChild(INFLUBOX)
+        }
 
     axios.get("https://i3b304.p.ssafy.io/api/board/influencer").then((data)=>{
       this.influencer=data.data;
@@ -474,9 +512,10 @@ export default {
     console.log(this.mainfeed, '메인피드')
     console.log(this.likeStates,'좋아요리스트');
     console.log(this.bookmarkStates,'북마크리스트');
+  },
+  beforeDestroy() { 
+    this.setIsSelectBar(false)
   }
-
-  
 }
 
 </script>

@@ -8,8 +8,8 @@
       </div>
       <div class="user-search-text-area">
         <div @click="goProfile(user.nickname)" class="user-search-username">{{ user.nickname }}</div>
-        <div v-show="!user.selfintroduce" class="user-search-nonuserintro">{{ user.selfintroduce }}</div>
-        <div v-show="user.selfintroduce" class="user-search-userintro">{{ user.selfintroduce }}1</div>
+        <div v-show="!user.selfintroduce" class="user-search-nonuserintro"></div>
+        <div v-show="user.selfintroduce" class="user-search-userintro">{{ user.selfintroduce }}</div>
       </div>
     </div>
     <div v-show="!userResultList" class='user-search-not-result'>
@@ -96,7 +96,11 @@ export default {
   height: 8vh;
   display: flex;
   position: relative;
-  margin: 1.5vh 0;
+  margin: 1vh 0;
+}
+
+.user-search-box:hover {
+  background-color: rgba(0,0,0,0.1);
 }
 
 .user-search-box .user-search-icon-area {

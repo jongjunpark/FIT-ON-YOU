@@ -22,7 +22,10 @@ const state = {
   isFollower: false,
   isCuration: false,
   isMe: false,
+  isWrite: true,
+  isSelectBar: false,
   otherUserName: '',
+  dmProfileImg:'',
 }
 
 Vue.use(Vuex)
