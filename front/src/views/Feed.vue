@@ -377,11 +377,6 @@ export default {
     },
   },
   mounted() {
-    console.log(window.location.href)
-    console.log(window.location.hostname)
-    console.log(window.location.pathname)
-    console.log(window.location.protocol)
-
     this.onNewsFeed()
     this.defaultDark()
     let ref=this;
@@ -435,6 +430,7 @@ export default {
             feeddata.articleUser= this.feedlist[index].influeUser;
             feeddata.articleNo=this.feedlist[index].articleNo;
           }
+          feeddata.favoriteCnt=this.feedlist[index].favoriteCnt;
         });
         axios.post("https://i3b304.p.ssafy.io/api/board/tags",articleNo).then((tag)=>{
         const tags = tag.data;
@@ -452,9 +448,10 @@ export default {
       }
     });
 
-    axios.post("https://i3b304.p.ssafy.io/api/board/influencer").then((data)=>{
+    axios.get("https://i3b304.p.ssafy.io/api/board/influencer").then((data)=>{
       this.influencer=data.data;
       console.log(this.influencer)
+      console.log('!!!!')
 
       // for (let i=0; i<data.data.length; i++) {  
       //   const CAROUSELL = document.querySelector(`.feed-influ-carousel${i+1}`)
