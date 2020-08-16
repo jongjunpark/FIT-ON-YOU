@@ -11,19 +11,17 @@
         <div class="modal-container">
           <div class="" v-for="(comment,index) in commentList" :key="index">
             <div class="comment-box">
-              <div class="comment-user-icon">
+              <div class="comment-user-icon" @click="goToUserPage(comment.writer)">
                 <img class="comment-user-icon" :src="comment.user.profile_img">
               </div>
               <div class="comment-article">
                 <div class="comment-article-head">
-                  <div class="comment-username comment-text">{{comment.writer}}</div>
+                  <div class="comment-username comment-text"><span  @click="goToUserPage(comment.writer)">{{comment.writer}}</span></div>
                   <div class="comment-update-time comment-text">{{timeCal(comment.createAt)}}</div>
                 </div>
-                <div class="comment-content comment-text">{{comment.content}}
-                  <i v-if="comment.user.nickname=nickname"
-                    @click="deleteComment(comment.commentNo,index)"></i></div>
+                <div class="comment-content comment-text">{{comment.content}}</div>
               </div>
-              <i class="fas fa-times comment-del-icon"></i>
+              <i v-show="comment.writer==nickname" class="fas fa-times comment-del-icon" @click="deleteComment(comment.commentNo,index)"></i>
             </div>
           </div>
         </div>
@@ -151,6 +149,9 @@ export default {
       })
       .catch()
 
+    },
+    goToUserPage(nickname){
+      this.$router.push(`/otheruser/${nickname}`).catch(()=>{})
     },
     
   }

@@ -187,14 +187,14 @@ export default {
         e.target.classList.add('heart')
         this.modal = true
 
-        // let tmp=this.feedlist[index]
+
+        this.mainfeed[index].favoriteCnt++;
+
+        // let tmp=this.mainfeed[index]
         // tmp.favoriteCnt++;
 
-        // this.$set(this.feedlist,index,tmp);
+        // this.$set(this.mainfeed,index,tmp);
 
-        // this.feedlist=this.feeedlist.filter(function (articleNo){
-        //   if()
-        // })
         
 
         axios.post('https://i3b304.p.ssafy.io/api/board/likes',{
@@ -208,7 +208,7 @@ export default {
         this.likeStates[index]=0
         e.target.classList.remove('heart')
         
-        this.feedlist.splice(this.feedlist[index].favoriteCnt,1,this.feedlist[index].favoriteCnt-1)
+        this.mainfeed[index].favoriteCnt--
 
         axios.delete('https://i3b304.p.ssafy.io/api/board/likes',{
           data:{
