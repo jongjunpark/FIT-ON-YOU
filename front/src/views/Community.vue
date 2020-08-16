@@ -25,6 +25,7 @@ export default {
     return{
       tempList:[],
       recellList:[],
+      limit:'1'
     }
   },
   methods: {
@@ -40,6 +41,38 @@ export default {
       selectBar.classList.add('go-third-menu')
       selectBar.classList.remove('go-second-menu')
       selectBar.classList.remove('go-first-menu')
+    },
+    
+    infiniteHandler($state){
+      let ref=this;
+      axios.post('https://i3b304.p.ssafy.io/api/recell/all/'+ref.limit)
+      .then((data)=>{
+        setTimeout(() => {
+          if(data.data.object.length){
+            ref.tempList=data.data.object;
+            for (let index = 0; index < ref.tempList.length; index++) {
+              let feeddata={
+              recellNo:ref.tempList[index].recellNo,
+              content:ref.tempList[index].recellContent,
+              price:ref.tempList[index].recellPrice,
+              imgurl:ref.tempList[index].recellImage,
+              date:ref.tempList[index].recellDate,
+              size:ref.tempList[index].recellSize,
+              roomname:ref.tempList[index].roomname
+              }
+            this.recellList.push(feeddata);
+            }
+            ref.tempList=[];
+
+            $state.loaded();
+            ref.limit+=1;
+          }
+          else{
+            $state.complete();
+          }
+        }, 1000);
+      })
+      .catch()
     },
     defaultDark() {
       const Dark = this.$cookies.get('dark')
@@ -87,6 +120,7 @@ export default {
           }
         this.recellList.push(feeddata);
         }
+      this.tempList=[];
       })
     },
   beforeDestroy() { 

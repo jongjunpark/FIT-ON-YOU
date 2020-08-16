@@ -475,7 +475,7 @@ export default {
         ref.bookmarkStates.push(this.feedlist[index].markchk);
       }
     });
-    axios.post("https://i3b304.p.ssafy.io/api/board/influencer").then((data)=>{
+    axios.get("https://i3b304.p.ssafy.io/api/board/influencer").then((data)=>{
         this.influencer=data.data;
 
         for (let i=0; i<data.data.length; i++) {  
