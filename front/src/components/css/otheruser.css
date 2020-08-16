@@ -40,7 +40,8 @@
   color: #202020;
 }
 
-.other-user-child:hover {
+.other-user-child:hover,
+.other-user-child-no:hover {
   transform: translateY(5px)
 }
 

@@ -258,6 +258,7 @@ export default {
   line-height: 2vh;
   background-color: #ebebeb;
   color: black !important;
+  transition: transform 0.5s;
 }
 @media (max-width: 449px) {
   .follower-btn-area .follower-follow-btn {
@@ -284,6 +285,7 @@ export default {
   line-height: 2vh;
   background-color: #FFBA00;
   color: black !important;
+  transition: transform 0.5s;
 }
 @media (max-width: 300px) {
   .follower-btn-area .follower-dm-btn {

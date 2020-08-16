@@ -6,36 +6,228 @@
   width: 100%;
   height: 80vh;
   flex-direction: row !important;
-  overflow: auto;
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
+  overflow: auto;
+  margin-top: 3vh;
 }
-
 .community-container::-webkit-scrollbar{
   width: 0;
   height: 0;
 }
 
-.search-inner-box {
+.my-community-head {
+  width: 100%;
+  margin: 1vh;
+  font-size: 3vh;
+  font-weight: 700;
+  text-align: start;
+}
+
+.community-inner-box {
   width: 32.5%;
   height: 0;
   padding-top: 32.5%;
   margin: 0.3vw;
   background-color: grey;
-  position: relative
+  position: relative;
+  transform-style: preserve-3d;
 }
 @media (min-width:1200px) {
-  .search-inner-box {
+  .community-inner-box {
     margin: 1px;
   }
 }
 
-.search-inner-box img {
+.my-inner-box {
+  width: 15%;
+  padding-top: 15%;
+}
+
+.community-inner-box img {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   width: 100%;
   height: 100%;
+}
+
+.community-content {
+  position: absolute;
+  top: 80%;
+  left: 0;
+  background-color: #fff;
+  box-shadow: 0 6px 12px 0 rgba(0,0,0,0.25),
+              -3px -3px 10px -1px rgba(250,250,250,0.15);
+  width: 100%;
+  transform: translateZ(20px) scaleY(0);
+  /* padding: 40px 25px; */
+  transform-origin: top;
+  transition: 0.5s;
+  padding: 1vw;
+  z-index: 10000;
+}
+@media (min-width:1200px) {
+  .community-content {
+    padding: 10px;
+  }
+}
+
+.community-inner-box:hover .community-content {
+  transform: translateZ(20px) scaleY(1);
+}
+.community-inner-box:hover {
+  z-index: 100;
+}
+
+.community-content .community-content-head {
+  font-size: 3vw;
+  font-weight: 700;
+}
+@media (min-width:1200px) {
+  .community-content .community-content-head {
+    font-size: 14px;
+  }
+}
+
+
+.community-content .community-content-body {
+  font-size: 3vw;
+}
+@media (min-width:1200px) {
+  .community-content .community-content-body {
+    font-size: 12px;
+  }
+}
+
+.community-content .community-content-footer {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  margin-top: 0.5vh;
+}
+
+.community-content-footer .community-content-btn {
+  width: 11vw;
+  height: 50%;
+  border-radius: 2vh;
+  font-size: 2vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #fff;
+}
+@media (min-width:1200px) {
+  .community-content-footer .community-content-btn {
+    width: 60px;
+    font-size: 12px;
+  }
+}
+
+.community-content-footer .dm-btn {
+  background-color: #FFBA00;
+} 
+
+.community-content-footer .del-btn {
+  background-color: #FF3636;
+}
+
+.community-content-footer .other-btn {
+  width: 15vw;
+}
+@media (min-width:1200px) {
+  .community-content-footer .other-btn {
+    width: 80px;
+  }
+}
+
+
+.slide-my-commu-enter-active, .slide-my-commu-leave-active {
+  transition: all .5s ease-in-out;
+}
+.slide-my-commu-enter, .slide-my-commu-leave-to {
+  height: 0;
+}
+
+.community-toggle-box {
+  margin-top: 2vh;
+  width:100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.community-toggle-box > span {
+  position: absolute; 
+  top: 0; 
+  right: calc(25px + 10vw);
+  margin-top: 1vh;
+  line-height: 3vh;
+  font-size: 2vh;
+}
+
+.community-toggle-box input {
+  display: none;
+}
+
+.community-toggle-box .community-toggle-inner {
+  position: absolute; 
+  top: 0; 
+  right: 20px; 
+  margin-top: 1vh;
+}
+
+.community-toggle-box label {
+  display: block; 
+  width: 10vw; 
+  height: 3vh; 
+  box-sizing: border-box; 
+  border-radius: 3vh; 
+  border: 1px solid #e5e5e5; 
+  background: #fff; 
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.community-toggle-box label > span {
+  position: absolute; 
+  top: 0.5vh; 
+  left: 0.5vh; 
+  display: block; 
+  width: 2vh; 
+  height: 2vh; 
+  border-radius: 50%; 
+  box-sizing: border-box; 
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.25), 
+              0 3px 3px 0 rgba(0, 0, 0, 0.15); 
+  transition: all 0.3s cubic-bezier(0.275, -0.45, 0.725, 1.45); 
+  background: #fff;
+  cursor: pointer;
+}
+
+.community-toggle-box input:active + div label,
+.community-toggle-box input:checked + div label {
+  background-color: #abe2fb; 
+  box-shadow: 0 0 2vh #abe2fb;
+}
+
+.community-toggle-box input:active + div label > span, 
+.community-toggle-box input:checked + div label > span { 
+  left: 5vw; 
+}
+
+@media (min-width: 450px) {
+  .community-toggle-box label {
+    width: 6.5vh;
+  }
+  .community-toggle-box input:active + div label > span, 
+  .community-toggle-box input:checked + div label > span {
+    left: 4vh;
+  }
+  .community-toggle-box > span {
+    right: calc(25px + 7vh);
+  }
 }

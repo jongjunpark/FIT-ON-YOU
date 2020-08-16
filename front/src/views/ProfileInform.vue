@@ -52,7 +52,7 @@ export default {
     ...mapState(['flag', 'isMyFeed', 'isBookMark', 'isFollowing', 'isFollower', 'isCuration', 'isMe']),
   },
   methods: {
-    ...mapMutations(['setMyFeed','setBookMark','setFollower','setFollowing', 'setCuration']),
+    ...mapMutations(['setMyFeed','setBookMark','setFollower','setFollowing', 'setCuration', 'setIsMe']),
     goMyFeed() {
       this.setMyFeed();
       const selectBar = document.querySelector('.profile-nav-select')
@@ -176,10 +176,21 @@ export default {
         wrap.classList.remove('wrap-dark')
       }
     },
+    classifyUser() {
+      let data = this.$cookies.get('auth-nickname');
+      let uri = data;
+      let uri_enc = encodeURIComponent(uri);
+      let user_nick = decodeURIComponent(uri_enc);
+      if (this.$router.currentRoute.params.name === user_nick) {
+        this.setIsMe(true)
+      } else {
+        this.setIsMe(false)
+      }
+    }
   },
   mounted() {
     this.defaultDark()
-    
+    this.classifyUser()
     if (this.isMyFeed) {
       this.goMyFeed()
     } else if (this.isBookMark) {
