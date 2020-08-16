@@ -26,7 +26,7 @@
             </div>
             <div class="search-more-btn-box">
               <div class='search-more-btn-left'>
-                <i :class="'fas fa-heart '+likeicon[likechk]" @click="clickLike(articleNo,likechk,$event)"></i>
+                <i :class="'fas fa-heart '+likeicon[likechk]" @click="clickLike(articleNo,likechk,$event)"></i>{{favoriteCnt}}
               </div>
               <div class='search-more-btn-right'>
                 <i :class="'fas fa-bookmark '+markicon[markchk]" @click="clickBookMark(articleNo,markchk,$event)"></i>
@@ -102,6 +102,7 @@ export default {
       likeicon:['','heart'],
       markicon:['','mark'],
       articleNo:'',
+      favoriteCnt:'',
     }
   },
   components: {
@@ -145,6 +146,7 @@ export default {
       this.profile = response.data[0].profile
       this.likechk=response.data[0].aarticles.likechk;
       this.markchk=response.data[0].aarticles.markchk;
+      this.favoriteCnt=response.data[0].aarticles.favoriteCnt;
       });
 
     
@@ -198,7 +200,8 @@ export default {
       if(flag==0){
         this.likechk=1
         e.target.classList.add('heart')
-        this.modal = true
+        this.favoriteCnt++;
+
         axios.post('https://i3b304.p.ssafy.io/api/board/likes',{
             articleNo:articleNo,
             nickname:res
@@ -209,6 +212,7 @@ export default {
       else if(flag==1){
         this.likechk=0
         e.target.classList.remove('heart')
+        this.favoriteCnt--;
         axios.delete('https://i3b304.p.ssafy.io/api/board/likes',{
           data:{
             articleNo:articleNo,
