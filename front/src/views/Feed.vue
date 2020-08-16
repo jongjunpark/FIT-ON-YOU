@@ -6,12 +6,13 @@
     <transition name='slide-influ-nav'>
       <div v-show="isInfluNav" class="influ-nav-box">
         <div class="influ-nav">
-          <VueSlickCarousel v-bind="settings">
+          <VueSlickCarousel v-bind="settings" v-if="influencer.length">
             <div v-for="influ in influencer" :key="influ.nickname">
               <div class="influ-box">
-                <div class="influ-icon">
+                <div class="influ-icon" @click="goProfile(influ.nickname)">
                   <img :src="influ.profile_img">
                 </div>
+                <p class="influ-name" @click="goProfile(influ.nickname)">{{ influ.nickname }}</p>
               </div>
             </div>
             <span></span>
@@ -48,7 +49,7 @@
             <div class='feed-btn-left'>
              
               <i :class="'fas fa-heart '+likeicon[likeStates[index]]" 
-              @click="clickLike(feed.articleNo,likeStates[index],index,$event)"></i>{{feed.favoriteCnt}}
+              @click="clickLike(feed.articleNo,likeStates[index],index,$event)"></i>
               <i :id="'show-modal'+ feed.articleNo" @click="clickComment(feed.articleNo,feed.articleUser)" class="fas fa-comment-alt"></i>
 
             </div>
@@ -56,6 +57,10 @@
               <i :class="'fas fa-bookmark ' +markicon[bookmarkStates[index]]"
               @click="clickBookMark(feed.articleNo,bookmarkStates[index],index,$event)"></i>
             </div>
+          </div>
+          <div class="feed-like-cnt">
+            <p v-show="likeStates[index]">{{ myName }}님 외 {{feed.favoriteCnt}}명이 좋아합니다</p>
+            <p v-show="!likeStates[index]">{{feed.favoriteCnt}}명이 좋아합니다</p>
           </div>
           <header class='feed-content-head'>{{feed.content}}</header>
           <aside class='feed-content-tag'>
@@ -110,6 +115,7 @@ export default {
       showModal: false,
       isInfluNav: false,
       modal: false,
+      myName: '',
       mainfeed:[],
       influencer:[],
       feedlist:[],
@@ -154,7 +160,9 @@ export default {
       this.defaultDark()
     },
   },
-  
+  created() {
+    this.getInflu()
+  },
   methods: {
     ...mapActions(['sendUserInfo', 'setLoggedIn', 'setToken']),
     ...mapMutations(['setIsSelectBar']),
@@ -170,7 +178,11 @@ export default {
       selectBar.classList.remove('go-second-menu')
       selectBar.classList.remove('go-third-menu')
     },
-  
+    getInflu() {
+      axios.get("https://i3b304.p.ssafy.io/api/board/influencer").then((data)=>{
+        this.influencer=data.data;
+      });
+    },
     clickLike(articleNo,flag,index,e) {
       let ref=this
 
@@ -407,6 +419,7 @@ export default {
     let uri_enc = encodeURIComponent(uri);
     let uri_dec = decodeURIComponent(uri_enc);
     let res = uri_dec;
+    this.myName = res;
     const formData = new FormData();
     formData.append('nickname',res);
     // formData.append('pageNum',ref.limit),
@@ -453,7 +466,7 @@ export default {
             feeddata.articleNo=this.feedlist[index].articleNo;
           }
           feeddata.favoriteCnt=this.feedlist[index].favoriteCnt;
-      });
+        });
         axios.post("https://i3b304.p.ssafy.io/api/board/tags",articleNo).then((tag)=>{
         const tags = tag.data;
         const taglist = [];
@@ -469,46 +482,7 @@ export default {
         ref.bookmarkStates.push(this.feedlist[index].markchk);
       }
     });
-    axios.get("https://i3b304.p.ssafy.io/api/board/influencer").then((data)=>{
-        this.influencer=data.data;
-
-        for (let i=0; i<data.data.length; i++) {  
-          const CAROUSELL = document.querySelector(`.feed-influ-carousel${i+1}`)
-          const INFLUBOX = document.createElement('div')
-          const INFLUICON = document.createElement('div')
-          const INFLUIMG = document.createElement('img')
-          INFLUBOX.classList.add('influ-box')
-          INFLUICON.classList.add('influ-icon')
-          INFLUIMG.setAttribute("src", data.data[i].profile_img)
-  
-          INFLUICON.appendChild(INFLUIMG)
-          INFLUBOX.appendChild(INFLUICON)
-          CAROUSELL.appendChild(INFLUBOX)
-        }
-
-    axios.get("https://i3b304.p.ssafy.io/api/board/influencer").then((data)=>{
-      this.influencer=data.data;
-      console.log(this.influencer)
-      console.log('!!!!')
-
-      // for (let i=0; i<data.data.length; i++) {  
-      //   const CAROUSELL = document.querySelector(`.feed-influ-carousel${i+1}`)
-      //   const INFLUBOX = document.createElement('div')
-      //   const INFLUICON = document.createElement('div')
-      //   const INFLUIMG = document.createElement('img')
-      //   const INFLUNAME = document.createElement('span')
-      //   INFLUBOX.classList.add('influ-box')
-      //   INFLUICON.classList.add('influ-icon')
-      //   INFLUIMG.setAttribute("src", data.data[i].profile_img)
-      //   INFLUNAME.innerHTML = data.data[i].nickname
-      //   INFLUNAME.classList.add('influ-name')
-
-      //   INFLUICON.appendChild(INFLUIMG)
-      //   INFLUBOX.appendChild(INFLUICON)
-      //   CAROUSELL.appendChild(INFLUBOX)
-      //   INFLUBOX.appendChild(INFLUNAME)
-      // }
-    });
+    
     console.log(this.mainfeed, '메인피드')
     console.log(this.likeStates,'좋아요리스트');
     console.log(this.bookmarkStates,'북마크리스트');
@@ -519,251 +493,4 @@ export default {
 }
 
 </script>
-<style>
-@media (min-width: 1200px) {
-  .wrap {
-  max-width: 440px !important;
-  width: 100%;
-  margin: 0 auto;
-  margin-top: 60px;
-  }
-}
-
-.wrap-container {
-  margin-bottom: 50px;
-}
-.feed-wrap {
-    padding-top: 20px;
-  }
-/* @media (max-width: 280px) {
-  .feed-wrap {
-    margin-top: 150px;
-  }
-} */
-@media (min-width: 1200px) {
-  .feed-wrap {
-    margin-top: 60px !important;
-    padding-top: 20px;
-  }
-}
-/* @media (min-height: 700px) {
-  .feed-wrap {
-    margin-top: 150px;
-  }
-}
-@media (min-height: 800px) {
-  .feed-wrap {
-    margin-top: 200px;
-  }
-}
-@media (min-height: 1000px) {
-  .feed-wrap {
-    margin-top: 80px;
-  }
-} */
-.open-influ-nav {
-  position: fixed;
-  top: 8vh;
-  left: 50%;
-  transform: translate(-50%, 0);
-  width: 50px;
-  height: 20px;
-  line-height: 20px;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  background-color: #DFDFDF;
-  box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.25);
-  text-align: center;
-  font-weight: 900;
-  z-index: 10;
-  cursor: pointer;
-}
-
-.open-influ-nav:hover {
-  background-color: rgb(199, 199, 199);
-}
-
-.influ-nav-box {
-  position: fixed;
-  top: 70px;
-  left: 0;
-  right: 0;
-  margin: 0 10px;
-  z-index: 9;
-  overflow-y: hidden;
-  height: 100px;
-}
-
-.influ-nav {
-  padding: 10px 30px;
-  background-color: white;
-  box-shadow: 0 6px 12px 0 rgba(0,0,0,0.25);
-  border-radius: 10px;
-  
-}
-
-@media (min-width: 1200px) {
-  .influ-nav {
-    max-width: 580px;
-    width: 100%;
-    margin: 0 auto;
-  }
-}
-
-.influ-nav div {
-  outline: none;
-}
-
-.influ-box {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.influ-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: black;
-  cursor: pointer;
-  border: 0.5px solid grey;
-}
-@media (max-width: 375px) {
-  .influ-icon {
-  width: 30px;
-  height: 30px;
-  }
-}
-
-.influ-icon img {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-}
-
-.influ-name {
-  font-size: 1.5vh
-}
-
-.slide-influ-nav-enter-active, .slide-influ-nav-leave-active {
-  transition: all .5s ease-in-out;
-}
-.slide-influ-nav-enter, .slide-influ-nav-leave-to {
-  height: 0;
-}
-
-/* .carousel-inner-box {
-  padding: 0 30px;
-  margin: 20px 0;
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  background-color: yellowgreen;
-}
-
-.carousel-btn {
-  height: 30px;
-  width: 30px;
-  position: absolute;
-  top: 50%;
-  transform:translate(0,-50%);
-  background-color: grey;
-  border-radius: 50%;
-}
-
-.influ-box{
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: slateblue;
-} */
-
-.modal-mask {
-  position: fixed;
-  z-index: 9998;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, .5);
-  display: table;
-  transition: opacity .3s ease;
-}
-
-.modal-wrapper {
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.modal-container {
-  width: 300px;
-  margin: 0px auto;
-  padding: 20px 30px;
-  background-color: #fff;
-  border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-  transition: all .3s ease;
-  font-family: Helvetica, Arial, sans-serif;
-}
-
-.modal-header h3 {
-  margin-top: 0;
-  color: #42b983;
-}
-
-.modal-body {
-  margin: 20px 0;
-}
-
-.modal-default-button {
-  float: right;
-}
-
-/*
- * The following styles are auto-applied to elements with
- * transition="modal" when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
- */
-
-.modal-enter {
-  opacity: 0;
-}
-
-.modal-leave-active {
-  opacity: 0;
-}
-
-.modal-enter .modal-container,
-.modal-leave-active .modal-container {
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
-}
-.margin-box {
-  height: 20px;
-}
-
-.nav-influ-btn-dark {
-  background-color: rgb(109, 108, 108);
-}
-
-.nav-influ-btn-dark:hover {
-  color: #202020;
-}
-
-.nav-influ-dark {
-  background-color: rgb(77, 76, 76);
-}
-
-.heart{
-  color:crimson;
-}
-.mark{
-  color:gold;
-}
-</style>
 
