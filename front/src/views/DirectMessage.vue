@@ -72,10 +72,11 @@ export default {
       roomname:'',
       nick: '',
       othername: '',
+      profileImg:'',
     }
   },
   computed: {
-    ...mapState(['user' ,'flag'])
+    ...mapState(['user' ,'flag','dmProfileImg'])
   },
   updated() {
     this.goDown()
@@ -189,6 +190,9 @@ export default {
     console.log(this.roomname)
     console.log(this.othername)
     this.fetchMessage();
+    this.profileImg=this.dmProfileImg;
+    console.log(this.dmProfileImg,1);
+    console.log(this.profileImg,2);
   },
   mounted(){
     this.defaultDark()  

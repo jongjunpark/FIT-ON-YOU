@@ -90,7 +90,13 @@ export default {
       this.$router.push('/newpassword').catch(()=>{})
     },
     deleteAllAlarm(){
-      let nickname=this.user.nickname
+
+      let tmpNick = this.$cookies.get('auth-nickname');
+      let uri = tmpNick;
+      let uri_enc = encodeURIComponent(uri);
+      let uri_dec = decodeURIComponent(uri_enc);
+      let resNick = uri_dec;
+      let nickname=resNick;
       console.log(nickname,1);
       const frm = new FormData();
       frm.append('recevier',nickname);
@@ -102,9 +108,14 @@ export default {
 
     leave(){
       let ref=this;
+      let tmpNick = this.$cookies.get('auth-nickname');
+      let uri = tmpNick;
+      let uri_enc = encodeURIComponent(uri);
+      let uri_dec = decodeURIComponent(uri_enc);
+      let resNick = uri_dec;
 
+      let nickname=resNick;
       const formData=new FormData();
-      let nickname=this.user.nickname;
       console.log(nickname);
       formData.append('nickname',nickname);
       axios.delete('https://i3b304.p.ssafy.io/api/account/delete',{

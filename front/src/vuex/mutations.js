@@ -90,5 +90,8 @@ export default {
   },
   setIsSelectBar(state, data) {
     state.isSelectBar = data
+  },
+  setDmProfileImg(state,data){
+    state.dmProfileImg=data;
   }
 }
