@@ -1,24 +1,30 @@
 <template>
   <div class='wrap-container hash-container'>
       <div v-show="hashResultList" class="hash-search-inner-box" v-for="hash in hashResultList" :key="hash.articleNo">
-        <img :src="hash.imgList[0]" :alt="`articleNo : ${hash.articleNo}`">
+        <img :src="hash.imgList[0]" :alt="`articleNo : ${hash.articleNo}`" @click="onModal(hash.articleNo)">
       </div>
       <div v-show="hashResultList.length===0" class='hash-search-not-result'>
         <p>일치하는 검색결과가 없습니다.</p>
       </div>
+      <SearchModal  v-if="showModal" @close="showModal= false"/>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState,mapMutations } from 'vuex'
 import axios from 'axios'
+import SearchModal from '../components/SearchModal.vue'
 
 export default {
   name: 'HashSearch',
+  components:{
+    SearchModal,
+  },
   data() {
     return {
       scrollDown: 0,
       hashResultList: [],
+      showModal:false,
     }
   },
   computed: {
@@ -33,6 +39,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setArticledata']),
     defaultDark() {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
@@ -61,8 +68,14 @@ export default {
         console.log(data.data)
         console.log(this.hashResultList, 'rr')
       }).catch()
-    }
+    },
+    onModal(articleNo) {
+      this.setArticledata(articleNo);
+      this.showModal = true
+    },
+    
   },
+
   mounted() {
     let nickdata = this.$cookies.get('auth-nickname')
     let uri = nickdata;

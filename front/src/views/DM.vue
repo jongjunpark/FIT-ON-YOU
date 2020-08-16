@@ -15,7 +15,7 @@
 
 <script>
 import "../components/css/dm.css"
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import firebase from 'firebase'
 import axios from 'axios'
 
@@ -46,6 +46,7 @@ export default {
     this.defaultDark()
   },
   methods: {
+    ...mapMutations(['setDmProfileImg']),
     defaultDark() {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
@@ -141,7 +142,8 @@ export default {
               
               // IMGDM.src = "../assets/images/default-user.png"
               IMGDM.classList.add('dm-container-message-img')
-              IMGDM.setAttribute("src", "/images/default-user.png")
+              if(element.img!=null && element.img.length>0) IMGDM.setAttribute('src',element.img);
+              else IMGDM.setAttribute("src", "/images/default-user.png")
               DIVUNDER.classList.add('dm-container-message')
               H5message.classList.add('dm-in-text')
               H3.classList.add('dm-user-name')
@@ -169,7 +171,8 @@ export default {
                     seconduser: Next
                   }
                   }).then(()=>{
-
+                    if(element.img!=null && element.img.length>0) this.setDmProfileImg(element.img)
+                    else this.setDmProfileImg('');
                     this.$router.push(`/directmessage/${element.roomname}/${Next}`).catch(()=>{})
                   })
                     .catch(

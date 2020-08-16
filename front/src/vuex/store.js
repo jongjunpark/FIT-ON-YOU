@@ -25,6 +25,7 @@ const state = {
   isWrite: true,
   isSelectBar: false,
   otherUserName: '',
+  dmProfileImg:'',
 }
 
 Vue.use(Vuex)
