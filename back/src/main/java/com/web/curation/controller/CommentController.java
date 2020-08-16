@@ -46,11 +46,12 @@ public class CommentController {
 	private UserDao userDao;
 	
 	@GetMapping
-	public Object getAllComment(@RequestParam int articleNo) {
+	public Object getAllComment(@RequestParam int articleNo , @RequestParam String nickname) {
 		Map<String,Object> resultMap=new HashMap<>();
 		final BasicResponse result = new BasicResponse();
 		List<Comment> commentli = new ArrayList<>();
 		List<String> profile=new ArrayList<>();
+		String myprofile = userDao.findProfileImgByNickname(nickname);
 		commentli=commentDao.findAllByArticleNoOrderByCommentNoAsc(articleNo);
 		for(Comment comment : commentli) {
 			comment.getUser().setPassword("");
@@ -59,8 +60,7 @@ public class CommentController {
 		result.status=true;
 		result.data="success";
 		
-		
-		resultMap.put("result",result);		
+		if(myprofile!=null && myprofile.length()>0) resultMap.put("myprofile",myprofile);
 		resultMap.put("commentli",commentli);		
 		resultMap.put("result",result);		
 		

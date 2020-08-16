@@ -1,21 +1,28 @@
 <template>
   <div class='curation-container'>
     <div class="curation-search-inner-box" v-for="curation in curationList" :key="curation.articleNo">
-      <img :src="curation.imgUrl" :alt="`articleNo : ${curation.articleNo}`">
+      <img :src="curation.imgUrl" :alt="`articleNo : ${curation.articleNo}`" @click="onModal(curation.articleNo)">
     </div>
+    <SearchModal  v-if="showModal" @close="showModal= false"/>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState ,mapMutations} from 'vuex'
 import axios from 'axios'
+import SearchModal from '../components/SearchModal.vue'
 export default {
   name: 'Curation',
+  components:{
+    SearchModal
+  },
   data(){
     return{
       curationList: [],
+      showModal:false,
     }
   },
+  
   computed: {
     ...mapState(['flag'])
   },
@@ -30,6 +37,7 @@ export default {
   },
 
   methods: {
+    ...mapMutations(['setArticledata']),
     defaultDark() {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
@@ -62,7 +70,11 @@ export default {
         this.curationList = data.data.object
         console.log(data)
       })
-    }
+    },
+    onModal(articleNo) {
+      this.setArticledata(articleNo);
+      this.showModal = true
+    },
   },
 }
 </script>
