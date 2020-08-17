@@ -333,14 +333,18 @@ public class AccountController {
 		Map<String,Object> resultMap=new HashMap<>();
 		System.out.println(prev+ " "+cur);
 		final BasicResponse result = new BasicResponse();
-		if(userDao.updateNickname(prev, cur)==1) {
-			result.data="success";
-			result.object=cur;
-			UserDTO userDTO = new UserDTO(userDao.findUserByNickname(cur).get());
-			String Token = jwtService.create(userDTO);
-			resultMap.put("auth_token",Token);
+		try {
+			if(userDao.updateNickname(prev, cur)==1) {
+				result.data="success";
+				result.object=cur;
+				UserDTO userDTO = new UserDTO(userDao.findUserByNickname(cur).get());
+				String Token = jwtService.create(userDTO);
+				resultMap.put("auth_token",Token);
+			}else {
+				result.data="fail";
+			}
 		}
-		else {
+		catch(Exception e) {
 			result.data="fail";
 		}
 		result.status=true;
