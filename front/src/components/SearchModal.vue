@@ -12,6 +12,7 @@
               <p class='search-more-username' @click="goToUserPage(username)">{{ username }}</p>
               <p class='search-more-article-date'>{{ time }}</p>
             </div>
+            <div v-show="myname === username" class="search-more-del-btn">삭제</div>
           </header>
           <section class="search-more-content">
             <VueSlickCarousel v-bind="settings" v-if="imgs[1]">
@@ -79,6 +80,7 @@ export default {
   data() {
     return {
       username: '',
+      myname: '',
       userprofileimg: '',
       time: '',
       content: '',
@@ -126,6 +128,7 @@ export default {
     let uri_enc = encodeURIComponent(uri);
     let uri_dec = decodeURIComponent(uri_enc);
     let res = uri_dec;
+    this.myname = res;
     let frm = new FormData();
     frm.append('nickname',res);
     axios.post(`https://i3b304.p.ssafy.io/api/search/${articleNo}`,frm)
@@ -148,8 +151,6 @@ export default {
       this.markchk=response.data[0].aarticles.markchk;
       this.favoriteCnt=response.data[0].aarticles.favoriteCnt;
       });
-
-    
   },
   computed: {
     ...mapState(['flag','articledata'])
@@ -344,6 +345,7 @@ export default {
   display: flex;
   width: 100%;
   align-items: center;
+  position: relative;
 }
 .search-more-user-profile {
   width: 4vh;
@@ -368,6 +370,19 @@ export default {
 .search-more-article-head .search-more-article-date {
   font-size: 1vh;
   color: grey;
+}
+
+.search-more-del-btn {
+  position: absolute;
+  top:0;
+  right: 1vh;
+  font-size: 1.4vh;
+  cursor: pointer;
+  transition: all 0.5s ease ;
+}
+
+.search-more-del-btn:hover {
+  color: #5AAEFF;
 }
 
 .search-more-content {
