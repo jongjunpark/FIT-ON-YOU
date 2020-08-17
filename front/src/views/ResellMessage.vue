@@ -4,7 +4,9 @@
       <div class="wrap-direct">
         <p class="back-btn" @click="goDM">〈 </p>
         <div class="in-img">
-          <img src="../assets/images/default-user.png" alt="" class="in-img-profile">
+          <img v-if="!profileImg" src="../assets/images/default-user.png" alt="" class="in-img-profile">
+          <img v-if="profileImg" :src="profileImg" alt="" class="in-img-profile">
+          <i class="fas fa-crown seller"></i>
         </div>
         <p class="back-btn-name">{{ othername }}</p>
       </div>
@@ -14,10 +16,19 @@
           <div v-show='message.senduser == nick' class="user-me">
             <p class="user-me-content">{{ message.message }}</p>
           </div>
-          <div v-show='message.senduser != nick' class="user-opponent">
+          <div v-show='message.senduser != nick && message.senduser != othername' class="user-opponent">
             <!-- <p class="user-me-content">{{ message.senduser }}</p> -->
             <!-- 이미지 보여주기 -->
-            <img src="../assets/images/default-user.png" alt="" class="in-img-content">
+            <img :src="profileImg" alt="" class="in-img-profile" v-if="profileImg">
+            <img src="../assets/images/default-user.png" alt="" class="in-img-content" v-if="!profileImg">
+            <p class="in-user-content">{{ message.message }}</p>
+          </div>
+          <div v-show='message.senduser != nick && message.senduser == othername' class="user-opponent">
+            <!-- <p class="user-me-content">{{ message.senduser }}</p> -->
+            <!-- 이미지 보여주기 -->
+            <img :src="profileImg" alt="" class="in-img-profile" v-if="profileImg">
+            <img src="../assets/images/default-user.png" alt="" class="in-img-content" v-if="!profileImg">
+            <i class="fas fa-crown seller2"></i>
             <p class="in-user-content">{{ message.message }}</p>
           </div>
          </div>         
@@ -34,7 +45,8 @@
 <script>
 import {mapState}from 'vuex'
 import firebase from 'firebase'
-
+import axios from 'axios'
+import "../components/css/resellmessage.css"
 // Required for side-effects
 require("firebase/firestore");
 
@@ -71,6 +83,7 @@ export default {
       roomname:'',
       nick: '',
       othername: '',
+      profileImg: '',
     }
   },
   computed: {
@@ -179,6 +192,18 @@ export default {
     let uri_dec = decodeURIComponent(uri_enc);
     let res = uri_dec;
     this.nick = res
+      axios.get('https://i3b304.p.ssafy.io/api/mypage/otheruser',{
+        params:{
+        nickname: this.othername,
+      }
+      }).then((data)=>{
+        if (data.data.userinfo.profile_img) {
+          
+          this.profileImg = data.data.userinfo.profile_img.substring(2,);
+        }
+      })
+      .catch(
+      )
   }
 }
 </script>

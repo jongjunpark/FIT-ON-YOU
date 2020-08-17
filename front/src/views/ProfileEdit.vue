@@ -246,6 +246,7 @@ export default {
           title: '중복된 닉네임이에요.',
           text: '다른 닉네임을 사용해주세요',
         })
+          this.nickname = this.tempNickName
 
         }
       })
