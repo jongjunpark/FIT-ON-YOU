@@ -170,6 +170,19 @@
   top: 60%;
   width: 4vh;
   height: 4vh;
+  display: flex;
+  justify-content: space-evenly;
+}
+.profile-nick-cancel1 {
+  width: 4vh;
+  height: 4vh;
+  margin-right: 2vh;
+}
+
+.profile-nick-cancel2 {
+  width: 4vh;
+  height: 4vh;
+  margin-left: 2vh;
 }
 
 .profile-content-cancel {
@@ -177,6 +190,18 @@
   top: 60%;
   width: 4vh;
   height: 4vh;
+  display: flex;
+  justify-content: space-evenly;
+}
+.profile-content-cancel1 {
+  width: 4vh;
+  height: 4vh;
+  margin-left: 2vh;
+}
+.profile-content-cancel2 {
+  width: 4vh;
+  height: 4vh;
+  margin-left: 2vh;
 }
 
 .profile-nick-cancel:hover {

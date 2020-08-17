@@ -3,11 +3,9 @@
     <div class="wrap-container-direct">
       <div class="wrap-direct">
         <p class="back-btn" @click="goDM">〈 </p>
-        <div class="in-img" v-show="!profileImg">
-          <img src="../assets/images/default-user.png" alt="" class="in-img-profile">
-        </div>
-        <div class="in-img" v-show="profileImg">
-          <img :src="profileImg" alt="" class="in-img-profile">
+        <div class="in-img">
+          <img v-if="!profileImg" src="../assets/images/default-user.png" alt="" class="in-img-profile">
+          <img v-if="profileImg" :src="profileImg" alt="" class="in-img-profile">
         </div>
         <p class="back-btn-name">{{ othername }}</p>
       </div>
@@ -20,8 +18,8 @@
           <div v-show='message.senduser != nick' class="user-opponent">
             <!-- <p class="user-me-content">{{ message.senduser }}</p> -->
             <!-- 이미지 보여주기 -->
-            <img :src="profileImg" alt="" class="in-img-profile" v-show="profileImg">
-            <img src="../assets/images/default-user.png" alt="" class="in-img-content" v-show="!profileImg">
+            <img :src="profileImg" alt="" class="in-img-profile" v-if="profileImg">
+            <img src="../assets/images/default-user.png" alt="" class="in-img-content" v-if="!profileImg">
             <p class="in-user-content">{{ message.message }}</p>
           </div>
          </div>         
@@ -214,7 +212,8 @@ export default {
       }
       }).then((data)=>{
         if (data.data.userinfo.profile_img) {
-          this.profileImg=data.data.userinfo.profile_img;
+          
+          this.profileImg = data.data.userinfo.profile_img.substring(2,);
         }
       })
       .catch(
