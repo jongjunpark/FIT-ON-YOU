@@ -45,6 +45,9 @@ table {
   border-spacing: 0;
 }
 /* reset CSS end */
+.swal2-container {
+  z-index: 9999999 !important;
+}
 html {
   transition: 0.3s ease;
 }
