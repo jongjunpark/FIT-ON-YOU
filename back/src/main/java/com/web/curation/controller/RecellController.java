@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +20,6 @@ import com.web.curation.dao.ImageDao;
 import com.web.curation.dao.RecellDao;
 import com.web.curation.dao.UserDao;
 import com.web.curation.model.BasicResponse;
-import com.web.curation.model.BoardDTO;
 import com.web.curation.model.ImageStore;
 import com.web.curation.model.Recell;
 import com.web.curation.service.user.BoardService;
@@ -43,14 +45,37 @@ public class RecellController {
 	RecellDao recellDao;
 	@Autowired
 	BoardService boardService;
-	
+
+	// 내게시글만 가져오기
+	@GetMapping("/myContents")
+	public Object getMyContents(@RequestParam String username) {
+		final BasicResponse result = new BasicResponse();
+		List<Recell> myRecellList = recellDao.getMyContents(username);
+		if (!myRecellList.isEmpty()) {
+			result.object = myRecellList;
+			result.data = "success";
+			result.status = true;
+		} else {
+			result.object = null;
+			result.data = "Nodata";
+			result.status = true;
+		}
+
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
 	@PostMapping("/newsfeed/{page}")
 	public Object getFollowArticle(@PathVariable int page) {
 		List<Recell> result = boardService.getRecellList(page);
 		return result;
 	}
 
-	@PostMapping(value="/upload")
+	@PostMapping("/soldout")
+	public void changeSaleCheck(@RequestParam int num) {
+		recellDao.changeSalechek(num);
+	}
+
+	@PostMapping(value = "/upload")
 	public void addRecell(@RequestParam("recellimg") MultipartFile recellimg, @RequestParam("nickname") String nickname,
 			@RequestParam("content") String content, @RequestParam("price") String price,
 			@RequestParam("size") String size) {
@@ -68,7 +93,6 @@ public class RecellController {
 		recell.setRecellImage(storePath);
 		System.out.println(recell.toString());
 		recellDao.save(recell);
-
 
 		int recellNo = recellDao.getCountRecell().get(0);
 		ImageStore img = new ImageStore();
