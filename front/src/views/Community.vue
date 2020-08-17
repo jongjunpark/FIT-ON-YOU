@@ -1,8 +1,40 @@
 <template>
   <div class='wrap'>
-    <div class='wrap-container community-container'>
-      <div class="search-inner-box" v-for="(article,index) in recellList" :key="`recell-${index}`">
-        <img :src="article.imgurl" alt=""></div>
+    <div class='community-toggle-box'>
+      <span>내글보기</span>
+      <input @change="onToggle" type="checkbox" id="community-toggle" name="" value=""/> 
+        <div class='community-toggle-inner'>
+          <label for="community-toggle"><span/></label> 
+        </div>
+    </div>
+    <div v-show="isMyCommu" class='wrap-container community-container'>
+      <div class="community-inner-box" v-for="(myarticle,index) in myList" :key="`recell-${index}`">
+        <img :src="myarticle.imgurl" alt="">
+        <div class="community-content">
+          <p class='community-content-head'>{{ myarticle.content }}</p>
+          <p class='community-content-body'>·판매자: {{ myarticle.user }}</p>
+          <p class='community-content-body'>·가격: {{ myarticle.price }}원</p>
+          <p class='community-content-body'>·사이즈: {{ myarticle.size }}</p>
+          <div class="community-content-footer">
+            <div @click="goDM(myarticle.roomname, myarticle.user)" class="community-content-btn dm-btn">DM</div>
+            <div class="community-content-btn del-btn">판매완료</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-show="!isMyCommu" class='wrap-container community-container'>
+      <div class="community-inner-box" v-for="(article,index) in recellList" :key="`recell-${index}`">
+        <img :src="article.imgurl" alt="">
+        <div class="community-content">
+          <p class='community-content-head'>{{ article.content }}</p>
+          <p class='community-content-body'>·판매자: {{ article.user }}</p>
+          <p class='community-content-body'>·가격: {{ article.price }}원</p>
+          <p class='community-content-body'>·사이즈: {{ article.size }}</p>
+          <div class="community-content-footer">
+            <div @click="goDM(article.roomname, article.user)" class="community-content-btn dm-btn other-btn">DM보내기</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -25,7 +57,10 @@ export default {
     return{
       tempList:[],
       recellList:[],
-      limit:'1'
+      myList:[],
+      nickName:[],
+      limit:'1',
+      isMyCommu: false,
     }
   },
   methods: {
@@ -42,7 +77,16 @@ export default {
       selectBar.classList.remove('go-second-menu')
       selectBar.classList.remove('go-first-menu')
     },
-    
+    onToggle() {
+      if(event.target.checked) {
+        this.isMyCommu = true
+      } else {
+        this.isMyCommu = false
+      }
+    },
+    goDM(room, name) {
+      this.$router.push(`/resellmessage/${room}/${name}`)
+    },
     infiniteHandler($state){
       let ref=this;
       axios.post('https://i3b304.p.ssafy.io/api/recell/all/'+ref.limit)
@@ -58,7 +102,8 @@ export default {
               imgurl:ref.tempList[index].recellImage,
               date:ref.tempList[index].recellDate,
               size:ref.tempList[index].recellSize,
-              roomname:ref.tempList[index].roomname
+              roomname:ref.tempList[index].roomname,
+              user:ref.tempList[index].recellUser
               }
             this.recellList.push(feeddata);
             }
@@ -98,28 +143,50 @@ export default {
         }
       }
     },
+    getNickName() {
+      let nickdata = this.$cookies.get('auth-nickname')
+      let uri = nickdata;
+      let uri_enc = encodeURIComponent(uri);
+      this.nickName = decodeURIComponent(uri_enc);
+    }
   },
   mounted() {
     this.setIsSelectBar(true)
     this.goCommunity()
     this.defaultDark()
-
+    this.getNickName()
      axios.post("https://i3b304.p.ssafy.io/api/recell/newsfeed/0").then((data)=>{
       console.log("success")
       console.log(data)
       this.tempList=data.data;
       for (let index = 0; index < this.tempList.length; index++) {
-        let feeddata={
-          recellNo:this.tempList[index].recellNo,
-          content:this.tempList[index].recellContent,
-          price:this.tempList[index].recellPrice,
-          imgurl:this.tempList[index].recellImage,
-          date:this.tempList[index].recellDate,
-          size:this.tempList[index].recellSize,
-          roomname:this.tempList[index].roomname
-          }
-        this.recellList.push(feeddata);
+        if (this.tempList[index].recellUser !== this.nickName) {
+          let feeddata={
+            recellNo:this.tempList[index].recellNo,
+            content:this.tempList[index].recellContent,
+            price:this.tempList[index].recellPrice,
+            imgurl:this.tempList[index].recellImage,
+            date:this.tempList[index].recellDate,
+            size:this.tempList[index].recellSize,
+            roomname:this.tempList[index].roomname,
+            user:this.tempList[index].recellUser
+            }
+          this.recellList.push(feeddata);
+        } else {
+          let myfeeddata={
+            recellNo:this.tempList[index].recellNo,
+            content:this.tempList[index].recellContent,
+            price:this.tempList[index].recellPrice,
+            imgurl:this.tempList[index].recellImage,
+            date:this.tempList[index].recellDate,
+            size:this.tempList[index].recellSize,
+            roomname:this.tempList[index].roomname,
+            user:this.tempList[index].recellUser
+            }
+            this.myList.push(myfeeddata);
+            console.log(this.myList,'내글')
         }
+      }
       this.tempList=[];
       })
     },

@@ -125,7 +125,7 @@ export default {
 
   },
   methods: {
-    ...mapMutations(['setMyFeed','setBookMark','setFollower', 'setFollowing', 'setCuration', 'setIsMe', 'setOtherUser']),
+    ...mapMutations(['setMyFeed','setBookMark','setFollower', 'setFollowing', 'setCuration', 'setOtherUser']),
     defaultDark() {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
@@ -160,19 +160,16 @@ export default {
     },
     goMyFeed() {
       this.setMyFeed();
-      this.setIsMe(false);
       this.setOtherUser(this.$route.params.nickname);
       this.$router.push(`/profileinform/${this.$route.params.nickname}`).catch(()=>{})
     },
     goFollowing() {
       this.setFollowing();
-      this.setIsMe(false);
       this.setOtherUser(this.$route.params.nickname);
       this.$router.push(`/profileinform/${this.$route.params.nickname}`).catch(()=>{})
     },
     goFollower() {
       this.setFollower();
-      this.setIsMe(false);
       this.setOtherUser(this.$route.params.nickname);
       this.$router.push(`/profileinform/${this.$route.params.nickname}`).catch(()=>{})
     },

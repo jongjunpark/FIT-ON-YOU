@@ -260,7 +260,25 @@ export default {
     setHashList() {
       this.hashString += `#${this.hashList[this.hashList.length-1]} `
     },
-
+    inUserSearch() {
+      axios.get(`https://i3b304.p.ssafy.io/api/search/user`,{
+      params: {
+        username: this.userContent
+      },
+      }).then((data) => {
+        console.log(data, '실시간유저')
+        if(data.data.object.length>5) {
+          this.userList = data.data.object.splice(0,5)
+          this.userListLength = data.data.object.length - 5
+        } else {
+          this.userList = data.data.object
+          this.userListLength = 0
+        }
+      }).catch()
+    },
+    goProfile(name) {
+      this.$router.push(`/otheruser/${name}`)
+    },
     infiniteHandler($state){
       let ref=this;
       axios.post('https://i3b304.p.ssafy.io/api/search/all/'+ref.limit)
