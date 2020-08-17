@@ -100,7 +100,8 @@ export default {
   padding-top: 32.5%;
   margin: 0.3vw;
   background-color: grey;
-  position: relative
+  position: relative;
+  cursor: pointer;
 }
 @media (min-width:1200px) {
   .bookmark-search-inner-box {
