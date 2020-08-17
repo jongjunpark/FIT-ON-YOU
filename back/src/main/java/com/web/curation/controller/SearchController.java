@@ -10,8 +10,10 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,7 +69,7 @@ public class SearchController {
 	InfluencerDao influDao;
 	@Autowired
 	BoardTwoDao boardTwoDao;
-	
+
 	@Autowired
 	BoardService boardService;
 
@@ -75,10 +77,10 @@ public class SearchController {
 	@ApiOperation(value = "페이지 업로드")
 	public Object uploadBoard(@PathVariable int page) {
 		final BasicResponse result = new BasicResponse();
-		result.status=true;
-		result.data="success";
-		result.object=boardService.getAllSearchList(page);
-		
+		result.status = true;
+		result.data = "success";
+		result.object = boardService.getAllSearchList(page);
+
 		return result;
 	}
 
@@ -103,15 +105,15 @@ public class SearchController {
 			e.printStackTrace();
 		}
 		try {
-			String profile= userDao.findProfileImgByNickname(board.getArticleUser());
-			if(profile == null) {
+			String profile = userDao.findProfileImgByNickname(board.getArticleUser());
+			if (profile == null) {
 				Influencer temp = influDao.findInfluencerByNickname(board.getInflueUser());
 				board.setArticleUser(board.getInflueUser());
-				profile=temp.getProfile_img();
+				profile = temp.getProfile_img();
 			}
 			data.setProfile(profile);
 
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		data.setAarticles(board);
@@ -137,6 +139,23 @@ public class SearchController {
 			result.status = true;
 		}
 
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@DeleteMapping(value = "deleteSearchHistory/{username}")
+	public Object deleteMethodName(@PathVariable String username) {
+		final BasicResponse result = new BasicResponse();
+
+		if (curationDao.deleteAllByUsername(username) != 0) {
+			result.data = "earase success";
+			result.object = null;
+			result.status = true;
+		} else {
+			result.data = "지울내용이 없습니다";
+			result.object = null;
+			result.status = true;
+		}
+		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
@@ -167,12 +186,14 @@ public class SearchController {
 			curationDao.save(curation);
 		}
 		int size = list.size();
-
 		List<Curation> curationList = curationDao.getCurationByUsername(username);
-		if (!curationList.isEmpty() && curationList.size() + list.size() >= 5) {
-			int forSize = curationList.size() + list.size() - 5;
-			for (int i = 0; i < (forSize > 5 ? 5 : forSize); i++) {
-				curationDao.delete(curationList.get(i));
+		if (!curationList.isEmpty()){
+			if(curationList.size()>5) {
+				int len = curationList.size()-5;
+				for(int i=0; i<len; i++) {
+					System.out.println("포문 카운트=>"+i+curationList.get(i));
+					curationDao.deleteCurationByCurationno(curationList.get(i).getCurationno());
+				}
 			}
 		}
 

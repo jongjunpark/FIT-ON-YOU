@@ -36,6 +36,7 @@ public class Recell {
 	private LocalDateTime recellDate;
 	private String recellSize;
 	private String roomname;
+	private int salecheck;
 
 	public int getRecellNo() {
 		return recellNo;
