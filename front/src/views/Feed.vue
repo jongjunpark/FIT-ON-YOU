@@ -74,6 +74,7 @@
       <div class="margin-box"></div>
       <infinite-loading @infinite="infiniteHandler" spinner="spinner">
         <div slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</div>
+        <div slot="no-results" class="no-result" v-show="mainfeed.length==0"><h1>현재<br> 팔로우가 없어요.<br> 친구들을 <br>팔로우하여<br>피드를 받아보세요.</h1></div>
       </infinite-loading>
     </div>
   </div>
@@ -107,6 +108,7 @@ function timeForToday(value) {
         }
         return `${Math.floor(betweenTimeDay / 365)}년전`;
  }
+
 
 export default {
   name: 'Feed',
@@ -288,6 +290,7 @@ export default {
       const wrap = document.querySelector('.wrap')
       const INFLUNAVBTN = document.querySelector('.open-influ-nav')
       const INFLUNAV = document.querySelector('.influ-nav')
+      const H1tag = document.querySelector('.no-result')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -298,11 +301,13 @@ export default {
         wrap.classList.add('wrap-dark')
         INFLUNAVBTN.classList.add('nav-influ-btn-dark')
         INFLUNAV.classList.add('nav-influ-dark')
+        H1tag.classList.add('no-result-dark')
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
         INFLUNAVBTN.classList.remove('nav-influ-btn-dark')
         INFLUNAV.classList.remove('nav-influ-dark')
+        H1tag.classList.remove('no-result-dark')
       }
     },
     infiniteHandler($state){
