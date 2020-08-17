@@ -17,7 +17,8 @@
           <p class='community-content-body'>·사이즈: {{ myarticle.recellSize }}</p>
           <div class="community-content-footer">
             <div @click="goDM(myarticle.roomname, myarticle.recellUser)" class="community-content-btn dm-btn">DM</div>
-            <div @click="soldItem(myarticle.recellNo)" class="community-content-btn del-btn">판매완료</div>
+            <div v-show="!myarticle.salecheck" @click="soldItem(myarticle.recellNo)" class="community-content-btn del-btn">판매완료</div>
+            <div v-show="myarticle.salecheck" class="community-content-btn non-del-btn">완료됨</div>
           </div>
         </div>
       </div>
@@ -43,6 +44,7 @@
 import { mapState, mapMutations } from 'vuex'
 import "../components/css/community.css"
 import axios from 'axios'
+import Swal from 'sweetalert2'
 export default {
   name: 'Community',
   computed: {
@@ -183,13 +185,31 @@ export default {
       }).catch()
     },
     soldItem(roomNo) {
-      const frm = new FormData();
-      frm.append("num",roomNo);
-      axios.post('http://localhost:8080/api/recell/soldout', frm)
-      .then(console.log("팔았다"))
-      .catch()
-      this.getAllList()
-    }
+      Swal.fire({
+        title: '완료하시겠습니까?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '완료하기',
+        cancelButtonText: '아니오',
+      }).then((result) => {
+        if (result.value) {
+          const frm = new FormData();
+          frm.append("num",roomNo);
+          axios.post('http://localhost:8080/api/recell/soldout', frm)
+          .then(console.log("팔았다"))
+          .catch()
+          Swal.fire(
+            '완료되었습니다.',
+          ).then((result2) => {
+            if (result2.value) {
+              this.$router.go(this.$router.currentRoute)
+            }
+          })
+        }
+      }
+    )}
   },
   mounted() {
     this.setIsSelectBar(true)
