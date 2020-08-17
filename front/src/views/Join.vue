@@ -11,17 +11,16 @@
         <span class='email-join-span'> |  </span>
         <select @focus="activeInput" @blur='deactiveInputEmail' v-model='select' name="job" id='email-combo'>
           <option >직접입력</option>
-          <option >gmail.com</option>
-          <option > naver.com</option>
-          <option > hanmail.net</option>
-          <option > lycos.co.kr</option>
-          <option > nate.com</option>
-          <option > yahoo.co.kr</option>
-          <option > yahoo.com</option>
-          <option > empal.com</option>
-          <option > paran.com</option>
-          <option > korea.com</option>
-        </select>
+          <option >gmail</option>
+          <option > naver</option>
+          <option > hanmail</option>
+          <option > lycos</option>
+          <option > nate</option>
+          <option > yahoo</option>
+          <option > empal</option>
+          <option > paran</option>
+          <option > korea</option>
+        </select>  
         <p v-if="mailErrMsg" class='err-msg join-err-msg'>유효하지 않은 이메일 형식입니다.</p>
         <p v-if="mailSucMsg && finalMail" class='err-msg join-err-msg'>이미 사용중인 이메일입니다.</p>
         <p v-if="mailSucMsg && !finalMail && joinFlag" class='suc-msg join-suc-msg'>사용가능합니다.</p>
@@ -223,25 +222,23 @@ export default {
       } else {
         this.onSelect = true
         this.offSelect = false
-        if (this.select === 'naver.com') {
+        if (this.select === 'naver') {
           this.input.url = 'naver.com'
-        } else if (this.select === 'hanmail.net') {
+        } else if (this.select === 'hanmail') {
           this.input.url = 'hanmail.net'
-        } else if (this.select === 'nate.com') {
+        } else if (this.select === 'nate') {
           this.input.url = 'nate.com'
-        } else if (this.select === 'gmail.com') {
+        } else if (this.select === 'gmail') {
           this.input.url = 'gmail.com'
-        } else if (this.select === 'lycos.co.kr') {
+        } else if (this.select === 'lycos') {
           this.input.url = 'lycos.co.kr'
-        } else if (this.select === 'yahoo.co.kr') {
+        } else if (this.select === 'yahoo') {
           this.input.url = 'yahoo.co.kr'
-        } else if (this.select === 'yahoo.com') {
-          this.input.url = 'yahoo.com'
-        } else if (this.select === 'empal.com') {
+        } else if (this.select === 'empal') {
           this.input.url = 'empal.com'
-        } else if (this.select === 'paran.com') {
+        } else if (this.select === 'paran') {
           this.input.url = 'paran.com'
-        } else if (this.select === 'korea.com') {
+        } else if (this.select === 'korea') {
           this.input.url = 'korea.com'
         }
       }

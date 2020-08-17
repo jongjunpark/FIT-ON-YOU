@@ -81,6 +81,7 @@ export default {
   },
   setIsMe(state, data) {
     state.isMe = data
+    console.log('ㄱㄱ')
   },
   setOtherUser(state, data) {
     state.otherUserName = data
