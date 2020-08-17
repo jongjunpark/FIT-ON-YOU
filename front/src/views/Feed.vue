@@ -375,7 +375,6 @@ export default {
               axios.post("https://i3b304.p.ssafy.io/api/board/tags",articleNo).then((tag)=>{
               const tags = tag.data;
               const taglist = [];
-              console.log(tag, '태그리스트')
               for (let i = 0; i < tags.length; i++) {
                   const el2= tags[i];
                   taglist.push({tagname:el2.tagName});     
