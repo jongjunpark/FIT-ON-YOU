@@ -230,7 +230,7 @@ export default {
       const formData=new FormData();
       formData.append("prev",this.tempNickName);
       formData.append("cur",this.nickname);
-      axios.post('https://i3b304.p.ssafy.io/api/account/nickchange',formData)
+      axios.post('http://localhost:8080/api/account/nickchange',formData)
       .then((data)=>{
         console.log(data);
         if(data.data.result.data=="success"){
