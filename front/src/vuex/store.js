@@ -16,7 +16,7 @@ const state = {
   articledata: '',
   hashSearchList: '',
   userSearch: '',
-  isMyFeed: false,
+  isMyFeed: true,
   isBookMark: false,
   isFollowing: false,
   isFollower: false,

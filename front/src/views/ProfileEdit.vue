@@ -128,7 +128,7 @@ export default {
     ...mapState(['isLoggedIn', 'user', 'flag'])
   },
   methods: {
-    ...mapMutations(['setUserIntro','setUserNick','setToken','setMyFeed','setBookMark','setFollower','setFollowing','setCuration','setIsMe']),
+    ...mapMutations(['setUserIntro','setUserNick','setToken','setMyFeed','setBookMark','setFollower','setFollowing','setCuration']),
     ...mapActions(['sendUserInfo']),
     setProfileImg() {
       let ref=this;
@@ -148,27 +148,22 @@ export default {
     },
     goMyFeed() {
       this.setMyFeed();
-      this.setIsMe(true);
       this.$router.push(`/profileinform/${this.nickname}`).catch(()=>{})
     },
     goBookMark() {
       this.setBookMark();
-      this.setIsMe(true);
       this.$router.push(`/profileinform/${this.nickname}`).catch(()=>{})
     },
     goFollowing() {
       this.setFollowing();
-      this.setIsMe(true);
       this.$router.push(`/profileinform/${this.nickname}`).catch(()=>{})
     },
     goFollower() {
       this.setFollower();
-      this.setIsMe(true);
       this.$router.push(`/profileinform/${this.nickname}`).catch(()=>{})
     },
     goCuration() {
       this.setCuration();
-      this.setIsMe(true);
       this.$router.push(`/profileinform/${this.nickname}`).catch(()=>{})
     },
     changeNickName() {
