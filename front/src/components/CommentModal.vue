@@ -11,8 +11,9 @@
         <div class="comment-modal-container">
           <div class="" v-for="(comment,index) in commentList" :key="index">
             <div class="comment-box">
-              <div class="comment-user-icon" @click="goToUserPage(comment.writer)">
-                <img class="comment-user-icon" :src="comment.user.profile_img">
+              <div @click="goToUserPage(comment.writer)">
+                <img v-show="comment.user.profile_img" class="comment-user-icon" :src="comment.user.profile_img">
+                <img v-show="!comment.user.profile_img" class="comment-user-icon" src="../assets/images/default-user.png">
               </div>
               <div class="comment-article">
                 <div class="comment-article-head">
@@ -27,7 +28,8 @@
         </div>
         <div class="comment-modal-footer">
           <div class="comment-my-icon">
-            <img class="comment-user-icon" :src="myProfileImg">
+            <img v-show="myProfileImg" class="comment-user-icon" :src="myProfileImg">
+            <img v-show="!myProfileImg" class="comment-user-icon" src="../assets/images/default-user.png">
           </div>
           <input @input="commentContent = $event.target.value" @keydown.enter="addComment" class='comment-input' type="text" placeholder="댓글을 입력해 주세요." v-model="commentContent">
           <i class="fas fa-check-circle" @click="addComment"></i>
@@ -47,7 +49,7 @@ export default {
   name: 'CommentModal',
   props:['modalArticleNo','modalArticleUser'],
   computed: {
-    ...mapState(['flag','user'])
+    ...mapState(['user'])
   },
   data() {
     return {
@@ -206,36 +208,39 @@ export default {
 .comment-modal-wrapper {
   padding: 0 30px;
   height: 100%;
-  margin-top: 30%;
   transition: all .3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 100vw;
+  width: 100%;
 }
 @media (min-width: 1200px) {
   .comment-modal-wrapper {
   max-width: 400px;
   width: 100%;
   margin: 0 auto;
-  margin-top: 150px;
   }
 }
 
 .comment-modal-head {
   width: 100%;
-  height: 5%;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  height: 6vh;
+  border-top-left-radius: 1vh;
+  border-top-right-radius: 1vh;
   background-color: white;
-  border-bottom: 0.5px solid rgb(175, 175, 175);
+  border-bottom: 0.1vh solid rgb(175, 175, 175);
   display: flex;
   align-items: center;
   transition: all .3s ease;
 }
 
 .comment-modal-footer {
-  height: 7%;
-  padding: 0px 15px;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  border-top: 0.5px solid rgb(175, 175, 175);
+  height: 8vh;
+  padding: 0px 2vh;
+  border-bottom-left-radius: 1vh;
+  border-bottom-right-radius: 1vh;
+  border-top: 0.1vh solid rgb(175, 175, 175);
   background-color: white;
   display: flex;
   align-items: center;
@@ -244,33 +249,34 @@ export default {
 
 
 .comment-modal-back-btn {
-  margin: 0 10px;
-  width: 25px;
-  height: 25px;
+  margin: 0 1.4vh;
+  width: 3vh;
+  height: 3vh;
   cursor: pointer;
 }
 
 .comment-modal-back-btn .fas {
-  font-size: 150% !important;
-  padding-left: 5%;
+  font-size: 3vh !important;
+  padding-left: 0.5vh;
   color: black;
 }
 
 .comment-modal-category {
   font-weight: 700;
+  font-size: 2.3vh;
+  color: black !important;
 }
 
 
 .comment-modal-container {
   max-height: 50%;
   overflow-y: auto;
-  margin: 0px auto;
   padding: 0px 15px;
   background-color: #fff;
   transition: all .3s ease;
 }
 
-.comment-modal-container::-webkit-scrollbar { width: 10px; }
+.comment-modal-container::-webkit-scrollbar { width: 10px; height: 0;}
 /* 스크롤바의 width */
 ::-webkit-scrollbar-track { background-color: transparent; }
 /* 스크롤바의 전체 배경색 */
@@ -278,28 +284,6 @@ export default {
 /* 스크롤바 색 */
 ::-webkit-scrollbar-button { display: none; }
 /* 스크롤바 버튼 */
-
-.comment-modal-header h3 {
-  margin-top: 0;
-  color: #42b983;
-}
-
-.comment-modal-body {
-  margin: 20px 0;
-}
-
-.comment-modal-default-button {
-  float: right;
-}
-
-/*
- * The following styles are auto-applied to elements with
- * transition="modal" when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
- */
 
 .modal-enter {
   opacity: 0;
@@ -316,34 +300,29 @@ export default {
 }
 
 .comment-user-icon {
-  width: 40px;
-  height: 40px;
+  width: 5.5vh;
+  height: 5.5vh;
   border-radius: 50%;
-  background-color: rgb(199, 199, 199);
+  border: 1px solid rgb(199, 199, 199);
+  cursor: pointer;
 }
 
 .comment-box {
   display: flex;
   /* background-color: grey; */
-  margin: 10px 0;
-  height: 40px;
+  margin: 2vh 0;
   position: relative;
 }
 
 .comment-my-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: rgb(199, 199, 199);
-  margin-right: 20px;
+  margin-right: 2vh;
 }
 
 .comment-article {
-  width: 80%;
-  height: 40px;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  margin-left: 10px;
+  margin-left: 1.4vh;
 }
 
 .comment-del-icon {
@@ -355,22 +334,25 @@ export default {
 
 .comment-article-head {
   display: flex;
-  height: 50%;
+  margin-bottom: 1vh;
 }
 
 .comment-content {
   height: 50%;
+  width: 80%;
+  word-wrap:break-word;
 }
 
 .comment-input {
-  height: 30px;
-  width: 70%;
+  height: 4vh;
+  width: 100%;
   border: none;
-  margin-right: 20px;
+  margin-right: 3vh;
+  font-size: 2vh;
 }
 
 .comment-modal-footer .fa-check-circle {
-  font-size: 150% !important;
+  font-size: 3.5vh !important;
 }
 
 .on-comment-input {
@@ -378,18 +360,20 @@ export default {
 }
 
 .comment-box .comment-text {
-  font-size: 90%;
-  line-height: 1;
+  font-size: 2vh;
+  line-height: 2vh;
+  color: black !important;
 }
 
 .comment-username {
   font-weight: 700;
-  margin-right: 10px;
+  margin-right: 1.4vh;
+  cursor: pointer;
 }
 
 .comment-update-time {
   color: rgb(99, 99, 99);
-  font-size: 70% !important;
+  font-size: 1.3vh !important;
 }
 
 .comment-head-dark {
