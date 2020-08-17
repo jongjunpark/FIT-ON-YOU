@@ -21,6 +21,7 @@ export default {
       myFeedList:[],
       username:'',
       showModal:false,
+      name: '',
     }
   },
   computed: {
@@ -33,6 +34,7 @@ export default {
   },
   mounted(){
     this.defaultDark()
+    this.name = this.$route.params.name
     this.getUserFeed()
   },
 
@@ -59,7 +61,7 @@ export default {
       this.username = this.$router.currentRoute.params.name
       axios.get('https://i3b304.p.ssafy.io/api/mypage/myboard',{
         params:{
-          nickname : this.username,
+          nickname : this.name,
         }
       })
       .then((data)=>{

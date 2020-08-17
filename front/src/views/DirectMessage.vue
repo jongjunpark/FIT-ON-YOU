@@ -3,8 +3,11 @@
     <div class="wrap-container-direct">
       <div class="wrap-direct">
         <p class="back-btn" @click="goDM">〈 </p>
-        <div class="in-img">
+        <div class="in-img" v-show="!profileImg">
           <img src="../assets/images/default-user.png" alt="" class="in-img-profile">
+        </div>
+        <div class="in-img" v-show="profileImg">
+          <img :src="profileImg" alt="" class="in-img-profile">
         </div>
         <p class="back-btn-name">{{ othername }}</p>
       </div>
@@ -17,7 +20,8 @@
           <div v-show='message.senduser != nick' class="user-opponent">
             <!-- <p class="user-me-content">{{ message.senduser }}</p> -->
             <!-- 이미지 보여주기 -->
-            <img src="../assets/images/default-user.png" alt="" class="in-img-content">
+            <img :src="profileImg" alt="" class="in-img-profile" v-show="profileImg">
+            <img src="../assets/images/default-user.png" alt="" class="in-img-content" v-show="!profileImg">
             <p class="in-user-content">{{ message.message }}</p>
           </div>
          </div>         
@@ -35,6 +39,7 @@
 import "../components/css/directmessage.css"
 import { mapState } from "vuex"
 import firebase from 'firebase'
+import axios from 'axios'
 
 // Required for side-effects
 require("firebase/firestore");
@@ -203,6 +208,17 @@ export default {
     let uri_dec = decodeURIComponent(uri_enc);
     let res = uri_dec;
     this.nick = res
+      axios.get('https://i3b304.p.ssafy.io/api/mypage/otheruser',{
+        params:{
+        nickname: this.othername,
+      }
+      }).then((data)=>{
+        if (data.data.userinfo.profile_img) {
+          this.profileImg=data.data.userinfo.profile_img;
+        }
+      })
+      .catch(
+      )
   }
 }
 </script>
