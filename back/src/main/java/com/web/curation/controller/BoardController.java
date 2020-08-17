@@ -221,17 +221,15 @@ public class BoardController {
 			} else {
 				Alarm alarm = new Alarm();
 				Board board = boardDao.findBoardByArticleNo(likes.getArticleNo());
-				alarm.setType("3");
-				alarm.setRecevier(board.getArticleUser());
-				alarm.setFollower(likes.getNickname());
-				alarm.setArticleNo(likes.getArticleNo());
-				alarm.setIsRead(0);
-				if (alarmDao.save(alarm) == null) {
-					result.status = true;
-					result.data = "fail";
-				} else {
-					result.status = true;
-					result.data = "success";
+				String recevier = board.getArticleUser();
+				String follower = likes.getNickname();
+				if(!recevier.equals(follower)) {
+					alarm.setType("3");
+					alarm.setRecevier(recevier);
+					alarm.setFollower(follower);
+					alarm.setArticleNo(likes.getArticleNo());
+					alarm.setIsRead(0);
+					alarmDao.save(alarm);
 				}
 
 				boardDao.increFvCnt(likes.getArticleNo());
