@@ -190,7 +190,19 @@ export default {
   },
   mounted() {
     this.defaultDark()
-    this.goMyFeed()
+    this.classifyUser()
+    if (this.isMyFeed) {
+      this.goMyFeed()
+    } else if (this.isBookMark) {
+      this.goBookMark()
+    } else if (this.isFollowing) {
+      this.goFollowing()
+    } else if (this.isFollower) {
+      this.goFollower()
+    } else if (this.isCuration) {
+      this.goCuration()
+    }
+
   }
 }
 </script>
