@@ -9,15 +9,15 @@
     </div>
     <div v-show="isMyCommu" class='wrap-container community-container'>
       <div class="community-inner-box" v-for="(myarticle,index) in myList" :key="`recell-${index}`">
-        <img :src="myarticle.imgurl" alt="">
+        <img :src="myarticle.recellImage" alt="">
         <div class="community-content">
-          <p class='community-content-head'>{{ myarticle.content }}</p>
-          <p class='community-content-body'>·판매자: {{ myarticle.user }}</p>
-          <p class='community-content-body'>·가격: {{ myarticle.price }}원</p>
-          <p class='community-content-body'>·사이즈: {{ myarticle.size }}</p>
+          <p class='community-content-head'>{{ myarticle.recellContent }}</p>
+          <p class='community-content-body'>·판매자: {{ myarticle.recellUser }}</p>
+          <p class='community-content-body'>·가격: {{ myarticle.recellPrice }}원</p>
+          <p class='community-content-body'>·사이즈: {{ myarticle.recellSize }}</p>
           <div class="community-content-footer">
-            <div @click="goDM(myarticle.roomname, myarticle.user)" class="community-content-btn dm-btn">DM</div>
-            <div class="community-content-btn del-btn">판매완료</div>
+            <div @click="goDM(myarticle.roomname, myarticle.recellUser)" class="community-content-btn dm-btn">DM</div>
+            <div @click="soldItem(myarticle.recellNo)" class="community-content-btn del-btn">판매완료</div>
           </div>
         </div>
       </div>
@@ -148,14 +148,9 @@ export default {
       let uri = nickdata;
       let uri_enc = encodeURIComponent(uri);
       this.nickName = decodeURIComponent(uri_enc);
-    }
-  },
-  mounted() {
-    this.setIsSelectBar(true)
-    this.goCommunity()
-    this.defaultDark()
-    this.getNickName()
-     axios.post("https://i3b304.p.ssafy.io/api/recell/newsfeed/0").then((data)=>{
+    },
+    getAllList() {
+      axios.post("http://localhost:8080/api/recell/newsfeed/0").then((data)=>{
       console.log("success")
       console.log(data)
       this.tempList=data.data;
@@ -172,23 +167,37 @@ export default {
             user:this.tempList[index].recellUser
             }
           this.recellList.push(feeddata);
-        } else {
-          let myfeeddata={
-            recellNo:this.tempList[index].recellNo,
-            content:this.tempList[index].recellContent,
-            price:this.tempList[index].recellPrice,
-            imgurl:this.tempList[index].recellImage,
-            date:this.tempList[index].recellDate,
-            size:this.tempList[index].recellSize,
-            roomname:this.tempList[index].roomname,
-            user:this.tempList[index].recellUser
-            }
-            this.myList.push(myfeeddata);
-            console.log(this.myList,'내글')
         }
       }
       this.tempList=[];
       })
+    },
+    getMyList() {
+      axios.get("http://localhost:8080/api/recell/myContents",{
+        params: {
+          username: this.nickName
+        },
+      }).then((data) => {
+        this.myList = data.data.object
+        console.log(this.myList, '내글')
+      }).catch()
+    },
+    soldItem(roomNo) {
+      const frm = new FormData();
+      frm.append("num",roomNo);
+      axios.post('http://localhost:8080/api/recell/soldout', frm)
+      .then(console.log("팔았다"))
+      .catch()
+      this.getAllList()
+    }
+  },
+  mounted() {
+    this.setIsSelectBar(true)
+    this.goCommunity()
+    this.defaultDark()
+    this.getNickName()
+    this.getMyList()
+    this.getAllList()
     },
   beforeDestroy() { 
     this.setIsSelectBar(false)

@@ -27,7 +27,8 @@
       <div class='wrap-container' v-for="(feed,index) in mainfeed" :key="index">
         <header class="feed-user-data">
           <div class="feed-user-profile" @click="goToUserPage(feed.articleUser)">
-            <img :src="feed.userProfile">
+            <img v-show="feed.userProfile" :src="feed.userProfile">
+            <img v-show="!feed.userProfile" src="../assets/images/default-user.png" alt="dafault">
           </div>
           <div class="feed-article-head">
             <p class='feed-username' @click="goToUserPage(feed.articleUser)">{{feed.articleUser}}</p>
