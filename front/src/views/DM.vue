@@ -119,10 +119,12 @@ export default {
               } else {
                 H3.innerHTML = element.firstuser
               }
-              if (this.lastMessage.message.length < 10) {
-                H5message.innerHTML = this.lastMessage.message.substring(0, 10)
-              } else {
-                H5message.innerHTML = this.lastMessage.message.substring(0, 8) + '..'
+              if (this.lastMessage.message) {
+                if (this.lastMessage.message.length < 10) {
+                  H5message.innerHTML = this.lastMessage.message.substring(0, 10)
+                } else {
+                  H5message.innerHTML = this.lastMessage.message.substring(0, 8) + '..'
+                }
               }
               const Time = ((new Date() - new Date(this.lastMessage.createdAt.seconds*1000)) / (1000 * 60))
 
