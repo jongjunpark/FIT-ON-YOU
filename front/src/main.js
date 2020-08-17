@@ -4,6 +4,7 @@ import router from './router'
 import vuetify from './plugins/vuetify';
 import store from './vuex/store';
 import VueCookies from 'vue-cookies'
+
 // import firebase from 'firebase'
 
 // // Required for side-effects
@@ -34,7 +35,6 @@ import VueCookies from 'vue-cookies'
 Vue.config.productionTip = false
 
 Vue.use(VueCookies)
-
 new Vue({
   router,
   vuetify,
