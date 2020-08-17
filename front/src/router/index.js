@@ -21,7 +21,7 @@ import OtherUser from '../views/OtherUser.vue'
 import JoinConfirm from '../views/JoinConfirm.vue'
 import PageNotFound from '../views/PageNotFound.vue'
 import ResellMessage from '../views/ResellMessage.vue'
-
+import axios from 'axios'
 
 
 Vue.use(VueRouter)
@@ -226,7 +226,31 @@ Vue.use(VueRouter)
       if (!Vue.$cookies.isKey('auth-token')) {
         next('/')
       } else {
-        next()
+        let param = to.params.nickname
+        let data = Vue.$cookies.get('auth-nickname');
+        console.log(data)
+        let uri = data;
+        let uri_enc = encodeURIComponent(uri);
+        let uri_dec = decodeURIComponent(uri_enc);
+        let res = uri_dec;
+        axios.get('https://i3b304.p.ssafy.io/api/account/checkNickname',{ 
+          params: {
+            nickname: param
+            }
+        }).then(data => {
+          if (data.data.data == "exist") {
+            next()
+          } else {   
+            next('/404')    
+          }
+        })
+        .catch(function(){
+            })
+        if (param == res) {
+          next('/404')
+        } else {
+          next()
+        }
       }   
      }
   },
