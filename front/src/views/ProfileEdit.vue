@@ -4,14 +4,18 @@
       <p v-show="!isChange" class="profile-nick-input">
         <input type="text" :placeholder="user.nickname" v-model="nickname" maxlength="20">
       </p>
-      <img v-show="!isChange && !nickname" class='profile-nick-cancel' src="../assets/images/X.png" alt="" @click="cancel">
-      <img v-show="!isChange && nickname" class='profile-nick-cancel' src="../assets/images/pngguru.com (1).png" alt="" @click="change">
+      <div class="profile-nick-cancel">
+        <img v-show="!isChange" class='profile-nick-cancel1' src="../assets/images/X.png" alt="" @click="cancel">
+        <img v-show="!isChange" class='profile-nick-cancel2' src="../assets/images/pngguru.com (1).png" alt="" @click="change">
+      </div>
       
       <p v-show="!isChange2" class="profile-content-input">
-        <input type="text" :placeholder="user.selfintroduce" v-model="content" maxlength="100">
+        <input type="text" :placeholder="user.selfintroduce" v-model="tmpcontent" maxlength="100">
       </p>
-      <img v-show="!isChange2 && !content" class='profile-content-cancel' src="../assets/images/X.png" alt="" @click="cancelInput">
-      <img v-show="!isChange2 && content" class='profile-content-cancel' src="../assets/images/pngguru.com (1).png" alt="" @click="changeInput">
+      <div class="profile-content-cancel">
+        <img v-show="!isChange2" class='profile-content-cancel1' src="../assets/images/X.png" alt="" @click="cancelInput">
+        <img v-show="!isChange2" class='profile-content-cancel2' src="../assets/images/pngguru.com (1).png" alt="" @click="changeInput">
+      </div>
     </div>
     <div class="wrap-container profile-wrap">
       <div class='profile-head-area'>
@@ -38,11 +42,11 @@
         </div>
       </div>
       <div class="profile-edit-area">
-        <p v-show="isChange && isChange2" class="my-nickname" @click="changeNickName">{{nickname }}
+        <p v-show="isChange && isChange2" class="my-nickname" @click="changeNickName">{{ nickname }}
           <img src="../assets/images/edit.png" alt="" class="profile-edit-img">
         </p>
         <div v-show="isChange2 && isChange" class="profile-edit-content" @click="changeContent">
-          <p class='my-content'>{{content}}
+          <p class='my-content'>{{ content }}
             <img src="../assets/images/edit.png" alt="" class="profile-edit-img">
           </p>
         </div>
@@ -77,6 +81,7 @@
 import "../components/css/profileedit.css"
 import axios from 'axios'
 import { mapState, mapMutations, mapActions } from 'vuex'
+import Swal from 'sweetalert2'
 
 export default {
   name: 'ProfileEdit',
@@ -91,6 +96,7 @@ export default {
       followedCnt :'',
       tempNickName:'' ,
       test:'',
+      tmpcontent: '',
     }
   },
   watch: {
@@ -235,6 +241,12 @@ export default {
         }
         else if(data.data.result.data=="fail"){
           console.log("중복된 닉네임인 경우");
+          Swal.fire({
+          icon: 'error',
+          title: '중복된 닉네임이에요.',
+          text: '다른 닉네임을 사용해주세요',
+        })
+
         }
       })
       .catch()
@@ -279,14 +291,14 @@ export default {
 
       const formData = new FormData();
       formData.append("nickname",this.nickname);
-      formData.append("selfintroduce",this.content);
+      formData.append("selfintroduce",this.tmpcontent);
       axios.put('https://i3b304.p.ssafy.io/api/account/selfintro',formData)
       .then((data)=>{
         console.log(data);
         ref.$cookies.set('auth-token', data.data.auth_token)
         ref.setToken(data.data.auth_token)
         ref.sendUserInfo();
-        
+        this.content = this.tmpcontent
       })
       .catch()
 
