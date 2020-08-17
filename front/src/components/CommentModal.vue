@@ -1,14 +1,14 @@
 <template>
 <transition name="modal">
-    <div class="modal-mask" @click.self="$emit('close')">
-      <div class="modal-wrapper" @click.self="$emit('close')">
-        <div class="modal-head">
-          <div class='modal-back-btn' @click="$emit('close')">
+    <div class="comment-modal-mask" @click.self="$emit('close')">
+      <div class="comment-modal-wrapper" @click.self="$emit('close')">
+        <div class="comment-modal-head">
+          <div class='comment-modal-back-btn' @click="$emit('close')">
             <i class="fas fa-arrow-left"></i>
           </div>
-          <div class='modal-category'>댓글</div>
+          <div class='comment-modal-category'>댓글</div>
         </div>
-        <div class="modal-container">
+        <div class="comment-modal-container">
           <div class="" v-for="(comment,index) in commentList" :key="index">
             <div class="comment-box">
               <div class="comment-user-icon" @click="goToUserPage(comment.writer)">
@@ -25,11 +25,11 @@
             </div>
           </div>
         </div>
-        <div class="modal-footer">
+        <div class="comment-modal-footer">
           <div class="comment-my-icon">
             <img class="comment-user-icon" :src="myProfileImg">
           </div>
-          <input @input="comment_content = $event.target.value" class='comment-input' type="text" placeholder="댓글을 입력해 주세요." v-model="comment_content">
+          <input @input="commentContent = $event.target.value" @keydown.enter="addComment" class='comment-input' type="text" placeholder="댓글을 입력해 주세요." v-model="commentContent">
           <i class="fas fa-check-circle" @click="addComment"></i>
         </div>
       </div>
@@ -40,6 +40,7 @@
 <script>
 import { mapState } from 'vuex'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 import time from '../utils/timecal.js'
 
 export default {
@@ -50,7 +51,7 @@ export default {
   },
   data() {
     return {
-      comment_content: '',
+      commentContent: '',
       commentList: [],
       profileList:[],
       nickname:'',
@@ -80,7 +81,7 @@ export default {
 
   },
   watch: {
-    comment_content() {
+    commentContent() {
       this.checkCommentInput();
     },
    
@@ -92,62 +93,79 @@ export default {
    
     checkCommentInput() {
       const INPUTBTN = document.querySelector('.fa-check-circle')
-      if (this.comment_content) {
+      if (this.commentContent) {
         INPUTBTN.classList.add('on-comment-input')
       } else {
         INPUTBTN.classList.remove('on-comment-input')
       }
     },
     addComment(){
-      let ref=this;
-
-      let data = this.$cookies.get('auth-nickname');
-      let uri = data;
-      let uri_enc = encodeURIComponent(uri);
-      let uri_dec = decodeURIComponent(uri_enc);
-      let res = uri_dec;
-
-      const frm = new FormData();
-      frm.append("articleNo", this.modalArticleNo);
-      frm.append("writer", res);
-      frm.append("content", this.comment_content);
-      frm.append("articleUser",this.modalArticleUser);
-      console.log(this.modalArticleNo);
-      let today=new Date();
-
-      axios.post('https://i3b304.p.ssafy.io/api/comment',frm
-      )
-      .then((data)=>{
-        let tmp={
-          commentNo:data.data.rescmt.commentNo,
-          writer:data.data.rescmt.writer,
-          articleNo:data.data.rescmt.articleNo,
-          content:data.data.rescmt.content,
-          user:{
-            profile_img:ref.myProfileImg
-          },
-          createAt:today,
-        }
-        ref.commentList.push(tmp);
-        ref.comment_content='';
-
-      })
-      .catch(()=>{
-        console.log("fail");
-      })
+      if(this.commentContent) {
+        let ref=this;
+  
+        let data = this.$cookies.get('auth-nickname');
+        let uri = data;
+        let uri_enc = encodeURIComponent(uri);
+        let uri_dec = decodeURIComponent(uri_enc);
+        let res = uri_dec;
+  
+        const frm = new FormData();
+        frm.append("articleNo", this.modalArticleNo);
+        frm.append("writer", res);
+        frm.append("content", this.commentContent);
+        frm.append("articleUser",this.modalArticleUser);
+        console.log(this.modalArticleNo);
+        let today=new Date();
+  
+        axios.post('https://i3b304.p.ssafy.io/api/comment',frm
+        )
+        .then((data)=>{
+          let tmp={
+            commentNo:data.data.rescmt.commentNo,
+            writer:data.data.rescmt.writer,
+            articleNo:data.data.rescmt.articleNo,
+            content:data.data.rescmt.content,
+            user:{
+              profile_img:ref.myProfileImg
+            },
+            createAt:today,
+          }
+          ref.commentList.push(tmp);
+          ref.commentContent='';
+  
+        })
+        .catch(()=>{
+          console.log("fail");
+        })
+      }
     },
 
     deleteComment(commentNo,index){
-      
-      let frm=new FormData();
-      frm.append('commentNo',commentNo);
-      axios.post('https://i3b304.p.ssafy.io/api/comment/del',frm)
-      .then(()=>{
-        this.commentList.splice(index,1);
-        this.profileList.splice(index,1);
+      Swal.fire({
+        title: '삭제하시겠습니까?',
+        text: "삭제된 댓글은 복구할 수 없습니다.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '삭제하기',
+        cancelButtonText: '아니오',
+      }).then((result) => {
+        if (result.value) {
+          let frm=new FormData();
+          frm.append('commentNo',commentNo);
+          axios.post('https://i3b304.p.ssafy.io/api/comment/del',frm)
+          .then(()=>{
+            this.commentList.splice(index,1);
+            this.profileList.splice(index,1);
 
+          })
+          .catch()
+          Swal.fire(
+            '삭제되었습니다',
+          )
+        }
       })
-      .catch()
 
     },
     goToUserPage(nickname){
@@ -173,9 +191,9 @@ export default {
 
 }
 
-.modal-mask {
+.comment-modal-mask {
   position: fixed;
-  z-index: 9998;
+  z-index: 10000;
   top: 0;
   left: 0;
   width: 100%;
@@ -185,14 +203,14 @@ export default {
   transition: opacity .3s ease;
 }
 
-.modal-wrapper {
+.comment-modal-wrapper {
   padding: 0 30px;
   height: 100%;
   margin-top: 30%;
   transition: all .3s ease;
 }
 @media (min-width: 1200px) {
-  .modal-wrapper {
+  .comment-modal-wrapper {
   max-width: 400px;
   width: 100%;
   margin: 0 auto;
@@ -200,7 +218,7 @@ export default {
   }
 }
 
-.modal-head {
+.comment-modal-head {
   width: 100%;
   height: 5%;
   border-top-left-radius: 5px;
@@ -212,7 +230,7 @@ export default {
   transition: all .3s ease;
 }
 
-.modal-footer {
+.comment-modal-footer {
   height: 7%;
   padding: 0px 15px;
   border-bottom-left-radius: 5px;
@@ -225,25 +243,25 @@ export default {
 }
 
 
-.modal-back-btn {
+.comment-modal-back-btn {
   margin: 0 10px;
   width: 25px;
   height: 25px;
   cursor: pointer;
 }
 
-.modal-back-btn .fas {
+.comment-modal-back-btn .fas {
   font-size: 150% !important;
   padding-left: 5%;
   color: black;
 }
 
-.modal-category {
+.comment-modal-category {
   font-weight: 700;
 }
 
 
-.modal-container {
+.comment-modal-container {
   max-height: 50%;
   overflow-y: auto;
   margin: 0px auto;
@@ -252,7 +270,7 @@ export default {
   transition: all .3s ease;
 }
 
-.modal-container::-webkit-scrollbar { width: 10px; }
+.comment-modal-container::-webkit-scrollbar { width: 10px; }
 /* 스크롤바의 width */
 ::-webkit-scrollbar-track { background-color: transparent; }
 /* 스크롤바의 전체 배경색 */
@@ -261,16 +279,16 @@ export default {
 ::-webkit-scrollbar-button { display: none; }
 /* 스크롤바 버튼 */
 
-.modal-header h3 {
+.comment-modal-header h3 {
   margin-top: 0;
   color: #42b983;
 }
 
-.modal-body {
+.comment-modal-body {
   margin: 20px 0;
 }
 
-.modal-default-button {
+.comment-modal-default-button {
   float: right;
 }
 
@@ -291,8 +309,8 @@ export default {
   opacity: 0;
 }
 
-.modal-enter .modal-wrapper,
-.modal-leave-active .modal-wrapper {
+.modal-enter .comment-modal-wrapper,
+.modal-leave-active .comment-modal-wrapper {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
@@ -351,7 +369,7 @@ export default {
   margin-right: 20px;
 }
 
-.modal-footer .fa-check-circle {
+.comment-modal-footer .fa-check-circle {
   font-size: 150% !important;
 }
 
