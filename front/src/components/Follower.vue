@@ -226,6 +226,7 @@ export default {
   justify-content: center;
   align-items: center;
   margin: 0 2vh;
+  cursor: pointer;
 }
 @media (max-width: 449px) {
   .follower-box .follower-icon-area {

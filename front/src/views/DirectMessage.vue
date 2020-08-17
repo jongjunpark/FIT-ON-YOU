@@ -3,11 +3,11 @@
     <div class="wrap-container-direct">
       <div class="wrap-direct">
         <p class="back-btn" @click="goDM">〈 </p>
-        <div class="in-img">
+        <div class="in-img" @click="goProfile">
           <img v-if="!profileImg" src="../assets/images/default-user.png" alt="" class="in-img-profile">
           <img v-if="profileImg" :src="profileImg" alt="" class="in-img-profile">
         </div>
-        <p class="back-btn-name">{{ othername }}</p>
+        <p class="back-btn-name" @click="goProfile">{{ othername }}</p>
       </div>
       <div class="message-content-wrap">
         <div class="message-content">
@@ -134,6 +134,9 @@ export default {
         this.defaultDark()
         
       })
+    },
+    goProfile() {
+      this.$router.push(`/otheruser/${this.othername}`).catch(()=>{})
     },
     goDM() {
       this.$router.go(-1)

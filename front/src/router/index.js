@@ -247,7 +247,7 @@ Vue.use(VueRouter)
         .catch(function(){
             })
         if (param == res) {
-          next('/404')
+          next('/profileedit')
         } else {
           next()
         }

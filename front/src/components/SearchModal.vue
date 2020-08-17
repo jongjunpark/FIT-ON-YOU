@@ -356,6 +356,7 @@ export default {
   width: 100%;
   height: 100%;
   border-radius: 50%;
+  cursor: pointer;
 }
 
 .search-more-article-head p {
@@ -364,6 +365,7 @@ export default {
 .search-more-article-head .search-more-username {
   font-weight: 700;
   font-size: 1.5vh;
+  cursor: pointer;
 }
 .search-more-article-head .search-more-article-date {
   font-size: 1vh;
