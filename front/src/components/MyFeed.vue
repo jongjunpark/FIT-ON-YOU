@@ -21,6 +21,7 @@ export default {
       myFeedList:[],
       username:'',
       showModal:false,
+      name: '',
     }
   },
   computed: {
@@ -33,6 +34,7 @@ export default {
   },
   mounted(){
     this.defaultDark()
+    this.name = this.$route.params.name
     this.getUserFeed()
   },
 
@@ -56,19 +58,10 @@ export default {
       }
     },
     getUserFeed() {
-      if (this.isMe) {
-        let data = this.$cookies.get('auth-nickname');
-        let uri = data;
-        let uri_enc = encodeURIComponent(uri);
-        let uri_dec = decodeURIComponent(uri_enc);
-        this.username = uri_dec;
-      } else {
-        this.username = this.otherUserName
-      }
-      console.log(this.username,'이름')
+      console.log(this.name,'이름')
       axios.get('https://i3b304.p.ssafy.io/api/mypage/myboard',{
         params:{
-          nickname : this.username,
+          nickname : this.name,
         }
       })
       .then((data)=>{
