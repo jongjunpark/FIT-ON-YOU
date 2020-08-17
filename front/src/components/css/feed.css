@@ -107,6 +107,24 @@
   font-size: 1.5vh;
   cursor: pointer;
 }
+@media (max-width: 449px) {
+  .influ-name {
+    font-size: 1vh;
+  }
+}
+@media (max-width: 320px) {
+  .influ-name {
+    font-size: 1vh;
+    -webkit-transform: scale(0.9);
+  }
+}
+@media (max-width: 280px) {
+  .influ-name {
+    font-size: 1vh;
+    -webkit-transform: scale(0.7);
+  }
+}
+
 
 .slide-influ-nav-enter-active, .slide-influ-nav-leave-active {
   transition: all .5s ease-in-out;
@@ -187,9 +205,13 @@
 
 .heart{
   color:crimson;
+  animation-name: check;
+  animation-duration: 0.5s;
 }
 .mark{
   color:gold;
+  animation-name: check;
+  animation-duration: 0.5s;
 }
 
 .feed-user-data {
@@ -310,4 +332,9 @@
 
 .no-result-dark{
   color: #ebebeb;
+}
+
+@keyframes check {
+	50% {transform: scale(1.2)}
+	100% {transform: scale(1)}
 }
