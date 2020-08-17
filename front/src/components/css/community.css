@@ -136,6 +136,11 @@
   background-color: #FF3636;
 }
 
+.community-content-footer .non-del-btn {
+  background-color: grey;
+  cursor: default;
+}
+
 .community-content-footer .other-btn {
   width: 15vw;
 }
