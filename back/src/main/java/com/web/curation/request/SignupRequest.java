@@ -69,6 +69,14 @@ public class SignupRequest {
     public void setPassword(String password) {
         this.password = password;
     }
+    
+    public String getSelfintroduce() {
+    	return this.selfintroduce;
+    }
+    
+    public void setSelfintroduce(String selfintroduce) {
+    	this.selfintroduce=selfintroduce;
+    }
 
 	public String getProfile_img() {
 		return profile_img;

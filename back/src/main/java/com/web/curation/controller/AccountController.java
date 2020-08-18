@@ -124,13 +124,12 @@ public class AccountController {
 		LocalDate currentDate = LocalDate.of(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()),
 				Integer.parseInt(st.nextToken()));
 
-		System.out.println(request.getNickname());
 		user.setNickname(request.getNickname());
 		user.setEmail(request.getEmail());
 		user.setBirth(currentDate);
 		user.setGender(request.getGender());
 		user.setPassword(request.getPassword());
-		user.setSelfintroduce(null);
+		if(request.getSelfintroduce()!=null) user.setSelfintroduce(request.getSelfintroduce());
 		user.setProfile_img(request.getProfile_img());
 		if (userDao.findUserByNickname(user.getNickname()).isPresent()
 				|| userDao.findUserByEmail(user.getEmail()).isPresent()) {
@@ -225,8 +224,7 @@ public class AccountController {
       final BasicResponse result = new BasicResponse();
       // 이 path는 로컬에선 일단 각자 경로로 테스트
       String path ="/var/www/html/dist/images/profile/";
-      UUID uuid = UUID.randomUUID();
-      String savedName = uuid.toString()+"_"+img.getOriginalFilename();
+      String savedName =nickname+"_"+img.getOriginalFilename();
       File file = new File(path + savedName);
       try {
          img.transferTo(file);
@@ -236,6 +234,7 @@ public class AccountController {
             UserDTO userDTO = new UserDTO(userDao.findUserByNickname(nickname).get());
             String Token = jwtService.create(userDTO);
             resultMap.put("auth_token",Token);
+            resultMap.put("profileurl",storePath);
             
          }
          else {
@@ -245,7 +244,6 @@ public class AccountController {
       } catch (Exception e) {
          e.printStackTrace();
       }
-      
       
       resultMap.put("result",result);
       System.out.println(img);

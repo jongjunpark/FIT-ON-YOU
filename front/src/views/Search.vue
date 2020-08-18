@@ -40,12 +40,9 @@
       </transition-group>
     </div>
     <div v-if="isDefault" class='search-container'>
-
-      <div class="search-box" v-for="(feed,index) in feedList" :key="`feed-${index}`">
-        <div class="search-inner-box" v-for="article in feedList[index]" :key="article.articleno">
-          <div @click="onModal(article.articleNo)" class="search-inner-btn">자세히</div>
-          <img v-if='article.imageUrl' :src="article.imageUrl" :id="index">
-        </div>
+      <div @click="onModal(article.articleNo)" class="search-inner-box" v-for="article in articleList" :key="article.articleNo">
+        <!-- <div @click="onModal(article.articleNo)" class="search-inner-btn">자세히</div> -->
+        <img v-if='article.imageUrl' :src="article.imageUrl" :id="article.imageNo">
       </div>
       <infinite-loading @infinite="infiniteHandler" spinner="spinner" force-use-infinite-wrapper=".search-container">
         <div slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</div>
@@ -285,9 +282,7 @@ export default {
       .then((data)=>{
         setTimeout(() => {
           if(data.data.object.length){
-            ref.articleList=data.data.object;
-            ref.setList();
-            ref.articleList=[];
+            ref.articleList.push(data.data.object);
 
             $state.loaded();
             ref.limit+=1;
@@ -311,8 +306,6 @@ export default {
     axios.post("https://i3b304.p.ssafy.io/api/search/all/0").then((data)=>{
       this.articleList=data.data.object;
       console.log(this.articleList)
-      this.setList();
-      this.articleList=[];
     })
   },
   beforeDestroy() { 

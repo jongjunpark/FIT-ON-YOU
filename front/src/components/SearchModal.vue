@@ -6,7 +6,8 @@
         <div class="search-more-box">
           <header class="search-more-user-data">
             <div class="search-more-user-profile" @click="goToUserPage(username)">
-              <img :src="profile">
+              <img v-show="profile" :src="profile">
+              <img v-show="!profile" src="../assets/images/default-user.png" alt="">
             </div>
             <div class="search-more-article-head">
               <p class='search-more-username' @click="goToUserPage(username)">{{ username }}</p>
@@ -27,11 +28,15 @@
             </div>
             <div class="search-more-btn-box">
               <div class='search-more-btn-left'>
-                <i :class="'fas fa-heart '+likeicon[likechk]" @click="clickLike(articleNo,likechk,$event)"></i>{{favoriteCnt}}
+                <i :class="'fas fa-heart '+likeicon[likechk]" @click="clickLike(articleNo,likechk,$event)"></i>
               </div>
               <div class='search-more-btn-right'>
                 <i :class="'fas fa-bookmark '+markicon[markchk]" @click="clickBookMark(articleNo,markchk,$event)"></i>
               </div>
+            </div>
+            <div class="search-more-like-cnt">
+              <p v-show="likechk">{{ myname }}님 외 {{favoriteCnt}}명이 좋아합니다</p>
+              <p v-show="!likechk">{{favoriteCnt}}명이 좋아합니다</p>
             </div>
             <p v-show="content" class='search-more-content-head'>{{ content }}</p>
             <p v-show="longContent" class='search-more-content-head'>{{ longContent }}</p>
@@ -136,8 +141,8 @@ export default {
       console.log(response.data)
       this.username = response.data[0].aarticles.articleUser
       this.time = timeForToday(response.data[0].aarticles.articleDate)
-      if (response.data[0].aarticles.content.length>60) {
-        for (let i=0; i<60; i++) {
+      if (response.data[0].aarticles.content.length>100) {
+        for (let i=0; i<100; i++) {
           this.longContent += response.data[0].aarticles.content[i]
         }
         this.longContent += ' ....'
@@ -330,7 +335,6 @@ export default {
   max-width: 50vh;
   width: 100%;
   margin: 0 auto;
-  height: 65vh;
   }
 }
 
@@ -348,9 +352,10 @@ export default {
   position: relative;
 }
 .search-more-user-profile {
-  width: 4vh;
-  height: 4vh;
-  background-color: grey;
+  width: 5vh;
+  height: 5vh;
+  border: 1px solid rgba(0,0,0,0.5);
+  background-color: #fff;
   border-radius: 50%;
 }
 
@@ -366,11 +371,11 @@ export default {
 }
 .search-more-article-head .search-more-username {
   font-weight: 700;
-  font-size: 1.5vh;
+  font-size: 1.8vh;
   cursor: pointer;
 }
 .search-more-article-head .search-more-article-date {
-  font-size: 1vh;
+  font-size: 1.5vh;
   color: grey;
 }
 
@@ -449,6 +454,12 @@ export default {
   cursor: pointer;
 }
 
+.search-more-content .search-more-like-cnt {
+  font-size: 1.8vh;
+  margin-bottom: 1vh;
+  margin-left: 1vh;
+}
+
 .search-more-content .search-more-content-head {
   font-weight: 900;
   font-size: 2vh;
@@ -474,8 +485,17 @@ export default {
 
 .heart{
   color:crimson;
+  animation-name: check;
+  animation-duration: 0.5s;
 }
 .mark{
   color:gold;
+  animation-name: check;
+  animation-duration: 0.5s;
+}
+
+@keyframes check {
+	50% {transform: scale(1.2)}
+	100% {transform: scale(1)}
 }
 </style>

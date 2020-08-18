@@ -1,10 +1,14 @@
 <template>
   <div class="wrap">
-    <div @click='writeFormChange' class="write-toggle-btn"></div>
-    <div class='wrap-container'>
+    <div class="write-toggle-area">
+      <div @click='writeFormChange(false)' class="feed-write-btn write-toggle-btn">Feed</div>
+      <div @click='writeFormChange(true)' class="commu-write-btn write-toggle-btn">Resell</div>
+    </div>
+    <div class="write-hanger-box"></div>
+    <div class='wrap-container feed-write-container'>
       <div class='write-feed-box' v-show="!isCommu">
         <div class="write-img-box">
-          <img class="write-hanger-img" src="../assets/images/hanger.png" alt="">
+          <!-- <img class="write-hanger-img" src="../assets/images/hanger.png" alt=""> -->
           <label v-if="!feedImg[0]" class="write-upload-btn" for='feed-img-edit0'>
             <i class="far fa-images"><i class="fas fa-plus"></i></i>
             <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit0" accept="image/*" @change="setFeedImg(0)">
@@ -46,9 +50,9 @@
         </div>
         <div class="write-content-box">
           <p class='write-content-head'>내용</p>
-          <textarea @input="writeContent = $event.target.value" cols="30" rows="3" placeholder="내용"></textarea>
+          <textarea @input="writeContent = $event.target.value" cols="30" rows="3" placeholder=" 100자 이내로 작성해주세요"></textarea>
           <p class='write-hash-head'>태그</p>
-          <input @input="writeHashContent = $event.target.value" v-model='writeHashContent' @keyup.188="addWriteHash" type="text" placeholder="태그">
+          <input @input="writeHashContent = $event.target.value" v-model='writeHashContent' @keyup.188="addWriteHash" type="text" placeholder=" , 를 통해 태그를 추가해주세요">
           <transition-group name='fade' tag="div" class="write-hash-group" mode="in-out">
             <div class='write-hash-item' v-for='(hash, index) in writeHashList' :key='`hash-${index}`'>
               <div @click='delWriteHashItem(index)' class="write-hash-item-close-btn"><i class="fas fa-times"></i></div>
@@ -64,9 +68,12 @@
     </div>
 
 
-    <div v-if="isCommu">
+    <div v-show="isCommu">
       <div class="write-commu-img-box">
         <div class="write-commu-upload">
+          <div class="write-commu-cloth-hanger">
+            <img class="write-commu-cloth-hanger-img first-feed-img" src="../assets/images/cloth-hanger.png" alt="">
+          </div>
           <label v-show="!commuImg" class="write-upload-btn" for='feed-img-edit'>
             <i class="far fa-images"><i class="fas fa-plus"></i></i>
             <input type= "file" id="feed-img-edit" accept="image/*" @change="setCommuImg">
@@ -79,9 +86,9 @@
       </div>
       <div class="write-content-box">
         <p class='write-content-head'>내용</p>
-        <textarea @input="commuContent = $event.target.value" cols="30" rows="3" placeholder="내용"></textarea>
+        <textarea class="commu-content-textbox" @input="commuContent = $event.target.value" cols="30" rows="3" placeholder="100자 이내로 작성해주세요"></textarea>
         <p class='write-content-head'>가격</p>
-        <textarea @input="commuPrice = $event.target.value" cols="30" rows="3" placeholder="내용"></textarea>
+        <textarea class="commu-price-textbox" @input="commuPrice = $event.target.value" cols="30" rows="3" placeholder="숫자만 입력하세요"></textarea>
         <p class='write-content-head'>사이즈</p>
         <textarea @input="commuSize = $event.target.value" cols="30" rows="3" placeholder="내용"></textarea>
         <p class='write-content-head'>장소</p>
@@ -163,7 +170,15 @@ export default {
       this.checkCommuForm()
     },
     commuPrice() {
+      if (isNaN(this.commuPrice)) {
+        this.isNumPrice = false
+      } else {
+        this.isNumPrice = true
+      }
       this.checkCommuForm()
+      this.inNumber()
+      console.log(this.commuPrice)
+      console.log(this.isNumPrice)
     },
     commuSize() {
       this.checkCommuForm()
@@ -171,6 +186,8 @@ export default {
   },
   mounted() {
     this.setIsWrite(false)
+    const FEEDBTN = document.querySelector('.feed-write-btn')
+    FEEDBTN.classList.add('on-feed-btn')
     this.defaultDark()
   },
   methods: {
@@ -180,8 +197,11 @@ export default {
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.wrap')
       const PTAG = document.querySelectorAll('p')
-      const HANGER = document.querySelector('.write-hanger-img')
+      // const HANGER = document.querySelector('.write-hanger-img')
+      const HANGER = document.querySelector('.write-hanger-box')
       const CLOTH_HANGER = document.querySelectorAll('.write-cloth-hanger-img')
+      const CLOTH_HANGER2 = document.querySelector('.write-commu-cloth-hanger-img')
+      const ON_TOGGLE = document.querySelector('.on-feed-btn')
       const WRITE_PLUS = document.querySelectorAll('.write-plus')
       const CANCLE_IMG = document.querySelectorAll('.cancle-img')
       const INPUT = document.querySelectorAll('input')
@@ -195,9 +215,12 @@ export default {
       if (Dark === 'off') {
         HTML.classList.add('black')
         wrap.classList.add('wrap-dark')
+        CLOTH_HANGER2.classList.add('cloth-hanger-dark')
+        ON_TOGGLE.classList.add('toggle-dark')
+        // HANGER.classList.add('hanger-dark')
         HANGER.classList.add('hanger-dark')
         for (let i=0; i<CLOTH_HANGER.length; i++) {
-          CLOTH_HANGER[i].classList.add('hanger-dark')
+          CLOTH_HANGER[i].classList.add('cloth-hanger-dark')
         }
         for (let i=0; i<WRITE_PLUS.length; i++) {
           WRITE_PLUS[i].classList.add('write-plus-dark')
@@ -220,9 +243,12 @@ export default {
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
+        CLOTH_HANGER2.classList.remove('cloth-hanger-dark')
+        ON_TOGGLE.classList.remove('toggle-dark')
+        // HANGER.classList.remove('hanger-dark')
         HANGER.classList.remove('hanger-dark')
         for (let i=0; i<CLOTH_HANGER.length; i++) {
-          CLOTH_HANGER[i].classList.remove('hanger-dark')
+          CLOTH_HANGER[i].classList.remove('cloth-hanger-dark')
         }
         for (let i=0; i<WRITE_PLUS.length; i++) {
           WRITE_PLUS[i].classList.remove('write-plus-dark')
@@ -278,7 +304,7 @@ export default {
     },
     setCommuImg() {
       const CommuPhotoFile = document.getElementById('feed-img-edit')
-      this.commuImg += URL.createObjectURL(CommuPhotoFile.files[0])
+      this.commuImg = URL.createObjectURL(CommuPhotoFile.files[0])
       this.commuPhoto.push(CommuPhotoFile.files[0])
     },
     onCancelBtn(num) {
@@ -306,6 +332,7 @@ export default {
     },
     delCommuImg() {
       this.commuImg = ''
+      document.getElementById('feed-img-edit').value = ""
     },
     addWriteHash() {
       this.writeHashList.push(this.writeHashContent.slice(0,-1))
@@ -322,13 +349,14 @@ export default {
       }
     },
     checkCommuForm() {
-      if (this.commuImg && this.commuContent && this.commuPrice && this.commuSize) {
+      if (this.commuImg && this.commuContent && this.isNumPrice && this.commuSize) {
         this.isCommuBtn = true
       } else {
         this.isCommuBtn = false
       }
     },
     sendBoardData(){
+      this.writeHashList.push(this.writeHashContent)
       let dataforms = new FormData();
       console.log(this.photo)
       for (let index = 0; index < this.photo.length; index++) {
@@ -340,12 +368,15 @@ export default {
      
       axios.post("https://i3b304.p.ssafy.io/api/board/upload",dataforms).then(
         console.log('success'))
-        Swal.fire(
-        '환영해요!',
-        '자신만의 패션을 뽐내보세요!',
-        'success'
-        )
-        this.$router.go('/feed')
+        Swal.fire({
+          icon: 'success',
+          title: '작성이 완료됐습니다!',
+          confirmButtonText: '확인'
+        }).then((result) => {
+          if (result.value) {
+            this.$router.push('/feed')
+          }
+        })
     },
     sendRecellData(){
       let dataform = new FormData();
@@ -358,16 +389,39 @@ export default {
       
       axios.post("http://localhost:8080/api/recell/upload", dataform).then(
         console.log('success'))
+        Swal.fire({
+          icon: 'success',
+          title: '작성이 완료됐습니다!',
+          confirmButtonText: '확인'
+        }).then((result) => {
+          if (result.value) {
+            this.$router.push('/community')
+          }
+        })
       },
-    writeFormChange() {
-      this.isCommu = !this.isCommu
+    writeFormChange(bool) {
+      const FEEDBTN = document.querySelector('.feed-write-btn')
+      const COMMUBTN = document.querySelector('.commu-write-btn')
+      const Dark = this.$cookies.get('dark')
+      if (bool) {
+        COMMUBTN.classList.add('on-feed-btn')
+        FEEDBTN.classList.remove('on-feed-btn')
+      } else {
+        FEEDBTN.classList.add('on-feed-btn')
+        COMMUBTN.classList.remove('on-feed-btn')
+      }
+      this.isCommu = bool
+      if (Dark === 'off') {
+        const DARK_TOGGLE = document.querySelector('.toggle-dark')
+        DARK_TOGGLE.classList.remove('toggle-dark')
+        this.defaultDark()
+      }
     },
-    onModal(){
-      this.postModal = true;
-    },
-    receiveAddress(place){
-      this.commuPlace=place;
-    },
+    inNumber() {
+      if(event.keyCode<48 || event.keyCode>57){
+        event.returnValue=false
+      }
+    }
   },
   beforeDestroy() { 
     this.setIsWrite(true)

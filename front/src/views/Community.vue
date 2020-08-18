@@ -142,6 +142,7 @@ export default {
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.wrap')
       const INPUT = document.querySelectorAll('input')
+      const SPAN = document.querySelectorAll('span')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -153,11 +154,17 @@ export default {
         for (let i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.add('input-dark')
         }
+        for (let i=0; i<SPAN.length ; i++) {
+          SPAN[i].classList.add('font-dark')
+        }
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
         for (let i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.remove('input-dark')
+        }
+        for (let i=0; i<SPAN.length ; i++) {
+          SPAN[i].classList.remove('font-dark')
         }
       }
     },
@@ -168,7 +175,7 @@ export default {
       this.nickName = decodeURIComponent(uri_enc);
     },
     getAllList() {
-      axios.post("http://localhost:8080/api/recell/newsfeed/0").then((data)=>{
+      axios.post("https://i3b304.p.ssafy.io/api/recell/newsfeed/0").then((data)=>{
       console.log("success")
       console.log(data)
       this.tempList=data.data;
@@ -192,7 +199,7 @@ export default {
       })
     },
     getMyList() {
-      axios.get("http://localhost:8080/api/recell/myContents",{
+      axios.get("https://i3b304.p.ssafy.io/api/recell/myContents",{
         params: {
           username: this.nickName
         },
@@ -214,7 +221,7 @@ export default {
         if (result.value) {
           const frm = new FormData();
           frm.append("num",roomNo);
-          axios.post('http://localhost:8080/api/recell/soldout', frm)
+          axios.post('https://i3b304.p.ssafy.io/api/recell/soldout', frm)
           .then(console.log("팔았다"))
           .catch()
           Swal.fire(

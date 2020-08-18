@@ -456,6 +456,7 @@ export default {
         console.log(errorMessage);
         // ...
         });
+
       axios.post('https://i3b304.p.ssafy.io/api/account/signup',{
 
           email: this.input.email+'@'+this.input.url,
@@ -463,7 +464,8 @@ export default {
           nickname: this.input.nickname,
           gender: this.gender,
           birth: this.input.birth.year+' '+this.input.birth.month+' '+this.input.birth.day,
-          profile_img: this.profileImg
+          profile_img: this.profileImg,
+          selfintroduce : this.input.textProfile,
 
       }).then(data => {
         console.log(data)

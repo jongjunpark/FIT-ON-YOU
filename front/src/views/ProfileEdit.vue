@@ -148,7 +148,7 @@ export default {
         ref.$cookies.set('auth-token', data.data.auth_token)
         ref.setToken(data.data.auth_token)
         ref.sendUserInfo();
-        ref.profileImg=ref.user.profileImg;
+        ref.profileImg=data.data.profileurl;
       })
       .catch()
     },
@@ -231,7 +231,7 @@ export default {
       const formData=new FormData();
       formData.append("prev",this.tempNickName);
       formData.append("cur",this.nickname);
-      axios.post('http://localhost:8080/api/account/nickchange',formData)
+      axios.post('https://i3b304.p.ssafy.io/api/account/nickchange',formData)
       .then((data)=>{
         console.log(data);
         if(data.data.result.data=="success"){
