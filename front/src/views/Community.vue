@@ -152,7 +152,7 @@ export default {
       this.nickName = decodeURIComponent(uri_enc);
     },
     getAllList() {
-      axios.post("http://localhost:8080/api/recell/newsfeed/0").then((data)=>{
+      axios.post("https://i3b304.p.ssafy.io/api/recell/newsfeed/0").then((data)=>{
       console.log("success")
       console.log(data)
       this.tempList=data.data;
@@ -175,7 +175,7 @@ export default {
       })
     },
     getMyList() {
-      axios.get("http://localhost:8080/api/recell/myContents",{
+      axios.get("https://i3b304.p.ssafy.io/api/recell/myContents",{
         params: {
           username: this.nickName
         },
@@ -197,7 +197,7 @@ export default {
         if (result.value) {
           const frm = new FormData();
           frm.append("num",roomNo);
-          axios.post('http://localhost:8080/api/recell/soldout', frm)
+          axios.post('https://i3b304.p.ssafy.io/api/recell/soldout', frm)
           .then(console.log("팔았다"))
           .catch()
           Swal.fire(

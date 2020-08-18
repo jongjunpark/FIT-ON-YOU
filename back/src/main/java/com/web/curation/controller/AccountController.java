@@ -224,8 +224,7 @@ public class AccountController {
       final BasicResponse result = new BasicResponse();
       // 이 path는 로컬에선 일단 각자 경로로 테스트
       String path ="/var/www/html/dist/images/profile/";
-      UUID uuid = UUID.randomUUID();
-      String savedName = uuid.toString()+"_"+img.getOriginalFilename();
+      String savedName =nickname+"_"+img.getOriginalFilename();
       File file = new File(path + savedName);
       try {
          img.transferTo(file);
