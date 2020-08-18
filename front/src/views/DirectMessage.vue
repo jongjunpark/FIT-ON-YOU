@@ -187,7 +187,10 @@ export default {
       }
     },
     goDown() {
-      document.querySelector('.message-content-wrap').scrollTop = document.querySelector('.message-content-wrap').scrollHeight;
+      const WRAPMESSAGE = document.querySelector('.message-content-wrap')
+      if (WRAPMESSAGE) {
+        document.querySelector('.message-content-wrap').scrollTop = document.querySelector('.message-content-wrap').scrollHeight;
+      }
     },
   },
   created(){
