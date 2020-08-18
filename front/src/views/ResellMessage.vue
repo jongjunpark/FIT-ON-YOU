@@ -19,15 +19,15 @@
           <div v-show='message.senduser != nick && message.senduser != othername' class="user-opponent">
             <!-- <p class="user-me-content">{{ message.senduser }}</p> -->
             <!-- 이미지 보여주기 -->
-            <img :src="img" alt="" class="in-img-profile" v-if="img">
-            <img src="../assets/images/default-user.png" alt="" class="in-img-content" v-if="!img">
+            <img :src="message.img" alt="" class="in-img-profile" v-if="message.img">
+            <img src="../assets/images/default-user.png" alt="" class="in-img-content" v-if="!message.img">
             <p class="in-user-content">{{ message.message }}</p>
           </div>
           <div v-show='message.senduser != nick && message.senduser == othername' class="user-opponent">
             <!-- <p class="user-me-content">{{ message.senduser }}</p> -->
             <!-- 이미지 보여주기 -->
-            <img :src="img" alt="" class="in-img-profile" v-if="img">
-            <img src="../assets/images/default-user.png" alt="" class="in-img-content" v-if="!img">
+            <img :src="message.img" alt="" class="in-img-profile" v-if="message.img">
+            <img src="../assets/images/default-user.png" alt="" class="in-img-content" v-if="!message.img">
             <i class="fas fa-crown seller2"></i>
             <p class="in-user-content">{{ message.message }}</p>
           </div>
