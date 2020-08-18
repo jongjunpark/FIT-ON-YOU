@@ -142,7 +142,7 @@ public class SearchController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
-	@DeleteMapping(value = "deleteSearchHistory/{username}")
+	@DeleteMapping(value = "/deleteSearchHistory/{username}")
 	public Object deleteMethodName(@PathVariable String username) {
 		final BasicResponse result = new BasicResponse();
 

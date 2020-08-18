@@ -141,6 +141,25 @@ export default {
     goDM() {
       this.$router.go(-1)
     },
+  deleteAtPath(path) {
+    var deleteList = [];
+    db.collection(path).get()
+    .then(snapshot => {
+      snapshot.forEach(doc=>{
+        console.log(doc.id,'=>',doc.data());
+        deleteList.push(doc.id);
+      });
+    })
+    .catch()
+    .finally(()=> {
+      console.log('delete=>',deleteList)
+      deleteList.forEach(docName =>{
+        console.log('docName=>',docName)
+        db.collection(path).doc(docName).delete();
+      })
+    })
+
+  },
     defaultDark() {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
@@ -190,7 +209,9 @@ export default {
       document.querySelector('.message-content-wrap').scrollTop = document.querySelector('.message-content-wrap').scrollHeight;
     },
   },
-  created(){
+    
+    created(){
+    this.deleteAtPath("123123123이준형")
     this.roomname = this.$route.params.roomname
     this.othername = this.$route.params.othername
     console.log(this.roomname)

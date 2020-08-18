@@ -103,6 +103,7 @@ export default {
     saveMessage(){
       //save to fires'tore
       db.collection(this.roomname).add({
+        img: this.user.img,
         message: this.text,
         createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
         senduser: this.user.nickname,
