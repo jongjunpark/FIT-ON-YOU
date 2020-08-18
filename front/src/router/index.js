@@ -168,8 +168,21 @@ Vue.use(VueRouter)
       if (!Vue.$cookies.isKey('auth-token')) {
         next('/')
       } else {
-        next()
-      }    }
+        let param = to.params.name
+        axios.get('https://i3b304.p.ssafy.io/api/account/checkNickname',{ 
+          params: {
+            nickname: param
+            }
+        }).then(data => {
+          if (data.data.data == "exist") {
+            next()
+          } else {   
+            next('/404')    
+          }
+        })
+        .catch()
+      }   
+     }
   },
   {
     path: '/alarm',
