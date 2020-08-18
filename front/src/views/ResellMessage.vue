@@ -19,15 +19,15 @@
           <div v-show='message.senduser != nick && message.senduser != othername' class="user-opponent">
             <!-- <p class="user-me-content">{{ message.senduser }}</p> -->
             <!-- 이미지 보여주기 -->
-            <img :src="profileImg" alt="" class="in-img-profile" v-if="profileImg">
-            <img src="../assets/images/default-user.png" alt="" class="in-img-content" v-if="!profileImg">
+            <img :src="img" alt="" class="in-img-profile" v-if="img">
+            <img src="../assets/images/default-user.png" alt="" class="in-img-content" v-if="!img">
             <p class="in-user-content">{{ message.message }}</p>
           </div>
           <div v-show='message.senduser != nick && message.senduser == othername' class="user-opponent">
             <!-- <p class="user-me-content">{{ message.senduser }}</p> -->
             <!-- 이미지 보여주기 -->
-            <img :src="profileImg" alt="" class="in-img-profile" v-if="profileImg">
-            <img src="../assets/images/default-user.png" alt="" class="in-img-content" v-if="!profileImg">
+            <img :src="img" alt="" class="in-img-profile" v-if="img">
+            <img src="../assets/images/default-user.png" alt="" class="in-img-content" v-if="!img">
             <i class="fas fa-crown seller2"></i>
             <p class="in-user-content">{{ message.message }}</p>
           </div>
@@ -47,6 +47,7 @@ import {mapState}from 'vuex'
 import firebase from 'firebase'
 import axios from 'axios'
 import "../components/css/resellmessage.css"
+import "../components/css/directmessage.css"
 // Required for side-effects
 require("firebase/firestore");
 
@@ -84,6 +85,7 @@ export default {
       nick: '',
       othername: '',
       profileImg: '',
+      myprofile: '',
     }
   },
   computed: {
@@ -103,6 +105,7 @@ export default {
     saveMessage(){
       //save to fires'tore
       db.collection(this.roomname).add({
+        img: this.myprofile,
         message: this.text,
         createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
         senduser: this.user.nickname,
@@ -192,18 +195,28 @@ export default {
     let uri_dec = decodeURIComponent(uri_enc);
     let res = uri_dec;
     this.nick = res
-      axios.get('https://i3b304.p.ssafy.io/api/mypage/otheruser',{
-        params:{
-        nickname: this.othername,
+    axios.get('https://i3b304.p.ssafy.io/api/mypage/otheruser',{
+      params:{
+      nickname: this.othername,
+    }
+    }).then((data)=>{
+      if (data.data.userinfo.profile_img) {
+        
+        this.profileImg = data.data.userinfo.profile_img.substring(2,);
       }
-      }).then((data)=>{
-        if (data.data.userinfo.profile_img) {
-          
-          this.profileImg = data.data.userinfo.profile_img.substring(2,);
-        }
-      })
-      .catch(
-      )
+    })
+    .catch(
+    )
+    axios.get('https://i3b304.p.ssafy.io/api/mypage/',{
+      params:{nickname:this.nick}
+    })
+    .then((data)=>{
+      console.log(data);
+      if(data.data.userinfo.profile_img){
+        this.myprofile = data.data.userinfo.profile_img.substring(2, );
+      }
+    })
+    .catch()
   }
 }
 </script>
