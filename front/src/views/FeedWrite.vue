@@ -90,14 +90,18 @@
         <p class='write-content-head'>가격</p>
         <textarea class="commu-price-textbox" @input="commuPrice = $event.target.value" cols="30" rows="3" placeholder="숫자만 입력하세요"></textarea>
         <p class='write-content-head'>사이즈</p>
-        <textarea class="commu-size-textbox" @input="commuSize = $event.target.value" cols="30" rows="3" placeholder="자유롭게 입력하세요"></textarea>
+        <textarea @input="commuSize = $event.target.value" cols="30" rows="3" placeholder="내용"></textarea>
+        <p class='write-content-head'>장소</p>
+        
+         <textarea @input="commuPlace = $event.target.value" cols="30" rows="3" placeholder="필요하다면 클릭하여 장소를 입력하세요." @click="onModal()"
+         v-model="commuPlace" readonly></textarea>
       </div>
       <div class="write-btn-box">
           <div v-if="!isCommuBtn" class="btn write-btn">작성하기</div>
           <div v-if="isCommuBtn" class="btn write-btn on-write-btn" @click="sendRecellData">작성하기</div>
         </div>
     </div>
-
+    <PostModal @child-event="receiveAddress" v-if="postModal" @close="postModal= false" />
   </div>
 </template>
 
@@ -106,12 +110,16 @@ import { mapState, mapMutations } from 'vuex';
 import axios from 'axios';
 import "../components/css/feedwrite.css"
 import Swal from 'sweetalert2'
+import PostModal from '../components/PostModal.vue'
 
 export default {
   
   name: 'FeedWrite',
   computed: {
     ...mapState(['flag'])
+  },
+  components:{
+    PostModal,
   },
   data() {
     return {
@@ -129,10 +137,11 @@ export default {
       commuContent: '',
       commuPrice: '',
       commuSize: '',
-      isNumPrice: false,
+      commuPlace:'',
       isWriteBtn: false,
       isCommuBtn: false,
       isCommu: false,
+      postModal: false,
     }
   },
   watch: {
@@ -173,7 +182,7 @@ export default {
     },
     commuSize() {
       this.checkCommuForm()
-    }
+    },
   },
   mounted() {
     this.setIsWrite(false)
@@ -376,8 +385,9 @@ export default {
       dataform.append("content", this.commuContent);
       dataform.append("price",this.commuPrice);
       dataform.append("size",this.commuSize)
+      dataform.append("place",this.commuPlace);
       
-      axios.post("https://i3b304.p.ssafy.io/api/recell/upload", dataform).then(
+      axios.post("http://localhost:8080/api/recell/upload", dataform).then(
         console.log('success'))
         Swal.fire({
           icon: 'success',
