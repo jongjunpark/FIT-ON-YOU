@@ -148,7 +148,7 @@ export default {
         ref.$cookies.set('auth-token', data.data.auth_token)
         ref.setToken(data.data.auth_token)
         ref.sendUserInfo();
-        ref.profileImg=ref.user.profileImg;
+        ref.profileImg=data.data.profileurl;
       })
       .catch()
     },
