@@ -71,7 +71,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .modal-enter-active, .modal-leave-active {
   transition: opacity 0.4s;
 
@@ -122,7 +122,8 @@ export default {
   transition: 0.3s ease;
   background-color: #fff;
   border-radius: 1vw;
-  width: 88%
+  width: 70%;
+  height: 60%;
 }
 
 @media (min-width: 450px) {

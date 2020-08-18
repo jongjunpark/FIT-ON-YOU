@@ -236,3 +236,17 @@
     right: calc(25px + 7vh);
   }
 }
+.map {
+  color: #FFBA00;
+  font-size: 2vh;
+  margin: 0;
+  text-align: center;
+}
+
+.map-zone {
+  display: flex;
+  justify-content: center;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+  cursor: pointer;
+}

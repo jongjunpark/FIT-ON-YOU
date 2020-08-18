@@ -15,6 +15,9 @@
           <p class='community-content-body'>·판매자: {{ myarticle.recellUser }}</p>
           <p class='community-content-body' @click="onModal">·가격: {{ myarticle.recellPrice }}원</p>
           <p class='community-content-body'>·사이즈: {{ myarticle.recellSize }}</p>
+          <div class="map-zone" @click="onModal(article.place)" v-show="article.plcae!=-1">
+           <span>직거래위치 <i class="fas fa-map-marker-alt map"></i></span>
+          </div>
           <div class="community-content-footer">
             <div @click="goDM(myarticle.roomname, myarticle.recellUser)" class="community-content-btn dm-btn">DM</div>
             <div v-show="!myarticle.salecheck" @click="soldItem(myarticle.recellNo)" class="community-content-btn del-btn">판매완료</div>
@@ -31,6 +34,9 @@
           <p class='community-content-body'>·판매자: {{ article.user }}</p>
           <p class='community-content-body' @click="onModal">·가격: {{ article.price }}원</p>
           <p class='community-content-body'>·사이즈: {{ article.size }}</p>
+          <div class="map-zone" @click="onModal(article.place)" v-show="article.plcae!=-1">
+           <span>직거래위치 <i class="fas fa-map-marker-alt map"></i></span>
+          </div>
           <div class="community-content-footer">
             <div @click="goDM(article.roomname, article.user)" class="community-content-btn dm-btn other-btn">DM보내기</div>
           </div>
@@ -69,7 +75,8 @@ export default {
       limit:'1',
       isMyCommu: false,
       mapModal:false,
-      placeAddrress:"서울 강남구 가로수길 5 (신사동)",
+      placeAddrress:'',
+      mapFlag:false,
     }
   },
   methods: {
@@ -112,7 +119,9 @@ export default {
               date:ref.tempList[index].recellDate,
               size:ref.tempList[index].recellSize,
               roomname:ref.tempList[index].roomname,
-              user:ref.tempList[index].recellUser
+              user:ref.tempList[index].recellUser,
+              place:ref.tempList[index].place,
+
               }
             this.recellList.push(feeddata);
             }
@@ -173,7 +182,8 @@ export default {
             date:this.tempList[index].recellDate,
             size:this.tempList[index].recellSize,
             roomname:this.tempList[index].roomname,
-            user:this.tempList[index].recellUser
+            user:this.tempList[index].recellUser,
+            place:this.tempList[index].place,
             }
           this.recellList.push(feeddata);
         }
@@ -217,7 +227,8 @@ export default {
         }
       }
     )},
-    onModal(){
+    onModal(place){
+      this.placeAddrress=place
       this.mapModal=true;
     },
   },

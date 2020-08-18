@@ -86,7 +86,7 @@
         <textarea @input="commuSize = $event.target.value" cols="30" rows="3" placeholder="내용"></textarea>
         <p class='write-content-head'>장소</p>
         
-         <textarea @input="commuPlace = $event.target.value" cols="30" rows="3" placeholder="클릭하여 장소를 입력하세요." @click="onModal()"
+         <textarea @input="commuPlace = $event.target.value" cols="30" rows="3" placeholder="필요하다면 클릭하여 장소를 입력하세요." @click="onModal()"
          v-model="commuPlace" readonly></textarea>
       </div>
       <div class="write-btn-box">
@@ -354,8 +354,9 @@ export default {
       dataform.append("content", this.commuContent);
       dataform.append("price",this.commuPrice);
       dataform.append("size",this.commuSize)
+      dataform.append("place",this.commuPlace);
       
-      axios.post("https://i3b304.p.ssafy.io/api/recell/upload", dataform).then(
+      axios.post("http://localhost:8080/api/recell/upload", dataform).then(
         console.log('success'))
       },
     writeFormChange() {
