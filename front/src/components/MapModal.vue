@@ -30,6 +30,7 @@ export default {
   methods: {
     initMap() {
       console.log(this.placeAddrress)
+      let HEAR = this.placeAddrress
       var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
       mapOption = {
         center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
@@ -58,7 +59,7 @@ export default {
 
               //인포윈도우로 장소에 대한 설명을 표시합니다
               var infowindow = new kakao.maps.InfoWindow({
-                  content: '<div style="width:150px;text-align:center;padding:6px 0;">직거래 장소</div>'
+                  content: '<div style="width:150px;text-align:center;padding:6px 0;">' + HEAR + '</div>'
               });
               infowindow.open(map, marker);
 
@@ -74,7 +75,6 @@ export default {
 <style>
 .modal-enter-active, .modal-leave-active {
   transition: opacity 0.4s;
-
 }
 
 .modal-leave-active {
@@ -83,7 +83,6 @@ export default {
 
 .modal-enter, .modal-leave-to {
   opacity: 0;
-
 }
 
 .post-modal-mask {

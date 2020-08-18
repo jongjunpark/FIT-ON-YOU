@@ -185,9 +185,58 @@
 }
 
 .write-content-box .commu-price-textbox,
-.write-content-box .commu-size-textbox {
+.write-content-box .commu-size-textbox,
+.write-content-box .commu-location-textbox {
   height: 6vh;
   margin-bottom: 0;
+}
+
+.write-content-box .commu-body-box {
+  display: flex;
+  width: 100%;
+}
+
+.commu-body-box .commu-price-box,
+.commu-body-box .commu-size-box {
+  width: 50%;
+}
+
+.commu-body-box .commu-price-box {
+  margin-right: 0.5vh;
+}
+
+.commu-body-box .commu-size-box {
+  margin-left: 0.5vh;
+}
+
+.write-content-box .commu-footer-box {
+  display: flex;
+  width: 100%;
+}
+
+.commu-footer-box .commu-location-box {
+  width: 80%;
+  margin-right: 0.5vh
+}
+
+.commu-footer-box .commu-loc-search-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20%;
+  height: 6vh;
+  margin-top: 3.5vh;
+  margin-left: 0.5vh;
+  background-color: rgba(0,0,0,0.9);
+  color: #fff;
+  border-radius: 0.5vh;
+  font-size: 1.8vh;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.commu-footer-box .commu-loc-search-box:hover {
+  background-color: #5AAEFF;
 }
 
 .write-upload-btn .fa-images {
@@ -334,8 +383,21 @@
   border-radius: 0.5vh;
   resize: none;
   padding: 1.3vh;
-  font-size: 2vh;
+  font-size: 1.8vh;
   margin-bottom: 2vh;
+}
+
+@media (max-width: 449px) {
+  .write-content-box textarea {
+    font-size: 1.7vh;
+  }
+  .write-content-box .commu-location-textbox {
+    height: 8vh;
+  }
+  .commu-footer-box .commu-loc-search-box {
+    height: 8vh;
+    font-size: 1.7vh;
+  }
 }
 
 .write-content-box input {
