@@ -3,12 +3,12 @@
     <div class="wrap-container-direct">
       <div class="wrap-direct">
         <p class="back-btn" @click="goDM">〈 </p>
-        <div class="in-img">
+        <div class="in-img" @click="goProfile">
           <img v-if="!profileImg" src="../assets/images/default-user.png" alt="" class="in-img-profile">
           <img v-if="profileImg" :src="profileImg" alt="" class="in-img-profile">
           <i class="fas fa-crown seller"></i>
         </div>
-        <p class="back-btn-name">{{ othername }}</p>
+        <p class="back-btn-name" @click="goProfile">{{ othername }}</p>
       </div>
       <div class="message-content-wrap">
         <div class="message-content">
@@ -19,15 +19,15 @@
           <div v-show='message.senduser != nick && message.senduser != othername' class="user-opponent">
             <!-- <p class="user-me-content">{{ message.senduser }}</p> -->
             <!-- 이미지 보여주기 -->
-            <img :src="message.img" alt="" class="in-img-profile" v-if="message.img">
-            <img src="../assets/images/default-user.png" alt="" class="in-img-content" v-if="!message.img">
+            <img :src="message.img" alt="" class="in-img-profile" v-if="message.img" @click="goOther(message.senduser)">
+            <img src="../assets/images/default-user.png" alt="" class="in-img-content" v-if="!message.img" @click="goOther(message.senduser)">
             <p class="in-user-content">{{ message.message }}</p>
           </div>
           <div v-show='message.senduser != nick && message.senduser == othername' class="user-opponent">
             <!-- <p class="user-me-content">{{ message.senduser }}</p> -->
             <!-- 이미지 보여주기 -->
-            <img :src="message.img" alt="" class="in-img-profile" v-if="message.img">
-            <img src="../assets/images/default-user.png" alt="" class="in-img-content" v-if="!message.img">
+            <img :src="message.img" alt="" class="in-img-profile" v-if="message.img" @click="goOther(message.senduser)">
+            <img src="../assets/images/default-user.png" alt="" class="in-img-content" v-if="!message.img" @click="goOther(message.senduser)">
             <i class="fas fa-crown seller2"></i>
             <p class="in-user-content">{{ message.message }}</p>
           </div>
@@ -129,6 +129,12 @@ export default {
     },
     goDM() {
       this.$router.go(-1)
+    },
+    goProfile() {
+      this.$router.push(`/otheruser/${this.othername}`).catch(()=>{})
+    },
+    goOther(data) {
+      this.$router.push(`/otheruser/${data}`).catch(()=>{})
     },
     defaultDark() {
       const Dark = this.$cookies.get('dark')
