@@ -24,7 +24,7 @@
     <CommentModal v-if="showModal" @close="showModal= false" :modalArticleNo="modalArticleNo" :modalArticleUser="modalArticleUser"/>
 
     <div class='wrap feed-wrap'>
-      <div class='wrap-container' v-for="(feed,index) in mainfeed" :key="index">
+      <div class='wrap-container feed-wrap-container' v-for="(feed,index) in mainfeed" :key="index">
         <header class="feed-user-data">
           <div class="feed-user-profile" @click="goToUserPage(feed.articleUser)">
             <img v-show="feed.userProfile" :src="feed.userProfile">
@@ -72,7 +72,6 @@
           </aside>
         </section>
       </div>
-      <div class="margin-box"></div>
       <infinite-loading @infinite="infiniteHandler" spinner="spinner">
         <div slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</div>
         <div slot="no-results" class="no-result" v-show="mainfeed.length==0"><h1>현재<br> 팔로우가 없어요.<br> 친구들을 <br>팔로우하여<br>피드를 받아보세요.</h1></div>
@@ -292,6 +291,8 @@ export default {
       const INFLUNAVBTN = document.querySelector('.open-influ-nav')
       const INFLUNAV = document.querySelector('.influ-nav')
       const H1tag = document.querySelector('.no-result')
+      const PTAG = document.querySelectorAll('p')
+      const FEED_HEAD = document.querySelectorAll('header')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -303,12 +304,24 @@ export default {
         INFLUNAVBTN.classList.add('nav-influ-btn-dark')
         INFLUNAV.classList.add('nav-influ-dark')
         H1tag.classList.add('no-result-dark')
+        for (let i=0; i<FEED_HEAD.length ; i++) {
+          FEED_HEAD[i].classList.add('font-dark')
+        }
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.add('font-dark')
+        }
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
         INFLUNAVBTN.classList.remove('nav-influ-btn-dark')
         INFLUNAV.classList.remove('nav-influ-dark')
         H1tag.classList.remove('no-result-dark')
+        for (let i=0; i<FEED_HEAD.length ; i++) {
+          FEED_HEAD[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<PTAG.length ; i++) {
+          PTAG[i].classList.remove('font-dark')
+        }
       }
     },
     infiniteHandler($state){
@@ -418,7 +431,6 @@ export default {
   mounted() {
     this.setIsSelectBar(true)
     this.onNewsFeed()
-    this.defaultDark()
     let ref=this;
     let nickdata = this.$cookies.get('auth-nickname')
     let uri = nickdata;
@@ -492,6 +504,7 @@ export default {
     console.log(this.mainfeed, '메인피드')
     console.log(this.likeStates,'좋아요리스트');
     console.log(this.bookmarkStates,'북마크리스트');
+    this.defaultDark()
   },
   beforeDestroy() { 
     this.setIsSelectBar(false)

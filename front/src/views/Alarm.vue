@@ -3,20 +3,27 @@
     <div class="wrap-container-alarm">
       <div class="alarm-container-wrap">
         <div class="alarm-container">
-          <div v-if="alist!=null && alist.length>0">
+          <div v-show="alist!=null && alist.length>0">
             <div v-for="(alarm,index) in alist" :key="index">
               <div :class="isRead[alarm.isRead]">
-                <img :src="alarm.user.profile_img" alt="" class="alarm-container-message-img" @click="goToUserPage(alarm.follower)">
-                <i :class="alarmIcon[alarm.type-1]"></i>
-                <h4 class="alarmclass"><span @click="goToUserPage(alarm.follower)">{{alarm.follower}}</span>
-                {{alarmMsg[alarm.type-1][0]}}
-                <span @click="onModal(alarm.articleNo)">{{alarmMsg[alarm.type-1][1]}}</span>
-                {{alarmMsg[alarm.type-1][2]}}</h4>
-                <h5 class="in-text">{{timeCal(alarm.createAt)}}</h5>
+                <div class="alarm-icon-box">
+                  <img v-show="alarm.user.profile_img" :src="alarm.user.profile_img" alt="" class="alarm-container-message-img" @click="goToUserPage(alarm.follower)">
+                  <img v-show="!alarm.user.profile_img" src="../assets/images/default-user.png" alt="" class="alarm-container-message-img" @click="goToUserPage(alarm.follower)">
+                  <i :class="alarmIcon[alarm.type-1]"></i>
+                </div>
+                <div class="alarmclass">
+                  <span @click="goToUserPage(alarm.follower)">{{alarm.follower}}</span>
+                  {{alarmMsg[alarm.type-1][0]}}
+                  <span @click="onModal(alarm.articleNo)">{{alarmMsg[alarm.type-1][1]}}</span>
+                  {{alarmMsg[alarm.type-1][2]}}
+                </div>
+                <div class="alrarm-time-box">
+                  <h5 class="in-text">{{timeCal(alarm.createAt)}}</h5>
+                </div>
               </div>
             </div>
           </div>
-          <div v-else>
+          <div v-show="!(alist!=null && alist.length>0)">
             알림 내역이 없습니다.. :)
           </div> 
 
@@ -122,6 +129,8 @@ export default {
       const READ = document.querySelectorAll('.alarm-container-message-read')
       const H4TAG = document.querySelectorAll('.alarm-container-message > h4')
       const H5TAG = document.querySelectorAll('.alarm-container-message > h5')
+      const ALARM_TEXT = document.querySelectorAll('.alarmclass')
+      const ALARM_TIME = document.querySelectorAll('h5')
       
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -130,6 +139,12 @@ export default {
       if (Dark === 'off') {
         HTML.classList.add('black')
         wrap.classList.add('wrap-dark')
+        for (let i=0; i<ALARM_TEXT.length ; i++) {
+          ALARM_TEXT[i].classList.add('font-dark')
+        }
+        for (let i=0; i<ALARM_TIME.length ; i++) {
+          ALARM_TIME[i].classList.add('font-dark')
+        }
         for (let i=0; i<READ.length ; i++) {
           READ[i].classList.add('alarm-container-message-read-dark')
         }
@@ -142,7 +157,13 @@ export default {
 
       } else {
         HTML.classList.remove('black')
-        wrap.classList.remove('wrap-dark')      
+        wrap.classList.remove('wrap-dark')
+        for (let i=0; i<ALARM_TEXT.length ; i++) {
+          ALARM_TEXT[i].classList.remove('font-dark')
+        }
+        for (let i=0; i<ALARM_TIME.length ; i++) {
+          ALARM_TIME[i].classList.remove('font-dark')
+        }      
         for (let i=0; i<READ.length ; i++) {
           READ[i].classList.remove('alarm-container-message-read-dark')
         }
