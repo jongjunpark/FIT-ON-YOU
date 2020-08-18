@@ -3,7 +3,7 @@
     <h1 class="settings-name">계정설정</h1>
     <div class="settings-btn-area">
       <button class="btn change-password-btn settings-btn" @click="goPassword">비밀번호 변경</button>
-      <button class="btn change-search-btn settings-btn">검색내역 지우기</button>
+      <button class="btn change-search-btn settings-btn" @click="deleteSearch">검색내역 지우기</button>
       <button class="btn change-search-btn settings-btn" @click="deleteAllAlarm">알림내역 지우기</button>
       <button class="btn logout-btn settings-btn" @click="goLogout" id="customBtn">로그아웃</button>
       <button class="btn signout-btn settings-btn" @click="leave">회원 탈퇴</button>
@@ -90,6 +90,23 @@ export default {
     goPassword() {
       this.$router.push('/newpassword').catch(()=>{})
     },
+    deleteSearch() {
+      let tmpNick = this.$cookies.get('auth-nickname');
+      let uri = tmpNick;
+      let uri_enc = encodeURIComponent(uri);
+      let uri_dec = decodeURIComponent(uri_enc);
+      let resNick = uri_dec;
+
+      let nickname=resNick;
+      axios.delete(`https://i3b304.p.ssafy.io/api/search/deleteSearchHistory/${nickname}`
+      )
+      .then(Swal.fire(
+        '검색기록이 삭제되었습니다..',
+        '새로운 검색을 입력해주세요!',
+        'success'
+      ))
+      .catch()
+    },
     deleteAllAlarm(){
 
       let tmpNick = this.$cookies.get('auth-nickname');
@@ -123,7 +140,18 @@ export default {
       const formData=new FormData();
       console.log(nickname);
       formData.append('nickname',nickname);
-      axios.delete('https://i3b304.p.ssafy.io/api/account/delete',{
+
+      Swal.fire({
+        title: '정말로 탈퇴하실거에요?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '네',
+        cancelButtonText: '아니오',
+      }).then((result) => {
+        if (result.value) {
+          axios.delete('https://i3b304.p.ssafy.io/api/account/delete',{
         data:formData,
         
       })
@@ -142,6 +170,17 @@ export default {
         }
       })
       .catch()
+          Swal.fire(
+            '완료되었습니다.',
+          ).then((result2) => {
+            if (result2.value) {
+              this.$router.push('/').catch(()=>{})
+                }
+              })
+            }
+          }
+        )
+      
     },
   },
 }
