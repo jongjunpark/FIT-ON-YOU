@@ -13,7 +13,7 @@
         <div class="community-content">
           <p class='community-content-head'>{{ myarticle.recellContent }}</p>
           <p class='community-content-body'>·판매자: {{ myarticle.recellUser }}</p>
-          <p class='community-content-body'>·가격: {{ myarticle.recellPrice }}원</p>
+          <p class='community-content-body' @click="onModal">·가격: {{ myarticle.recellPrice }}원</p>
           <p class='community-content-body'>·사이즈: {{ myarticle.recellSize }}</p>
           <div class="community-content-footer">
             <div @click="goDM(myarticle.roomname, myarticle.recellUser)" class="community-content-btn dm-btn">DM</div>
