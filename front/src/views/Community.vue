@@ -126,6 +126,7 @@ export default {
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.wrap')
       const INPUT = document.querySelectorAll('input')
+      const SPAN = document.querySelectorAll('span')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -137,11 +138,17 @@ export default {
         for (let i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.add('input-dark')
         }
+        for (let i=0; i<SPAN.length ; i++) {
+          SPAN[i].classList.add('font-dark')
+        }
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
         for (let i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.remove('input-dark')
+        }
+        for (let i=0; i<SPAN.length ; i++) {
+          SPAN[i].classList.remove('font-dark')
         }
       }
     },

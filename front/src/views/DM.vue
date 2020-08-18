@@ -5,10 +5,10 @@
         <div class="dm-container">
         </div>
       </div>
-      <div class="search-dm">
+      <!-- <div class="search-dm">
         <input type="text" name="" id="" class="search-dm-input" placeholder="검색">
         <i class="fas fa-search search-img-dm"></i>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -126,16 +126,18 @@ export default {
                   H5message.innerHTML = this.lastMessage.message.substring(0, 8) + '..'
                 }
               }
-              const Time = ((new Date() - new Date(this.lastMessage.createdAt.seconds*1000)) / (1000 * 60))
-
-              if (Time < 60) {
-                H5date.innerHTML = Math.floor(Time / 1) + '분전'
-              } else if (Time < 60 * 24) {
-                H5date.innerHTML = Math.floor(Time / 60) + '시간전'
-              } else if (Time < 60 * 24 * 7) {
-                H5date.innerHTML = Math.floor(Time / (60 * 24)) + '일전'
-              } else {
-                H5date.innerHTML = Math.floor(Time / (60 * 24 * 7)) + '주전'
+              if (this.lastMessage.createdAt.seconds) {
+                const Time = ((new Date() - new Date(this.lastMessage.createdAt.seconds*1000)) / (1000 * 60))
+  
+                if (Time < 60) {
+                  H5date.innerHTML = Math.floor(Time / 1) + '분전'
+                } else if (Time < 60 * 24) {
+                  H5date.innerHTML = Math.floor(Time / 60) + '시간전'
+                } else if (Time < 60 * 24 * 7) {
+                  H5date.innerHTML = Math.floor(Time / (60 * 24)) + '일전'
+                } else {
+                  H5date.innerHTML = Math.floor(Time / (60 * 24 * 7)) + '주전'
+                }
               }
 
               // 이미지 aws로 상대경로 잡아 주어야 함
