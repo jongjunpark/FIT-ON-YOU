@@ -131,6 +131,7 @@ export default {
       isCancle2: false,
       isCancle3: false,
       isCommuCancle: false,
+      isNumPrice: false,
       writeHashContent: '',
       writeHashList: [],
       writeContent: '',
@@ -416,6 +417,12 @@ export default {
         DARK_TOGGLE.classList.remove('toggle-dark')
         this.defaultDark()
       }
+    },
+    onModal(){
+      this.postModal = true;
+    },
+    receiveAddress(place){
+      this.commuPlace=place;
     },
     inNumber() {
       if(event.keyCode<48 || event.keyCode>57){

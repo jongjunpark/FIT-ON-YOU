@@ -299,6 +299,11 @@ public class BoardController {
 		return result;
 
 	}
+	@DeleteMapping(value = "/delete/{articleNo}")
+	public void deleteArticle(@PathVariable int articleNo) {
+		System.out.println(articleNo);
+		boardDao.delBoardArticle(articleNo);
+	}
 
 	@PostMapping(value = "/upload")
 	public void addArticle(@RequestParam("imgdata") MultipartFile[] imgs, @RequestParam("nickname") String nickname,

@@ -13,7 +13,7 @@
               <p class='search-more-username' @click="goToUserPage(username)">{{ username }}</p>
               <p class='search-more-article-date'>{{ time }}</p>
             </div>
-            <div v-show="myname === username" class="search-more-del-btn">삭제</div>
+            <div v-show="myname === username" class="search-more-del-btn" @click="deleteArticle">삭제</div>
           </header>
           <section class="search-more-content">
             <VueSlickCarousel v-bind="settings" v-if="imgs[1]">
@@ -168,6 +168,16 @@ export default {
       } else {
         INPUTBTN.classList.remove('on-comment-input')
       }
+    },
+    deleteArticle(){
+      let article =this.articledata
+       axios.delete('https://i3b304.p.ssafy.io/api/board/delete',{
+          data:{
+            articleNo:article
+          }
+        }).then(
+        console.log("success")
+      )
     },
     defaultDark() {
       const Dark = this.$cookies.get('dark')

@@ -36,7 +36,7 @@ public interface BoardDao extends JpaRepository<Board, String> {
 	@Query(value = "select * from board where articleNo = :articleno",nativeQuery = true)
 	Optional<Board> selectArticleno(int articleno);
 	
-	@Query(value="DELETE FROM board WHERE articleNo=:articleNo",nativeQuery = true)
+	@Query(value="delete from board where articleNo=:articleNo",nativeQuery = true)
 	void delBoardArticle(int articleNo);
 	
 	
