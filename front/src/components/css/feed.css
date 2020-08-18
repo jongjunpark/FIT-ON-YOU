@@ -3,7 +3,7 @@
   max-width: 440px !important;
   width: 100%;
   margin: 0 auto;
-  margin-top: 60px;
+  margin-top: 8vh;
   }
 }
 
@@ -13,7 +13,7 @@
 
 @media (min-width: 1200px) {
   .feed-wrap {
-    margin-top: 60px !important;
+    margin-top: 8vh !important;
     padding-top: 20px;
   }
 }
@@ -86,7 +86,7 @@
   width: 6.5vh;
   height: 6.5vh;
   border-radius: 50%;
-  background-color: black;
+  background-color: #fff;
   cursor: pointer;
   border: 0.5px solid grey;
 }
@@ -160,7 +160,8 @@
 .feed-user-profile {
   width: 5.5vh;
   height: 5.5vh;
-  background-color: grey;
+  background-color: #fff;
+  border: 1px solid grey;
   border-radius: 50%;
   cursor: pointer;
 }

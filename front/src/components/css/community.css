@@ -33,6 +33,7 @@
   background-color: grey;
   position: relative;
   transform-style: preserve-3d;
+  cursor: pointer;
 }
 @media (min-width:1200px) {
   .community-inner-box {

@@ -42,7 +42,7 @@
 }
 @media(max-width: 300px) {
 	.alarm-container .alrarm-time-box {
-		width: 18%;
+		width: 22%;
 	}
 }
 @media(min-width: 450px) {

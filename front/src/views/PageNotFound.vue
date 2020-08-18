@@ -1,9 +1,9 @@
 <template>
   <div class="PageNotFound">
 		<main class="pagecontainer">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-6 align-self-center">
+			<div class="container-404">
+				<div class="row-404">
+					<div class="col-404 align-self-center img-box-404">
 						<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 							viewBox="0 0 800 600">
 							<g>
@@ -258,13 +258,16 @@
 							</g>
 						</svg>
 					</div>
-					<div class="col-md-6 align-self-center">
+					<div class="col-404 align-self-center content-box-404">
 						<h1>404</h1>
 						<h2>UH OH! You're lost.</h2>
 						<p>The page you are looking for does not exist.
 							How you got here is a mystery. But you can click the button below
 							to go back to the homepage.
 						</p>
+						<button class="btn-space2" @click="goHome">HOME</button>
+					</div>
+					<div class="btn-box-404">
 						<button class="btn-space" @click="goHome">HOME</button>
 					</div>
 				</div>
@@ -286,7 +289,14 @@ export default {
     },
 	},
 	mounted() {
-    this.defaultDark()
+		this.defaultDark()
+		this.setBtn()
+	},
+	created() {
+		window.addEventListener("resize", this.setBtn)
+	},
+	destroyed() {
+		window.removeEventListener("resize", this.setBtn)
 	},
 	methods: {
 		goHome() {
@@ -302,6 +312,7 @@ export default {
 			const H2Page = document.querySelector('h2')
 			const PPage = document.querySelector('p')
 			const BTNHOME = document.querySelector('.btn-space')
+			const BTNHOME2 = document.querySelector('.btn-space2')
       
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -321,8 +332,8 @@ export default {
 				H1Page.classList.add('pageblack-on')
 				H2Page.classList.add('pageblack-on')
 				PPage.classList.add('pageblack-on')
-				BTNHOME.classList.add('pageblack-on')
-
+				BTNHOME.classList.add('page-btn-black-on')
+				BTNHOME2.classList.add('page-btn-black-on')
       } else {
 				HTML.classList.remove('black')
 				for (let i=0; i<circle.length ; i++) {
@@ -337,9 +348,21 @@ export default {
 				H1Page.classList.remove('pageblack-on')
 				H2Page.classList.remove('pageblack-on')
 				PPage.classList.remove('pageblack-on')
-				BTNHOME.classList.remove('pageblack-on')
+				BTNHOME.classList.remove('page-btn-black-on')
+				BTNHOME2.classList.remove('page-btn-black-on')
       }
-    },
+		},
+		setBtn() {
+			const BTN1 = document.querySelector('.btn-box-404')
+			const BTN2 = document.querySelector('.btn-space2')
+			if(window.innerWidth > 600) {
+				BTN1.classList.add('btn-box-404-non')
+				BTN2.classList.remove('btn-box-404-non')
+			} else {
+				BTN1.classList.remove('btn-box-404-non')
+				BTN2.classList.add('btn-box-404-non')
+			}
+		}
 	},
 
 }
@@ -352,7 +375,7 @@ export default {
 }
 
 .pagecontainer {
-	margin-top: 15vh;
+	margin-top: 8vh;
 }
 
 .pageblack {
@@ -363,40 +386,55 @@ export default {
 	color: white !important;
 }
 
-.btn-space {
+.page-btn-black-on {
+	color: #fff !important;
+}
+
+.page-btn-black-on:hover {
+	background-color: #fff !important;
+	color: rgba(0,0,0,0.8) !important;
+}
+
+.btn-box-404 {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.btn-space, .btn-space2 {
 	box-sizing: border-box;
 	border: 2px solid #ebebeb;
 	border-radius: 10vh;
-	width: 20vh;
-	height: 8vh;
-	margin-top: 3vh;
-	margin-left: 10vh;
+	width: 18vh;
+	height: 7vh;
+	transition: all 0.3s ease;
+	font-size: 2vh;
 }
 
-.btn-space:focus {
+.btn-space2 {
+	margin: 5vh 0 0 5vh;
+
+}
+
+.btn-space:focus, .btn-space2:focus {
 	outline: none;
 }
 
-@media (min-width:1200px) {
-  .container {
-    max-width: 1185px;
-  }
+.btn-space:hover, .btn-space2:hover {
+	background-color: rgba(0,0,0,0.9);
+	color: #fff;
+	border: 0
 }
 
-@media (min-width:960px) {
-  .container {
-    max-width: 900px;
-  }
-}
-
-.container {
+.container-404 {
 	width: 100%;
-	padding: 12px;
+	padding: 1vh;
 	margin-left: auto;
 	margin-right: auto;
 }
 
-.row {
+.row-404 {
 	display: flex;
 	flex-wrap: wrap;
 	flex: 1 1 auto;
@@ -404,15 +442,67 @@ export default {
 	margin-left: -12px;
 }
 
-@media (min-width:960px) {
-  .col-md-6 {
-	flex: 0 0 50%;
-	max-width: 50%;
-  }
+.col-404 {
+	width: 100%;
+	padding: 2vh;
+	padding-left: 5vh;
+	font-size: 2vh;
 }
 
-.col-md-6 {
-	width: 100%;
-	padding: 12px;
+.img-box-404 {
+	margin-top: 3vh;
 }
+@media (max-width: 500px) {
+	.img-box-404 {
+		margin-top: 4vh;
+	}
+	.btn-box-404 {
+		margin-top: 4vh;
+	}
+}
+
+.img-box-404 svg{
+	width: 80%;
+}
+
+@media (min-width: 601px) {
+  .col-404 {
+		flex: 0 0 50%;
+		max-width: 50%;
+		padding-left: 0;
+	}
+	.container-404 {
+		padding-top: 5vh;
+	}
+	.img-box-404{
+		padding-left: 5vw;
+	}
+	.img-box-404 svg{
+		width: 100%;
+		max-width: 50vw;
+	}
+	.content-box-404 {
+		padding-top: 10vw;
+	}
+	.btn-space {
+		margin-left: 10vh;
+	}
+	.btn-box-404 {
+		padding-bottom: 30vh;
+	}
+}
+
+@media (min-width:1200px) {
+  .container-404 {
+    max-width: 1185px;
+	}
+	.content-box-404 {
+		padding-top: 15vh;
+	}
+}
+
+.btn-box-404-non {
+	display: none;
+}
+
 </style>

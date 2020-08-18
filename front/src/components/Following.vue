@@ -244,7 +244,8 @@ export default {
 .following-box .following-icon-area img {
   width: 7vh;
   height: 7vh;
-  background-color: black;
+  background-color: #fff;
+  border: 1px solid grey;
   border-radius: 50%;
 }
 

@@ -62,21 +62,34 @@
 }
 
 .dm-container-message .dm-container-message-img {
-  border: 1px solid black;
+  border: 1px solid grey;
   border-radius: 50%;
   width: 6.5vh;
   height: 6.5vh;
   margin-right: 2.5vh;
 }
 
+.dm-container-message .dm-content-box {
+  display: flex;
+  flex-direction: column;
+}
+
 .dm-container-message .dm-user-name {
   font-size: 2.5vh;
+  display: flex;
+  align-items: center;
 }
 
 .dm-container-message .dm-in-text {
   margin-left: 1.3vh;
   color: #808080;
   font-size: 1.7vh;
+}
+
+.dm-container-message .dm-content-text {
+  color: black;
+  margin: 0;
+  font-weight: 500;
 }
 
 .search-img-dm-dark {

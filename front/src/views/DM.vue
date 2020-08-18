@@ -53,8 +53,9 @@ export default {
       const wrap = document.querySelector('.wrap')
       const INPUT = document.querySelectorAll('input')
       const H3TAG = document.querySelectorAll('h3')
+      const DM_TEXT = document.querySelectorAll('.dm-content-text')
       
-      const searchIMGDM = document.querySelector('.search-img-dm')
+      // const searchIMGDM = document.querySelector('.search-img-dm')
       
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -69,8 +70,11 @@ export default {
         for (let i=0; i<H3TAG.length ; i++) {
           H3TAG[i].classList.add('font-dark')
         }
+        for (let i=0; i<DM_TEXT.length ; i++) {
+          DM_TEXT[i].classList.add('font-dark')
+        }
         
-        searchIMGDM.classList.add('search-img-dm-dark')
+        // searchIMGDM.classList.add('search-img-dm-dark')
 
       } else {
         HTML.classList.remove('black')
@@ -81,8 +85,11 @@ export default {
         for (let i=0; i<H3TAG.length ; i++) {
           H3TAG[i].classList.remove('font-dark')
         }
+        for (let i=0; i<DM_TEXT.length ; i++) {
+          DM_TEXT[i].classList.remove('font-dark')
+        }
         
-        searchIMGDM.classList.remove('search-img-dm-dark')
+        // searchIMGDM.classList.remove('search-img-dm-dark')
       }
     },
     getLastMessage() {
@@ -106,9 +113,10 @@ export default {
               this.lastMessage=allMessages;
               console.dir(this.lastMessage);
               
+              const CONTENT_BOX = document.createElement('div')
               const H3 = document.createElement('h3')
               const H5message = document.createElement('h5')
-              const H5date = document.createElement('h5')
+              const H5date = document.createElement('span')
               const IMGDM = document.createElement('img')
               const DIVUNDER = document.createElement('div')
               const DIVUPPER = document.querySelector('.dm-container')
@@ -120,10 +128,10 @@ export default {
                 H3.innerHTML = element.firstuser
               }
               if (this.lastMessage.message) {
-                if (this.lastMessage.message.length < 10) {
-                  H5message.innerHTML = this.lastMessage.message.substring(0, 10)
+                if (this.lastMessage.message.length < 30) {
+                  H5message.innerHTML = this.lastMessage.message
                 } else {
-                  H5message.innerHTML = this.lastMessage.message.substring(0, 8) + '..'
+                  H5message.innerHTML = this.lastMessage.message.substring(0, 30) + '..'
                 }
               }
               if (this.lastMessage.createdAt.seconds) {
@@ -148,14 +156,20 @@ export default {
               IMGDM.classList.add('dm-container-message-img')
               if(element.img!=null && element.img.length>0) IMGDM.setAttribute('src',element.img);
               else IMGDM.setAttribute("src", "/images/default-user.png")
+              CONTENT_BOX.classList.add('dm-content-box')
               DIVUNDER.classList.add('dm-container-message')
               H5message.classList.add('dm-in-text')
+              H5message.classList.add('dm-content-text')
               H3.classList.add('dm-user-name')
               H5date.classList.add('dm-in-text')
               DIVUNDER.appendChild(IMGDM)
-              DIVUNDER.appendChild(H3)
-              DIVUNDER.appendChild(H5message)
-              DIVUNDER.appendChild(H5date)
+              DIVUNDER.appendChild(CONTENT_BOX)
+              CONTENT_BOX.appendChild(H3)
+              H3.appendChild(H5date)
+              CONTENT_BOX.appendChild(H5message)
+              // DIVUNDER.appendChild(H3)
+              // DIVUNDER.appendChild(H5message)
+              // DIVUNDER.appendChild(H5date)
 
 
               if (DIVUPPER) {
