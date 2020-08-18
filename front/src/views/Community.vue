@@ -29,7 +29,7 @@
         <div class="community-content">
           <p class='community-content-head'>{{ article.content }}</p>
           <p class='community-content-body'>·판매자: {{ article.user }}</p>
-          <p class='community-content-body'>·가격: {{ article.price }}원</p>
+          <p class='community-content-body' @click="onModal">·가격: {{ article.price }}원</p>
           <p class='community-content-body'>·사이즈: {{ article.size }}</p>
           <div class="community-content-footer">
             <div @click="goDM(article.roomname, article.user)" class="community-content-btn dm-btn other-btn">DM보내기</div>
@@ -37,6 +37,7 @@
         </div>
       </div>
     </div>
+     <MapModal v-if="mapModal" @close="mapModal= false" :placeAddrress="placeAddrress"/>
   </div>
 </template>
 
@@ -45,8 +46,12 @@ import { mapState, mapMutations } from 'vuex'
 import "../components/css/community.css"
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import MapModal from '../components/MapModal.vue'
 export default {
   name: 'Community',
+  components:{
+    MapModal,
+  },
   computed: {
     ...mapState(['flag'])
   },
@@ -63,6 +68,8 @@ export default {
       nickName:[],
       limit:'1',
       isMyCommu: false,
+      mapModal:false,
+      placeAddrress:"서울 강남구 가로수길 5 (신사동)",
     }
   },
   methods: {
@@ -209,7 +216,10 @@ export default {
           })
         }
       }
-    )}
+    )},
+    onModal(){
+      this.mapModal=true;
+    },
   },
   mounted() {
     this.setIsSelectBar(true)
@@ -218,7 +228,8 @@ export default {
     this.getNickName()
     this.getMyList()
     this.getAllList()
-    },
+
+  },
   beforeDestroy() { 
     this.setIsSelectBar(false)
   }
