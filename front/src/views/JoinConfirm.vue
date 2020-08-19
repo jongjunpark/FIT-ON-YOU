@@ -65,6 +65,9 @@ export default {
       this.defaultDark()
     }
   },
+  mounted() {
+    this.defaultDark()
+  },
   methods: {
     ...mapGetters(['getUser']),
     ...mapMutations(['setToken', 'setUser', 'setLoggedIn']),
