@@ -157,7 +157,6 @@ public class AccountController {
 	@ApiOperation(value = "비밀번호 찾기")
 	public Map<String, Object> findPassword(@Valid @RequestParam String email, @Valid @RequestParam String pTime) {
 		Map<String, Object> result = new HashMap<>();
-		System.out.println(1);
 		LocalDate time = LocalDate.of(Integer.parseInt(pTime.substring(0, 4)), Integer.parseInt(pTime.substring(4, 6)),
 				Integer.parseInt(pTime.substring(6, 8)));
 		Optional<User> optUser = userDao.findUserByEmailAndBirth(email, time);
@@ -198,7 +197,6 @@ public class AccountController {
 
 			MimeMessage message = emailSender.createMimeMessage();
 			try {
-				System.out.println(4);
 				MimeMessageHelper helper = new MimeMessageHelper(message, true);
 				helper.setFrom("ouosssssssa@gmail.com");
 				helper.setTo(to);
@@ -209,7 +207,6 @@ public class AccountController {
 				result.put("certifNum", certificationNum);
 
 			} catch (Exception e) {
-				System.out.println(5);
 				e.printStackTrace();
 			}
 		}
@@ -310,7 +307,6 @@ public class AccountController {
 	}
 	@GetMapping("/account/token")
 	public Map<String, Object> getUserByToken(@RequestParam String jwt){
-		System.out.println(jwt);
 		Map<String, Object> resultMap = new HashMap<>();
 		try {
 			jwtService.checkValid(jwt); // 토큰이 유효한지 검사
