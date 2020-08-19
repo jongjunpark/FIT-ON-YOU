@@ -342,8 +342,12 @@ export default {
       document.getElementById('feed-img-edit').value = ""
     },
     addWriteHash() {
-      this.writeHashList.push(this.writeHashContent.slice(0,-1))
-      this.writeHashContent = ''
+      if (this.writeHashContent != ',') {
+        this.writeHashList.push(this.writeHashContent.slice(0,-1))
+        this.writeHashContent = ''
+      } else {
+        this.writeHashContent = ''
+      }
     },
     delWriteHashItem(index) {
       this.writeHashList.splice(index, 1)
@@ -363,7 +367,9 @@ export default {
       }
     },
     sendBoardData(){
-      this.writeHashList.push(this.writeHashContent)
+      if (this.writeContent[0]) {
+        this.writeHashList.push(this.writeHashContent)
+      }
       let dataforms = new FormData();
       for (let index = 0; index < this.photo.length; index++) {
         dataforms.append("imgdata",this.photo[index]);
