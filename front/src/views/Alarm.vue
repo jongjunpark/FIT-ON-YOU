@@ -16,6 +16,8 @@
                   {{alarmMsg[alarm.type-1][0]}}
                   <span @click="onModal(alarm.articleNo)">{{alarmMsg[alarm.type-1][1]}}</span>
                   {{alarmMsg[alarm.type-1][2]}}
+                  <span @click="goCmtModal(alarm.articleNo)">{{alarmMsg[alarm.type-1][3]}}</span>
+                  {{alarmMsg[alarm.type-1][4]}}
                 </div>
                 <div class="alrarm-time-box">
                   <h5 class="in-text">{{timeCal(alarm.createAt)}}</h5>
@@ -31,6 +33,7 @@
       </div>
     </div>
     <SearchModal  v-if="showModal" @close="showModal= false"/>
+    <CommentModal v-if="showCmtModal" @close="showCmtModal= false" :modalArticleNo="modalArticleNo" :modalArticleUser="mynick"/>
   </div>
 </template>
 
@@ -40,10 +43,12 @@ import axios from 'axios'
 import { mapState,mapMutations } from 'vuex'
 import time from '../utils/timecal.js'
 import SearchModal from '../components/SearchModal.vue'
+import CommentModal from '../components/CommentModal.vue'
 export default {
   name: 'Alarm',
   components:{
     SearchModal,
+    CommentModal,
   },
   data() {
     //댓글 1 팔로우 2 좋아요 3
@@ -52,9 +57,9 @@ export default {
                   'fas fa-user-circle user-alarm',
                   'fas fa-heart heart-alarm'],
       alarmMsg:[
-        ['님이 회원님의 ','게시글','에 댓글을 남겼습니다.'],
-        ['님이 회원님을 ','팔로우','하기 시작하였습니다'],
-        ['님이 회원님의 ','사진','에 좋아요를 눌렀습니다.'],
+        ['님이 회원님의 ','게시글','에 ','댓글','을 남겼습니다.'],
+        ['님이 회원님을 ','팔로우','하기','','시작하였습니다'],
+        ['님이 회원님의 ','사진','에 좋아요를','','눌렀습니다.'],
       ],
       alist :[],
       isRead:[
@@ -62,6 +67,10 @@ export default {
         'alarm-container-message'
       ],
       showModal:false,
+      showCmtModal:false,
+      modalArticleNo:'',
+      modalArticleUser:'',
+      mynick:'',
     }
   },
   computed: {
@@ -84,6 +93,7 @@ export default {
     let uri_enc = encodeURIComponent(uri);
     let uri_dec = decodeURIComponent(uri_enc);
     let resNick = uri_dec;
+    this.mynick=resNick;
     
     axios.get('https://i3b304.p.ssafy.io/api/alarm',{
       params:{
@@ -193,6 +203,14 @@ export default {
         this.showModal = true
       }
     },
+    goCmtModal(articleNo){
+      if(articleNo==-1 || articleNo==null) return
+      else{
+        this.modalArticleNo=articleNo;
+        this.modalArticleUser=this.mynick
+        this.showCmtModal=true;
+      }
+    }
   },
 }
 </script>
