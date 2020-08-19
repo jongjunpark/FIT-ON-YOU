@@ -222,9 +222,9 @@ export default {
           ref.AC_USER(userData);
         
           axios.post('https://i3b304.p.ssafy.io/api/account/social/0',{
-                nickname : googleUser.getBasicProfile().Cd,
-                profile_image : googleUser.getBasicProfile().fL,
-                email : googleUser.getBasicProfile().zu,
+                 nickname : googleUser.getBasicProfile().Ad,
+                profile_image : googleUser.getBasicProfile().jK,
+                email : googleUser.getBasicProfile().bu,
               })
               .then((data)=>{
                 console.log("구글로그인성공")

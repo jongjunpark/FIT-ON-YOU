@@ -106,16 +106,13 @@ public class SearchController {
 		}
 		try {
 			String profile = userDao.findProfileImgByNickname(board.getArticleUser());
-			if (profile == null) {
-				Influencer temp = influDao.findInfluencerByNickname(board.getInflueUser());
-				board.setArticleUser(board.getInflueUser());
-				profile = temp.getProfile_img();
-			}
+			
 			data.setProfile(profile);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println(board.toString());
 		data.setAarticles(board);
 
 		result.add(data);
