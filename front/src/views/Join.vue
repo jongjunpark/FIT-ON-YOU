@@ -497,7 +497,7 @@ export default {
       const test1 = this.input.email
       const test2 = this.input.password
        firebase.auth().createUserWithEmailAndPassword(test1.toString(), test2.toString()).then(()=>{
-        }).catch();
+        }).catch(()=>{});
 
       axios.post('https://i3b304.p.ssafy.io/api/account/signup',{
 
