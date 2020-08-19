@@ -28,6 +28,7 @@ import com.web.curation.dao.CurationDao;
 import com.web.curation.dao.ImageDao;
 import com.web.curation.dao.InfluencerDao;
 import com.web.curation.dao.SearchDao;
+import com.web.curation.dao.TagDao;
 import com.web.curation.dao.UserDao;
 import com.web.curation.model.Articletag;
 import com.web.curation.model.BasicResponse;
@@ -72,6 +73,9 @@ public class SearchController {
 
 	@Autowired
 	BoardService boardService;
+	
+	@Autowired
+	TagDao tagDao;
 
 	@PostMapping("/all/{page}")
 	@ApiOperation(value = "페이지 업로드")
@@ -178,9 +182,11 @@ public class SearchController {
 			list.add(input);
 
 			Curation curation = new Curation();
-			curation.setTagname(input);
-			curation.setUsername(username);
-			curationDao.save(curation);
+			if(tagDao.findBytagName(input)!=null) {
+				curation.setTagname(input);
+				curation.setUsername(username);
+				curationDao.save(curation);
+			}
 		}
 		int size = list.size();
 		List<Curation> curationList = curationDao.getCurationByUsername(username);
