@@ -15,7 +15,7 @@
           <p class='community-content-body'>·판매자: {{ myarticle.recellUser }}</p>
           <p class='community-content-body' @click="onModal">·가격: {{ myarticle.recellPrice }}원</p>
           <p class='community-content-body'>·사이즈: {{ myarticle.recellSize }}</p>
-          <div class="map-zone" @click="onModal(article.place)" v-show="article.plcae!=-1">
+          <div class="map-zone" @click="onModal(article.place)" v-show="article.place!=-1">
            <span>직거래위치 <i class="fas fa-map-marker-alt map"></i></span>
           </div>
           <div class="community-content-footer">
@@ -34,7 +34,7 @@
           <p class='community-content-body'>·판매자: {{ article.user }}</p>
           <p class='community-content-body' @click="onModal">·가격: {{ article.price }}원</p>
           <p class='community-content-body'>·사이즈: {{ article.size }}</p>
-          <div class="map-zone" @click="onModal(article.place)" v-show="article.plcae!=-1">
+          <div class="map-zone" @click="onModal(article.place)" v-show="article.place!=-1">
            <span>직거래위치 <i class="fas fa-map-marker-alt map"></i></span>
           </div>
           <div class="community-content-footer">

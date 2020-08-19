@@ -171,10 +171,7 @@ export default {
     },
     deleteArticle(){
       let article =this.articledata
-       axios.delete('https://i3b304.p.ssafy.io/api/board/delete',{
-          data:{
-            articleNo:article
-          }
+       axios.delete(`https://i3b304.p.ssafy.io/api/board/${article}`,{
         }).then(
         console.log("success")
       )

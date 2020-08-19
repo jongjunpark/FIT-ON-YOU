@@ -388,7 +388,7 @@ export default {
       dataform.append("size",this.commuSize)
       dataform.append("place",this.commuPlace);
       
-      axios.post("http://localhost:8080/api/recell/upload", dataform).then(
+      axios.post("https://i3b304.p.ssafy.io/api/recell/upload", dataform).then(
         console.log('success'))
         Swal.fire({
           icon: 'success',

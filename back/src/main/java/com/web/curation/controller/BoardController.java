@@ -299,7 +299,7 @@ public class BoardController {
 		return result;
 
 	}
-	@DeleteMapping(value = "/delete/{articleNo}")
+	@DeleteMapping(value = "/{articleNo}")
 	public void deleteArticle(@PathVariable int articleNo) {
 		System.out.println(articleNo);
 		boardDao.delBoardArticle(articleNo);
