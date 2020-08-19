@@ -180,7 +180,10 @@ export default {
       }
     },
     goDown() {
-      document.querySelector('.message-content-wrap').scrollTop = document.querySelector('.message-content-wrap').scrollHeight;
+      const ErrorResell = document.querySelector('.message-content-wrap')
+      if (ErrorResell) {
+        document.querySelector('.message-content-wrap').scrollTop = document.querySelector('.message-content-wrap').scrollHeight;
+      }
     },
   },
   created(){
