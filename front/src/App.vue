@@ -197,7 +197,7 @@ export default {
       selectBar.classList.remove('go-second-menu')
       selectBar.classList.remove('go-first-menu')
       if (this.$route.name === 'Community') {
-        this.$router.go(this.$router.currentRoute).catch(()=>{})
+        this.$router.go(this.$router.currentRoute)
       } else {
         this.$router.push("/community").catch(()=>{})
       }
