@@ -16,6 +16,8 @@ import "../components/css/settings.css"
 import { mapState, mapMutations, mapActions  } from 'vuex' 
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import firebase from 'firebase'
+
 
 export default {
   name: 'Settings',
@@ -37,6 +39,25 @@ export default {
     ...mapMutations(['setToken', 'setLoggedIn', 'setUser']),
     ...mapActions([]),
     
+     deleteAtPath(path) {
+    var deleteList = [];
+    firebase.firestore().collection(path).get()
+    .then(snapshot => {
+      snapshot.forEach(doc=>{
+        console.log(doc.id,'=>',doc.data());
+        deleteList.push(doc.id);
+      });
+    })
+    .catch()
+    .finally(()=> {
+      console.log('delete=>',deleteList)
+      deleteList.forEach(docName =>{
+        console.log('docName=>',docName)
+        firebase.firestore().collection(path).doc(docName).delete();
+      })
+    })
+
+  },
     goLogout() {
       this.$cookies.remove('auth-token')
       this.$cookies.remove('auth-nickname')
@@ -119,11 +140,7 @@ export default {
       frm.append('recevier',nickname);
       axios.post('https://i3b304.p.ssafy.io/api/alarm/del',frm
       )
-      .then(Swal.fire(
-        '알림기록이 삭제되었습니다..',
-        '새로운 알람을 기대하세요!',
-        'success'
-      ))
+      .then()
       .catch()
     },
 
@@ -134,8 +151,10 @@ export default {
       let uri_enc = encodeURIComponent(uri);
       let uri_dec = decodeURIComponent(uri_enc);
       let resNick = uri_dec;
-
       let nickname=resNick;
+
+      
+      
       const formData=new FormData();
       formData.append('nickname',nickname);
 
@@ -149,9 +168,19 @@ export default {
         cancelButtonText: '아니오',
       }).then((result) => {
         if (result.value) {
+        axios.get('https://i3b304.p.ssafy.io/api/chat/allChatList',{
+        params:{
+        username: nickname,
+       }
+       })
+       .then((data)=>{
+        data.data.object.forEach(obj=>{
+          this.deleteAtPath(obj.roomname);
+        });
+       })
+       .catch()
           axios.delete('https://i3b304.p.ssafy.io/api/account/delete',{
         data:formData,
-        
       })
       .then((data)=>{
         if(data.data.data=="success"){

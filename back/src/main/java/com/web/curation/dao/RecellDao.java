@@ -23,4 +23,7 @@ public interface RecellDao extends JpaRepository<Recell, String> {
 
 	@Query(value = "update recellboard set salecheck = 1 where recellNo = :num", nativeQuery = true)
 	void changeSalechek(int num);
+	
+	@Query(value = "select * from recellboard where roomname = :roomname",nativeQuery = true)
+	Optional<Recell> existRoomname(String roomname);
 }

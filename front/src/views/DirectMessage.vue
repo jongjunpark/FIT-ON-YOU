@@ -39,32 +39,6 @@ import { mapState } from "vuex"
 import firebase from 'firebase'
 import axios from 'axios'
 
-// Required for side-effects
-require("firebase/firestore");
-
-// Your web app's Firebase configuration
-var firebaseConfig = {
-  apiKey: "AIzaSyCPKM_f3wVIMx9PG9A62_c7ObfSShrqXBQ",
-  authDomain: "vue-firestore-704a4.firebaseapp.com",
-  databaseURL: "https://vue-firestore-704a4.firebaseio.com",
-  projectId: "vue-firestore-704a4",
-  storageBucket: "vue-firestore-704a4.appspot.com",
-  messagingSenderId: "880449748292",
-  appId: "1:880449748292:web:c13cb68cfd9815dff16b11",
-  measurementId: "G-HX35ED5RHD"
-};
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-firebase.analytics();
-
-var db = firebase.firestore();
-
-window.db = db;
-
-db.settings({
-  
-});
-
 export default {
   name: 'DirectMessage',
   data() {
@@ -94,7 +68,7 @@ export default {
   methods: {
     saveMessage(){
       //save to firestore
-      db.collection(this.roomname).add({
+      firebase.firestore().collection(this.roomname).add({
         message: this.text,
         createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
         senduser: this.user.nickname,
@@ -119,7 +93,7 @@ export default {
       this.text = null;
     },
     fetchMessage(){
-      db.collection(this.roomname).orderBy('createdAt').onSnapshot((querySnapshot)=>{
+      firebase.firestore().collection(this.roomname).orderBy('createdAt').onSnapshot((querySnapshot)=>{
        
         let allMessages = [];
         querySnapshot.forEach(doc=>{
@@ -138,6 +112,7 @@ export default {
     goDM() {
       this.$router.go(-1)
     },
+ 
     defaultDark() {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
@@ -190,7 +165,8 @@ export default {
       }
     },
   },
-  created(){
+    
+    created(){
     this.roomname = this.$route.params.roomname
     this.othername = this.$route.params.othername
     this.fetchMessage();

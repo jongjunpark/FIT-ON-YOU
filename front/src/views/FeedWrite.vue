@@ -11,7 +11,7 @@
           <!-- <img class="write-hanger-img" src="../assets/images/hanger.png" alt=""> -->
           <label v-if="!feedImg[0]" class="write-upload-btn" for='feed-img-edit0'>
             <i class="far fa-images"><i class="fas fa-plus"></i></i>
-            <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit0" accept="image/*" @change="setFeedImg(0)">
+            <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit0" accept="images/*" @change="setFeedImg(0)">
           </label>
         </div>
         <div class="write-cloth-box">
@@ -21,7 +21,7 @@
               <i @click='delFeedImg(1)' v-show='feedImg[0]&&isCancle1' class="far fa-times-circle cancle-img"></i>
               <img v-if="feedImg[0]" class='feed-img' :src="feedImg[0]" alt="">
               <label for="feed-img-edit1" class='feed-more-label'>
-                <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit1" accept="image/*" @change="setFeedImg(1)">
+                <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit1" accept="images/*" @change="setFeedImg(1)">
               </label>
             </div>
           </div>
@@ -32,7 +32,7 @@
               <img v-if="feedImg[1]" class='feed-img' :src="feedImg[1]" alt="">
               <label for="feed-img-edit2" class='feed-more-label'>
                 <i v-if="feedImg[0] && !feedImg[1]" class="fas fa-plus"></i>
-                <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit2" accept="image/*" @change="setFeedImg(2)">
+                <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit2" accept="images/*" @change="setFeedImg(2)">
               </label>
             </div>
           </div>
@@ -43,7 +43,7 @@
               <img v-if="feedImg[2]" class='feed-img' :src="feedImg[2]" alt="">
               <label for="feed-img-edit3" class='feed-more-label'>
                 <i v-if="feedImg[0] && !feedImg[2]" class="fas fa-plus"></i>
-                <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit3" accept="image/*" @change="setFeedImg(3)">
+                <input multiple="multiple" class="imgdata" type="file" id="feed-img-edit3" accept="images/*" @change="setFeedImg(3)">
               </label>
             </div>
           </div>
@@ -76,7 +76,7 @@
           </div>
           <label v-show="!commuImg" class="write-upload-btn" for='feed-img-edit'>
             <i class="far fa-images"><i class="fas fa-plus"></i></i>
-            <input type= "file" id="feed-img-edit" accept="image/*" @change="setCommuImg">
+            <input type= "file" id="feed-img-edit" accept="images/*" @change="setCommuImg">
           </label>
           <div class="write-commu-img" @mouseover="onCancelBtn" @mouseout="offCancleBtn">
             <i @click='delCommuImg' v-show='commuImg&&isCommuCancle' class="far fa-times-circle cancle-img"></i>
@@ -342,8 +342,12 @@ export default {
       document.getElementById('feed-img-edit').value = ""
     },
     addWriteHash() {
-      this.writeHashList.push(this.writeHashContent.slice(0,-1))
-      this.writeHashContent = ''
+      if (this.writeHashContent != ',') {
+        this.writeHashList.push(this.writeHashContent.slice(0,-1))
+        this.writeHashContent = ''
+      } else {
+        this.writeHashContent = ''
+      }
     },
     delWriteHashItem(index) {
       this.writeHashList.splice(index, 1)
@@ -363,7 +367,9 @@ export default {
       }
     },
     sendBoardData(){
-      this.writeHashList.push(this.writeHashContent)
+      if (this.writeContent[0]) {
+        this.writeHashList.push(this.writeHashContent)
+      }
       let dataforms = new FormData();
       for (let index = 0; index < this.photo.length; index++) {
         dataforms.append("imgdata",this.photo[index]);

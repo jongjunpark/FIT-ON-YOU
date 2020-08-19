@@ -2,6 +2,7 @@ package com.web.curation.controller;
 
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.web.curation.dao.BoardDao;
 import com.web.curation.dao.ImageDao;
 import com.web.curation.dao.RecellDao;
 import com.web.curation.dao.UserDao;
 import com.web.curation.model.BasicResponse;
+import com.web.curation.model.Chat;
+import com.web.curation.model.ChatDTO;
 import com.web.curation.model.ImageStore;
 import com.web.curation.model.Recell;
 import com.web.curation.service.user.BoardService;
@@ -46,6 +50,30 @@ public class RecellController {
 	@Autowired
 	BoardService boardService;
 
+	
+	@GetMapping("/existroom")
+	public Object existroom(@RequestParam String roomname) {
+		final BasicResponse result = new BasicResponse();
+		Recell recell;
+		Optional<Recell> optRecell = recellDao.existRoomname(roomname);
+		if (optRecell.isPresent()) {// 있다면 lasttime을 update후에
+			System.out.println(2);
+			// 룸네임을 반환
+			recell = optRecell.get();
+			result.data = "success";
+			result.object = recell;
+			result.status = true;
+		} else {
+			// 새로운 룸네임을 저장후 이를 반환
+			
+			result.object = null;
+			result.data = "not exist roomname";
+			result.status = true;
+		}
+		System.out.println(4);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
 	// 내게시글만 가져오기
 	@GetMapping("/myContents")
 	public Object getMyContents(@RequestParam String username) {
