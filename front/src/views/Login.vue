@@ -101,7 +101,7 @@ export default {
       errormsgEmail: false,
       errormsgPwd: false,
       params: {
-          client_id: "834514064011-bqc7hgss1hil5965mdbgf57420u04lvv.apps.googleusercontent.com"
+          client_id: "834514064011-lcb0a6a4b4bu6p22bho4r5g94tcvknjf.apps.googleusercontent.com"
       },
       renderParams: {
         width: 250,
@@ -197,7 +197,7 @@ export default {
       let ref = this;
       gapi.load('auth2', function(){
         let auth2 = gapi.auth2.init({
-          client_id: '834514064011-bqc7hgss1hil5965mdbgf57420u04lvv.apps.googleusercontent.com',
+          client_id: '834514064011-lcb0a6a4b4bu6p22bho4r5g94tcvknjf.apps.googleusercontent.com',
           cookiepolicy: 'single_host_origin',
         });
         auth2.attachClickHandler('customBtn', {},
@@ -205,9 +205,9 @@ export default {
           let userData  = {
                 // access_token : googleUser.getAuthResponse(true).access_token,
                 // idToken : googleUser.getAuthResponse(true).id_token,
-                nickname : googleUser.getBasicProfile().Cd,
-                profile_image : googleUser.getBasicProfile().fL,
-                email : googleUser.getBasicProfile().zu,
+                nickname : googleUser.getBasicProfile().Ad,
+                profile_image : googleUser.getBasicProfile().jK,
+                email : googleUser.getBasicProfile().bu,
                 // token_type : 'Bearer',
           }
           ref.AC_USER(userData);
