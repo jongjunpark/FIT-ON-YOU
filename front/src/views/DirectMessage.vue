@@ -39,32 +39,6 @@ import { mapState } from "vuex"
 import firebase from 'firebase'
 import axios from 'axios'
 
-// Required for side-effects
-require("firebase/firestore");
-
-// Your web app's Firebase configuration
-var firebaseConfig = {
-  apiKey: "AIzaSyCPKM_f3wVIMx9PG9A62_c7ObfSShrqXBQ",
-  authDomain: "vue-firestore-704a4.firebaseapp.com",
-  databaseURL: "https://vue-firestore-704a4.firebaseio.com",
-  projectId: "vue-firestore-704a4",
-  storageBucket: "vue-firestore-704a4.appspot.com",
-  messagingSenderId: "880449748292",
-  appId: "1:880449748292:web:c13cb68cfd9815dff16b11",
-  measurementId: "G-HX35ED5RHD"
-};
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-firebase.analytics();
-
-var db = firebase.firestore();
-
-window.db = db;
-
-db.settings({
-  
-});
-
 export default {
   name: 'DirectMessage',
   data() {
@@ -94,7 +68,7 @@ export default {
   methods: {
     saveMessage(){
       //save to firestore
-      db.collection(this.roomname).add({
+      firebase.firestore().collection(this.roomname).add({
         message: this.text,
         createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
         senduser: this.user.nickname,
@@ -121,7 +95,7 @@ export default {
       this.text = null;
     },
     fetchMessage(){
-      db.collection(this.roomname).orderBy('createdAt').onSnapshot((querySnapshot)=>{
+      firebase.firestore().collection(this.roomname).orderBy('createdAt').onSnapshot((querySnapshot)=>{
        
         let allMessages = [];
         querySnapshot.forEach(doc=>{
@@ -141,25 +115,7 @@ export default {
     goDM() {
       this.$router.go(-1)
     },
-  deleteAtPath(path) {
-    var deleteList = [];
-    db.collection(path).get()
-    .then(snapshot => {
-      snapshot.forEach(doc=>{
-        console.log(doc.id,'=>',doc.data());
-        deleteList.push(doc.id);
-      });
-    })
-    .catch()
-    .finally(()=> {
-      console.log('delete=>',deleteList)
-      deleteList.forEach(docName =>{
-        console.log('docName=>',docName)
-        db.collection(path).doc(docName).delete();
-      })
-    })
-
-  },
+ 
     defaultDark() {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
@@ -211,7 +167,6 @@ export default {
   },
     
     created(){
-    this.deleteAtPath("123123123이준형")
     this.roomname = this.$route.params.roomname
     this.othername = this.$route.params.othername
     console.log(this.roomname)
