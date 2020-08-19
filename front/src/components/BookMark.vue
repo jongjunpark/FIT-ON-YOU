@@ -67,7 +67,6 @@ export default {
         }
       })
       .then((data)=>{
-        console.log(data,"bookmark");
         this.bookMarkList = data.data.bmImgList
       })
     },

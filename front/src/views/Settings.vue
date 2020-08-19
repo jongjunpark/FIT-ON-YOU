@@ -115,7 +115,6 @@ export default {
       let uri_dec = decodeURIComponent(uri_enc);
       let resNick = uri_dec;
       let nickname=resNick;
-      console.log(nickname,1);
       const frm = new FormData();
       frm.append('recevier',nickname);
       axios.post('https://i3b304.p.ssafy.io/api/alarm/del',frm
@@ -138,7 +137,6 @@ export default {
 
       let nickname=resNick;
       const formData=new FormData();
-      console.log(nickname);
       formData.append('nickname',nickname);
 
       Swal.fire({
@@ -156,7 +154,6 @@ export default {
         
       })
       .then((data)=>{
-        console.log(data)
         if(data.data.data=="success"){
           ref.$cookies.remove('auth-token')
           ref.$cookies.remove('auth-nickname')
@@ -164,9 +161,6 @@ export default {
           ref.setLoggedIn(false)
           ref.setUser(null)
           ref.$router.push('/').catch(()=>{})
-        }
-        else{
-          console.log("fail..");
         }
       })
       .catch()

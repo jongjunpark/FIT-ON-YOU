@@ -35,7 +35,6 @@ export default {
       const ARRAYFOLLOW = data.data.result
       const PRFIMGS = data.data.prfimgs;
       ARRAYFOLLOW.forEach((element,index) => {
-        console.log(element,index);
         
         const FollowingBox = document.createElement('div')
         const FollowingIcon = document.createElement('div')

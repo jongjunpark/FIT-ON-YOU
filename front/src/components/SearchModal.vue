@@ -139,7 +139,6 @@ export default {
     frm.append('nickname',res);
     axios.post(`https://i3b304.p.ssafy.io/api/search/${articleNo}`,frm)
     .then((response)=>{
-      console.log(response.data)
       this.username = response.data[0].aarticles.articleUser
       this.time = timeForToday(response.data[0].aarticles.articleDate)
       if (response.data[0].aarticles.content.length>100) {
@@ -209,8 +208,6 @@ export default {
     },
 
     clickLike(articleNo,flag,e) {
-      let ref=this
-
       let data = this.$cookies.get('auth-nickname');
       let uri = data;
       let uri_enc = encodeURIComponent(uri);
@@ -226,7 +223,7 @@ export default {
             articleNo:articleNo,
             nickname:res
           })
-          .then(console.log("좋아요"))
+          .then()
           .catch()
       }
       else if(flag==1){
@@ -239,7 +236,7 @@ export default {
             nickname:res
           }
         })
-        .then(console.log(ref.likechk,"좋아요 취소"))
+        .then()
         .catch()
       }
       
@@ -250,8 +247,6 @@ export default {
       this.showModal = true
     },
     clickBookMark(articleNo,flag,e) {
-      let ref=this
-
       let data = this.$cookies.get('auth-nickname');
       let uri = data;
       let uri_enc = encodeURIComponent(uri);
@@ -265,7 +260,7 @@ export default {
             bookedArticle:articleNo,
             bookUser:res
           })
-          .then(console.log("북마크 등록"))
+          .then()
           .catch()
       }
       else if(flag==1){
@@ -277,7 +272,7 @@ export default {
             bookUser:res
           }
         })
-        .then(console.log(ref.markchk,"북마크 취소"))
+        .then()
         .catch()
       }
 

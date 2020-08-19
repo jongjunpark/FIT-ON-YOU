@@ -164,7 +164,11 @@ export default {
   },
   created() {
     this.getInflu()
+    window.addEventListener("scroll", this.defaultDark)
   },
+  destroyed() {
+		window.removeEventListener("srcoll", this.defaultDark)
+	},
   methods: {
     ...mapActions(['sendUserInfo', 'setLoggedIn', 'setToken']),
     ...mapMutations(['setIsSelectBar']),
@@ -186,8 +190,6 @@ export default {
       });
     },
     clickLike(articleNo,flag,index,e) {
-      let ref=this
-
       let data = this.$cookies.get('auth-nickname');
       let uri = data;
       let uri_enc = encodeURIComponent(uri);
@@ -213,7 +215,7 @@ export default {
             articleNo:articleNo,
             nickname:res
           })
-          .then(console.log("좋아요"))
+          .then()
           .catch()
       }
       else if(flag==1){
@@ -228,7 +230,7 @@ export default {
             nickname:res
           }
         })
-        .then(console.log(ref.likeStates[index],"좋아요 취소"))
+        .then()
         .catch()
       }
       
@@ -239,7 +241,7 @@ export default {
       this.showModal = true
     },
     clickBookMark(articleNo,flag,index,e) {
-      let ref=this
+
 
       let data = this.$cookies.get('auth-nickname');
       let uri = data;
@@ -254,7 +256,7 @@ export default {
             bookedArticle:articleNo,
             bookUser:res
           })
-          .then(console.log("북마크 등록"))
+          .then()
           .catch()
       }
       else if(flag==1){
@@ -266,7 +268,7 @@ export default {
             bookUser:res
           }
         })
-        .then(console.log(ref.bookmarkStates[index],"북마크 취소"))
+        .then()
         .catch()
       }
 
@@ -301,33 +303,35 @@ export default {
       if (Dark === 'off') {
         HTML.classList.add('black')
         wrap.classList.add('wrap-dark')
-        INFLUNAVBTN.classList.add('nav-influ-btn-dark')
-        INFLUNAV.classList.add('nav-influ-dark')
-        H1tag.classList.add('no-result-dark')
-        for (let i=0; i<FEED_HEAD.length ; i++) {
-          FEED_HEAD[i].classList.add('font-dark')
-        }
-        for (let i=0; i<PTAG.length ; i++) {
-          PTAG[i].classList.add('font-dark')
+        if (INFLUNAVBTN && INFLUNAV && H1tag && PTAG && FEED_HEAD ) {
+          INFLUNAVBTN.classList.add('nav-influ-btn-dark')
+          INFLUNAV.classList.add('nav-influ-dark')
+          H1tag.classList.add('no-result-dark')
+          for (let i=0; i<FEED_HEAD.length ; i++) {
+            FEED_HEAD[i].classList.add('font-dark')
+          }
+          for (let i=0; i<PTAG.length ; i++) {
+            PTAG[i].classList.add('font-dark')
+          }
         }
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
-        INFLUNAVBTN.classList.remove('nav-influ-btn-dark')
-        INFLUNAV.classList.remove('nav-influ-dark')
-        H1tag.classList.remove('no-result-dark')
-        for (let i=0; i<FEED_HEAD.length ; i++) {
-          FEED_HEAD[i].classList.remove('font-dark')
-        }
-        for (let i=0; i<PTAG.length ; i++) {
-          PTAG[i].classList.remove('font-dark')
+        if (INFLUNAVBTN && INFLUNAV && H1tag && PTAG && FEED_HEAD) {
+          INFLUNAVBTN.classList.remove('nav-influ-btn-dark')
+          INFLUNAV.classList.remove('nav-influ-dark')
+          H1tag.classList.remove('no-result-dark')
+          for (let i=0; i<FEED_HEAD.length ; i++) {
+            FEED_HEAD[i].classList.remove('font-dark')
+          }
+          for (let i=0; i<PTAG.length ; i++) {
+            PTAG[i].classList.remove('font-dark')
+          }
         }
       }
     },
     infiniteHandler($state){
-      let ref=this;
-      console.log("바닥에 닿음",ref.limit);
-
+      let ref = this
       let nickdata = this.$cookies.get('auth-nickname')
       let uri = nickdata;
       let uri_enc = encodeURIComponent(uri);
@@ -342,11 +346,7 @@ export default {
       .then((data)=>{
         setTimeout(() => {
           if(data.data.length){
-            
-            console.log("success")
-            console.log(data)
             this.feedlist=data.data;
-            console.log(typeof(this.feedlist))
             for (let index = 0; index < this.feedlist.length; index++) {
               let feeddata={tags:[],
                             images:[],
@@ -409,7 +409,6 @@ export default {
 
             $state.loaded();
             ref.limit+=1;
-            console.log(ref.limit)
             if(ref.mainfeed.length/10==0){
               $state.loaded();
             }
@@ -458,6 +457,7 @@ export default {
         
         axios.post("https://i3b304.p.ssafy.io/api/board/profileimg",follow).then((proff)=>{
           feeddata.userProfile=proff.data.profile_img;
+          this.defaultDark()
         });
 
         const articleNo = new FormData();
@@ -484,6 +484,7 @@ export default {
             feeddata.articleNo=this.feedlist[index].articleNo;
           }
           feeddata.favoriteCnt=this.feedlist[index].favoriteCnt;
+          this.defaultDark()
         });
         axios.post("https://i3b304.p.ssafy.io/api/board/tags",articleNo).then((tag)=>{
         const tags = tag.data;
@@ -493,17 +494,15 @@ export default {
             taglist.push({tagname:el2.tagName});  
           }
             feeddata.tags=taglist;
+        this.defaultDark()
         });
         
         this.mainfeed.push(feeddata)
         ref.likeStates.push(this.feedlist[index].likechk);
         ref.bookmarkStates.push(this.feedlist[index].markchk);
+        this.defaultDark()
       }
     });
-    
-    console.log(this.mainfeed, '메인피드')
-    console.log(this.likeStates,'좋아요리스트');
-    console.log(this.bookmarkStates,'북마크리스트');
     this.defaultDark()
   },
   beforeDestroy() { 

@@ -68,7 +68,6 @@ export default {
       })
       .then((data)=>{
         this.curationList = data.data.object
-        console.log(data)
       })
     },
     onModal(articleNo) {

@@ -241,7 +241,6 @@ Vue.use(VueRouter)
       } else {
         let param = to.params.nickname
         let data = Vue.$cookies.get('auth-nickname');
-        console.log(data)
         let uri = data;
         let uri_enc = encodeURIComponent(uri);
         let uri_dec = decodeURIComponent(uri_enc);
