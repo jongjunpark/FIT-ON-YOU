@@ -60,6 +60,7 @@ import VueSlickCarousel from 'vue-slick-carousel'
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 function timeForToday(value) {
         const today = new Date();
@@ -169,12 +170,31 @@ export default {
         INPUTBTN.classList.remove('on-comment-input')
       }
     },
-    deleteArticle(){
-      let article =this.articledata
-       axios.delete(`https://i3b304.p.ssafy.io/api/board/${article}`,{
-        }).then(
-        console.log("success")
-      )
+    deleteArticle() {
+      let article = this.articledata
+      Swal.fire({
+        title: '삭제하시겠습니까?',
+        text: "삭제된 댓글은 복구할 수 없습니다.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '삭제하기',
+        cancelButtonText: '아니오',
+      }).then((result) => {
+        if (result.value) {
+          axios.delete(`https://i3b304.p.ssafy.io/api/board/${article}`,{
+            }).then(() => {
+            Swal.fire(
+            '삭제되었습니다',
+          )
+            this.$router.go(0)
+            }
+          )
+          
+        }
+      })
+    
     },
     defaultDark() {
       const Dark = this.$cookies.get('dark')
