@@ -102,6 +102,10 @@ import * as EmailValidator from "email-validator"
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import { mapState, mapMutations, mapActions } from 'vuex'
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4850b06074bfabfafdfa6c5aaa8a1dadbb307f14
 
 
 export default {
