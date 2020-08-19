@@ -88,6 +88,7 @@ export default {
     },
     changePwd() {
       if (this.uuid == this.certifNum && !this.remaintime) {
+        this.$cookies.set('agree', 'true')
         this.$router.push("/find/password/passwordchange").catch(()=>{})
       } else {
         Swal.fire({

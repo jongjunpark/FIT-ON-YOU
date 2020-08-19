@@ -22,7 +22,7 @@ import JoinConfirm from '../views/JoinConfirm.vue'
 import PageNotFound from '../views/PageNotFound.vue'
 import ResellMessage from '../views/ResellMessage.vue'
 import axios from 'axios'
-
+import JoinConfirmNew from '../views/JoinConfirmNew.vue'
 
 Vue.use(VueRouter)
 
@@ -42,6 +42,22 @@ Vue.use(VueRouter)
     path: '/join',
     name: 'Join',
     component: Join,
+    beforeEnter(to, from, next) {
+      if (Vue.$cookies.isKey('auth-token')) {
+        next('/feed')
+      } else {
+        if (Vue.$cookies.get('agree'))
+        { Vue.$cookies.remove('agree')
+          next() }
+        else {
+          next('/')
+        }
+      }    }
+  },
+  {
+    path: '/joinconfirmnew',
+    name: 'JoinConfirmNew',
+    component: JoinConfirmNew,
     beforeEnter(to, from, next) {
       if (Vue.$cookies.isKey('auth-token')) {
         next('/feed')
@@ -102,7 +118,13 @@ Vue.use(VueRouter)
       if (Vue.$cookies.isKey('auth-token')) {
         next('/feed')
       } else {
-        next()
+        if (Vue.$cookies.get('agree'))
+        { Vue.$cookies.remove('agree')
+          next()
+        }
+        else {
+          next('/find/password')
+        }
       }    }
   },
   {
@@ -113,7 +135,13 @@ Vue.use(VueRouter)
       if (Vue.$cookies.isKey('auth-token')) {
         next('/feed')
       } else {
-        next()
+        if (Vue.$cookies.get('agree'))
+        { Vue.$cookies.remove('agree')
+          next()
+        }
+        else {
+          next('/find/password')
+        }
       }    }
   },
   {

@@ -74,7 +74,7 @@
       </div>
       <infinite-loading @infinite="infiniteHandler" spinner="spinner">
         <div slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</div>
-        <div slot="no-results" class="no-result" v-show="mainfeed.length==0"><h1>현재<br> 팔로우가 없어요.<br> 친구들을 <br>팔로우하여<br>피드를 받아보세요.</h1></div>
+        <div slot="no-results" class="no-result" v-show="mainfeed.length==0"><h1>현재<br> 팔로우가 없거나<br> 친구들의 <br> 게시글이 없어요 <br>팔로우하여<br>피드를 받아보세요</h1></div>
       </infinite-loading>
     </div>
   </div>

@@ -25,6 +25,13 @@
         <p v-if="mailSucMsg && finalMail" class='err-msg join-err-msg'>이미 사용중인 이메일입니다.</p>
         <p v-if="mailSucMsg && !finalMail && joinFlag" class='suc-msg join-suc-msg'>사용가능합니다.</p>
       </div>
+      <div class="join-input-area" v-show="mailSucMsg && !finalMail && joinFlag && !finalFlag">
+        <label for="">인증번호 입력</label>
+        <input @focus="activeInput" @blur='deactiveInput' v-model='checkConfirm' type="text" class="common-input-join helllotest" placeholder="인증번호입력" >
+        <p v-show="confirmErrorMsg" class='err-msg join-err-msg'>인증번호가 틀렸습니다.</p>
+        <p v-show="confirmSuccessMsg" class='suc-msg join-suc-msg'>사용 가능한 비밀번호 입니다.</p>
+        <button class="confirm-btnid" @click="goConfrim">전송</button> 
+      </div>
       <div class="join-input-area">
         <label for="">비밀번호</label>
         <input @focus="activeInput" @blur='deactiveInput' v-model='input.password' type="password" class="common-input-join" placeholder="password" >
@@ -112,6 +119,8 @@ export default {
       passwordSchema: new PasswordValidator(),
       select: '직접입력',
       offSelect: true,
+      checkConfirm: '',
+      checkConfirmFlag: 'QWcbjksbQ',
       gender: '',
       input: {
         email: '',
@@ -139,10 +148,13 @@ export default {
       isFemale: false,
       isEmail: false,
       changeProfile: false,
+      confirmErrorMsg: false,
+      confirmSuccessMsg: false,
       isMale: false,
       isCancle: false,
       defaultImg: "default-user.png",
       joinFlag: false,
+      finalFlag: false,
     }
   },
   created() {
@@ -157,6 +169,12 @@ export default {
       .letters();
   },
   watch: {
+    checkConfirm() {
+      this.goCheckConfirm();
+    },
+    finalFlag() {
+      this.checkJoinForm();
+    },
     select() {
       this.checkSelect();
       this.checkEmailValidate();
@@ -243,6 +261,26 @@ export default {
         }
       }
     },
+    goConfrim() {
+      axios.get('http://localhost:8080/api/account/confirmemail',{
+        params:{
+          email: this.input.email + '@' + this.input.url
+        }
+      }).then(data => {
+        if (data.data.certifNum) {
+          this.checkConfirmFlag = data.data.certifNum;
+        }
+      })
+      .catch();
+      Swal.fire(
+        '인증번호가 전송되었습니다.',
+        '번호를 입력해주세요',
+        'success'
+        )
+      
+      const Confirm = document.querySelector('.confirm-btnid')
+      Confirm.innerHTML = '재전송'
+    },
     clickMale() {
       const male = document.querySelector('.fa-male')
       const female = document.querySelector('.fa-female')
@@ -290,7 +328,7 @@ export default {
       }
     },
     checkJoinForm() {
-      if(this.input.email && (this.input.url || this.select != '직접입력') && this.input.password
+      if(this.input.email && (this.input.url || this.select != '직접입력') && this.input.password && this.finalFlag
       && this.input.passwordConfirm && this.input.nickname && this.passwordSuccessMsg
       && this.input.birth.year && this.input.birth.month && this.input.birth.day
       && (this.isMale || this.isFemale)
@@ -317,6 +355,18 @@ export default {
         this.mailSucMsg = true
       } else {
         this.mailSucMsg = false
+      }
+    },
+    goCheckConfirm() {
+      if (this.checkConfirm == this.checkConfirmFlag) {
+        this.confirmSuccessMsg = true;
+        this.confirmErrorMsg = false;
+        this.finalFlag = true;
+      } else {
+        this.confirmErrorMsg = true;
+        this.confirmSuccessMsg = false;
+        this.finalFlag = false;
+
       }
     },
     checkNickname() {
@@ -462,6 +512,7 @@ export default {
       }).then(data => {
         this.$cookies.set('auth-token', data.data.auth_token)
         this.setToken(data.data.auth_token)
+        this.$cookies.remove('agree')
         Swal.fire(
         '환영해요!',
         '자신만의 패션을 뽐내보세요!',

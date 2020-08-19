@@ -432,6 +432,55 @@ public class AccountController {
 		
 		return result;
 	}
+	@GetMapping("/account/confirmemail")
+	   @ApiOperation(value = "이메일 인증")
+	   public Map<String, Object> confrimEmail(@Valid @RequestParam String email) {
+	      Map<String, Object> result = new HashMap<>();
+	      Properties props = new Properties();
+	      
+	      String host="smtp.gmail.com";
+	  String port="587";
+	  String user="ouosssssssa@gmail.com";
+	  String password="zzxx1122";
+	  
+	  props.put("mail.smtp.starttls.enable", "true");
+	  props.put("mail.smtp.ssl.trust", host);
+	  props.put("mail.smtp.auth", "true");
+	  props.put("mail.smtp.host", host);
+	  
+	  if (port != null)
+	  {
+	     props.put("mail.smtp.port", port);
+	     props.put("mail.smtp.socketFactory.port", port);
+	     props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+	  }
+	  
+	
+	  String to = email;
+	  String subject = "핏온유 회원가입 인증번호입니다. 확인해 주세요";
+	  int randomCode = new Random().nextInt(9000) + 1000;
+	  String certificationNum = Integer.toString(randomCode);
+	  StringBuilder text = new StringBuilder();
+	  text.append("핏온유 회원가입을 위한 인증 절차입니다. 하단의 번호를 핏온유 화면에 입력해 주세요\n");
+	  text.append("인증번호:" + certificationNum + '\n');
+	  text.append("인증번호를 다른사람이 보지 않게 주의해 주세요.\n");
+	
+	  MimeMessage message = emailSender.createMimeMessage();
+	  try {
+	     System.out.println(4);
+	     MimeMessageHelper helper = new MimeMessageHelper(message, true);
+	     helper.setFrom("ouosssssssa@gmail.com");
+	     helper.setTo(to);
+	     helper.setSubject(subject);
+	     helper.setText(text.toString());
+	     emailSender.send(message);
+	     result.put("certifNum", certificationNum);
+	
+	      } catch (Exception e) {
+	         e.printStackTrace();
+	      }
+	      return result;
+	   }
 	
 	
 }
