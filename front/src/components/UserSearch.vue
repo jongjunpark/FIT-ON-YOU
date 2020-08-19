@@ -40,11 +40,15 @@ export default {
       this.getUserSearch()
     }
   },
+  updated() {
+    this.defaultDark();
+  },
   methods: {
     defaultDark() {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.wrap')
+      const PTAGI = document.querySelector('p')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -53,9 +57,15 @@ export default {
       if (Dark === 'off') {
         HTML.classList.add('black')
         wrap.classList.add('wrap-dark')
+        if (PTAGI) {
+          PTAGI.classList.add('dark-onon')
+        }
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
+        if (PTAGI) {
+          PTAGI.classList.remove('dark-onon')
+        }
       }
     },
     getUserSearch() {
@@ -164,5 +174,9 @@ export default {
   padding-top: 20vh;
   font-size: 2.5vh;
   font-weight: 700;
+}
+
+.dark-onon {
+  color: white;
 }
 </style>
