@@ -92,7 +92,6 @@ export default {
   transition: 0.3s ease;
   background-color: #fff;
   border-radius: 1vw;
-  width: 88%
 }
 
 @media (min-width: 450px) {
