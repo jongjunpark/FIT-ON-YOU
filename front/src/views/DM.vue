@@ -99,10 +99,7 @@ export default {
         }
         }).then((data)=>{
           let ARRAY = data.data.object
-          console.log('ARRAY')
-          console.dir(ARRAY)
           ARRAY.forEach(element => {
-            console.log(element.roomname)
             db.collection(element.roomname).orderBy('createdAt','desc').limit(1).onSnapshot((querySnapshot)=>{
 
             let allMessages = {};
@@ -111,7 +108,6 @@ export default {
               })
 
               this.lastMessage=allMessages;
-              console.dir(this.lastMessage);
               
               const CONTENT_BOX = document.createElement('div')
               const H3 = document.createElement('h3')
@@ -175,7 +171,6 @@ export default {
               if (DIVUPPER) {
                 DIVUPPER.appendChild(DIVUNDER)
               }
-              console.log(DIVUPPER);
               DIVUNDER.addEventListener('click', () => {
                 let Next;
                 if (element.firstuser == this.nickname) {
@@ -211,13 +206,11 @@ export default {
   },
   created(){
     let nickdata = this.$cookies.get('auth-nickname')
-    console.log(nickdata,'nick0')
     let uri = nickdata;
     let uri_enc = encodeURIComponent(uri);
     let uri_dec = decodeURIComponent(uri_enc);
     let res = uri_dec;
     this.nickname = res
-    console.log(this.nickname,'nick')
   }
 
 }

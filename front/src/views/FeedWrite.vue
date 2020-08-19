@@ -188,8 +188,6 @@ export default {
       }
       this.checkCommuForm()
       this.inNumber()
-      console.log(this.commuPrice)
-      console.log(this.isNumPrice)
     },
     commuSize() {
       this.checkCommuForm()
@@ -309,7 +307,6 @@ export default {
         } else {
           this.feedImg.push(URL.createObjectURL(photoFile.files[i]))
           this.photo.push(photoFile.files[i]);
-          console.log(this.photo, 'upload')
         }
       }
     },
@@ -339,7 +336,6 @@ export default {
       let idx = num-1
       this.feedImg.splice(idx, 1)
       this.photo.splice(idx, 1)
-      console.log(this.photo, 'delete')
     },
     delCommuImg() {
       this.commuImg = ''
@@ -369,7 +365,6 @@ export default {
     sendBoardData(){
       this.writeHashList.push(this.writeHashContent)
       let dataforms = new FormData();
-      console.log(this.photo)
       for (let index = 0; index < this.photo.length; index++) {
         dataforms.append("imgdata",this.photo[index]);
       }
@@ -377,8 +372,7 @@ export default {
       dataforms.append("content", this.writeContent);
       dataforms.append("tags",this.writeHashList);
      
-      axios.post("https://i3b304.p.ssafy.io/api/board/upload",dataforms).then(
-        console.log('success'))
+      axios.post("https://i3b304.p.ssafy.io/api/board/upload",dataforms).then()
         Swal.fire({
           icon: 'success',
           title: '작성이 완료됐습니다!',
@@ -398,8 +392,7 @@ export default {
       dataform.append("size",this.commuSize)
       dataform.append("place",this.commuPlace);
       
-      axios.post("https://i3b304.p.ssafy.io/api/recell/upload", dataform).then(
-        console.log('success'))
+      axios.post("https://i3b304.p.ssafy.io/api/recell/upload", dataform).then()
         Swal.fire({
           icon: 'success',
           title: '작성이 완료됐습니다!',

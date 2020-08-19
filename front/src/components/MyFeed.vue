@@ -65,9 +65,7 @@ export default {
         }
       })
       .then((data)=>{
-        console.log(data,"myfeed");
         this.myFeedList = data.data.myBoards
-        console.log(this.myFeedList)
       })
     },
     onModal(articleNo) {

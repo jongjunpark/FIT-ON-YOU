@@ -75,7 +75,6 @@ export default {
       }
     })
     .then((res)=>{
-      console.log(res,2)
       ref.commentList=res.data.commentli;
       if(res.data.myprofile) ref.myProfileImg=res.data.myprofile;      
     })
@@ -116,7 +115,6 @@ export default {
         frm.append("writer", res);
         frm.append("content", this.commentContent);
         frm.append("articleUser",this.modalArticleUser);
-        console.log(this.modalArticleNo);
         let today=new Date();
   
         axios.post('https://i3b304.p.ssafy.io/api/comment',frm
@@ -136,9 +134,7 @@ export default {
           ref.commentContent='';
   
         })
-        .catch(()=>{
-          console.log("fail");
-        })
+        .catch()
       }
     },
 

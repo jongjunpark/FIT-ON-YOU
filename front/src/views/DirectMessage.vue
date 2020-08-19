@@ -116,8 +116,6 @@ export default {
       //   var p = document.createElement('p');
       //   p.className = 'user-me-content';
       //   p.innerText = this.text;
-
-      console.log(this.user);
       this.text = null;
     },
     fetchMessage(){
@@ -129,7 +127,6 @@ export default {
         })
 
         this.messages=allMessages;
-        console.dir(this.messages);
         this.goDown()
         this.defaultDark()
         
@@ -196,12 +193,8 @@ export default {
   created(){
     this.roomname = this.$route.params.roomname
     this.othername = this.$route.params.othername
-    console.log(this.roomname)
-    console.log(this.othername)
     this.fetchMessage();
     this.profileImg=this.dmProfileImg;
-    console.log(this.dmProfileImg,1);
-    console.log(this.profileImg,2);
   },
   mounted(){
     this.defaultDark()  

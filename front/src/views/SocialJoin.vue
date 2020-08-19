@@ -205,7 +205,6 @@ export default {
           birth: this.input.birth.year+' '+this.input.birth.month+' '+this.input.birth.day,
           // profile_img: this.profileImg
       }).then(data => {
-        console.log(data)
         this.$cookies.set('auth-token', data.data.auth_token)
         this.setToken(data.data.auth_token)
         Swal.fire(
@@ -217,9 +216,7 @@ export default {
         this.sendUserInfo();
         this.$router.push('/feed').catch(()=>{})
       })
-      .catch(function(){
-        // console.log(data.data.data)
-      });
+      .catch();
     },
     checkPassword() {
       if (this.input.passwordConfirm !== '') {

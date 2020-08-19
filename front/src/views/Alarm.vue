@@ -92,7 +92,6 @@ export default {
     })
     .then((data)=>{
       ref.alist=data.data.alist
-      console.log(ref.alist)
     })
     .catch()
   },

@@ -118,7 +118,6 @@ export default {
       params:{nickname:res}
     })
     .then((data)=>{
-      console.log(data);
       ref.followedCnt=data.data.followedCnt;
       ref.followingCnt=data.data.followingCnt;
       ref.nickname=data.data.userinfo.nickname;
@@ -144,7 +143,6 @@ export default {
       frm.append("nickname",this.nickname);
       axios.post('https://i3b304.p.ssafy.io/api/account/addProfileImg',frm)
       .then((data)=>{
-        console.log(data)
         ref.$cookies.set('auth-token', data.data.auth_token)
         ref.setToken(data.data.auth_token)
         ref.sendUserInfo();
@@ -206,7 +204,6 @@ export default {
       params:{nickname:res}
       })
       .then((data)=>{
-        console.log(data);
         ref.followedCnt=data.data.followedCnt;
         ref.followingCnt=data.data.followingCnt;
         ref.nickname=data.data.userinfo.nickname;
@@ -233,14 +230,12 @@ export default {
       formData.append("cur",this.nickname);
       axios.post('https://i3b304.p.ssafy.io/api/account/nickchange',formData)
       .then((data)=>{
-        console.log(data);
         if(data.data.result.data=="success"){
           ref.$cookies.set('auth-token', data.data.auth_token)
           ref.setToken(data.data.auth_token)
           ref.sendUserInfo();
         }
         else if(data.data.result.data=="fail"){
-          console.log("중복된 닉네임인 경우");
           Swal.fire({
           icon: 'error',
           title: '중복된 닉네임이에요.',
@@ -295,7 +290,6 @@ export default {
       formData.append("selfintroduce",this.tmpcontent);
       axios.put('https://i3b304.p.ssafy.io/api/account/selfintro',formData)
       .then((data)=>{
-        console.log(data);
         ref.$cookies.set('auth-token', data.data.auth_token)
         ref.setToken(data.data.auth_token)
         ref.sendUserInfo();

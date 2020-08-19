@@ -29,7 +29,6 @@ export default {
 
   methods: {
     initMap() {
-      console.log(this.placeAddrress)
       let HEAR = this.placeAddrress
       var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
       mapOption = {

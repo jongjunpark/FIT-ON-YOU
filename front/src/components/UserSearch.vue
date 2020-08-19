@@ -64,9 +64,7 @@ export default {
         username: this.userSearch
       },
       }).then((data) => {
-        console.log(data, 2)
         this.userResultList = data.data.object
-        console.log(this.userResultList)
       }).catch()
     },
     goProfile(name) {

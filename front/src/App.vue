@@ -138,7 +138,7 @@ export default {
       if (this.$route.name === 'Feed') {
         this.$router.go(this.$router.currentRoute)
       } else {
-        this.$router.push("/feed")
+        this.$router.push("/feed").catch(()=>{})
       }
     },
     goSearch() {
@@ -155,7 +155,7 @@ export default {
       if (this.$route.name === 'Search') {
         this.$router.go(this.$router.currentRoute)
       } else {
-        this.$router.push("/search")
+        this.$router.push("/search").catch(()=>{})
       }
     },
     goCommunity() {
@@ -378,7 +378,6 @@ export default {
           }
           })
         .then((data) => {
-          console.log(data.data)
           if (data.data.data == '1') {
             this.isAlarm = true
           }

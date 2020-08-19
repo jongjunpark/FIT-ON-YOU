@@ -15,8 +15,10 @@
           <p class='community-content-body'>·판매자: {{ myarticle.recellUser }}</p>
           <p class='community-content-body' @click="onModal">·가격: {{ myarticle.recellPrice }}원</p>
           <p class='community-content-body'>·사이즈: {{ myarticle.recellSize }}</p>
-          <div class="map-zone" @click="onModal(article.place)" v-show="article.place!=-1">
-           <span>직거래위치 <i class="fas fa-map-marker-alt map"></i></span>
+          <div class="community-content-footer">
+            <div v-show="myarticle.place!=''" class="map-zone" @click="onModal(myarticle.place)">직거래위치 
+              <i class="fas fa-map-marker-alt map"></i>
+            </div>
           </div>
           <div class="community-content-footer">
             <div @click="goDM(myarticle.roomname, myarticle.recellUser)" class="community-content-btn dm-btn">DM</div>
@@ -34,8 +36,10 @@
           <p class='community-content-body'>·판매자: {{ article.user }}</p>
           <p class='community-content-body' @click="onModal">·가격: {{ article.price }}원</p>
           <p class='community-content-body'>·사이즈: {{ article.size }}</p>
-          <div class="map-zone" @click="onModal(article.place)" v-show="article.place!=-1">
-           <span>직거래위치 <i class="fas fa-map-marker-alt map"></i></span>
+          <div class="community-content-footer">
+            <div v-show="article.place!=''" class="map-zone" @click="onModal(article.place)">직거래위치 
+              <i class="fas fa-map-marker-alt map"></i>
+            </div>
           </div>
           <div class="community-content-footer">
             <div @click="goDM(article.roomname, article.user)" class="community-content-btn dm-btn other-btn">DM보내기</div>
@@ -176,8 +180,6 @@ export default {
     },
     getAllList() {
       axios.post("https://i3b304.p.ssafy.io/api/recell/newsfeed/0").then((data)=>{
-      console.log("success")
-      console.log(data)
       this.tempList=data.data;
       for (let index = 0; index < this.tempList.length; index++) {
         if (this.tempList[index].recellUser !== this.nickName) {
@@ -205,7 +207,6 @@ export default {
         },
       }).then((data) => {
         this.myList = data.data.object
-        console.log(this.myList, '내글')
       }).catch()
     },
     soldItem(roomNo) {
@@ -222,7 +223,7 @@ export default {
           const frm = new FormData();
           frm.append("num",roomNo);
           axios.post('https://i3b304.p.ssafy.io/api/recell/soldout', frm)
-          .then(console.log("팔았다"))
+          .then()
           .catch()
           Swal.fire(
             '완료되었습니다.',

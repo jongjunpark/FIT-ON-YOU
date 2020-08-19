@@ -65,8 +65,6 @@ export default {
       },
       }).then((data) => {
         this.hashResultList = data.data.object
-        console.log(data.data)
-        console.log(this.hashResultList, 'rr')
       }).catch()
     },
     onModal(articleNo) {

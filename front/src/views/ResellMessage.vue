@@ -110,7 +110,6 @@ export default {
         createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
         senduser: this.user.nickname,
       })
-      console.log(this.user);
       this.text = null;
     },
     fetchMessage(){
@@ -121,7 +120,6 @@ export default {
         })
 
         this.messages=allMessages;
-        console.dir(this.messages);
         this.goDown()
         this.defaultDark()
         
@@ -188,8 +186,6 @@ export default {
   created(){
     this.roomname = this.$route.params.roomname
     this.othername = this.$route.params.othername
-    console.log(this.roomname)
-    console.log(this.othername)
     this.fetchMessage();
   },
   mounted(){
@@ -217,7 +213,6 @@ export default {
       params:{nickname:this.nick}
     })
     .then((data)=>{
-      console.log(data);
       if(data.data.userinfo.profile_img){
         this.myprofile = data.data.userinfo.profile_img.substring(2, );
       }

@@ -112,7 +112,6 @@ export default {
     },
     userContent() {
       this.inUserSearch()
-      console.log(this.userList)
     }
   },
   methods: {
@@ -263,7 +262,6 @@ export default {
         username: this.userContent
       },
       }).then((data) => {
-        console.log(data, '실시간유저')
         if(data.data.object.length>5) {
           this.userList = data.data.object.splice(0,5)
           this.userListLength = data.data.object.length - 5
@@ -278,7 +276,6 @@ export default {
     },
     infiniteHandler($state){
       let ref=this;
-      console.log("바닥에닿음",this.limit)
       axios.post('https://i3b304.p.ssafy.io/api/search/all/'+ref.limit)
       .then((data)=>{
         setTimeout(() => {
@@ -308,7 +305,6 @@ export default {
 
     axios.post("https://i3b304.p.ssafy.io/api/search/all/0").then((data)=>{
       this.articleList=data.data.object;
-      console.log(this.articleList)
     })
   },
   beforeDestroy() { 
