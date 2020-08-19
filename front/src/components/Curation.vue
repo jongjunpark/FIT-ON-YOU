@@ -104,7 +104,7 @@ export default {
   cursor: pointer;
 }
 @media (min-width:1200px) {
-  .bookmark-search-inner-box {
+  .curation-search-inner-box {
     margin: 1px;
   }
 }
