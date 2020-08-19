@@ -90,7 +90,7 @@
   border: 1px solid rgba(0,0,0,0.05);
   transition: transform 0.5s;
 }
-@media (max-width: 300px) {
+@media (max-width: 449px) {
   .profile-user-btn {
     width: 6.5vh;
     height: 6.5vh;

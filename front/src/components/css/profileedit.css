@@ -288,7 +288,7 @@
   transition: all 0.3s ease;
   position: relative;
 }
-@media (max-width: 300px) {
+@media (max-width: 449px) {
   .profile-user-btn .mylist-icon, 
   .profile-user-btn .follower-icon, 
   .profile-user-btn .following-icon, 
@@ -322,7 +322,7 @@
   border-radius: 50%;
   transition: all 0.3s ease;
 }
-@media (max-width: 300px) {
+@media (max-width: 449px) {
   .profile-footer-area .follow-inner {
     font-size: 0.5vh;
   }

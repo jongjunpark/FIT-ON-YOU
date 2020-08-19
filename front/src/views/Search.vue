@@ -173,18 +173,15 @@ export default {
       this.hashList.splice(index, 1)
     },
     onHashResult() {
-      if (this.hashContent || this.hashList.length>0) {
+      if (this.hashContent) {
         this.hashList.push(this.hashContent)
-        this.setHashSearch(this.hashList);
-        if(this.isHashResult) {
-          this.isHashResult = false
-          this.isHashResult = true
-        } else {
-          this.isDefault = false
-          this.isUserResult = false
-          this.isHashResult = true
-        }
         this.hashContent = ''
+      }
+      if (this.hashList.length>0) {
+        this.setHashSearch(this.hashList);
+        this.isDefault = false
+        this.isHashResult = true
+        this.isUserResult = false
         this.hashList = []
       }
     },
@@ -264,7 +261,7 @@ export default {
         username: this.userContent
       },
       }).then((data) => {
-        if(data.data.objeck) {
+        if(data.data.object) {
           if(data.data.object.length>5) {
             this.userList = data.data.object.splice(0,5)
             this.userListLength = data.data.object.length - 5

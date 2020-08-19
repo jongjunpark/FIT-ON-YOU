@@ -94,10 +94,10 @@ export default {
 }
 
 .curation-search-inner-box {
-  width: 32.8%;
+  width: 32.5%;
   height: 0;
-  padding-top: 32.8%;
-  margin: 1px;
+  padding-top: 32.5%;
+  margin: 0.3vw;
   background-color: grey;
   position: relative;
   transition: 0.2s ease;

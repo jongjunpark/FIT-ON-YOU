@@ -49,6 +49,7 @@ export default {
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.wrap')
       const PTAGI = document.querySelector('p')
+      const USERNAME = document.querySelectorAll('.user-search-username')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -57,12 +58,18 @@ export default {
       if (Dark === 'off') {
         HTML.classList.add('black')
         wrap.classList.add('wrap-dark')
+        for (let i=0; i<USERNAME.length; i++) {
+          USERNAME[i].classList.add('font-dark')
+        }
         if (PTAGI) {
           PTAGI.classList.add('dark-onon')
         }
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
+        for (let i=0; i<USERNAME.length; i++) {
+          USERNAME[i].classList.remove('font-dark')
+        }
         if (PTAGI) {
           PTAGI.classList.remove('dark-onon')
         }

@@ -44,6 +44,7 @@ export default {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.wrap')
+      const PTAGI = document.querySelector('p')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -52,9 +53,15 @@ export default {
       if (Dark === 'off') {
         HTML.classList.add('black')
         wrap.classList.add('wrap-dark')
+        if (PTAGI) {
+          PTAGI.classList.add('font-dark')
+        }
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
+        if (PTAGI) {
+          PTAGI.classList.remove('font-dark')
+        }
       }
     },
     getHashSearch() {
@@ -109,12 +116,19 @@ export default {
   padding-top: 32.5%;
   margin: 0.3vw;
   background-color: grey;
+  transition: 0.2s ease;
   position: relative
 }
 @media (min-width:1200px) {
   .hash-search-inner-box {
     margin: 1px;
   }
+}
+
+.hash-search-inner-box:hover {
+  transform: scale(1.1);
+  z-index: 10;
+  box-shadow: 0 5px 20px rgba(0,0,0,1);
 }
 
 .hash-search-inner-box img {

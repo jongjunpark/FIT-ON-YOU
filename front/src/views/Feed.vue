@@ -187,6 +187,7 @@ export default {
     getInflu() {
       axios.get("https://i3b304.p.ssafy.io/api/board/influencer").then((data)=>{
         this.influencer=data.data;
+        this.defaultDark()
       });
     },
     clickLike(articleNo,flag,index,e) {
