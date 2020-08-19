@@ -367,7 +367,7 @@ export default {
       }
     },
     sendBoardData(){
-      if (this.writeContent[0]) {
+      if (this.writeHashContent[0]) {
         this.writeHashList.push(this.writeHashContent)
       }
       let dataforms = new FormData();

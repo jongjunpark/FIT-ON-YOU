@@ -262,7 +262,7 @@ export default {
       }
     },
     goConfrim() {
-      axios.get('http://localhost:8080/api/account/confirmemail',{
+      axios.get('https://i3b304.p.ssafy.io/api/account/confirmemail',{
         params:{
           email: this.input.email + '@' + this.input.url
         }
