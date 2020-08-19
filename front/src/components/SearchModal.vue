@@ -60,6 +60,7 @@ import VueSlickCarousel from 'vue-slick-carousel'
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 function timeForToday(value) {
         const today = new Date();
@@ -169,11 +170,17 @@ export default {
         INPUTBTN.classList.remove('on-comment-input')
       }
     },
-    deleteArticle(){
-      let article =this.articledata
+    deleteArticle() {
+      let article = this.articledata
        axios.delete(`https://i3b304.p.ssafy.io/api/board/${article}`,{
-        }).then(
-        console.log("success")
+        }).then(() => {
+        Swal.fire(
+        '글이 삭제되었어요.',
+        '새로운 게시글을 작성하세요!',
+        'success'
+        )
+        this.$router.go(0)
+        }
       )
     },
     defaultDark() {
