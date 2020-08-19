@@ -278,11 +278,14 @@ export default {
     },
     infiniteHandler($state){
       let ref=this;
+      console.log("바닥에닿음",this.limit)
       axios.post('https://i3b304.p.ssafy.io/api/search/all/'+ref.limit)
       .then((data)=>{
         setTimeout(() => {
           if(data.data.object.length){
-            ref.articleList.push(data.data.object);
+            for(let i=0;i<data.data.object.length;i++){
+              ref.articleList.push(data.data.object[i]);
+            }
 
             $state.loaded();
             ref.limit+=1;

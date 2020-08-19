@@ -87,14 +87,24 @@
       <div class="write-content-box">
         <p class='write-content-head'>내용</p>
         <textarea class="commu-content-textbox" @input="commuContent = $event.target.value" cols="30" rows="3" placeholder="100자 이내로 작성해주세요"></textarea>
-        <p class='write-content-head'>가격</p>
-        <textarea class="commu-price-textbox" @input="commuPrice = $event.target.value" cols="30" rows="3" placeholder="숫자만 입력하세요"></textarea>
-        <p class='write-content-head'>사이즈</p>
-        <textarea @input="commuSize = $event.target.value" cols="30" rows="3" placeholder="내용"></textarea>
-        <p class='write-content-head'>장소</p>
-        
-         <textarea @input="commuPlace = $event.target.value" cols="30" rows="3" placeholder="필요하다면 클릭하여 장소를 입력하세요." @click="onModal()"
-         v-model="commuPlace" readonly></textarea>
+        <div class="commu-body-box">
+          <div class="commu-price-box">
+            <p class='write-content-head'>가격</p>
+            <textarea class="commu-price-textbox" @input="commuPrice = $event.target.value" cols="30" rows="3" placeholder="숫자만 입력하세요"></textarea>
+          </div>
+          <div class="commu-size-box">
+            <p class='write-content-head'>사이즈</p>
+            <textarea class='commu-size-textbox' @input="commuSize = $event.target.value" cols="30" rows="3" placeholder="내용"></textarea>
+          </div>
+        </div>
+        <div class="commu-footer-box">
+          <div class="commu-location-box">  
+            <p class='write-content-head'>장소</p>  
+            <textarea class='commu-location-textbox' @input="commuPlace = $event.target.value" cols="30" rows="3" placeholder="버튼을 통해 검색해주세요" 
+            v-model="commuPlace" readonly></textarea>
+          </div>
+          <div class="commu-loc-search-box" @click="onModal">주소검색</div>
+        </div>
       </div>
       <div class="write-btn-box">
           <div v-if="!isCommuBtn" class="btn write-btn">작성하기</div>
@@ -171,7 +181,7 @@ export default {
       this.checkCommuForm()
     },
     commuPrice() {
-      if (isNaN(this.commuPrice)) {
+      if (isNaN(this.commuPrice) || this.commuPrice === '') {
         this.isNumPrice = false
       } else {
         this.isNumPrice = true

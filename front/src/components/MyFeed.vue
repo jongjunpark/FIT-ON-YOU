@@ -100,12 +100,19 @@ export default {
   margin: 0.3vw;
   background-color: grey;
   position: relative;
+  transition: 0.2s ease;
   cursor: pointer;
 }
 @media (min-width:1200px) {
   .myfeed-search-inner-box {
     margin: 1px;
   }
+}
+
+.myfeed-search-inner-box:hover {
+  transform: scale(1.1);
+  z-index: 10;
+  box-shadow: 0 5px 20px rgba(0,0,0,1);
 }
 
 .myfeed-search-inner-box img {

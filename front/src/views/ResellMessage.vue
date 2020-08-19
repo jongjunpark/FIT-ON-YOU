@@ -36,8 +36,8 @@
       </div>
       <div class="input-message">
         <input type="textarea" name="" id="" class="input-message-in" placeholder="메세지 보내기..." v-model="text" @keyup.enter="saveMessage">
-      </div>
         <button class="butn" @click="saveMessage">↑</button>
+      </div>
     </div>
   </div>
 </template>
