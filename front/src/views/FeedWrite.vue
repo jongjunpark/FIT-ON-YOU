@@ -396,8 +396,8 @@ export default {
       dataform.append("content", this.commuContent);
       dataform.append("price",this.commuPrice);
       dataform.append("size",this.commuSize)
-      if(this.commuPlace=='') dataform.append("place","-1");
-      else dataform.append("place",this.commuPlace);
+      dataform.append("place",this.commuPlace);
+      
       axios.post("https://i3b304.p.ssafy.io/api/recell/upload", dataform).then(
         console.log('success'))
         Swal.fire({

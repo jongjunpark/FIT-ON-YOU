@@ -15,10 +15,8 @@
           <p class='community-content-body'>·판매자: {{ myarticle.recellUser }}</p>
           <p class='community-content-body' @click="onModal">·가격: {{ myarticle.recellPrice }}원</p>
           <p class='community-content-body'>·사이즈: {{ myarticle.recellSize }}</p>
-          <div class="community-content-footer">
-            <div class="map-zone" @click="onModal(myarticle.place)" v-show="myarticle.place!='-1'">직거래위치 
-              <i class="fas fa-map-marker-alt map"></i>
-            </div>
+          <div class="map-zone" @click="onModal(article.place)" v-show="article.place!=-1">
+           <span>직거래위치 <i class="fas fa-map-marker-alt map"></i></span>
           </div>
           <div class="community-content-footer">
             <div @click="goDM(myarticle.roomname, myarticle.recellUser)" class="community-content-btn dm-btn">DM</div>
@@ -36,10 +34,8 @@
           <p class='community-content-body'>·판매자: {{ article.user }}</p>
           <p class='community-content-body' @click="onModal">·가격: {{ article.price }}원</p>
           <p class='community-content-body'>·사이즈: {{ article.size }}</p>
-          <div class="community-content-footer">
-            <div class="map-zone" @click="onModal(article.place)" v-show="article.place!='-1'">직거래위치 
-              <i class="fas fa-map-marker-alt map"></i>
-            </div>
+          <div class="map-zone" @click="onModal(article.place)" v-show="article.place!=-1">
+           <span>직거래위치 <i class="fas fa-map-marker-alt map"></i></span>
           </div>
           <div class="community-content-footer">
             <div @click="goDM(article.roomname, article.user)" class="community-content-btn dm-btn other-btn">DM보내기</div>
