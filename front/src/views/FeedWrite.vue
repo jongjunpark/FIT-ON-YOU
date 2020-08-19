@@ -343,7 +343,7 @@ export default {
     },
     addWriteHash() {
       if (this.writeHashContent != ',') {
-        if (this.writeHashContent[0] == '#') {
+        if (this.writeHashContent[0] === '#') {
           this.writeHashList.push(this.writeHashContent.slice(1,-1))
         }
         else {
@@ -373,7 +373,11 @@ export default {
     },
     sendBoardData(){
       if (this.writeHashContent[0]) {
-        this.writeHashList.push(this.writeHashContent)
+        if (this.writeHashContent[0] === '#') {
+        this.writeHashList.push(this.writeHashContent.slice(1, ))
+        } else {
+          this.writeHashList.push(this.writeHashContent)
+        }
       }
       let dataforms = new FormData();
       for (let index = 0; index < this.photo.length; index++) {
