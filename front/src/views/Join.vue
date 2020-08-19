@@ -102,7 +102,7 @@ import * as EmailValidator from "email-validator"
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import { mapState, mapMutations, mapActions } from 'vuex'
-import firebase from 'firebase'
+
 
 
 export default {
