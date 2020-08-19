@@ -16,6 +16,8 @@ import "../components/css/settings.css"
 import { mapState, mapMutations, mapActions  } from 'vuex' 
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import firebase from 'firebase'
+
 
 export default {
   name: 'Settings',
