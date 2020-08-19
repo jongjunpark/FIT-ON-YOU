@@ -165,7 +165,7 @@ export default {
       if (this.$route.name === 'Feed') {
         this.$router.go(this.$router.currentRoute)
       } else {
-        this.$router.push("/feed")
+        this.$router.push("/feed").catch(()=>{})
       }
     },
     goSearch() {
@@ -182,7 +182,7 @@ export default {
       if (this.$route.name === 'Search') {
         this.$router.go(this.$router.currentRoute)
       } else {
-        this.$router.push("/search")
+        this.$router.push("/search").catch(()=>{})
       }
     },
     goCommunity() {
@@ -219,18 +219,34 @@ export default {
     },
     goProfile() {
       this.isUserIcon = false;
-      this.$router.push('/profileedit').catch(()=>{})
+      if(this.$route.name === 'ProfileEdit') {
+        this.$router.go(this.$router.currentRoute)
+      } else {
+        this.$router.push('/profileedit').catch(()=>{})
+      }
     },
     goWrite() {
-      this.$router.push('/write').catch(()=>{})
+      if(this.$route.name === 'FeedWrite') {
+        this.$router.go(this.$router.currentRoute)
+      } else {
+        this.$router.push('/write').catch(()=>{})
+      }
     },
     goDM() {
       this.isUserIcon = false;
-      this.$router.push('/dm').catch(()=>{})
+      if(this.$route.name === 'DM') {
+        this.$router.go(this.$router.currentRoute)
+      } else {
+        this.$router.push('/dm').catch(()=>{})
+      }
     },
     goAlarm() {
       this.isUserIcon = false;
-      this.$router.push('/alarm').catch(()=>{})
+      if(this.$route.name === 'Alarm') {
+        this.$router.go(this.$router.currentRoute)
+      } else {
+        this.$router.push('/alarm').catch(()=>{})
+      }
     },
     darkOn() {
       // const HTML = document.querySelector('html')
@@ -389,7 +405,6 @@ export default {
           }
           })
         .then((data) => {
-          console.log(data.data)
           if (data.data.data == '1') {
             this.isAlarm = true
           }

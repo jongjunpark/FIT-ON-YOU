@@ -13,8 +13,13 @@
         <div class="community-content">
           <p class='community-content-head'>{{ myarticle.recellContent }}</p>
           <p class='community-content-body'>·판매자: {{ myarticle.recellUser }}</p>
-          <p class='community-content-body'>·가격: {{ myarticle.recellPrice }}원</p>
+          <p class='community-content-body' @click="onModal">·가격: {{ myarticle.recellPrice }}원</p>
           <p class='community-content-body'>·사이즈: {{ myarticle.recellSize }}</p>
+          <div class="community-content-footer">
+            <div v-show="myarticle.place!=''" class="map-zone" @click="onModal(myarticle.place)">직거래위치 
+              <i class="fas fa-map-marker-alt map"></i>
+            </div>
+          </div>
           <div class="community-content-footer">
             <div @click="goDM(myarticle.roomname, myarticle.recellUser)" class="community-content-btn dm-btn">DM</div>
             <div v-show="!myarticle.salecheck" @click="soldItem(myarticle.recellNo)" class="community-content-btn del-btn">판매완료</div>
@@ -29,14 +34,20 @@
         <div class="community-content">
           <p class='community-content-head'>{{ article.content }}</p>
           <p class='community-content-body'>·판매자: {{ article.user }}</p>
-          <p class='community-content-body'>·가격: {{ article.price }}원</p>
+          <p class='community-content-body' @click="onModal">·가격: {{ article.price }}원</p>
           <p class='community-content-body'>·사이즈: {{ article.size }}</p>
+          <div class="community-content-footer">
+            <div v-show="article.place!=''" class="map-zone" @click="onModal(article.place)">직거래위치 
+              <i class="fas fa-map-marker-alt map"></i>
+            </div>
+          </div>
           <div class="community-content-footer">
             <div @click="goDM(article.roomname, article.user)" class="community-content-btn dm-btn other-btn">DM보내기</div>
           </div>
         </div>
       </div>
     </div>
+     <MapModal v-if="mapModal" @close="mapModal= false" :placeAddrress="placeAddrress"/>
   </div>
 </template>
 
@@ -45,8 +56,12 @@ import { mapState, mapMutations } from 'vuex'
 import "../components/css/community.css"
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import MapModal from '../components/MapModal.vue'
 export default {
   name: 'Community',
+  components:{
+    MapModal,
+  },
   computed: {
     ...mapState(['flag'])
   },
@@ -63,6 +78,9 @@ export default {
       nickName:[],
       limit:'1',
       isMyCommu: false,
+      mapModal:false,
+      placeAddrress:'',
+      mapFlag:false,
     }
   },
   methods: {
@@ -105,7 +123,9 @@ export default {
               date:ref.tempList[index].recellDate,
               size:ref.tempList[index].recellSize,
               roomname:ref.tempList[index].roomname,
-              user:ref.tempList[index].recellUser
+              user:ref.tempList[index].recellUser,
+              place:ref.tempList[index].place,
+
               }
             this.recellList.push(feeddata);
             }
@@ -126,6 +146,7 @@ export default {
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.wrap')
       const INPUT = document.querySelectorAll('input')
+      const SPAN = document.querySelectorAll('span')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -137,11 +158,17 @@ export default {
         for (let i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.add('input-dark')
         }
+        for (let i=0; i<SPAN.length ; i++) {
+          SPAN[i].classList.add('font-dark')
+        }
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
         for (let i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.remove('input-dark')
+        }
+        for (let i=0; i<SPAN.length ; i++) {
+          SPAN[i].classList.remove('font-dark')
         }
       }
     },
@@ -152,9 +179,7 @@ export default {
       this.nickName = decodeURIComponent(uri_enc);
     },
     getAllList() {
-      axios.post("http://localhost:8080/api/recell/newsfeed/0").then((data)=>{
-      console.log("success")
-      console.log(data)
+      axios.post("https://i3b304.p.ssafy.io/api/recell/newsfeed/0").then((data)=>{
       this.tempList=data.data;
       for (let index = 0; index < this.tempList.length; index++) {
         if (this.tempList[index].recellUser !== this.nickName) {
@@ -166,7 +191,8 @@ export default {
             date:this.tempList[index].recellDate,
             size:this.tempList[index].recellSize,
             roomname:this.tempList[index].roomname,
-            user:this.tempList[index].recellUser
+            user:this.tempList[index].recellUser,
+            place:this.tempList[index].place,
             }
           this.recellList.push(feeddata);
         }
@@ -175,13 +201,12 @@ export default {
       })
     },
     getMyList() {
-      axios.get("http://localhost:8080/api/recell/myContents",{
+      axios.get("https://i3b304.p.ssafy.io/api/recell/myContents",{
         params: {
           username: this.nickName
         },
       }).then((data) => {
         this.myList = data.data.object
-        console.log(this.myList, '내글')
       }).catch()
     },
     soldItem(roomNo) {
@@ -197,8 +222,8 @@ export default {
         if (result.value) {
           const frm = new FormData();
           frm.append("num",roomNo);
-          axios.post('http://localhost:8080/api/recell/soldout', frm)
-          .then(console.log("팔았다"))
+          axios.post('https://i3b304.p.ssafy.io/api/recell/soldout', frm)
+          .then()
           .catch()
           Swal.fire(
             '완료되었습니다.',
@@ -209,7 +234,11 @@ export default {
           })
         }
       }
-    )}
+    )},
+    onModal(place){
+      this.placeAddrress=place
+      this.mapModal=true;
+    },
   },
   mounted() {
     this.setIsSelectBar(true)
@@ -218,7 +247,8 @@ export default {
     this.getNickName()
     this.getMyList()
     this.getAllList()
-    },
+
+  },
   beforeDestroy() { 
     this.setIsSelectBar(false)
   }

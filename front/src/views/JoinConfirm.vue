@@ -171,7 +171,6 @@ export default {
     socialjoin(){
       let ref=this;
       let userData=this.getUser();
-      console.log(userData);
       axios.post('https://i3b304.p.ssafy.io/api/account/social/1',userData)
       .then((data)=>{
         if(data.data.result.data=='success'){

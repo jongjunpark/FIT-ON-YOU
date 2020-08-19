@@ -67,7 +67,6 @@ export default {
         }
       })
       .then((data)=>{
-        console.log(data,"bookmark");
         this.bookMarkList = data.data.bmImgList
       })
     },
@@ -100,12 +99,20 @@ export default {
   padding-top: 32.5%;
   margin: 0.3vw;
   background-color: grey;
-  position: relative
+  position: relative;
+  transition: 0.2s ease;
+  cursor: pointer;
 }
 @media (min-width:1200px) {
   .bookmark-search-inner-box {
     margin: 1px;
   }
+}
+
+.bookmark-search-inner-box:hover {
+  transform: scale(1.1);
+  z-index: 10;
+  box-shadow: 0 5px 20px rgba(0,0,0,1);
 }
 
 .bookmark-search-inner-box img {

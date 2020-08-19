@@ -3,12 +3,12 @@
     <div class="wrap-container-direct">
       <div class="wrap-direct">
         <p class="back-btn" @click="goDM">〈 </p>
-        <div class="in-img">
+        <div class="in-img" @click="goProfile">
           <img v-if="!profileImg" src="../assets/images/default-user.png" alt="" class="in-img-profile">
           <img v-if="profileImg" :src="profileImg" alt="" class="in-img-profile">
           <i class="fas fa-crown seller"></i>
         </div>
-        <p class="back-btn-name">{{ othername }}</p>
+        <p class="back-btn-name" @click="goProfile">{{ othername }}</p>
       </div>
       <div class="message-content-wrap">
         <div class="message-content">
@@ -19,15 +19,15 @@
           <div v-show='message.senduser != nick && message.senduser != othername' class="user-opponent">
             <!-- <p class="user-me-content">{{ message.senduser }}</p> -->
             <!-- 이미지 보여주기 -->
-            <img :src="profileImg" alt="" class="in-img-profile" v-if="profileImg">
-            <img src="../assets/images/default-user.png" alt="" class="in-img-content" v-if="!profileImg">
+            <img :src="message.img" alt="" class="in-img-profile" v-if="message.img" @click="goOther(message.senduser)">
+            <img src="../assets/images/default-user.png" alt="" class="in-img-content" v-if="!message.img" @click="goOther(message.senduser)">
             <p class="in-user-content">{{ message.message }}</p>
           </div>
           <div v-show='message.senduser != nick && message.senduser == othername' class="user-opponent">
             <!-- <p class="user-me-content">{{ message.senduser }}</p> -->
             <!-- 이미지 보여주기 -->
-            <img :src="profileImg" alt="" class="in-img-profile" v-if="profileImg">
-            <img src="../assets/images/default-user.png" alt="" class="in-img-content" v-if="!profileImg">
+            <img :src="message.img" alt="" class="in-img-profile" v-if="message.img" @click="goOther(message.senduser)">
+            <img src="../assets/images/default-user.png" alt="" class="in-img-content" v-if="!message.img" @click="goOther(message.senduser)">
             <i class="fas fa-crown seller2"></i>
             <p class="in-user-content">{{ message.message }}</p>
           </div>
@@ -36,8 +36,8 @@
       </div>
       <div class="input-message">
         <input type="textarea" name="" id="" class="input-message-in" placeholder="메세지 보내기..." v-model="text" @keyup.enter="saveMessage">
-      </div>
         <button class="butn" @click="saveMessage">↑</button>
+      </div>
     </div>
   </div>
 </template>
@@ -47,6 +47,7 @@ import {mapState}from 'vuex'
 import firebase from 'firebase'
 import axios from 'axios'
 import "../components/css/resellmessage.css"
+import "../components/css/directmessage.css"
 // Required for side-effects
 require("firebase/firestore");
 
@@ -84,6 +85,7 @@ export default {
       nick: '',
       othername: '',
       profileImg: '',
+      myprofile: '',
     }
   },
   computed: {
@@ -103,12 +105,11 @@ export default {
     saveMessage(){
       //save to fires'tore
       db.collection(this.roomname).add({
-        img: this.user.img,
+        img: this.myprofile,
         message: this.text,
         createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
         senduser: this.user.nickname,
       })
-      console.log(this.user);
       this.text = null;
     },
     fetchMessage(){
@@ -119,7 +120,6 @@ export default {
         })
 
         this.messages=allMessages;
-        console.dir(this.messages);
         this.goDown()
         this.defaultDark()
         
@@ -127,6 +127,12 @@ export default {
     },
     goDM() {
       this.$router.go(-1)
+    },
+    goProfile() {
+      this.$router.push(`/otheruser/${this.othername}`).catch(()=>{})
+    },
+    goOther(data) {
+      this.$router.push(`/otheruser/${data}`).catch(()=>{})
     },
     defaultDark() {
       const Dark = this.$cookies.get('dark')
@@ -180,8 +186,6 @@ export default {
   created(){
     this.roomname = this.$route.params.roomname
     this.othername = this.$route.params.othername
-    console.log(this.roomname)
-    console.log(this.othername)
     this.fetchMessage();
   },
   mounted(){
@@ -193,18 +197,27 @@ export default {
     let uri_dec = decodeURIComponent(uri_enc);
     let res = uri_dec;
     this.nick = res
-      axios.get('https://i3b304.p.ssafy.io/api/mypage/otheruser',{
-        params:{
-        nickname: this.othername,
+    axios.get('https://i3b304.p.ssafy.io/api/mypage/otheruser',{
+      params:{
+      nickname: this.othername,
+    }
+    }).then((data)=>{
+      if (data.data.userinfo.profile_img) {
+        
+        this.profileImg = data.data.userinfo.profile_img.substring(2,);
       }
-      }).then((data)=>{
-        if (data.data.userinfo.profile_img) {
-          
-          this.profileImg = data.data.userinfo.profile_img.substring(2,);
-        }
-      })
-      .catch(
-      )
+    })
+    .catch(
+    )
+    axios.get('https://i3b304.p.ssafy.io/api/mypage/',{
+      params:{nickname:this.nick}
+    })
+    .then((data)=>{
+      if(data.data.userinfo.profile_img){
+        this.myprofile = data.data.userinfo.profile_img.substring(2, );
+      }
+    })
+    .catch()
   }
 }
 </script>

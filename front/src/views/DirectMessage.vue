@@ -27,8 +27,8 @@
       </div>
       <div class="input-message">
         <input type="textarea" name="" id="" class="input-message-in" placeholder="메세지 보내기..." v-model="text" @keyup.enter="saveMessage">
-      </div>
         <button class="butn" @click="saveMessage">↑</button>
+      </div>
     </div>
   </div>
 </template>
@@ -90,8 +90,6 @@ export default {
       //   var p = document.createElement('p');
       //   p.className = 'user-me-content';
       //   p.innerText = this.text;
-
-      console.log(this.user);
       this.text = null;
     },
     fetchMessage(){
@@ -103,7 +101,6 @@ export default {
         })
 
         this.messages=allMessages;
-        console.dir(this.messages);
         this.goDown()
         this.defaultDark()
         
@@ -162,19 +159,18 @@ export default {
       }
     },
     goDown() {
-      document.querySelector('.message-content-wrap').scrollTop = document.querySelector('.message-content-wrap').scrollHeight;
+      const WRAPMESSAGE = document.querySelector('.message-content-wrap')
+      if (WRAPMESSAGE) {
+        document.querySelector('.message-content-wrap').scrollTop = document.querySelector('.message-content-wrap').scrollHeight;
+      }
     },
   },
     
     created(){
     this.roomname = this.$route.params.roomname
     this.othername = this.$route.params.othername
-    console.log(this.roomname)
-    console.log(this.othername)
     this.fetchMessage();
     this.profileImg=this.dmProfileImg;
-    console.log(this.dmProfileImg,1);
-    console.log(this.profileImg,2);
   },
   mounted(){
     this.defaultDark()  

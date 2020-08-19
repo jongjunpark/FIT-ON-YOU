@@ -35,7 +35,6 @@ export default {
       const ARRAYFOLLOW = data.data.result
       const PRFIMGS = data.data.prfimgs;
       ARRAYFOLLOW.forEach((element,index) => {
-        console.log(element,index);
         
         const FollowingBox = document.createElement('div')
         const FollowingIcon = document.createElement('div')
@@ -244,7 +243,8 @@ export default {
 .following-box .following-icon-area img {
   width: 7vh;
   height: 7vh;
-  background-color: black;
+  background-color: #fff;
+  border: 1px solid grey;
   border-radius: 50%;
 }
 

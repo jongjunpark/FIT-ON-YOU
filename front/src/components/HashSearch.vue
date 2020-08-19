@@ -65,8 +65,6 @@ export default {
       },
       }).then((data) => {
         this.hashResultList = data.data.object
-        console.log(data.data)
-        console.log(this.hashResultList, 'rr')
       }).catch()
     },
     onModal(articleNo) {
@@ -92,7 +90,7 @@ export default {
 <style scoped>
 .hash-container {
   width: 100%;
-  height: 70vh;
+  height: 80vh;
   overflow: auto;
   display: flex;
   flex-wrap: wrap;

@@ -81,11 +81,10 @@ var userData={
   
 }
 
-
+const dummy = ''
 const Store='Store'
  function attachSignin(element) {
-    console.log(element.id);
-    
+    dummy = element.id
   }
 export default {
   name: 'Login',
@@ -102,7 +101,7 @@ export default {
       errormsgEmail: false,
       errormsgPwd: false,
       params: {
-          client_id: "834514064011-bqc7hgss1hil5965mdbgf57420u04lvv.apps.googleusercontent.com"
+          client_id: "834514064011-lcb0a6a4b4bu6p22bho4r5g94tcvknjf.apps.googleusercontent.com"
       },
       renderParams: {
         width: 250,
@@ -137,7 +136,6 @@ export default {
 
     loginWithKakao(){
       let ref= this;
-      console.log(ref);
       Kakao.Auth.loginForm({
         success: function(authObj) {
           Kakao.Auth.setAccessToken(authObj.access_token);
@@ -156,7 +154,6 @@ export default {
                 // age_range : response.kakao_account.age_range
               };
               // ref.AC_USER(userData);
-              // console.log(ref.$store.state.user);
               // window.AC_USER(userData)
 
               axios.post('https://i3b304.p.ssafy.io/api/account/social/0',{
@@ -166,8 +163,6 @@ export default {
                 gender : response.kakao_account.gender,
               })
               .then((data)=>{
-                console.log("카카오로그인성공")
-                console.log(data);
                 if(data.data.result.data=="1"){ // 이미 존재하는 경우
                   ref.$cookies.set('auth-token', data.data.auth_token)
                   ref.setToken(data.data.auth_token)
@@ -189,9 +184,7 @@ export default {
               })
               .catch()
             },
-            fail: function(error) {
-                console.log(error);
-            }
+            fail: () => {}
           });
         },
         fail: function(err) {
@@ -204,7 +197,7 @@ export default {
       let ref = this;
       gapi.load('auth2', function(){
         let auth2 = gapi.auth2.init({
-          client_id: '834514064011-bqc7hgss1hil5965mdbgf57420u04lvv.apps.googleusercontent.com',
+          client_id: '834514064011-lcb0a6a4b4bu6p22bho4r5g94tcvknjf.apps.googleusercontent.com',
           cookiepolicy: 'single_host_origin',
         });
         auth2.attachClickHandler('customBtn', {},
@@ -212,22 +205,19 @@ export default {
           let userData  = {
                 // access_token : googleUser.getAuthResponse(true).access_token,
                 // idToken : googleUser.getAuthResponse(true).id_token,
-                nickname : googleUser.getBasicProfile().Cd,
-                profile_image : googleUser.getBasicProfile().fL,
-                email : googleUser.getBasicProfile().zu,
+                nickname : googleUser.getBasicProfile().Ad,
+                profile_image : googleUser.getBasicProfile().jK,
+                email : googleUser.getBasicProfile().bu,
                 // token_type : 'Bearer',
           }
-          console.log(userData)
           ref.AC_USER(userData);
         
           axios.post('https://i3b304.p.ssafy.io/api/account/social/0',{
-                nickname : googleUser.getBasicProfile().Cd,
-                profile_image : googleUser.getBasicProfile().fL,
-                email : googleUser.getBasicProfile().zu,
+                 nickname : googleUser.getBasicProfile().Ad,
+                profile_image : googleUser.getBasicProfile().jK,
+                email : googleUser.getBasicProfile().bu,
               })
               .then((data)=>{
-                console.log("구글로그인성공")
-                console.log(data);
                 if(data.data.result.data=="1"){ // 이미 존재하는 경우
                   ref.$cookies.set('auth-token', data.data.auth_token)
                   ref.setToken(data.data.auth_token)
@@ -295,8 +285,6 @@ export default {
     },
 
     loginHandler() { 
-      console.log(this.email);
-      console.log(this.password);
       axios.get('https://i3b304.p.ssafy.io/api/account/login',{
         params:{email:this.email,
                   password:this.password},
@@ -304,7 +292,6 @@ export default {
         // 로그인 성공
         if(response.data.result==1){
           this.AC_USER(response.data);
-          console.log(response.data)
           this.$cookies.set('auth-token', response.data.auth_token)
           this.setToken(response.data.auth_token)
           this.sendUserInfo();

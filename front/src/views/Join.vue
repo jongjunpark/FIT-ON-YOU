@@ -440,7 +440,6 @@ export default {
       var frm = new FormData();
       var photoFile = document.getElementById("profile-img-edit");
       if (photoFile.files[0]) {
-        console.log(photoFile.files[0].name)
         this.profileImg = "../images/profile/"+this.input.nickname+"_"+photoFile.files[0].name
       } else {
         this.profileImg = null
@@ -448,14 +447,8 @@ export default {
       const test1 = this.input.email
       const test2 = this.input.password
        firebase.auth().createUserWithEmailAndPassword(test1.toString(), test2.toString()).then(()=>{
-        }).catch((error) => {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        console.log(errorCode);
-        console.log(errorMessage);
-        // ...
-        });
+        }).catch();
+
       axios.post('https://i3b304.p.ssafy.io/api/account/signup',{
 
           email: this.input.email+'@'+this.input.url,
@@ -463,10 +456,10 @@ export default {
           nickname: this.input.nickname,
           gender: this.gender,
           birth: this.input.birth.year+' '+this.input.birth.month+' '+this.input.birth.day,
-          profile_img: this.profileImg
+          profile_img: this.profileImg,
+          selfintroduce : this.input.textProfile,
 
       }).then(data => {
-        console.log(data)
         this.$cookies.set('auth-token', data.data.auth_token)
         this.setToken(data.data.auth_token)
         Swal.fire(
@@ -478,14 +471,12 @@ export default {
         this.sendUserInfo();
       })
       .catch(function(){
-        // console.log(data.data.data)
       });
       if (photoFile.files[0]) {
         frm.append("profile-img-edit", photoFile.files[0]);
         frm.append("nickname",this.input.nickname);
         axios.post('https://i3b304.p.ssafy.io/api/account/addProfileImg',frm,
         ).then( () =>{
-          console.log("1");
 
 
           setTimeout(() => {
@@ -494,7 +485,6 @@ export default {
           
         })
         .catch(function(){
-          console.log("2");
         });
       } else {setTimeout(() => {
             this.$router.go('/feed')
@@ -559,7 +549,6 @@ export default {
       var frm = new FormData();
       var photoFile = document.getElementById("profile-img-edit");
       frm.append("profile-img-edit", photoFile.files[0]);
-      console.log(photoFile.files[0].name);
       this.input.profileImg = URL.createObjectURL(photoFile.files[0]);
     },
     onCancleBtn() {
@@ -572,9 +561,6 @@ export default {
       this.input.profileImg = ''
       this.isCancle = false
       document.getElementById("profile-img-edit").value = "";
-    },
-    checkcheck() {
-      console.log('hi')
     },
     defaultDark() {
       const Dark = this.$cookies.get('dark')

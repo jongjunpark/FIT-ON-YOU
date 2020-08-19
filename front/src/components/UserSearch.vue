@@ -1,5 +1,5 @@
 <template>
-  <div class='wrap-container'>
+  <div class='wrap-container user-search-container'>
     <div v-show="userResultList" class="user-search-box" v-for="user in userResultList" :key="user.nickname">
       <div class="user-search-icon-area">
         <img v-show="user.profile_img" @click="goProfile(user.nickname)" :src="user.profile_img" :alt="user.nickname">
@@ -64,9 +64,7 @@ export default {
         username: this.userSearch
       },
       }).then((data) => {
-        console.log(data, 2)
         this.userResultList = data.data.object
-        console.log(this.userResultList)
       }).catch()
     },
     goProfile(name) {
@@ -81,15 +79,15 @@ export default {
 </script>
 
 <style scoped>
-/* .user-search-container {
+.user-search-container {
   width: 100%;
-  height: 70vh;
+  height: 80vh;
   overflow-y: auto;
 }
 .user-search-container::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background-color: transparent; }
 ::-webkit-scrollbar-thumb { background: silver;}
-::-webkit-scrollbar-button { display: none; } */
+::-webkit-scrollbar-button { display: none; }
 
 .user-search-box {
   width: 100%;
