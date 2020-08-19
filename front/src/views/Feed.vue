@@ -283,6 +283,7 @@ export default {
       } else {
         INFLUBTN.innerHTML = '∧'
       }
+      this.defaultDark();
     },
     goProfile(name) {
       this.$router.push(`/otheruser/${name}`)
