@@ -36,6 +36,7 @@ public class ChatController {
 
 	@GetMapping("/allChatList")
 	public Object getAllCahtList(@RequestParam String username) {
+		System.out.println("username=>"+username);
 		final BasicResponse result = new BasicResponse();
 		List<ChatDTO> chatDtoList = new ArrayList<>();
 		chatDtoList = chatDao.getRoomListByUsername(username);
