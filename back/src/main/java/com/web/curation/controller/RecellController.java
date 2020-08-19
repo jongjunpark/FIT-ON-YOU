@@ -120,17 +120,12 @@ public class RecellController {
 		String name = uuid.toString() + "_recell_" + recellimg.getOriginalFilename();
 		String storePath = "../images/board/" + name;
 		recell.setRecellImage(storePath);
-		System.out.println(recell.toString());
 		recellDao.save(recell);
 
 		int recellNo = recellDao.getCountRecell().get(0);
-		ImageStore img = new ImageStore();
-		img.setArticleNo(recellNo);
 		File file = new File(path + name);
 		try {
 			recellimg.transferTo(file);
-			img.setImageUrl(storePath);
-			imageDao.save(img);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
