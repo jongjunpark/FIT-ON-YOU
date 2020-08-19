@@ -165,7 +165,9 @@ public class SearchController {
 	@ApiOperation(value = "검색")
 	public Object searchHash(@Valid @RequestParam String username, @Valid @RequestParam String findContent,
 			@Valid @PathVariable int page) {
-
+		
+		System.out.println(findContent);
+		
 		final BasicResponse result = new BasicResponse();
 
 		StringTokenizer st = new StringTokenizer(findContent.trim());

@@ -343,7 +343,12 @@ export default {
     },
     addWriteHash() {
       if (this.writeHashContent != ',') {
-        this.writeHashList.push(this.writeHashContent.slice(0,-1))
+        if (this.writeHashContent[0] == '#') {
+          this.writeHashList.push(this.writeHashContent.slice(1,-1))
+        }
+        else {
+          this.writeHashList.push(this.writeHashContent.slice(0,-1))
+        }
         this.writeHashContent = ''
       } else {
         this.writeHashContent = ''
