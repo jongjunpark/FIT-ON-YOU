@@ -262,7 +262,7 @@ export default {
       this.errormsg = true
     },
     pathJoin() {
-      this.$router.push("/join").catch(()=>{})
+      this.$router.push("/joinconfirmnew").catch(()=>{})
     },
     pathFind() {
       this.$router.push("/find/password").catch(()=>{})

@@ -23,7 +23,7 @@
               </div>
             </div>
           </div>
-          <div v-show="!(alist!=null && alist.length>0)">
+          <div v-show="!(alist!=null && alist.length>0)" id="DARKDARK">
             알림 내역이 없습니다.. :)
           </div> 
 
@@ -130,6 +130,7 @@ export default {
       const H5TAG = document.querySelectorAll('.alarm-container-message > h5')
       const ALARM_TEXT = document.querySelectorAll('.alarmclass')
       const ALARM_TIME = document.querySelectorAll('h5')
+      const DARKDARK = document.querySelector('#DARKDARK')
       
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -153,6 +154,10 @@ export default {
         for (let i=0; i<H4TAG.length ; i++) {
           H5TAG[i].classList.add('font-dark')
         }
+        if (DARKDARK) {
+          DARKDARK.classList.add('alarmtext-dark')
+          
+        }
 
       } else {
         HTML.classList.remove('black')
@@ -171,6 +176,10 @@ export default {
         }
         for (let i=0; i<H4TAG.length ; i++) {
           H5TAG[i].classList.remove('font-dark')
+        }
+        if (DARKDARK) {
+          DARKDARK.classList.remove('alarmtext-dark')
+          
         }
       }
     },

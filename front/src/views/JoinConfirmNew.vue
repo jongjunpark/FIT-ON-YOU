@@ -47,9 +47,8 @@
 <script>
 import { mapState,mapGetters,mapMutations,mapActions} from 'vuex'
 import "../components/css/joinconfirm.css"
-import axios from 'axios'
 export default {
-  name: 'JoinConfirm',
+  name: 'JoinConfirmNew',
   data() {
     return {
       isCheck1: false,
@@ -175,19 +174,8 @@ export default {
       }
     },
     socialjoin(){
-      let ref=this;
-      let userData=this.getUser();
-      axios.post('https://i3b304.p.ssafy.io/api/account/social/1',userData)
-      .then((data)=>{
-        if(data.data.result.data=='success'){
-          ref.$cookies.set('auth-token', data.data.auth_token)
-          ref.setToken(data.data.auth_token)
-          ref.sendUserInfo();
-          ref.setLoggedIn(true)
-          ref.$router.push('/feed').catch(()=>{})
-        }
-      })
-      .catch()
+      this.$cookies.set('agree', 'true')
+      this.$router.push('/join')
     },
   }
 }

@@ -70,6 +70,7 @@ export default {
         if (data.data.certifNum) {
           this.confirmPwd(data.data.certifNum)
           this.findUserPWd(data.data.userInfo)
+          this.$cookies.set('agree', 'true')
           this.$router.push("/find/password/ok").catch(()=>{})
         } else {
           Swal.fire({

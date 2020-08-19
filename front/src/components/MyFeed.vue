@@ -32,6 +32,9 @@ export default {
       this.defaultDark()
     }
   },
+  updated() {
+    this.defaultDark()
+  },
   mounted(){
     this.defaultDark()
     this.name = this.$route.params.name

@@ -135,3 +135,7 @@
 .alarm-container-message-read-dark {
 	background-color: #6a888a !important;
 }
+
+.alarmtext-dark {
+	color: white;
+}

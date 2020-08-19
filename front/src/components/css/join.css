@@ -237,3 +237,31 @@ i {
     margin-left: 5vw !important;
   }
 }
+
+.confirmPoint {
+  border: 1px solid#5AAEFF !important;
+  border-radius: .5vh;
+  background-color: #5AAEFF !important;
+  color: #686868;
+}
+
+.confirm-btnid {
+  position: absolute;
+  right: 1vh;
+  top: 3vh;
+  background-color: #5AAEFF !important;
+  color: white;
+  border: 1px solid#5AAEFF !important;
+  border-radius: 1vh;
+  z-index: 1;
+  width: 10vh;
+  height: 5vh;
+}
+
+.confirm-btnid:focus {
+  outline: none;
+}
+
+.helllotest {
+  width: 75% !important;
+}

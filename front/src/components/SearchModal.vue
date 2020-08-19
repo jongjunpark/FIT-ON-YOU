@@ -124,8 +124,10 @@ export default {
       this.defaultDark()
     }
   },
-  mounted() {
+  updated() {
     this.defaultDark()
+  },
+  mounted() {
     this.articleNo=this.articledata
 
     let articleNo = this.articledata
@@ -146,8 +148,10 @@ export default {
           this.longContent += response.data[0].aarticles.content[i]
         }
         this.longContent += ' ....'
+        this.defaultDark()
       } else {
         this.content = response.data[0].aarticles.content
+        this.defaultDark()
       }
       this.imgs = response.data[0].imgs
       this.tags = response.data[0].tags
@@ -155,7 +159,9 @@ export default {
       this.likechk=response.data[0].aarticles.likechk;
       this.markchk=response.data[0].aarticles.markchk;
       this.favoriteCnt=response.data[0].aarticles.favoriteCnt;
+      this.defaultDark()
       });
+      this.defaultDark()
   },
   computed: {
     ...mapState(['flag','articledata'])
@@ -200,6 +206,7 @@ export default {
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.search-modal-wrap')
       const PTAG = document.querySelectorAll('p')
+      const delbtn = document.querySelector('.search-more-del-btn')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -211,11 +218,17 @@ export default {
         for (let i=0; i<PTAG.length ; i++) {
           PTAG[i].classList.add('font-dark')
         }
+        if (delbtn) {
+          delbtn.classList.add('search-more-del-btn-dark')
+        }
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('search-modal-wrap-dark')
         for (let i=0; i<PTAG.length ; i++) {
           PTAG[i].classList.remove('font-dark')
+        }
+        if (delbtn) {
+          delbtn.classList.remove('search-more-del-btn-dark')
         }
       }
     },
@@ -519,5 +532,9 @@ export default {
 @keyframes check {
 	50% {transform: scale(1.2)}
 	100% {transform: scale(1)}
+}
+
+.search-more-del-btn-dark {
+  color: white;
 }
 </style>
