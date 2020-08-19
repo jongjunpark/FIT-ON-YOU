@@ -212,9 +212,9 @@ export default {
           let userData  = {
                 // access_token : googleUser.getAuthResponse(true).access_token,
                 // idToken : googleUser.getAuthResponse(true).id_token,
-                nickname : googleUser.getBasicProfile().Cd,
-                profile_image : googleUser.getBasicProfile().fL,
-                email : googleUser.getBasicProfile().zu,
+                nickname : googleUser.getBasicProfile().Ad,
+                profile_image : googleUser.getBasicProfile().jK,
+                email : googleUser.getBasicProfile().bu,
                 // token_type : 'Bearer',
           }
           console.log(googleUser);
