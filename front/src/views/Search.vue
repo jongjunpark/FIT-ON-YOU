@@ -111,7 +111,9 @@ export default {
       this.defaultDark()
     },
     userContent() {
-      this.inUserSearch()
+      if (this.userContent) {
+        this.inUserSearch()
+      }
     }
   },
   methods: {
@@ -262,12 +264,14 @@ export default {
         username: this.userContent
       },
       }).then((data) => {
-        if(data.data.object.length>5) {
-          this.userList = data.data.object.splice(0,5)
-          this.userListLength = data.data.object.length - 5
-        } else {
-          this.userList = data.data.object
-          this.userListLength = 0
+        if(data.data.objeck) {
+          if(data.data.object.length>5) {
+            this.userList = data.data.object.splice(0,5)
+            this.userListLength = data.data.object.length - 5
+          } else {
+            this.userList = data.data.object
+            this.userListLength = 0
+          }
         }
       }).catch()
     },

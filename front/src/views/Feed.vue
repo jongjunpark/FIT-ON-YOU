@@ -60,7 +60,7 @@
             </div>
           </div>
           <div class="feed-like-cnt">
-            <p v-show="likeStates[index]">{{ myName }}님 외 {{feed.favoriteCnt}}명이 좋아합니다</p>
+            <p v-show="likeStates[index]">{{ myName }}님 외 {{feed.favoriteCnt - 1}}명이 좋아합니다</p>
             <p v-show="!likeStates[index]">{{feed.favoriteCnt}}명이 좋아합니다</p>
           </div>
           <header class='feed-content-head'>{{feed.content}}</header>
