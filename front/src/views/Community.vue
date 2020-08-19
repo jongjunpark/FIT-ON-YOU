@@ -1,6 +1,11 @@
 <template>
   <div class='wrap'>
     <div class='community-toggle-box'>
+      <div class="community-search-box">
+        <i class="fas fa-user community-search-icon"></i>
+        <input class="community-search-user" type="text" placeholder="닉네임" @keypress.enter='onResellUser(resellUserContent)' @input="resellUserContent = $event.target.value" v-model='resellUserContent'>
+        <i @click="onResellUser(resellUserContent)" class="fab fa-sistrix community-search-icon"></i>
+      </div>
       <span>내글보기</span>
       <input @change="onToggle" type="checkbox" id="community-toggle" name="" value=""/> 
         <div class='community-toggle-inner'>
@@ -28,7 +33,7 @@
         </div>
       </div>
     </div>
-    <div v-show="!isMyCommu" class='wrap-container community-container'>
+    <div v-show="isOtherCommu" class='wrap-container community-container'>
       <div class="community-inner-box" v-for="(article,index) in recellList" :key="`recell-${index}`">
         <img :src="article.imgurl" alt="">
         <div class="community-content">
@@ -43,6 +48,28 @@
           </div>
           <div class="community-content-footer">
             <div @click="goDM(article.roomname, article.user)" class="community-content-btn dm-btn other-btn">DM보내기</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-show="isSearchCommu" class="community-search-usernick">{{ tempNickName }}님에 대한 검색결과입니다.</div>
+    <div v-show="isSearchCommu" class='wrap-container community-container community-search-container'>
+      <div class="community-inner-box" v-for="(userarticle,index) in resellUserList" :key="`recelluser-${index}`">
+        <img v-show="!userarticle.salecheck" :src="userarticle.recellImage" alt="">
+        <img v-show="userarticle.salecheck" :src="userarticle.recellImage" alt="">
+        <div v-show="userarticle.salecheck" class="community-sold-item">SOLD OUT</div>
+        <div class="community-content">
+          <p class='community-content-head'>{{ userarticle.recellContent }}</p>
+          <p class='community-content-body'>·판매자: {{ userarticle.recellUser }}</p>
+          <p class='community-content-body'>·가격: {{ userarticle.recellPrice }}원</p>
+          <p class='community-content-body'>·사이즈: {{ userarticle.recellSize }}</p>
+          <div v-show="!userarticle.salecheck" class="community-content-footer">
+            <div v-show="userarticle.place!=''" class="map-zone" @click="onModal(userarticle.place)">직거래위치 
+              <i class="fas fa-map-marker-alt map"></i>
+            </div>
+          </div>
+          <div v-show="!userarticle.salecheck" class="community-content-footer">
+            <div @click="goDM(userarticle.roomname, userarticle.recellUser)" class="community-content-btn dm-btn other-btn">DM보내기</div>
           </div>
         </div>
       </div>
@@ -78,9 +105,14 @@ export default {
       nickName:[],
       limit:'1',
       isMyCommu: false,
+      isSearchCommu: false,
+      isOtherCommu: true,
       mapModal:false,
       placeAddrress:'',
       mapFlag:false,
+      resellUserContent: '',
+      resellUserList: [],
+      tempNickName: '',
     }
   },
   methods: {
@@ -100,8 +132,12 @@ export default {
     onToggle() {
       if(event.target.checked) {
         this.isMyCommu = true
+        this.isOtherCommu = false
+        this.isSearchCommu = false
       } else {
+        this.isOtherCommu = true
         this.isMyCommu = false
+        this.isSearchCommu = false
       }
     },
     goDM(room, name) {
@@ -147,6 +183,8 @@ export default {
       const wrap = document.querySelector('.wrap')
       const INPUT = document.querySelectorAll('input')
       const SPAN = document.querySelectorAll('span')
+      const COMMUICON = document.querySelectorAll('.community-search-icon')
+      const USERNICK = document.querySelector('.community-search-usernick')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -155,6 +193,10 @@ export default {
       if (Dark === 'off') {
         HTML.classList.add('black')
         wrap.classList.add('wrap-dark')
+        USERNICK.classList.add('font-dark')
+        for (let i=0; i<COMMUICON.length ; i++) {
+          COMMUICON[i].classList.add('font-dark')
+        }
         for (let i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.add('input-dark')
         }
@@ -164,6 +206,10 @@ export default {
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
+        USERNICK.classList.remove('font-dark')
+        for (let i=0; i<COMMUICON.length ; i++) {
+          COMMUICON[i].classList.remove('font-dark')  
+        }
         for (let i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.remove('input-dark')
         }
@@ -238,6 +284,20 @@ export default {
     onModal(place){
       this.placeAddrress=place
       this.mapModal=true;
+    },
+    onResellUser(nick) {
+      axios.get("https://i3b304.p.ssafy.io/api/recell/myContents",{
+        params: {
+          username: nick
+        },
+      }).then((data) => {
+        this.resellUserList = data.data.object
+        this.isOtherCommu = false
+        this.isMyCommu = false
+        this.isSearchCommu = true
+        this.tempNickName = nick
+        this.resellUserContent = ''
+      }).catch()
     },
   },
   mounted() {

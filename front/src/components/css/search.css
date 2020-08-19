@@ -89,16 +89,9 @@
 }
 @media (max-width:449px) {
   .search-input {
-    width: 35vw;
-    font-size: 3vw;
-    animation-name: oninput2;
-  }
-}
-@media (max-width:300px) {
-  .search-input {
     width: 30vw;
     font-size: 3vw;
-    animation-name: oninput3;
+    animation-name: oninput2;
   }
 }
 
@@ -108,13 +101,8 @@
 }
 @keyframes oninput2 {
   0% {width: 0}
-  100% {width: 35vw}
-}
-@keyframes oninput3 {
-  0% {width: 0}
   100% {width: 30vw}
 }
-
 
 .search-input:focus {
   outline: none;
