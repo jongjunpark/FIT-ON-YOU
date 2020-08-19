@@ -153,19 +153,7 @@ export default {
       let resNick = uri_dec;
       let nickname=resNick;
 
-      axios.get('http://localhost:8080/api/chat/allChatList',{
-         params:{
-         username: nickname,
-       }
-       })
-       .then((data)=>{
-         console.log("datas=>",data);
-         data.data.object.forEach(obj=>{
-           console.log("path.roomname=>",obj)
-           this.deleteAtPath(obj.roomname);
-         });
-       })
-       .catch()
+      
       
       const formData=new FormData();
       formData.append('nickname',nickname);
@@ -180,9 +168,19 @@ export default {
         cancelButtonText: '아니오',
       }).then((result) => {
         if (result.value) {
+        axios.get('https://i3b304.p.ssafy.io/api/chat/allChatList',{
+        params:{
+        username: nickname,
+       }
+       })
+       .then((data)=>{
+        data.data.object.forEach(obj=>{
+          this.deleteAtPath(obj.roomname);
+        });
+       })
+       .catch()
           axios.delete('https://i3b304.p.ssafy.io/api/account/delete',{
         data:formData,
-        
       })
       .then((data)=>{
         if(data.data.data=="success"){

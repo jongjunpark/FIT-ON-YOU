@@ -36,7 +36,6 @@ public class ChatController {
 
 	@GetMapping("/allChatList")
 	public Object getAllCahtList(@RequestParam String username) {
-		System.out.println("username=>"+username);
 		final BasicResponse result = new BasicResponse();
 		List<ChatDTO> chatDtoList = new ArrayList<>();
 		chatDtoList = chatDao.getRoomListByUsername(username);
@@ -51,13 +50,11 @@ public class ChatController {
 				newChatDto.setRoomname(tempChat.getRoomname());
 				newChatDto.setSeconduser(tempChat.getSeconduser());
 				if (!tempChat.getFirstuser().equals(username)) {
-					System.out.println(1);
 					Optional<User> optUser = userDao.findUserByNickname(tempChat.getFirstuser());
 					if (optUser.get().getProfile_img() != null) {
 						newChatDto.setImg(optUser.get().getProfile_img());
 					}
 				} else if (!tempChat.getSeconduser().equals(username)) {
-					System.out.println(2);
 					Optional<User> optUser = userDao.findUserByNickname(tempChat.getSeconduser());
 					if (optUser.get().getProfile_img() != null) {
 						newChatDto.setImg(optUser.get().getProfile_img());
@@ -80,12 +77,10 @@ public class ChatController {
 
 	@GetMapping("/existroom")
 	public Object existroom(@RequestParam String firstuser, @RequestParam String seconduser) {
-		System.out.println(1);
 		final BasicResponse result = new BasicResponse();
 		Chat chat;
 		Optional<ChatDTO> optChatdto = chatDao.getRoomnameByUserInfos(firstuser, seconduser);
 		if (optChatdto.isPresent()) {// 있다면 lasttime을 update후에
-			System.out.println(2);
 			// 룸네임을 반환
 			chat = new Chat(optChatdto.get());
 			chatDao.updateLasttime(chat.getRoomname());
@@ -93,7 +88,6 @@ public class ChatController {
 			result.object = chat;
 			result.status = true;
 		} else {
-			System.out.println(3);
 			// 새로운 룸네임을 저장후 이를 반환
 			String roomname = firstuser + seconduser;
 			chatDao.InsertRoomname(firstuser, seconduser, roomname);
@@ -103,7 +97,6 @@ public class ChatController {
 			result.data = "success";
 			result.status = true;
 		}
-		System.out.println(4);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 }
