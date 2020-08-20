@@ -104,6 +104,8 @@ export default {
           ARRAY.forEach(element => {
             db.collection(element.roomname).orderBy('createdAt','desc').limit(1).onSnapshot((querySnapshot)=>{
 
+            
+
             let allMessages = {};
               querySnapshot.forEach(doc=>{
                 allMessages = doc.data();
