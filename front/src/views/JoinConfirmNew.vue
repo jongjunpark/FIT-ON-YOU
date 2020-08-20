@@ -37,7 +37,7 @@
         <div class="join-confirm-btn-area">
           <div v-if="!(isCheck1&&isCheck2&&isCheck3)" class="join-confirm-agree-off join-confirm-btn">동의</div>
           <div v-if="isCheck1&&isCheck2&&isCheck3" class="join-confirm-agree join-confirm-btn" @click="socialjoin">동의</div>
-          <div class="join-confirm-disagree join-confirm-btn">비동의</div>
+          <div class="join-confirm-disagree join-confirm-btn" @click="goBack">비동의</div>
         </div>
       </form>
     </div>
@@ -127,6 +127,9 @@ export default {
           this.isCheck3 = false
         }
       }
+    },
+    goBack() {
+      this.$router.go(-1)
     },
     defaultDark() {
       const Dark = this.$cookies.get('dark')

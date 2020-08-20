@@ -140,7 +140,11 @@ export default {
       frm.append('recevier',nickname);
       axios.post('https://i3b304.p.ssafy.io/api/alarm/del',frm
       )
-      .then()
+      .then(Swal.fire(
+        '알람기록이 삭제되었습니다..',
+        '새로운 알람을 기대해주세요!',
+        'success'
+      ))
       .catch()
     },
 
