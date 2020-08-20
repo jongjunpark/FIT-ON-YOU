@@ -38,6 +38,7 @@ public class Recell {
 	private String roomname;
 	private int salecheck;
 	private String place;
+	private String category;
 
 	public int getRecellNo() {
 		return recellNo;
