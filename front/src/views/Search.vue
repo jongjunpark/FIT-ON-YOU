@@ -34,7 +34,7 @@
             <div class="search-user-name">{{ user.nickname }}</div>
             <div v-show="!user.selfintroduce" class="search-user-nonuserintro">{{ user.selfintroduce }}</div>
             <div v-show="user.selfintroduce[10]" class="search-user-intro">{{ user.selfintroduce.substring(0, 10) }}</div>
-            <div v-show="user.selfintroduce&&user.selfintroduce[10]" class="search-user-intro">{{ user.selfintroduce.substring(0, 10) }}</div>
+            <div v-show="user.selfintroduce&&!user.selfintroduce[10]" class="search-user-intro">{{ user.selfintroduce.substring(0, 10) }}...</div>
           </div>
         </div>
         <div v-show="userListLength > 0" @click="onUserResult" class='search-user-more' key='0'>{{ userListLength }}개 더보기</div>

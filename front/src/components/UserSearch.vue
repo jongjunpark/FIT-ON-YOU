@@ -10,7 +10,7 @@
         <div @click="goProfile(user.nickname)" class="user-search-username">{{ user.nickname }}</div>
         <div v-show="!user.selfintroduce" class="user-search-nonuserintro"></div>
         <div v-show="user.selfintroduce[20]" class="user-search-userintro">{{ user.selfintroduce.substring(0,20) }}</div>
-        <div v-show="user.selfintroduce&&!user.selfintroduce[20]" class="user-search-userintro">{{ user.selfintroduce }}</div>
+        <div v-show="user.selfintroduce&&!user.selfintroduce[20]" class="user-search-userintro">{{ user.selfintroduce }}...</div>
       </div>
     </div>
     <div v-show="!userResultList" class='user-search-not-result'>
