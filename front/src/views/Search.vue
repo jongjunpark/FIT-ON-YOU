@@ -270,6 +270,9 @@ export default {
             this.userList = data.data.object
             this.userListLength = 0
           }
+        } else {
+          this.userList = []
+          this.userListLength = 0
         }
       }).catch()
     },
