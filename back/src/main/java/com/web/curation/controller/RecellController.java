@@ -117,6 +117,7 @@ public class RecellController {
 		recell.setRecellSize(size);
 		recell.setPlace(place);
 		recell.setRoomname(uuid.toString());
+		recell.setCategory(category);
 		String name = uuid.toString() + "_recell_" + recellimg.getOriginalFilename();
 		String storePath = "../images/board/" + name;
 		recell.setRecellImage(storePath);
