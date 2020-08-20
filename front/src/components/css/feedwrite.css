@@ -186,7 +186,8 @@
 
 .write-content-box .commu-price-textbox,
 .write-content-box .commu-size-textbox,
-.write-content-box .commu-location-textbox {
+.write-content-box .commu-location-textbox,
+.write-content-box .commu-category-textbox {
   height: 6vh;
   margin-bottom: 0;
 }
@@ -196,9 +197,13 @@
   width: 100%;
 }
 
-.commu-body-box .commu-price-box,
-.commu-body-box .commu-size-box {
+.commu-body-box .commu-price-box{
   width: 50%;
+}
+.commu-body-box .commu-size-box,
+.commu-body-box .commu-category-box
+ {
+  width: 25%;
 }
 
 .commu-body-box .commu-price-box {

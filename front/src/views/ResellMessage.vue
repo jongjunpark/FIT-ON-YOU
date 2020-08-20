@@ -9,6 +9,7 @@
           <i class="fas fa-crown seller"></i>
         </div>
         <p class="back-btn-name" @click="goProfile">{{ othername }}</p>
+        <div class="category-item">{{ category }}</div>
       </div>
       <div class="message-content-wrap">
         <div class="message-content">
@@ -86,6 +87,7 @@ export default {
       othername: '',
       profileImg: '',
       myprofile: '',
+      category: '',
     }
   },
   computed: {
@@ -201,6 +203,7 @@ export default {
   created(){
     this.roomname = this.$route.params.roomname
     this.othername = this.$route.params.othername
+    this.category = this.$route.params.category
     this.fetchMessage();
   },
   mounted(){

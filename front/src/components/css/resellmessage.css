@@ -24,3 +24,14 @@
 .user-opponent {
 	position: relative;
 }
+
+.category-item {
+	border: 1px solid black;
+	color: white;
+	border-radius: 1.5vh;
+	background-color: black;
+	font-size: 2.5vh;
+	right: 5vh;
+	position: absolute;
+	padding: 2px;
+}

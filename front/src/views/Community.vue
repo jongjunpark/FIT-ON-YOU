@@ -26,7 +26,7 @@
             </div>
           </div>
           <div class="community-content-footer">
-            <div @click="goDM(myarticle.roomname, myarticle.recellUser)" class="community-content-btn dm-btn">DM</div>
+            <div @click="goDM(myarticle.roomname, myarticle.recellUser, myarticle.category)" class="community-content-btn dm-btn">DM</div>
             <div v-show="!myarticle.salecheck" @click="soldItem(myarticle.recellNo)" class="community-content-btn del-btn">판매완료</div>
             <div v-show="myarticle.salecheck" class="community-content-btn non-del-btn">완료됨</div>
           </div>
@@ -47,7 +47,7 @@
             </div>
           </div>
           <div class="community-content-footer">
-            <div @click="goDM(article.roomname, article.user)" class="community-content-btn dm-btn other-btn">DM보내기</div>
+            <div @click="goDM(article.roomname, article.user, article.category)" class="community-content-btn dm-btn other-btn">DM보내기</div>
           </div>
         </div>
       </div>
@@ -69,7 +69,7 @@
             </div>
           </div>
           <div v-show="!userarticle.salecheck" class="community-content-footer">
-            <div @click="goDM(userarticle.roomname, userarticle.recellUser)" class="community-content-btn dm-btn other-btn">DM보내기</div>
+            <div @click="goDM(userarticle.roomname, userarticle.recellUser, userarticle.category)" class="community-content-btn dm-btn other-btn">DM보내기</div>
           </div>
         </div>
       </div>
@@ -140,8 +140,8 @@ export default {
         this.isSearchCommu = false
       }
     },
-    goDM(room, name) {
-      this.$router.push(`/resellmessage/${room}/${name}`)
+    goDM(room, name, category) {
+      this.$router.push(`/resellmessage/${room}/${name}/${category}`)
     },
     infiniteHandler($state){
       let ref=this;
@@ -161,7 +161,7 @@ export default {
               roomname:ref.tempList[index].roomname,
               user:ref.tempList[index].recellUser,
               place:ref.tempList[index].place,
-
+              category:ref.tempList[index].category
               }
             this.recellList.push(feeddata);
             }
@@ -239,6 +239,7 @@ export default {
             roomname:this.tempList[index].roomname,
             user:this.tempList[index].recellUser,
             place:this.tempList[index].place,
+            category:this.tempList[index].category
             }
           this.recellList.push(feeddata);
         }

@@ -96,6 +96,10 @@
             <p class='write-content-head'>사이즈</p>
             <textarea class='commu-size-textbox' @input="commuSize = $event.target.value" cols="30" rows="3" placeholder="내용"></textarea>
           </div>
+          <div class="commu-size-box">
+            <p class='write-content-head'>카테고리</p>
+            <textarea class='commu-category-textbox' @input="commuCategory = $event.target.value" cols="30" rows="3" placeholder="ex)신발"></textarea>
+          </div>
         </div>
         <div class="commu-footer-box">
           <div class="commu-location-box">  
@@ -149,6 +153,7 @@ export default {
       commuPrice: '',
       commuSize: '',
       commuPlace:'',
+      commuCategory: '',
       isWriteBtn: false,
       isCommuBtn: false,
       isCommu: false,
@@ -190,6 +195,9 @@ export default {
       this.inNumber()
     },
     commuSize() {
+      this.checkCommuForm()
+    },
+    commuCategory() {
       this.checkCommuForm()
     },
   },
@@ -365,7 +373,7 @@ export default {
       }
     },
     checkCommuForm() {
-      if (this.commuImg && this.commuContent && this.isNumPrice && this.commuSize) {
+      if (this.commuImg && this.commuContent && this.isNumPrice && this.commuSize && this.commuCategory) {
         this.isCommuBtn = true
       } else {
         this.isCommuBtn = false
@@ -406,6 +414,7 @@ export default {
       dataform.append("price",this.commuPrice);
       dataform.append("size",this.commuSize)
       dataform.append("place",this.commuPlace);
+      dataform.append("category",this.commuCategory);
       
       axios.post("https://i3b304.p.ssafy.io/api/recell/upload", dataform).then()
         Swal.fire({

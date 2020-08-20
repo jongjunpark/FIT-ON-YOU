@@ -308,7 +308,7 @@ Vue.use(VueRouter)
     component: PageNotFound,
   },
   {
-    path: '/resellmessage/:roomname/:othername',
+    path: '/resellmessage/:roomname/:othername/:category',
     name: 'ResellMessage',
     component: ResellMessage,
     beforeEnter(to, from, next) {
