@@ -1,21 +1,28 @@
 <template>
   <div class='curation-container'>
     <div class="curation-search-inner-box" v-for="curation in curationList" :key="curation.articleNo">
-      <img :src="curation.imgUrl" :alt="`articleNo : ${curation.articleNo}`">
+      <img :src="curation.imgUrl" :alt="`articleNo : ${curation.articleNo}`" @click="onModal(curation.articleNo)">
     </div>
+    <SearchModal  v-if="showModal" @close="showModal= false"/>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState ,mapMutations} from 'vuex'
 import axios from 'axios'
+import SearchModal from '../components/SearchModal.vue'
 export default {
   name: 'Curation',
+  components:{
+    SearchModal
+  },
   data(){
     return{
       curationList: [],
+      showModal:false,
     }
   },
+  
   computed: {
     ...mapState(['flag'])
   },
@@ -30,6 +37,7 @@ export default {
   },
 
   methods: {
+    ...mapMutations(['setArticledata']),
     defaultDark() {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
@@ -60,9 +68,12 @@ export default {
       })
       .then((data)=>{
         this.curationList = data.data.object
-        console.log(data)
       })
-    }
+    },
+    onModal(articleNo) {
+      this.setArticledata(articleNo);
+      this.showModal = true
+    },
   },
 }
 </script>
@@ -83,17 +94,25 @@ export default {
 }
 
 .curation-search-inner-box {
-  width: 32.8%;
+  width: 32.5%;
   height: 0;
-  padding-top: 32.8%;
-  margin: 1px;
+  padding-top: 32.5%;
+  margin: 0.3vw;
   background-color: grey;
-  position: relative
+  position: relative;
+  transition: 0.2s ease;
+  cursor: pointer;
 }
 @media (min-width:1200px) {
-  .bookmark-search-inner-box {
+  .curation-search-inner-box {
     margin: 1px;
   }
+}
+
+.curation-search-inner-box:hover {
+  transform: scale(1.1);
+  z-index: 10;
+  box-shadow: 0 5px 20px rgba(0,0,0,1);
 }
 
 .curation-search-inner-box img {

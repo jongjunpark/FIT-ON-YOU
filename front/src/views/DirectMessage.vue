@@ -3,10 +3,11 @@
     <div class="wrap-container-direct">
       <div class="wrap-direct">
         <p class="back-btn" @click="goDM">〈 </p>
-        <div class="in-img">
-          <img src="../assets/images/default-user.png" alt="" class="in-img-profile">
+        <div class="in-img" @click="goProfile">
+          <img v-if="!profileImg" src="../assets/images/default-user.png" alt="" class="in-img-profile">
+          <img v-if="profileImg" :src="profileImg" alt="" class="in-img-profile">
         </div>
-        <p class="back-btn-name">{{ othername }}</p>
+        <p class="back-btn-name" @click="goProfile">{{ othername }}</p>
       </div>
       <div class="message-content-wrap">
         <div class="message-content">
@@ -17,7 +18,8 @@
           <div v-show='message.senduser != nick' class="user-opponent">
             <!-- <p class="user-me-content">{{ message.senduser }}</p> -->
             <!-- 이미지 보여주기 -->
-            <img src="../assets/images/default-user.png" alt="" class="in-img-content">
+            <img :src="profileImg" alt="" class="in-img-profile" v-if="profileImg">
+            <img src="../assets/images/default-user.png" alt="" class="in-img-content" v-if="!profileImg">
             <p class="in-user-content">{{ message.message }}</p>
           </div>
          </div>         
@@ -25,8 +27,8 @@
       </div>
       <div class="input-message">
         <input type="textarea" name="" id="" class="input-message-in" placeholder="메세지 보내기..." v-model="text" @keyup.enter="saveMessage">
-      </div>
         <button class="butn" @click="saveMessage">↑</button>
+      </div>
     </div>
   </div>
 </template>
@@ -35,31 +37,7 @@
 import "../components/css/directmessage.css"
 import { mapState } from "vuex"
 import firebase from 'firebase'
-
-// Required for side-effects
-require("firebase/firestore");
-
-// Your web app's Firebase configuration
-var firebaseConfig = {
-  apiKey: "AIzaSyCPKM_f3wVIMx9PG9A62_c7ObfSShrqXBQ",
-  authDomain: "vue-firestore-704a4.firebaseapp.com",
-  databaseURL: "https://vue-firestore-704a4.firebaseio.com",
-  projectId: "vue-firestore-704a4",
-  storageBucket: "vue-firestore-704a4.appspot.com",
-  messagingSenderId: "880449748292",
-  appId: "1:880449748292:web:c13cb68cfd9815dff16b11",
-  measurementId: "G-HX35ED5RHD"
-};
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-firebase.analytics();
-
-var db = firebase.firestore();
-
-window.db = db;
-
-db.settings({
-});
+import axios from 'axios'
 
 export default {
   name: 'DirectMessage',
@@ -71,10 +49,11 @@ export default {
       roomname:'',
       nick: '',
       othername: '',
+      profileImg:'',
     }
   },
   computed: {
-    ...mapState(['user' ,'flag'])
+    ...mapState(['user' ,'flag','dmProfileImg'])
   },
   updated() {
     this.goDown()
@@ -89,7 +68,7 @@ export default {
   methods: {
     saveMessage(){
       //save to firestore
-      db.collection(this.roomname).add({
+      firebase.firestore().collection(this.roomname).add({
         message: this.text,
         createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
         senduser: this.user.nickname,
@@ -111,27 +90,29 @@ export default {
       //   var p = document.createElement('p');
       //   p.className = 'user-me-content';
       //   p.innerText = this.text;
-
-      console.log(this.user);
       this.text = null;
     },
     fetchMessage(){
-      db.collection(this.roomname).orderBy('createdAt').onSnapshot((querySnapshot)=>{
+      firebase.firestore().collection(this.roomname).orderBy('createdAt').onSnapshot((querySnapshot)=>{
+       
         let allMessages = [];
         querySnapshot.forEach(doc=>{
           allMessages.push(doc.data());
         })
 
         this.messages=allMessages;
-        console.dir(this.messages);
         this.goDown()
         this.defaultDark()
         
       })
     },
-    goDM() {
-      this.$router.go(-1).catch(()=>{})
+    goProfile() {
+      this.$router.push(`/otheruser/${this.othername}`).catch(()=>{})
     },
+    goDM() {
+      this.$router.go(-1)
+    },
+ 
     defaultDark() {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
@@ -178,15 +159,18 @@ export default {
       }
     },
     goDown() {
-      document.querySelector('.message-content-wrap').scrollTop = document.querySelector('.message-content-wrap').scrollHeight;
+      const WRAPMESSAGE = document.querySelector('.message-content-wrap')
+      if (WRAPMESSAGE) {
+        document.querySelector('.message-content-wrap').scrollTop = document.querySelector('.message-content-wrap').scrollHeight;
+      }
     },
   },
-  created(){
+    
+    created(){
     this.roomname = this.$route.params.roomname
     this.othername = this.$route.params.othername
-    console.log(this.roomname)
-    console.log(this.othername)
     this.fetchMessage();
+    this.profileImg=this.dmProfileImg;
   },
   mounted(){
     this.defaultDark()  
@@ -197,6 +181,18 @@ export default {
     let uri_dec = decodeURIComponent(uri_enc);
     let res = uri_dec;
     this.nick = res
+      axios.get('https://i3b304.p.ssafy.io/api/mypage/otheruser',{
+        params:{
+        nickname: this.othername,
+      }
+      }).then((data)=>{
+        if (data.data.userinfo.profile_img) {
+          
+          this.profileImg = data.data.userinfo.profile_img.substring(2,);
+        }
+      })
+      .catch(
+      )
   }
 }
 </script>

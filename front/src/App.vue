@@ -35,19 +35,22 @@
     <div v-show='isLoggedIn' id="nav2" >
       <div class="bottom-nav">
         <div class='menu-bar-list'>
-          <div class="menu-bar-select"></div>
+          <div v-show="isSelectBar" class="menu-bar-select"></div>
           <div @click="goNewsFeed" class="nav-menu-icon">
-            <i class="menu-bar-img far fa-newspaper"></i>
+            <i v-show="isSelectBar" class="menu-bar-img far fa-newspaper"></i>
+            <i v-show="!isSelectBar" class="menu-bar-img far fa-newspaper menu-bar-non"></i>
           </div>
           <div @click="goSearch" class="nav-menu-icon">
-            <i class="menu-bar-img fas fa-search"></i>
+            <i v-show="isSelectBar" class="menu-bar-img fas fa-search"></i>
+            <i v-show="!isSelectBar" class="menu-bar-img fas fa-search menu-bar-non"></i>
           </div>
           <div @click="goCommunity" class="nav-menu-icon">
-            <i class="menu-bar-img fas fa-users"></i>
+            <i v-show="isSelectBar" class="menu-bar-img fas fa-users"></i>
+            <i v-show="!isSelectBar" class="menu-bar-img fas fa-users menu-bar-non"></i>
           </div>
         </div>
       </div>
-      <div @click='goWrite' class="write-icon">
+      <div v-show="isWrite" @click='goWrite' class="write-icon">
         <i class="write-icon-img fas fa-pen"></i>
       </div>
     </div>
@@ -75,6 +78,33 @@ import "./assets/css/darkmode.scss";
 import axios from 'axios'
 import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 // import axios from 'axios';
+import firebase from 'firebase'
+
+// Required for side-effects
+require("firebase/firestore");
+
+// Your web app's Firebase configuration
+var firebaseConfig = {
+  apiKey: "AIzaSyCPKM_f3wVIMx9PG9A62_c7ObfSShrqXBQ",
+  authDomain: "vue-firestore-704a4.firebaseapp.com",
+  databaseURL: "https://vue-firestore-704a4.firebaseio.com",
+  projectId: "vue-firestore-704a4",
+  storageBucket: "vue-firestore-704a4.appspot.com",
+  messagingSenderId: "880449748292",
+  appId: "1:880449748292:web:c13cb68cfd9815dff16b11",
+  measurementId: "G-HX35ED5RHD"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
+
+var db = firebase.firestore();
+
+window.db = db;
+
+db.settings({
+});
+
 
 
 export default {
@@ -89,7 +119,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['authToken', 'isLoggedIn', 'user', 'flag']),
+    ...mapState(['authToken', 'isLoggedIn', 'user', 'flag', 'isWrite', 'isSelectBar']),
     ...mapGetters([])
   },
   watch: {
@@ -102,7 +132,7 @@ export default {
   },
  
   mounted() {
-     if (this.$cookies.isKey('auth-token')) {
+    if (this.$cookies.isKey('auth-token')) {
       this.setLoggedIn(true);
       this.setToken(this.$cookies.get('auth-token'));
       this.sendUserInfo();
@@ -135,7 +165,7 @@ export default {
       if (this.$route.name === 'Feed') {
         this.$router.go(this.$router.currentRoute)
       } else {
-        this.$router.push("/feed")
+        this.$router.push("/feed").catch(()=>{})
       }
     },
     goSearch() {
@@ -152,7 +182,7 @@ export default {
       if (this.$route.name === 'Search') {
         this.$router.go(this.$router.currentRoute)
       } else {
-        this.$router.push("/search")
+        this.$router.push("/search").catch(()=>{})
       }
     },
     goCommunity() {
@@ -167,7 +197,7 @@ export default {
       selectBar.classList.remove('go-second-menu')
       selectBar.classList.remove('go-first-menu')
       if (this.$route.name === 'Community') {
-        this.$router.go(this.$router.currentRoute).catch(()=>{})
+        this.$router.go(this.$router.currentRoute)
       } else {
         this.$router.push("/community").catch(()=>{})
       }
@@ -189,18 +219,34 @@ export default {
     },
     goProfile() {
       this.isUserIcon = false;
-      this.$router.push('/profileedit').catch(()=>{})
+      if(this.$route.name === 'ProfileEdit') {
+        this.$router.go(this.$router.currentRoute)
+      } else {
+        this.$router.push('/profileedit').catch(()=>{})
+      }
     },
     goWrite() {
-      this.$router.push('/write').catch(()=>{})
+      if(this.$route.name === 'FeedWrite') {
+        this.$router.go(this.$router.currentRoute)
+      } else {
+        this.$router.push('/write').catch(()=>{})
+      }
     },
     goDM() {
       this.isUserIcon = false;
-      this.$router.push('/dm').catch(()=>{})
+      if(this.$route.name === 'DM') {
+        this.$router.go(this.$router.currentRoute)
+      } else {
+        this.$router.push('/dm').catch(()=>{})
+      }
     },
     goAlarm() {
       this.isUserIcon = false;
-      this.$router.push('/alarm').catch(()=>{})
+      if(this.$route.name === 'Alarm') {
+        this.$router.go(this.$router.currentRoute)
+      } else {
+        this.$router.push('/alarm').catch(()=>{})
+      }
     },
     darkOn() {
       // const HTML = document.querySelector('html')
@@ -359,7 +405,6 @@ export default {
           }
           })
         .then((data) => {
-          console.log(data.data)
           if (data.data.data == '1') {
             this.isAlarm = true
           }
@@ -370,6 +415,6 @@ export default {
         .catch()
       }
     },
-  }
+  },
 }
 </script>

@@ -23,18 +23,37 @@
           {{ hash }}
         </div>
       </transition-group>
-    </div>
-    <div v-if="isDefault" class='wrap-container search-container'>
-
-      <div class="search-box" v-for="(feed,index) in feedList" :key="`feed-${index}`">
-        <div class="search-inner-box" v-for="article in feedList[index]" :key="article.articles.articleNo">
-          <div @click="onModal(article.articles)" class="search-inner-btn">자세히</div>
-          <img v-if='article.imgs[0]' :src="article.imgs[0].imageUrl" :id="index">
+      <transition-group v-show="userContent" name='fade' tag="div" class="search-user-group" mode="in-out">
+        <div class='search-user-item' v-for='user in userList' :key='user.nickname' @click='goProfile(user.nickname)'>
+          <div class="search-user-img">
+            <img v-show="user.profile_img" :src="user.profile_img" alt="">
+            <img v-show="!user.profile_img&&user.gender=='Male'" src="../assets/images/default-user.png" alt="">
+            <img v-show="!user.profile_img&&user.gender=='Female'" src="../assets/images/default-user-female.png" alt="">
+          </div>
+          <div class="search-user-content">
+            <div class="search-user-name">{{ user.nickname }}</div>
+            <div v-if="user.selfintroduce" class="search-user-intro">
+              <span v-if="user.selfintroduce.length>10">{{ user.selfintroduce.substring(0, 10)+'...' }}</span>
+              <span v-else>{{ user.selfintroduce }}</span>
+            </div>
+            <div v-else class="search-user-nonuserintro">{{ user.selfintroduce }}</div>
+          </div>
         </div>
-      </div>
-      <SearchModal  v-if="showModal" @close="showModal= false"/>
-     
+        <div v-show="userListLength > 0" @click="onUserResult" class='search-user-more' key='0'>{{ userListLength }}개 더보기</div>
+      </transition-group>
     </div>
+    <div v-if="isDefault" class='search-container'>
+      <div @click="onModal(article.articleNo)" class="search-inner-box" v-for="article in articleList" :key="article.articleNo">
+        <!-- <div @click="onModal(article.articleNo)" class="search-inner-btn">자세히</div> -->
+        <img v-if='article.imageUrl' :src="article.imageUrl" :id="article.imageNo">
+      </div>
+      <infinite-loading @infinite="infiniteHandler" spinner="spinner" force-use-infinite-wrapper=".search-container">
+        <div slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</div>
+      </infinite-loading>
+    </div>
+
+    <SearchModal  v-if="showModal" @close="showModal= false"/>
+     
     <UserSearch v-if="isUserResult"/>
     <HashSearch v-if="isHashResult"/>
   </div>
@@ -45,6 +64,7 @@ import { mapState,mapMutations } from 'vuex'
 import HashSearch from '../components/HashSearch.vue'
 import UserSearch from '../components/UserSearch.vue'
 import SearchModal from '../components/SearchModal.vue'
+import InfiniteLoading from 'vue-infinite-loading'
 import '../components/css/search.css'
 import axios from 'axios'
 
@@ -57,6 +77,7 @@ export default {
     HashSearch,
     UserSearch,
     SearchModal,
+    InfiniteLoading,
   },
   data() {
     return {
@@ -70,6 +91,8 @@ export default {
       hashList: [],
       hashString: '',
       userContent: '',
+      userList: [],
+      userListLength: 0,
       isDefault: true,
       isHashResult: false,
       isUserResult: false,
@@ -77,6 +100,7 @@ export default {
       tempList: [],
       feedList: [],
       showModal: false,
+      limit:1,
     }
   },
   watch: {
@@ -88,10 +112,15 @@ export default {
     },
     flag() {
       this.defaultDark()
+    },
+    userContent() {
+      if (this.userContent) {
+        this.inUserSearch()
+      }
     }
   },
   methods: {
-    ...mapMutations(['setArticledata', 'setHashSearch', 'setUserSearch']),
+    ...mapMutations(['setArticledata', 'setHashSearch', 'setUserSearch', 'setIsSelectBar']),
     goSearch() {
         const selectBar = document.querySelector('.menu-bar-select')
         const newsFeed = document.querySelector('.fa-newspaper')
@@ -147,25 +176,26 @@ export default {
       this.hashList.splice(index, 1)
     },
     onHashResult() {
-      this.hashList.push(this.hashContent)
-      this.setHashSearch(this.hashList);
-      if(this.isHashResult) {
-        this.isHashResult = false
-        this.isHashResult = true
-      } else {
-        this.isDefault = false
-        this.isUserResult = false
-        this.isHashResult = true
+      if (this.hashContent) {
+        this.hashList.push(this.hashContent)
+        this.hashContent = ''
       }
-      this.hashContent = ''
-      this.hashList = []
+      if (this.hashList.length>0) {
+        this.setHashSearch(this.hashList);
+        this.isDefault = false
+        this.isHashResult = true
+        this.isUserResult = false
+        this.hashList = []
+      }
     },
     onUserResult() {
-      this.setUserSearch(this.userContent);
-      this.isDefault = false
-      this.isHashResult = false
-      this.isUserResult = true
-      this.userContent = ''
+      if (this.userContent) {
+        this.setUserSearch(this.userContent);
+        this.isDefault = false
+        this.isHashResult = false
+        this.isUserResult = true
+        this.userContent = ''
+      }
     },
     defaultDark() {
       const Dark = this.$cookies.get('dark')
@@ -205,31 +235,86 @@ export default {
     },
     setList() {
       for (let i=0; i<this.articleList.length/3; i++) {
-        for (let j=0; j<3; j++) {
-          this.tempList.push(this.articleList[j+i*3])
+        if(this.articleList.length%3==0){
+          for (let j=0; j<3; j++) {
+            this.tempList.push(this.articleList[j+i*3])
+          }
+        }
+        else{
+          if(i==this.articleList.length-1){
+            for(let j=0;j<this.articleList.length;j++){
+              this.tempList.push(this.articleList[j+i*3])
+            }
+          }
         }
         this.feedList.push(this.tempList)
         this.tempList = []
       }
     },
-    onModal(data) {
-      this.setArticledata(data.articleNo);
+    onModal(articleNo) {
+      this.setArticledata(articleNo);
       this.showModal = true
     },
     setHashList() {
       this.hashString += `#${this.hashList[this.hashList.length-1]} `
     },
+    inUserSearch() {
+      axios.get(`https://i3b304.p.ssafy.io/api/search/user`,{
+      params: {
+        username: this.userContent
+      },
+      }).then((data) => {
+        if(data.data.object) {
+          if(data.data.object.length>5) {
+            this.userList = data.data.object.splice(0,5)
+            this.userListLength = data.data.object.length - 5
+          } else {
+            this.userList = data.data.object
+            this.userListLength = 0
+          }
+        } else {
+          this.userList = []
+        }
+      }).catch()
+    },
+    goProfile(name) {
+      this.$router.push(`/otheruser/${name}`)
+    },
+    infiniteHandler($state){
+      let ref=this;
+      axios.post('https://i3b304.p.ssafy.io/api/search/all/'+ref.limit)
+      .then((data)=>{
+        setTimeout(() => {
+          if(data.data.object.length){
+            for(let i=0;i<data.data.object.length;i++){
+              ref.articleList.push(data.data.object[i]);
+            }
+
+            $state.loaded();
+            ref.limit+=1;
+          }
+          else{
+            $state.complete();
+
+          }
+        }, 1000);
+      })
+      .catch()
+    },
+
   },
   mounted() {
+    this.setIsSelectBar(true)
     this.goSearch()
     this.defaultDark()
 
 
-    axios.post("https://i3b304.p.ssafy.io/api/search/").then((data)=>{
-      this.articleList=data.data;
-      console.log(this.articleList)
-      this.setList();
+    axios.post("https://i3b304.p.ssafy.io/api/search/all/0").then((data)=>{
+      this.articleList=data.data.object;
     })
+  },
+  beforeDestroy() { 
+    this.setIsSelectBar(false)
   }
 }
 </script>

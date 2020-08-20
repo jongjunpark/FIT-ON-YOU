@@ -7,7 +7,7 @@
         <div v-show="!isMe" class="profile-nav-fake-icon"></div>
         <div @click="goFollower" class="profile-nav-btn3 profile-nav-icon"><i class="fas fa-user follower"><i class="fas fa-arrow-left follow-inner"></i></i></div>
         <div v-show="!isMe" class="profile-nav-fake-icon"></div>
-        <div @click="goFollowing" class="profile-nav-btn2 profile-nav-icon"><i class="fas fa-user following"><i class="fas fa-arrow-right follow-inner"></i></i></div>
+        <div @click="goFollowing" :class="'profile-nav-btn2 profile-nav-icon profile-' + isMe"><i class="fas fa-user following"><i class="fas fa-arrow-right follow-inner"></i></i></div>
         <div v-show="isMe" @click="goCuration" class="profile-nav-btn4 profile-nav-icon"><i class="fas fa-check curation"></i></div>
         <div @click="goBack" class="profile-nav-btn5 profile-nav-icon profile-nav-back"><i class="fas fa-reply"></i></div>
         <div class="profile-nav-select"></div>
@@ -52,7 +52,7 @@ export default {
     ...mapState(['flag', 'isMyFeed', 'isBookMark', 'isFollowing', 'isFollower', 'isCuration', 'isMe']),
   },
   methods: {
-    ...mapMutations(['setMyFeed','setBookMark','setFollower','setFollowing', 'setCuration']),
+    ...mapMutations(['setMyFeed','setBookMark','setFollower','setFollowing', 'setCuration', 'setIsMe']),
     goMyFeed() {
       this.setMyFeed();
       const selectBar = document.querySelector('.profile-nav-select')
@@ -157,7 +157,7 @@ export default {
       selectBar.classList.add('go-curation-menu')
     },
     goBack() {
-      this.$router.go(-1).catch(()=>{})
+      this.$router.go(-1)
     },
     defaultDark() {
       const Dark = this.$cookies.get('dark')
@@ -176,10 +176,21 @@ export default {
         wrap.classList.remove('wrap-dark')
       }
     },
+    classifyUser() {
+      let data = this.$cookies.get('auth-nickname');
+      let uri = data;
+      let uri_enc = encodeURIComponent(uri);
+      let user_nick = decodeURIComponent(uri_enc);
+      if (this.$router.currentRoute.params.name === user_nick) {
+        this.setIsMe(true)
+      } else {
+        this.setIsMe(false)
+      }
+    }
   },
   mounted() {
     this.defaultDark()
-    
+    this.classifyUser()
     if (this.isMyFeed) {
       this.goMyFeed()
     } else if (this.isBookMark) {
@@ -191,6 +202,7 @@ export default {
     } else if (this.isCuration) {
       this.goCuration()
     }
+
   }
 }
 </script>

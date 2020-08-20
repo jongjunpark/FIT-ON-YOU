@@ -1,6 +1,6 @@
 <template>
   <div class='wrap'>
-   <div class='wrap-container'>
+   <div class='wrap-container-find'>
       <div class='findpasswordok-head'>
         <h1>임시 비밀번호를<br>전송했습니다.<br><br>메일을<br>확인해주세요.</h1>
       </div>
@@ -53,7 +53,7 @@ export default {
     },
     startTimer(duration, display) {
       var timer = duration, minutes, seconds;
-      this.reTime = setInterval(function () {
+      this.reTime = setInterval(() => {
       minutes = parseInt(timer / 60, 10);
       seconds = parseInt(timer % 60, 10);
 
@@ -70,7 +70,6 @@ export default {
     }, 1000);
     },
     retry() {
-      console.log(this.pwdUser.birth.substring(0, 4) + this.pwdUser.birth.substring(5, 7) + this.pwdUser.birth.substring(8, 10) )
       clearInterval(this.reTime);
       var fiveMinutes = 60 * 3,
       display = document.querySelector('#time');
@@ -82,19 +81,14 @@ export default {
           pTime: this.pwdUser.birth.substring(0, 4) + this.pwdUser.birth.substring(5, 7) + this.pwdUser.birth.substring(8, 10) 
         }
       }).then(data => {
-        console.log("성공")
-        console.dir(data)
         this.confirmPwd(data.data.certifNum)
         this.findUserPWd(data.data.userInfo)
       })
-      .catch(data => {
-        console.log(data)
-      });
+      .catch();
     },
     changePwd() {
-      console.log(1)
       if (this.uuid == this.certifNum && !this.remaintime) {
-        console.log(2)
+        this.$cookies.set('agree', 'true')
         this.$router.push("/find/password/passwordchange").catch(()=>{})
       } else {
         Swal.fire({

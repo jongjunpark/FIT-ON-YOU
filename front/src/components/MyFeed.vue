@@ -21,6 +21,7 @@ export default {
       myFeedList:[],
       username:'',
       showModal:false,
+      name: '',
     }
   },
   computed: {
@@ -31,8 +32,12 @@ export default {
       this.defaultDark()
     }
   },
+  updated() {
+    this.defaultDark()
+  },
   mounted(){
     this.defaultDark()
+    this.name = this.$route.params.name
     this.getUserFeed()
   },
 
@@ -56,25 +61,14 @@ export default {
       }
     },
     getUserFeed() {
-      if (this.isMe) {
-        let data = this.$cookies.get('auth-nickname');
-        let uri = data;
-        let uri_enc = encodeURIComponent(uri);
-        let uri_dec = decodeURIComponent(uri_enc);
-        this.username = uri_dec;
-      } else {
-        this.username = this.otherUserName
-      }
-      console.log(this.username,'이름')
+      this.username = this.$router.currentRoute.params.name
       axios.get('https://i3b304.p.ssafy.io/api/mypage/myboard',{
         params:{
-          nickname : this.username,
+          nickname : this.name,
         }
       })
       .then((data)=>{
-        console.log(data,"myfeed");
         this.myFeedList = data.data.myBoards
-        console.log(this.myFeedList)
       })
     },
     onModal(articleNo) {
@@ -106,12 +100,20 @@ export default {
   padding-top: 32.5%;
   margin: 0.3vw;
   background-color: grey;
-  position: relative
+  position: relative;
+  transition: 0.2s ease;
+  cursor: pointer;
 }
 @media (min-width:1200px) {
   .myfeed-search-inner-box {
     margin: 1px;
   }
+}
+
+.myfeed-search-inner-box:hover {
+  transform: scale(1.1);
+  z-index: 10;
+  box-shadow: 0 5px 20px rgba(0,0,0,1);
 }
 
 .myfeed-search-inner-box img {

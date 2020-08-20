@@ -6,7 +6,7 @@
 
 .wrap-container-alarm .alarm-container-wrap {
 	width: 100%;
-	height: 60vh;
+	height: 80vh;
 	overflow-y: auto;
 	scroll-behavior: smooth;
 }
@@ -21,6 +21,39 @@
 	padding-top: 3vh;
 }
 
+.alarm-container .alarm-icon-box {
+	width: 6vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	margin-right: 1vh;
+}
+
+.alarmclass {
+	cursor: pointer;
+	font-size: 1.5vh;
+	padding: 0 1vh;
+}
+
+.alarm-container .alrarm-time-box {
+	width: 15%;
+	font-size: 1.3vh;
+}
+@media(max-width: 300px) {
+	.alarm-container .alrarm-time-box {
+		width: 22%;
+	}
+}
+@media(min-width: 450px) {
+	.alarmclass {
+		font-size: 2vh;
+	}
+	.alarm-container .alrarm-time-box {
+		font-size: 1.8vh;
+	}
+}
+
 .alarm-container .alarm-container-message {
 	width: 100%;
 	height: 9vh;
@@ -31,12 +64,12 @@
 	padding: 1vh;
 }
 
-.alarm-container div .alarm-container-message-img {
-	border: 1px solid black;
+.alarm-icon-box .alarm-container-message-img {
+	border: 1px solid gray;
+	background-color: #fff;
 	border-radius: 50%;
-	width: 6.5vh;
-	height: 6.5vh;
-	margin-right: 2vh;
+	width: 6vh;
+	height: 6vh;
 }
 
 .alarm-container div .alarm-inform-text {
@@ -59,26 +92,26 @@
 	position: absolute;
 	color: red;
 	margin: 0;
-	bottom: 0.7vh;
-	left: 5vh;
-	font-size: x-large;
+	bottom: 0;
+	right: -1vh;
+	font-size: 2.5vh;
 }
 
 .alarm-container div .user-alarm {
 	position: absolute;
 	color: #5AAEFF;
 	margin: 0;
-	bottom: 0.7vh;
-	left: 5vh;
-	font-size: x-large;
+	bottom: 0;
+	right: -1vh;
+	font-size: 2.5vh;
 }
 .alarm-container div .chat-alarm {
 	position: absolute;
 	color: #00b900;
 	margin: 0;
-	bottom: 0.7vh;
-	left: 5vh;
-	font-size: x-large;
+	bottom: 0;
+	right: -1vh;
+	font-size: 2.5vh;
 }
 
 .alarm-container .alarm-container-message-read {
@@ -88,7 +121,7 @@
 	align-items: center;
 	position: relative;
 	/* border-bottom: 1px solid #D5D5D5; */
-	background-color: 	#BFF6F9;
+	background-color: #BFF6F9;
 	border-radius: 2.5vh;
 	padding: 1vh;
 }
@@ -100,8 +133,9 @@
 }
 
 .alarm-container-message-read-dark {
-	color: #202020;
+	background-color: #6a888a !important;
 }
-.alarmclass {
-	cursor: pointer;
+
+.alarmtext-dark {
+	color: white;
 }

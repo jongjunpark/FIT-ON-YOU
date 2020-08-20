@@ -168,10 +168,6 @@ public class BoardController {
 	public Object getFollowArticle(@RequestParam String nickname, @PathVariable int page) {
 
 		List<BoardDTO> result = boardService.getMainFeedList(page, nickname);
-		for (BoardDTO r : result) {
-			System.out.print(r.getArticleNo() + " ");
-		}
-		System.out.println();
 		return result;
 	}
 
@@ -225,17 +221,15 @@ public class BoardController {
 			} else {
 				Alarm alarm = new Alarm();
 				Board board = boardDao.findBoardByArticleNo(likes.getArticleNo());
-				alarm.setType("3");
-				alarm.setRecevier(board.getArticleUser());
-				alarm.setFollower(likes.getNickname());
-				alarm.setArticleNo(likes.getArticleNo());
-				alarm.setIsRead(0);
-				if (alarmDao.save(alarm) == null) {
-					result.status = true;
-					result.data = "fail";
-				} else {
-					result.status = true;
-					result.data = "success";
+				String recevier = board.getArticleUser();
+				String follower = likes.getNickname();
+				if(!recevier.equals(follower)) {
+					alarm.setType("3");
+					alarm.setRecevier(recevier);
+					alarm.setFollower(follower);
+					alarm.setArticleNo(likes.getArticleNo());
+					alarm.setIsRead(0);
+					alarmDao.save(alarm);
 				}
 
 				boardDao.increFvCnt(likes.getArticleNo());
@@ -286,7 +280,7 @@ public class BoardController {
 		return user;
 	}
 
-	@PostMapping("/influencer")
+	@GetMapping("/influencer")
 	public List<Influencer> getInfluencer() {
 		Random random = new Random();
 		List<Influencer> temp = influencerDao.AllInfluencers();
@@ -305,6 +299,11 @@ public class BoardController {
 		return result;
 
 	}
+	@DeleteMapping(value = "/{articleNo}")
+	public void deleteArticle(@PathVariable int articleNo) {
+		System.out.println(articleNo);
+		boardDao.delBoardArticle(articleNo);
+	}
 
 	@PostMapping(value = "/upload")
 	public void addArticle(@RequestParam("imgdata") MultipartFile[] imgs, @RequestParam("nickname") String nickname,
@@ -319,6 +318,7 @@ public class BoardController {
 		board.setArticleUser(nickname);
 		board.setContent(content);
 		boardDao.save(board);
+		System.out.println(board.toString());
 
 		int articleNo = boardDao.getCountBoard().get(0);
 		for (String string : tags) {
@@ -330,7 +330,9 @@ public class BoardController {
 			articletag.setArticleNo(articleNo);
 			articletag.setTagName(string);
 			articletagDao.save(articletag);
+			System.out.println(articletag.toString());
 		}
+		
 		for (int i = 0; i < imgs.length; i++) {
 			ImageStore img = new ImageStore();
 			names[i] = uuid.toString() + "_" + imgs[i].getOriginalFilename();
@@ -341,6 +343,7 @@ public class BoardController {
 //	            String storePath="i3b304.p.ssafy.io/img/"+names[0];
 				String storePath = "../images/board/" + names[i];
 				img.setImageUrl(storePath);
+				System.out.println(storePath);
 				imageDao.save(img);
 			} catch (Exception e) {
 				e.printStackTrace();

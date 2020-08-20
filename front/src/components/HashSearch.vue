@@ -1,71 +1,30 @@
 <template>
-  <div class='wrap-container'>
-    <div class="hash-search-box">
-      <div class="hash-search-inner-box">
-        <img src="$" alt="">
+  <div class='wrap-container hash-container'>
+      <div v-show="hashResultList" class="hash-search-inner-box" v-for="hash in hashResultList" :key="hash.articleNo">
+        <img :src="hash.imgList[0]" :alt="`articleNo : ${hash.articleNo}`" @click="onModal(hash.articleNo)">
       </div>
-      <div class="hash-search-inner-box">
-        <img src="$" alt="">
+      <div v-show="hashResultList.length===0" class='hash-search-not-result'>
+        <p>일치하는 검색결과가 없습니다.</p>
       </div>
-      <div class="hash-search-inner-box">
-        <img src="#" alt="">
-      </div>
-    </div>
-    <div class="hash-search-box">
-      <div class="hash-search-inner-box">
-        <img src="#" alt="">
-      </div>
-      <div class="hash-search-inner-box">
-        <img src="#" alt="">
-      </div>
-      <div class="hash-search-inner-box">
-        <img src="#" alt="">
-      </div>
-    </div>
-    <div class="hash-search-box">
-      <div class="hash-search-inner-box">
-        <img src="#" alt="">
-      </div>
-      <div class="hash-search-inner-box">
-        <img src="#" alt="">
-      </div>
-      <div class="hash-search-inner-box">
-        <img src="#" alt="">
-      </div>
-    </div>
-    <div class="hash-search-box">
-      <div class="hash-search-inner-box">
-        <img src="#" alt="">
-      </div>
-      <div class="hash-search-inner-box">
-        <img src="#" alt="">
-      </div>
-      <div class="hash-search-inner-box">
-        <img src="#" alt="">
-      </div>
-    </div>
+      <SearchModal  v-if="showModal" @close="showModal= false"/>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState,mapMutations } from 'vuex'
 import axios from 'axios'
+import SearchModal from '../components/SearchModal.vue'
 
 export default {
   name: 'HashSearch',
+  components:{
+    SearchModal,
+  },
   data() {
     return {
       scrollDown: 0,
-      hashList: [],
-      username: '',
-      userprofileimg: '',
-      time: '',
-      content: '',
-      longContent: '',
-      imgs: [],
-      img: '',
-      tags: [],
-      loginUserName: '',
+      hashResultList: [],
+      showModal:false,
     }
   },
   computed: {
@@ -80,10 +39,12 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setArticledata']),
     defaultDark() {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.wrap')
+      const PTAGI = document.querySelector('p')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -92,9 +53,15 @@ export default {
       if (Dark === 'off') {
         HTML.classList.add('black')
         wrap.classList.add('wrap-dark')
+        if (PTAGI) {
+          PTAGI.classList.add('font-dark')
+        }
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
+        if (PTAGI) {
+          PTAGI.classList.remove('font-dark')
+        }
       }
     },
     getHashSearch() {
@@ -104,11 +71,16 @@ export default {
         username: this.loginUserName,
       },
       }).then((data) => {
-        console.log(data)
-        console.log(data.object)
+        this.hashResultList = data.data.object
       }).catch()
-    }
+    },
+    onModal(articleNo) {
+      this.setArticledata(articleNo);
+      this.showModal = true
+    },
+    
   },
+
   mounted() {
     let nickdata = this.$cookies.get('auth-nickname')
     let uri = nickdata;
@@ -123,18 +95,40 @@ export default {
 </script>
 
 <style scoped>
-.hash-search-box {
-  display: flex;
-  justify-content: center;
+.hash-container {
   width: 100%;
+  height: 80vh;
+  overflow: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  flex-direction: row;
+}
+
+.hash-container::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 .hash-search-inner-box {
-  width: 33%;
-  padding-top: 33%;
-  margin: 1px;
+  width: 32.5%;
+  height: 0;
+  padding-top: 32.5%;
+  margin: 0.3vw;
   background-color: grey;
+  transition: 0.2s ease;
   position: relative
+}
+@media (min-width:1200px) {
+  .hash-search-inner-box {
+    margin: 1px;
+  }
+}
+
+.hash-search-inner-box:hover {
+  transform: scale(1.1);
+  z-index: 10;
+  box-shadow: 0 5px 20px rgba(0,0,0,1);
 }
 
 .hash-search-inner-box img {
@@ -144,5 +138,15 @@ export default {
   right: 0;
   width: 100%;
   height: 100%;
+}
+
+.hash-search-not-result {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 20vh;
+  font-size: 2.5vh;
+  font-weight: 700;
 }
 </style>

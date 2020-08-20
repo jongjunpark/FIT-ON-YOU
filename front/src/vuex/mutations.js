@@ -23,11 +23,7 @@ export default {
     state.user = data
   },
   setAuthUser(state, data) {
-    console.log(state)
-    // var uri = data;
-    // var uri_enc = encodeURIComponent(uri);
-    // var uri_dec = decodeURIComponent(uri_enc);
-    // var res = uri_dec;
+    state.dummy = state
     window.$cookies.set('auth-nickname', data)
   },
   setUserIntro(state, data){
@@ -84,5 +80,14 @@ export default {
   },
   setOtherUser(state, data) {
     state.otherUserName = data
+  },
+  setIsWrite(state, data) {
+    state.isWrite = data
+  },
+  setIsSelectBar(state, data) {
+    state.isSelectBar = data
+  },
+  setDmProfileImg(state,data){
+    state.dmProfileImg=data;
   }
 }

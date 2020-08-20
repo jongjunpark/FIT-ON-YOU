@@ -90,7 +90,6 @@ export default {
       nickname: uNick,
     }
     }).then((data)=>{
-      console.log(data);
       ref.nickname=data.data.userinfo.nickname;
       ref.profileImg=data.data.userinfo.profile_img;
       if(data.data.userinfo.selfintroduce!=null){
@@ -107,7 +106,6 @@ export default {
     let uri_dec = decodeURIComponent(uri_enc);
     let res = uri_dec;
     this.nick = res
-    console.log(this.nickname, this.nick)
     
     axios.get('https://i3b304.p.ssafy.io/api/isfollowed',{
       params:{
@@ -125,7 +123,7 @@ export default {
 
   },
   methods: {
-    ...mapMutations(['setMyFeed','setBookMark','setFollower', 'setFollowing', 'setCuration', 'setIsMe', 'setOtherUser']),
+    ...mapMutations(['setMyFeed','setBookMark','setFollower', 'setFollowing', 'setCuration', 'setOtherUser']),
     defaultDark() {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
@@ -160,21 +158,18 @@ export default {
     },
     goMyFeed() {
       this.setMyFeed();
-      this.setIsMe(false);
       this.setOtherUser(this.$route.params.nickname);
-      this.$router.push('/profileinform').catch(()=>{})
+      this.$router.push(`/profileinform/${this.$route.params.nickname}`).catch(()=>{})
     },
     goFollowing() {
       this.setFollowing();
-      this.setIsMe(false);
       this.setOtherUser(this.$route.params.nickname);
-      this.$router.push('/profileinform').catch(()=>{})
+      this.$router.push(`/profileinform/${this.$route.params.nickname}`).catch(()=>{})
     },
     goFollower() {
       this.setFollower();
-      this.setIsMe(false);
       this.setOtherUser(this.$route.params.nickname);
-      this.$router.push('/profileinform').catch(()=>{})
+      this.$router.push(`/profileinform/${this.$route.params.nickname}`).catch(()=>{})
     },
     goChatting() {
       axios.get('https://i3b304.p.ssafy.io/api/chat/existroom',{
@@ -196,7 +191,6 @@ export default {
       }
       }).then((data) => {
         this.isFollwed = false
-        console.log(data.data.object.followno)
         this.followNo = data.data.object.followno
         this.followedCnt = this.followedCnt + 1
       })
@@ -204,13 +198,11 @@ export default {
         )
     },
     followDelete() {
-      console.log(this.followNo)
       axios.get('https://i3b304.p.ssafy.io/api/follow/delete',{
       params:{
         followNo: this.followNo,
       }
-      }).then((data) => {
-        console.log(data.data)
+      }).then(() => {
         this.isFollwed = true
         this.followedCnt = this.followedCnt - 1
       })

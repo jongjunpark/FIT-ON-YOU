@@ -66,24 +66,39 @@
   font-weight: 700;
 }
 
+.email-combo-box {
+  position: relative;
+}
+
 .join-input-area #email-combo{
   width: 21vw;
   box-sizing: border-box;
   border: 0;
   font-family: "Noto Sans KR", sans-serif !important;
   color: #686868;
+  position: relative;
+  -webkit-appearance: menulist-button !important;
 }
 @media (min-width:1200px) {
   .join-input-area #email-combo {
     width: 28%;
   }
 }
+
 .join-input-area #email-combo option {
   font-size: 1.5vh;
 }
 
 .join-input-area #email-combo:focus{
   outline: none;
+}
+
+.email-combo-arrow {
+  position: absolute;
+  bottom: 0.4vh;
+  right:10%;
+  font-size: 1.5vh;
+  color: grey !important;
 }
 
 .join-input-area .common-input-join {
@@ -130,7 +145,6 @@
   color: #B0B0B0;
   font-size: 1.7vh;
 }
-
 
 .btn.join-btn {
   color: #B0B0B0;
@@ -201,4 +215,53 @@ i {
 
 .join-cancle-img-dark {
   filter: invert(70);
+}
+
+@media (max-width:300px) {
+  .join-input-area input::placeholder,
+  .join-input-area select,
+  .join-input-area #email-join,
+  .join-input-area #email-join2,
+  .join-input-area .common-input-join,
+  .join-input-area .birth-join,
+  .email-join-span,
+  .join-err-msg,
+  .join-suc-msg {
+    font-size: 1.5vh
+  }
+  .join-input-area label {
+    font-size: 1.7vh
+  }
+  .join-err-msg,
+  .join-suc-msg {
+    margin-left: 5vw !important;
+  }
+}
+
+.confirmPoint {
+  border: 1px solid#5AAEFF !important;
+  border-radius: .5vh;
+  background-color: #5AAEFF !important;
+  color: #686868;
+}
+
+.confirm-btnid {
+  position: absolute;
+  right: 1vh;
+  top: 3vh;
+  background-color: #5AAEFF !important;
+  color: white;
+  border: 1px solid#5AAEFF !important;
+  border-radius: 1vh;
+  z-index: 1;
+  width: 10vh;
+  height: 5vh;
+}
+
+.confirm-btnid:focus {
+  outline: none;
+}
+
+.helllotest {
+  width: 75% !important;
 }

@@ -4,14 +4,18 @@
       <p v-show="!isChange" class="profile-nick-input">
         <input type="text" :placeholder="user.nickname" v-model="nickname" maxlength="20">
       </p>
-      <img v-show="!isChange && !nickname" class='profile-nick-cancel' src="../assets/images/X.png" alt="" @click="cancel">
-      <img v-show="!isChange && nickname" class='profile-nick-cancel' src="../assets/images/pngguru.com (1).png" alt="" @click="change">
+      <div class="profile-nick-cancel">
+        <img v-show="!isChange" class='profile-nick-cancel1' src="../assets/images/X.png" alt="" @click="cancel">
+        <img v-show="!isChange" class='profile-nick-cancel2' src="../assets/images/pngguru.com (1).png" alt="" @click="change">
+      </div>
       
       <p v-show="!isChange2" class="profile-content-input">
-        <input type="text" :placeholder="user.selfintroduce" v-model="content" maxlength="100">
+        <input type="text" :placeholder="user.selfintroduce" v-model="tmpcontent" maxlength="100">
       </p>
-      <img v-show="!isChange2 && !content" class='profile-content-cancel' src="../assets/images/X.png" alt="" @click="cancelInput">
-      <img v-show="!isChange2 && content" class='profile-content-cancel' src="../assets/images/pngguru.com (1).png" alt="" @click="changeInput">
+      <div class="profile-content-cancel">
+        <img v-show="!isChange2" class='profile-content-cancel1' src="../assets/images/X.png" alt="" @click="cancelInput">
+        <img v-show="!isChange2" class='profile-content-cancel2' src="../assets/images/pngguru.com (1).png" alt="" @click="changeInput">
+      </div>
     </div>
     <div class="wrap-container profile-wrap">
       <div class='profile-head-area'>
@@ -38,11 +42,11 @@
         </div>
       </div>
       <div class="profile-edit-area">
-        <p v-show="isChange && isChange2" class="my-nickname" @click="changeNickName">{{nickname }}
+        <p v-show="isChange && isChange2" class="my-nickname" @click="changeNickName">{{ nickname }}
           <img src="../assets/images/edit.png" alt="" class="profile-edit-img">
         </p>
         <div v-show="isChange2 && isChange" class="profile-edit-content" @click="changeContent">
-          <p class='my-content'>{{content}}
+          <p class='my-content'>{{ content }}
             <img src="../assets/images/edit.png" alt="" class="profile-edit-img">
           </p>
         </div>
@@ -77,6 +81,7 @@
 import "../components/css/profileedit.css"
 import axios from 'axios'
 import { mapState, mapMutations, mapActions } from 'vuex'
+import Swal from 'sweetalert2'
 
 export default {
   name: 'ProfileEdit',
@@ -91,6 +96,7 @@ export default {
       followedCnt :'',
       tempNickName:'' ,
       test:'',
+      tmpcontent: '',
     }
   },
   watch: {
@@ -112,7 +118,6 @@ export default {
       params:{nickname:res}
     })
     .then((data)=>{
-      console.log(data);
       ref.followedCnt=data.data.followedCnt;
       ref.followingCnt=data.data.followingCnt;
       ref.nickname=data.data.userinfo.nickname;
@@ -128,7 +133,7 @@ export default {
     ...mapState(['isLoggedIn', 'user', 'flag'])
   },
   methods: {
-    ...mapMutations(['setUserIntro','setUserNick','setToken','setMyFeed','setBookMark','setFollower','setFollowing','setCuration','setIsMe']),
+    ...mapMutations(['setUserIntro','setUserNick','setToken','setMyFeed','setBookMark','setFollower','setFollowing','setCuration']),
     ...mapActions(['sendUserInfo']),
     setProfileImg() {
       let ref=this;
@@ -138,38 +143,32 @@ export default {
       frm.append("nickname",this.nickname);
       axios.post('https://i3b304.p.ssafy.io/api/account/addProfileImg',frm)
       .then((data)=>{
-        console.log(data)
         ref.$cookies.set('auth-token', data.data.auth_token)
         ref.setToken(data.data.auth_token)
         ref.sendUserInfo();
-        ref.profileImg=ref.user.profileImg;
+        ref.profileImg=data.data.profileurl;
       })
       .catch()
     },
     goMyFeed() {
       this.setMyFeed();
-      this.setIsMe(true);
-      this.$router.push('/profileinform').catch(()=>{})
+      this.$router.push(`/profileinform/${this.nickname}`).catch(()=>{})
     },
     goBookMark() {
       this.setBookMark();
-      this.setIsMe(true);
-      this.$router.push('/profileinform').catch(()=>{})
+      this.$router.push(`/profileinform/${this.nickname}`).catch(()=>{})
     },
     goFollowing() {
       this.setFollowing();
-      this.setIsMe(true);
-      this.$router.push('/profileinform').catch(()=>{})
+      this.$router.push(`/profileinform/${this.nickname}`).catch(()=>{})
     },
     goFollower() {
       this.setFollower();
-      this.setIsMe(true);
-      this.$router.push('/profileinform').catch(()=>{})
+      this.$router.push(`/profileinform/${this.nickname}`).catch(()=>{})
     },
     goCuration() {
       this.setCuration();
-      this.setIsMe(true);
-      this.$router.push('/profileinform').catch(()=>{})
+      this.$router.push(`/profileinform/${this.nickname}`).catch(()=>{})
     },
     changeNickName() {
       const wrapContainer = document.querySelector('.wrap-container')
@@ -192,6 +191,27 @@ export default {
       wrapBottom.classList.remove('profile-opacity-wrap')
       hidden.style.zIndex = -1000
       this.isChange = true;
+
+      let ref=this;
+      let data = this.$cookies.get('auth-nickname');
+      let uri = data;
+      let uri_enc = encodeURIComponent(uri);
+      let uri_dec = decodeURIComponent(uri_enc);
+      let res = uri_dec;
+      this.tempNickName=res;
+      this.nickname=res;
+      axios.get('https://i3b304.p.ssafy.io/api/mypage/',{
+      params:{nickname:res}
+      })
+      .then((data)=>{
+        ref.followedCnt=data.data.followedCnt;
+        ref.followingCnt=data.data.followingCnt;
+        ref.nickname=data.data.userinfo.nickname;
+        ref.content=data.data.userinfo.selfintroduce;
+        if(data.data.userinfo.profile_img){
+          ref.profileImg=data.data.userinfo.profile_img;
+        }
+      })
     },
     change() {
       let ref=this;
@@ -210,14 +230,19 @@ export default {
       formData.append("cur",this.nickname);
       axios.post('https://i3b304.p.ssafy.io/api/account/nickchange',formData)
       .then((data)=>{
-        console.log(data);
         if(data.data.result.data=="success"){
           ref.$cookies.set('auth-token', data.data.auth_token)
           ref.setToken(data.data.auth_token)
           ref.sendUserInfo();
         }
         else if(data.data.result.data=="fail"){
-          console.log("중복된 닉네임인 경우");
+          Swal.fire({
+          icon: 'error',
+          title: '중복된 닉네임이에요.',
+          text: '다른 닉네임을 사용해주세요',
+        })
+          this.nickname = this.tempNickName
+
         }
       })
       .catch()
@@ -262,14 +287,13 @@ export default {
 
       const formData = new FormData();
       formData.append("nickname",this.nickname);
-      formData.append("selfintroduce",this.content);
+      formData.append("selfintroduce",this.tmpcontent);
       axios.put('https://i3b304.p.ssafy.io/api/account/selfintro',formData)
       .then((data)=>{
-        console.log(data);
         ref.$cookies.set('auth-token', data.data.auth_token)
         ref.setToken(data.data.auth_token)
         ref.sendUserInfo();
-        
+        this.content = this.tmpcontent
       })
       .catch()
 

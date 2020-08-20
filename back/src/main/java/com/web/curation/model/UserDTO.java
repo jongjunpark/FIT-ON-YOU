@@ -36,6 +36,14 @@ public class UserDTO {
 		this.profile_img = user.getProfile_img();
 	}
 
+	public String getProfile_img() {
+		return profile_img;
+	}
+
+	public void setProfile_img(String profile_img) {
+		this.profile_img = profile_img;
+	}
+
 	public String getNickname() {
 		return nickname;
 	}

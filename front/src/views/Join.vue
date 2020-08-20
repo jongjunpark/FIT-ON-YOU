@@ -11,20 +11,26 @@
         <span class='email-join-span'> |  </span>
         <select @focus="activeInput" @blur='deactiveInputEmail' v-model='select' name="job" id='email-combo'>
           <option >직접입력</option>
-          <option >gmail.com</option>
-          <option > naver.com</option>
-          <option > hanmail.net</option>
-          <option > lycos.co.kr</option>
-          <option > nate.com</option>
-          <option > yahoo.co.kr</option>
-          <option > yahoo.com</option>
-          <option > empal.com</option>
-          <option > paran.com</option>
-          <option > korea.com</option>
-        </select>
+          <option >gmail</option>
+          <option > naver</option>
+          <option > hanmail</option>
+          <option > lycos</option>
+          <option > nate</option>
+          <option > yahoo</option>
+          <option > empal</option>
+          <option > paran</option>
+          <option > korea</option>
+        </select>  
         <p v-if="mailErrMsg" class='err-msg join-err-msg'>유효하지 않은 이메일 형식입니다.</p>
         <p v-if="mailSucMsg && finalMail" class='err-msg join-err-msg'>이미 사용중인 이메일입니다.</p>
         <p v-if="mailSucMsg && !finalMail && joinFlag" class='suc-msg join-suc-msg'>사용가능합니다.</p>
+      </div>
+      <div class="join-input-area" v-show="mailSucMsg && !finalMail && joinFlag && !finalFlag">
+        <label for="">인증번호 입력</label>
+        <input @focus="activeInput" @blur='deactiveInput' v-model='checkConfirm' type="text" class="common-input-join helllotest" placeholder="인증번호입력" >
+        <p v-show="confirmErrorMsg" class='err-msg join-err-msg'>인증번호가 틀렸습니다.</p>
+        <p v-show="confirmSuccessMsg" class='suc-msg join-suc-msg'>사용 가능한 비밀번호 입니다.</p>
+        <button class="confirm-btnid" @click="goConfrim">전송</button> 
       </div>
       <div class="join-input-area">
         <label for="">비밀번호</label>
@@ -96,7 +102,6 @@ import * as EmailValidator from "email-validator"
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import { mapState, mapMutations, mapActions } from 'vuex'
-import firebase from 'firebase'
 
 
 export default {
@@ -113,6 +118,8 @@ export default {
       passwordSchema: new PasswordValidator(),
       select: '직접입력',
       offSelect: true,
+      checkConfirm: '',
+      checkConfirmFlag: 'QWcbjksbQ',
       gender: '',
       input: {
         email: '',
@@ -140,10 +147,13 @@ export default {
       isFemale: false,
       isEmail: false,
       changeProfile: false,
+      confirmErrorMsg: false,
+      confirmSuccessMsg: false,
       isMale: false,
       isCancle: false,
       defaultImg: "default-user.png",
       joinFlag: false,
+      finalFlag: false,
     }
   },
   created() {
@@ -158,6 +168,12 @@ export default {
       .letters();
   },
   watch: {
+    checkConfirm() {
+      this.goCheckConfirm();
+    },
+    finalFlag() {
+      this.checkJoinForm();
+    },
     select() {
       this.checkSelect();
       this.checkEmailValidate();
@@ -223,28 +239,46 @@ export default {
       } else {
         this.onSelect = true
         this.offSelect = false
-        if (this.select === 'naver.com') {
+        if (this.select === 'naver') {
           this.input.url = 'naver.com'
-        } else if (this.select === 'hanmail.net') {
+        } else if (this.select === 'hanmail') {
           this.input.url = 'hanmail.net'
-        } else if (this.select === 'nate.com') {
+        } else if (this.select === 'nate') {
           this.input.url = 'nate.com'
-        } else if (this.select === 'gmail.com') {
+        } else if (this.select === 'gmail') {
           this.input.url = 'gmail.com'
-        } else if (this.select === 'lycos.co.kr') {
+        } else if (this.select === 'lycos') {
           this.input.url = 'lycos.co.kr'
-        } else if (this.select === 'yahoo.co.kr') {
+        } else if (this.select === 'yahoo') {
           this.input.url = 'yahoo.co.kr'
-        } else if (this.select === 'yahoo.com') {
-          this.input.url = 'yahoo.com'
-        } else if (this.select === 'empal.com') {
+        } else if (this.select === 'empal') {
           this.input.url = 'empal.com'
-        } else if (this.select === 'paran.com') {
+        } else if (this.select === 'paran') {
           this.input.url = 'paran.com'
-        } else if (this.select === 'korea.com') {
+        } else if (this.select === 'korea') {
           this.input.url = 'korea.com'
         }
       }
+    },
+    goConfrim() {
+      axios.get('https://i3b304.p.ssafy.io/api/account/confirmemail',{
+        params:{
+          email: this.input.email + '@' + this.input.url
+        }
+      }).then(data => {
+        if (data.data.certifNum) {
+          this.checkConfirmFlag = data.data.certifNum;
+        }
+      })
+      .catch();
+      Swal.fire(
+        '인증번호가 전송되었습니다.',
+        '번호를 입력해주세요',
+        'success'
+        )
+      
+      const Confirm = document.querySelector('.confirm-btnid')
+      Confirm.innerHTML = '재전송'
     },
     clickMale() {
       const male = document.querySelector('.fa-male')
@@ -293,7 +327,7 @@ export default {
       }
     },
     checkJoinForm() {
-      if(this.input.email && (this.input.url || this.select != '직접입력') && this.input.password
+      if(this.input.email && (this.input.url || this.select != '직접입력') && this.input.password && this.finalFlag
       && this.input.passwordConfirm && this.input.nickname && this.passwordSuccessMsg
       && this.input.birth.year && this.input.birth.month && this.input.birth.day
       && (this.isMale || this.isFemale)
@@ -320,6 +354,18 @@ export default {
         this.mailSucMsg = true
       } else {
         this.mailSucMsg = false
+      }
+    },
+    goCheckConfirm() {
+      if (this.checkConfirm == this.checkConfirmFlag) {
+        this.confirmSuccessMsg = true;
+        this.confirmErrorMsg = false;
+        this.finalFlag = true;
+      } else {
+        this.confirmErrorMsg = true;
+        this.confirmSuccessMsg = false;
+        this.finalFlag = false;
+
       }
     },
     checkNickname() {
@@ -443,22 +489,11 @@ export default {
       var frm = new FormData();
       var photoFile = document.getElementById("profile-img-edit");
       if (photoFile.files[0]) {
-        console.log(photoFile.files[0].name)
         this.profileImg = "../images/profile/"+this.input.nickname+"_"+photoFile.files[0].name
       } else {
         this.profileImg = null
       }
-      const test1 = this.input.email
-      const test2 = this.input.password
-       firebase.auth().createUserWithEmailAndPassword(test1.toString(), test2.toString()).then(()=>{
-        }).catch((error) => {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        console.log(errorCode);
-        console.log(errorMessage);
-        // ...
-        });
+
       axios.post('https://i3b304.p.ssafy.io/api/account/signup',{
 
           email: this.input.email+'@'+this.input.url,
@@ -466,12 +501,13 @@ export default {
           nickname: this.input.nickname,
           gender: this.gender,
           birth: this.input.birth.year+' '+this.input.birth.month+' '+this.input.birth.day,
-          profile_img: this.profileImg
+          profile_img: this.profileImg,
+          selfintroduce : this.input.textProfile,
 
       }).then(data => {
-        console.log(data)
         this.$cookies.set('auth-token', data.data.auth_token)
         this.setToken(data.data.auth_token)
+        this.$cookies.remove('agree')
         Swal.fire(
         '환영해요!',
         '자신만의 패션을 뽐내보세요!',
@@ -481,26 +517,23 @@ export default {
         this.sendUserInfo();
       })
       .catch(function(){
-        // console.log(data.data.data)
       });
       if (photoFile.files[0]) {
         frm.append("profile-img-edit", photoFile.files[0]);
         frm.append("nickname",this.input.nickname);
         axios.post('https://i3b304.p.ssafy.io/api/account/addProfileImg',frm,
         ).then( () =>{
-          console.log("1");
 
 
           setTimeout(() => {
-            this.$router.go('/feed').catch(()=>{})
+            this.$router.go('/feed')
           }, 1000);
           
         })
         .catch(function(){
-          console.log("2");
         });
       } else {setTimeout(() => {
-            this.$router.go('/feed').catch(()=>{})
+            this.$router.go('/feed')
           }, 1000);}
 
     },
@@ -562,7 +595,6 @@ export default {
       var frm = new FormData();
       var photoFile = document.getElementById("profile-img-edit");
       frm.append("profile-img-edit", photoFile.files[0]);
-      console.log(photoFile.files[0].name);
       this.input.profileImg = URL.createObjectURL(photoFile.files[0]);
     },
     onCancleBtn() {
@@ -575,9 +607,6 @@ export default {
       this.input.profileImg = ''
       this.isCancle = false
       document.getElementById("profile-img-edit").value = "";
-    },
-    checkcheck() {
-      console.log('hi')
     },
     defaultDark() {
       const Dark = this.$cookies.get('dark')

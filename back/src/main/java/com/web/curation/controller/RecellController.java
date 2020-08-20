@@ -1,36 +1,33 @@
 package com.web.curation.controller;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
+import java.util.Optional;
 import java.util.UUID;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.web.curation.dao.BoardDao;
 import com.web.curation.dao.ImageDao;
 import com.web.curation.dao.RecellDao;
 import com.web.curation.dao.UserDao;
 import com.web.curation.model.BasicResponse;
+import com.web.curation.model.Chat;
+import com.web.curation.model.ChatDTO;
 import com.web.curation.model.ImageStore;
 import com.web.curation.model.Recell;
+import com.web.curation.service.user.BoardService;
 
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
@@ -50,34 +47,87 @@ public class RecellController {
 	UserDao userDao;
 	@Autowired
 	RecellDao recellDao;
+	@Autowired
+	BoardService boardService;
+
+	
+	@GetMapping("/existroom")
+	public Object existroom(@RequestParam String roomname) {
+		final BasicResponse result = new BasicResponse();
+		Recell recell;
+		Optional<Recell> optRecell = recellDao.existRoomname(roomname);
+		if (optRecell.isPresent()) {// 있다면 lasttime을 update후에
+			System.out.println(2);
+			// 룸네임을 반환
+			recell = optRecell.get();
+			result.data = "success";
+			result.object = recell;
+			result.status = true;
+		} else {
+			// 새로운 룸네임을 저장후 이를 반환
+			
+			result.object = null;
+			result.data = "not exist roomname";
+			result.status = true;
+		}
+		System.out.println(4);
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	// 내게시글만 가져오기
+	@GetMapping("/myContents")
+	public Object getMyContents(@RequestParam String username) {
+		final BasicResponse result = new BasicResponse();
+		List<Recell> myRecellList = recellDao.getMyContents(username);
+		if (!myRecellList.isEmpty()) {
+			result.object = myRecellList;
+			result.data = "success";
+			result.status = true;
+		} else {
+			result.object = null;
+			result.data = "Nodata";
+			result.status = true;
+		}
+
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@PostMapping("/newsfeed/{page}")
+	public Object getFollowArticle(@PathVariable int page) {
+		List<Recell> result = boardService.getRecellList(page);
+		return result;
+	}
+
+	@PostMapping("/soldout")
+	public void changeSaleCheck(@RequestParam int num) {
+		recellDao.changeSalechek(num);
+	}
 
 	@PostMapping(value = "/upload")
-	public void addArticle(@RequestParam("imgdata") MultipartFile imgs, @RequestParam("nickname") String nickname,
-			@RequestParam("content") String content, @RequestParam("price") String price, @RequestParam("size") String size) {
+	public void addRecell(@RequestParam("recellimg") MultipartFile recellimg, @RequestParam("nickname") String nickname,
+			@RequestParam("content") String content, @RequestParam("price") String price,
+			@RequestParam("size") String size, @RequestParam("place") String place,
+			@RequestParam("category") String category) {
 		String path = "/var/www/html/dist/images/board/";
 		// String path ="https://i3b304.p.ssafy.io/dist/images/board/";
-
 		UUID uuid = UUID.randomUUID();
-
-		String[] names = new String[3];
 		Recell recell = new Recell();
 		recell.setRecellUser(nickname);
 		recell.setRecellContent(content);
 		recell.setRecellPrice(price);
 		recell.setRecellSize(size);
+		recell.setPlace(place);
+		recell.setRoomname(uuid.toString());
+		recell.setCategory(category);
+		String name = uuid.toString() + "_recell_" + recellimg.getOriginalFilename();
+		String storePath = "../images/board/" + name;
+		recell.setRecellImage(storePath);
+		recellDao.save(recell);
 
 		int recellNo = recellDao.getCountRecell().get(0);
-		ImageStore img = new ImageStore();
-		String name = nickname + "_recell_" + imgs.getOriginalFilename();
-		img.setArticleNo(recellNo);
 		File file = new File(path + name);
 		try {
-			imgs.transferTo(file);
-			String storePath = "../images/board/" + name;
-			img.setImageUrl(storePath);
-			recell.setRecellImage(storePath);
-			recellDao.save(recell);
-			imageDao.save(img);
+			recellimg.transferTo(file);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

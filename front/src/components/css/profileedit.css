@@ -170,6 +170,19 @@
   top: 60%;
   width: 4vh;
   height: 4vh;
+  display: flex;
+  justify-content: space-evenly;
+}
+.profile-nick-cancel1 {
+  width: 4vh;
+  height: 4vh;
+  margin-right: 2vh;
+}
+
+.profile-nick-cancel2 {
+  width: 4vh;
+  height: 4vh;
+  margin-left: 2vh;
 }
 
 .profile-content-cancel {
@@ -177,6 +190,18 @@
   top: 60%;
   width: 4vh;
   height: 4vh;
+  display: flex;
+  justify-content: space-evenly;
+}
+.profile-content-cancel1 {
+  width: 4vh;
+  height: 4vh;
+  margin-left: 2vh;
+}
+.profile-content-cancel2 {
+  width: 4vh;
+  height: 4vh;
+  margin-left: 2vh;
 }
 
 .profile-nick-cancel:hover {
@@ -263,7 +288,7 @@
   transition: all 0.3s ease;
   position: relative;
 }
-@media (max-width: 300px) {
+@media (max-width: 449px) {
   .profile-user-btn .mylist-icon, 
   .profile-user-btn .follower-icon, 
   .profile-user-btn .following-icon, 
@@ -297,7 +322,7 @@
   border-radius: 50%;
   transition: all 0.3s ease;
 }
-@media (max-width: 300px) {
+@media (max-width: 449px) {
   .profile-footer-area .follow-inner {
     font-size: 0.5vh;
   }

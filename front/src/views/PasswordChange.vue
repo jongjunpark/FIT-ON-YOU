@@ -106,14 +106,12 @@ export default {
       }
     },
     changePassword() {
-      console.log(this.pwdUser);
       const formData= new FormData();
       formData.append('email',this.pwdUser.email);
       formData.append('password',this.passwordConfirm);
 
       axios.post('https://i3b304.p.ssafy.io/api/account/changePassword',
         formData).then(data => {
-        console.log(data)
         this.$cookies.set('auth-token', data.data.auth_token)
         this.setToken(data.data.auth_token)
         this.setLoggedIn(true);
@@ -125,9 +123,7 @@ export default {
         )
         this.$router.push('/feed').catch(()=>{})
       })
-      .catch(data => {
-        console.log(data)
-      });
+      .catch();
     },
     defaultDark() {
       const Dark = this.$cookies.get('dark')

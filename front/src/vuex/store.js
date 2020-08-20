@@ -16,13 +16,17 @@ const state = {
   articledata: '',
   hashSearchList: '',
   userSearch: '',
-  isMyFeed: false,
+  isMyFeed: true,
   isBookMark: false,
   isFollowing: false,
   isFollower: false,
   isCuration: false,
   isMe: false,
+  isWrite: true,
+  isSelectBar: false,
   otherUserName: '',
+  dmProfileImg: '',
+  dummydata: '',
 }
 
 Vue.use(Vuex)

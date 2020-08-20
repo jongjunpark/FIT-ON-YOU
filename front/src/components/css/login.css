@@ -1,7 +1,7 @@
 
 .login-err-msg {
   position: absolute;
-  top: 15vh;
+  top: 20vh;
   left: 15px;
   margin-bottom: 1vh !important;
 }
@@ -211,33 +211,6 @@
   transform: translateY(5px);
 }
 
-
-/* .btn.google-btn .google-img {
-  position: absolute;
-  top: 0; bottom: 0; left: 0; right: 0;
-  width: 100%;
-  padding: 3.5vw 3vw 3vw 3.5vw;
-}
-@media (min-width: 1200px) {
-  .btn.google-btn .google-img {
-  height: 100%;
-  padding: 25% 23% 23% 25%;
-  }
-}
-
-.btn.kakao-btn .kakao-img {
-  position: absolute;
-  top: 0; bottom: 0; left: 0; right: 0;
-  height: 100%;
-  padding: 4vw 4.5vw 4vw 4vw;
-}
-@media (min-width: 1200px) {
-  .btn.kakao-btn .kakao-img {
-  height: 100%;
-  padding: 33% 30% 30% 30%;
-  }
-} */
-
 .btn.google-btn .fa-google {
   position: absolute;
   top: 50%; left: 50%;
@@ -331,4 +304,8 @@
 .social-btn-dark {
   background-color: rgb(39, 39, 39);
   border: 1px solid rgba(255, 255, 255, 0.02) !important;
+}
+
+.login-checkbox-area {
+  visibility: hidden;
 }

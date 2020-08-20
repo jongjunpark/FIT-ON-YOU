@@ -13,6 +13,7 @@ export default {
   data() {
     return {
       nick: '',
+      name: '',
     }
   },
   mounted() {
@@ -24,14 +25,16 @@ export default {
     let res = uri_dec;
     this.nick = res
     
+    this.name = this.$route.params.name
+
     axios.get('https://i3b304.p.ssafy.io/api/follow/forFollowing',{
       params:{
-      userName: this.nick,
+      userName: this.name,
     }
     }).then((data) => {
-      const ARRAYFOLLOW = data.data
-      ARRAYFOLLOW.forEach(element => {
-        console.log(element)
+      const ARRAYFOLLOW = data.data.result
+      const PRFIMGS = data.data.prfimgs;
+      ARRAYFOLLOW.forEach((element,index) => {
         
         const FollowingBox = document.createElement('div')
         const FollowingIcon = document.createElement('div')
@@ -54,24 +57,36 @@ export default {
         FollowingUser.innerHTML = element.followeduser
         FollowingText.classList.add('following-text-area')
         FollowingIcon.classList.add('following-icon-area')
-        FollowingImg.src = "/images/default-user.png"
+        if(PRFIMGS[index]=="-1") FollowingImg.src = "/images/default-user.png"
+        else FollowingImg.src=PRFIMGS[index];
         FollowingBox.classList.add('following-box')
 
         FollowingIcon.appendChild(FollowingImg)
-        FollowingBtnArea.appendChild(FollowingBtn)
-        FollowingBtnArea.appendChild(DMBTN)
+         if (!(this.nick == element.followeduser)) {
+          FollowingBtnArea.appendChild(FollowingBtn)
+          FollowingBtnArea.appendChild(DMBTN)
+          }
+
         FollowingText.appendChild(FollowingUser)
         FollowingText.appendChild(FollowingBtnArea)
 
         FollowingBox.appendChild(FollowingIcon)
         FollowingBox.appendChild(FollowingText)
-        Father.appendChild(FollowingBox)
+        if (Father) {
+
+          Father.appendChild(FollowingBox)
+        }
+
+        FollowingImg.addEventListener('click',()=>{
+          this.$router.push(`/otheruser/${element.followeduser}`).catch(()=>{})
+        })
+
 
         DMBTN.addEventListener('click', () => {
           axios.get('https://i3b304.p.ssafy.io/api/chat/existroom',{
             params:{
               firstuser: element.followeduser,
-              seconduser: this.nick
+              seconduser: this.name
             }
             }).then((data)=>{
               this.$router.push(`/directmessage/${data.data.object.roomname}/${element.followeduser}`).catch(()=>{})
@@ -81,32 +96,67 @@ export default {
         })
         let Num = element.followno
 
+        axios.get('https://i3b304.p.ssafy.io/api/isfollowed',{
+          params:{
+          followedUser: element.followeduser,
+          followingUser: this.nick
+        }
+        }).then((data) => {
+          if (!data.data.object) {
+            FollowingBtn.classList.add('btn-cancel-Ok')
+            FollowingBtn.innerHTML = '팔로우하기'
+          } else {
+            Num = data.data.object.followno
+          }
+        })
+        .catch(
+        )
+        
+
+
+
         FollowingBtn.addEventListener('click', () => {
           const Action = FollowingBtn.className
           if (Action == 'following-follow-btn') {
-            axios.get('https://i3b304.p.ssafy.io/api/follow/delete',{
+            axios.get('https://i3b304.p.ssafy.io/api/isfollowed',{
+              params:{
+              followedUser: element.followeduser,
+              followingUser: this.nick
+            }
+            }).then((data) => {
+              if (!data.data.object) {
+            FollowingBtn.classList.add('btn-cancel-Ok')
+            FollowingBtn.innerHTML = '팔로우하기'
+          } else {
+            Num = data.data.object.followno
+          }
+              axios.get('https://i3b304.p.ssafy.io/api/follow/delete',{
               params:{
                 followNo: Num,
               }
               }).then(() => {
-                FollowingBtn.classList.add('btn-cancel-ok')
+                FollowingBtn.classList.add('btn-cancel-Ok')
                 FollowingBtn.innerHTML = '팔로우하기'
               })
                 .catch(
                 )
+            })
+            .catch(
+            )
+
           } else {
-            axios.get('https://i3b304.p.ssafy.io/api/follow/add',{
-              params:{
-                followedUser: element.followeduser,
-                followingUser: this.nick
-              }
-              }).then((data) => {
-                FollowingBtn.classList.remove('btn-cancel-ok')
-                FollowingBtn.innerHTML = '팔로우취소'
-                Num = data.data.object.followno
-              })
-                .catch(
-                )
+              axios.get('https://i3b304.p.ssafy.io/api/follow/add',{
+                params:{
+                  followedUser: element.followeduser,
+                  followingUser: this.nick
+                }
+                }).then((data) => {
+                  FollowingBtn.classList.remove('btn-cancel-Ok')
+                  FollowingBtn.innerHTML = '팔로우취소'
+                  Num = data.data.object.followno
+                })
+                  .catch(
+                  )
           }
         })
 
@@ -182,6 +232,7 @@ export default {
   justify-content: center;
   align-items: center;
   margin: 0 2vh;
+  cursor: pointer;
 }
 @media (max-width: 449px) {
   .following-box .following-icon-area {
@@ -192,7 +243,8 @@ export default {
 .following-box .following-icon-area img {
   width: 7vh;
   height: 7vh;
-  background-color: black;
+  background-color: #fff;
+  border: 1px solid grey;
   border-radius: 50%;
 }
 

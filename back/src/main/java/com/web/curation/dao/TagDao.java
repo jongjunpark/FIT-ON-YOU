@@ -8,6 +8,6 @@ import com.web.curation.model.Tag;
 
 public interface TagDao extends JpaRepository<Tag, String>{
 	
-	String findBytagName(String tagName);
+	Tag findBytagName(String tagName);
 
 }

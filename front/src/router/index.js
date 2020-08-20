@@ -17,9 +17,11 @@ import Alarm from '../views/Alarm.vue'
 import DM from '../views/DM.vue'
 import FeedWrite from '../views/FeedWrite.vue'
 import OtherUser from '../views/OtherUser.vue'
-// import SocialJoin from '../views/SocialJoin.vue'
 import JoinConfirm from '../views/JoinConfirm.vue'
 import PageNotFound from '../views/PageNotFound.vue'
+import ResellMessage from '../views/ResellMessage.vue'
+import axios from 'axios'
+import JoinConfirmNew from '../views/JoinConfirmNew.vue'
 
 Vue.use(VueRouter)
 
@@ -39,6 +41,22 @@ Vue.use(VueRouter)
     path: '/join',
     name: 'Join',
     component: Join,
+    beforeEnter(to, from, next) {
+      if (Vue.$cookies.isKey('auth-token')) {
+        next('/feed')
+      } else {
+        if (Vue.$cookies.get('agree'))
+        { Vue.$cookies.remove('agree')
+          next() }
+        else {
+          next('/')
+        }
+      }    }
+  },
+  {
+    path: '/joinconfirmnew',
+    name: 'JoinConfirmNew',
+    component: JoinConfirmNew,
     beforeEnter(to, from, next) {
       if (Vue.$cookies.isKey('auth-token')) {
         next('/feed')
@@ -99,7 +117,13 @@ Vue.use(VueRouter)
       if (Vue.$cookies.isKey('auth-token')) {
         next('/feed')
       } else {
-        next()
+        if (Vue.$cookies.get('agree'))
+        { Vue.$cookies.remove('agree')
+          next()
+        }
+        else {
+          next('/find/password')
+        }
       }    }
   },
   {
@@ -110,7 +134,13 @@ Vue.use(VueRouter)
       if (Vue.$cookies.isKey('auth-token')) {
         next('/feed')
       } else {
-        next()
+        if (Vue.$cookies.get('agree'))
+        { Vue.$cookies.remove('agree')
+          next()
+        }
+        else {
+          next('/find/password')
+        }
       }    }
   },
   {
@@ -158,15 +188,28 @@ Vue.use(VueRouter)
       }    }
   },
   {
-    path: '/profileinform',
+    path: '/profileinform/:name',
     name: 'ProfileInform',
     component: ProfileInform,
     beforeEnter(to, from, next) {
       if (!Vue.$cookies.isKey('auth-token')) {
         next('/')
       } else {
-        next()
-      }    }
+        let param = to.params.name
+        axios.get('https://i3b304.p.ssafy.io/api/account/checkNickname',{ 
+          params: {
+            nickname: param
+            }
+        }).then(data => {
+          if (data.data.data == "exist") {
+            next()
+          } else {   
+            next('/404')    
+          }
+        })
+        .catch()
+      }   
+     }
   },
   {
     path: '/alarm',
@@ -202,6 +245,18 @@ Vue.use(VueRouter)
         next()
       }
     }
+  },
+  {
+    path: '/resellMessage',
+    name: 'resell',
+    component: ResellMessage,
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/')
+      } else {
+        next()
+      }
+    }
   }, 
   {
     path: '/otheruser/:nickname',
@@ -211,7 +266,30 @@ Vue.use(VueRouter)
       if (!Vue.$cookies.isKey('auth-token')) {
         next('/')
       } else {
-        next()
+        let param = to.params.nickname
+        let data = Vue.$cookies.get('auth-nickname');
+        let uri = data;
+        let uri_enc = encodeURIComponent(uri);
+        let uri_dec = decodeURIComponent(uri_enc);
+        let res = uri_dec;
+        axios.get('https://i3b304.p.ssafy.io/api/account/checkNickname',{ 
+          params: {
+            nickname: param
+            }
+        }).then(data => {
+          if (data.data.data == "exist") {
+            next()
+          } else {   
+            next('/404')    
+          }
+        })
+        .catch(function(){
+            })
+        if (param == res) {
+          next('/profileedit')
+        } else {
+          next()
+        }
       }   
      }
   },
@@ -228,7 +306,32 @@ Vue.use(VueRouter)
     path: '/404',
     name: 'PageNotFound',
     component: PageNotFound,
-  }
+  },
+  {
+    path: '/resellmessage/:roomname/:othername/:category',
+    name: 'ResellMessage',
+    component: ResellMessage,
+    beforeEnter(to, from, next) {
+      if (!Vue.$cookies.isKey('auth-token')) {
+        next('/')
+      } else {
+        let param = to.params.roomname
+        axios.get('https://i3b304.p.ssafy.io/api/recell/existroom',{ 
+          params: {
+            roomname: param
+            }
+        }).then(data => {
+          if (data.data.data == "success") {
+            next()
+          } else {   
+            next('/404')    
+          }
+        })
+        .catch()
+      }   
+     }
+  },
+  
     // beforeEnter(to, from, next) {
     //   if (!Vue.$cookies.isKey('auth-token')) {
     //     next('/')
