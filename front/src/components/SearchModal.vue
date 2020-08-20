@@ -6,13 +6,14 @@
         <div class="search-more-box">
           <header class="search-more-user-data">
             <div class="search-more-user-profile" @click="goToUserPage(username)">
-              <img :src="profile">
+              <img v-show="profile" :src="profile">
+              <img v-show="!profile" src="../assets/images/default-user.png" alt="">
             </div>
             <div class="search-more-article-head">
               <p class='search-more-username' @click="goToUserPage(username)">{{ username }}</p>
               <p class='search-more-article-date'>{{ time }}</p>
             </div>
-            <div v-show="myname === username" class="search-more-del-btn">삭제</div>
+            <div v-show="myname === username" class="search-more-del-btn" @click="deleteArticle">삭제</div>
           </header>
           <section class="search-more-content">
             <VueSlickCarousel v-bind="settings" v-if="imgs[1]">
@@ -27,11 +28,15 @@
             </div>
             <div class="search-more-btn-box">
               <div class='search-more-btn-left'>
-                <i :class="'fas fa-heart '+likeicon[likechk]" @click="clickLike(articleNo,likechk,$event)"></i>{{favoriteCnt}}
+                <i :class="'fas fa-heart '+likeicon[likechk]" @click="clickLike(articleNo,likechk,$event)"></i>
               </div>
               <div class='search-more-btn-right'>
                 <i :class="'fas fa-bookmark '+markicon[markchk]" @click="clickBookMark(articleNo,markchk,$event)"></i>
               </div>
+            </div>
+            <div class="search-more-like-cnt">
+              <p v-show="likechk">{{ myname }}님 외 {{favoriteCnt}}명이 좋아합니다</p>
+              <p v-show="!likechk">{{favoriteCnt}}명이 좋아합니다</p>
             </div>
             <p v-show="content" class='search-more-content-head'>{{ content }}</p>
             <p v-show="longContent" class='search-more-content-head'>{{ longContent }}</p>
@@ -55,6 +60,7 @@ import VueSlickCarousel from 'vue-slick-carousel'
 import 'vue-slick-carousel/dist/vue-slick-carousel.css'
 import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 function timeForToday(value) {
         const today = new Date();
@@ -118,8 +124,10 @@ export default {
       this.defaultDark()
     }
   },
-  mounted() {
+  updated() {
     this.defaultDark()
+  },
+  mounted() {
     this.articleNo=this.articledata
 
     let articleNo = this.articledata
@@ -133,16 +141,17 @@ export default {
     frm.append('nickname',res);
     axios.post(`https://i3b304.p.ssafy.io/api/search/${articleNo}`,frm)
     .then((response)=>{
-      console.log(response.data)
       this.username = response.data[0].aarticles.articleUser
       this.time = timeForToday(response.data[0].aarticles.articleDate)
-      if (response.data[0].aarticles.content.length>60) {
-        for (let i=0; i<60; i++) {
+      if (response.data[0].aarticles.content.length>100) {
+        for (let i=0; i<100; i++) {
           this.longContent += response.data[0].aarticles.content[i]
         }
         this.longContent += ' ....'
+        this.defaultDark()
       } else {
         this.content = response.data[0].aarticles.content
+        this.defaultDark()
       }
       this.imgs = response.data[0].imgs
       this.tags = response.data[0].tags
@@ -150,7 +159,9 @@ export default {
       this.likechk=response.data[0].aarticles.likechk;
       this.markchk=response.data[0].aarticles.markchk;
       this.favoriteCnt=response.data[0].aarticles.favoriteCnt;
+      this.defaultDark()
       });
+      this.defaultDark()
   },
   computed: {
     ...mapState(['flag','articledata'])
@@ -164,11 +175,38 @@ export default {
         INPUTBTN.classList.remove('on-comment-input')
       }
     },
+    deleteArticle() {
+      let article = this.articledata
+      Swal.fire({
+        title: '삭제하시겠습니까?',
+        text: "삭제된 댓글은 복구할 수 없습니다.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '삭제하기',
+        cancelButtonText: '아니오',
+      }).then((result) => {
+        if (result.value) {
+          axios.delete(`https://i3b304.p.ssafy.io/api/board/${article}`,{
+            }).then(() => {
+            Swal.fire(
+            '삭제되었습니다',
+          )
+            this.$router.go(0)
+            }
+          )
+          
+        }
+      })
+    
+    },
     defaultDark() {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.search-modal-wrap')
       const PTAG = document.querySelectorAll('p')
+      const delbtn = document.querySelector('.search-more-del-btn')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -180,18 +218,22 @@ export default {
         for (let i=0; i<PTAG.length ; i++) {
           PTAG[i].classList.add('font-dark')
         }
+        if (delbtn) {
+          delbtn.classList.add('search-more-del-btn-dark')
+        }
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('search-modal-wrap-dark')
         for (let i=0; i<PTAG.length ; i++) {
           PTAG[i].classList.remove('font-dark')
         }
+        if (delbtn) {
+          delbtn.classList.remove('search-more-del-btn-dark')
+        }
       }
     },
 
     clickLike(articleNo,flag,e) {
-      let ref=this
-
       let data = this.$cookies.get('auth-nickname');
       let uri = data;
       let uri_enc = encodeURIComponent(uri);
@@ -207,7 +249,7 @@ export default {
             articleNo:articleNo,
             nickname:res
           })
-          .then(console.log("좋아요"))
+          .then()
           .catch()
       }
       else if(flag==1){
@@ -220,7 +262,7 @@ export default {
             nickname:res
           }
         })
-        .then(console.log(ref.likechk,"좋아요 취소"))
+        .then()
         .catch()
       }
       
@@ -231,8 +273,6 @@ export default {
       this.showModal = true
     },
     clickBookMark(articleNo,flag,e) {
-      let ref=this
-
       let data = this.$cookies.get('auth-nickname');
       let uri = data;
       let uri_enc = encodeURIComponent(uri);
@@ -246,7 +286,7 @@ export default {
             bookedArticle:articleNo,
             bookUser:res
           })
-          .then(console.log("북마크 등록"))
+          .then()
           .catch()
       }
       else if(flag==1){
@@ -258,7 +298,7 @@ export default {
             bookUser:res
           }
         })
-        .then(console.log(ref.markchk,"북마크 취소"))
+        .then()
         .catch()
       }
 
@@ -330,7 +370,6 @@ export default {
   max-width: 50vh;
   width: 100%;
   margin: 0 auto;
-  height: 65vh;
   }
 }
 
@@ -348,9 +387,10 @@ export default {
   position: relative;
 }
 .search-more-user-profile {
-  width: 4vh;
-  height: 4vh;
-  background-color: grey;
+  width: 5vh;
+  height: 5vh;
+  border: 1px solid rgba(0,0,0,0.5);
+  background-color: #fff;
   border-radius: 50%;
 }
 
@@ -366,11 +406,11 @@ export default {
 }
 .search-more-article-head .search-more-username {
   font-weight: 700;
-  font-size: 1.5vh;
+  font-size: 1.8vh;
   cursor: pointer;
 }
 .search-more-article-head .search-more-article-date {
-  font-size: 1vh;
+  font-size: 1.5vh;
   color: grey;
 }
 
@@ -449,6 +489,12 @@ export default {
   cursor: pointer;
 }
 
+.search-more-content .search-more-like-cnt {
+  font-size: 1.8vh;
+  margin-bottom: 1vh;
+  margin-left: 1vh;
+}
+
 .search-more-content .search-more-content-head {
   font-weight: 900;
   font-size: 2vh;
@@ -474,8 +520,21 @@ export default {
 
 .heart{
   color:crimson;
+  animation-name: check;
+  animation-duration: 0.5s;
 }
 .mark{
   color:gold;
+  animation-name: check;
+  animation-duration: 0.5s;
+}
+
+@keyframes check {
+	50% {transform: scale(1.2)}
+	100% {transform: scale(1)}
+}
+
+.search-more-del-btn-dark {
+  color: white;
 }
 </style>

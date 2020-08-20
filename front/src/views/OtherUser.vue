@@ -90,7 +90,6 @@ export default {
       nickname: uNick,
     }
     }).then((data)=>{
-      console.log(data);
       ref.nickname=data.data.userinfo.nickname;
       ref.profileImg=data.data.userinfo.profile_img;
       if(data.data.userinfo.selfintroduce!=null){
@@ -107,7 +106,6 @@ export default {
     let uri_dec = decodeURIComponent(uri_enc);
     let res = uri_dec;
     this.nick = res
-    console.log(this.nickname, this.nick)
     
     axios.get('https://i3b304.p.ssafy.io/api/isfollowed',{
       params:{
@@ -193,7 +191,6 @@ export default {
       }
       }).then((data) => {
         this.isFollwed = false
-        console.log(data.data.object.followno)
         this.followNo = data.data.object.followno
         this.followedCnt = this.followedCnt + 1
       })
@@ -201,13 +198,11 @@ export default {
         )
     },
     followDelete() {
-      console.log(this.followNo)
       axios.get('https://i3b304.p.ssafy.io/api/follow/delete',{
       params:{
         followNo: this.followNo,
       }
-      }).then((data) => {
-        console.log(data.data)
+      }).then(() => {
         this.isFollwed = true
         this.followedCnt = this.followedCnt - 1
       })

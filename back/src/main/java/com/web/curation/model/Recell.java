@@ -36,7 +36,8 @@ public class Recell {
 	private LocalDateTime recellDate;
 	private String recellSize;
 	private String roomname;
-	private String category;
+	private int salecheck;
+	private String place;
 
 	public int getRecellNo() {
 		return recellNo;
@@ -100,6 +101,12 @@ public class Recell {
 
 	public void setRoomname(String roomname) {
 		this.roomname = roomname;
+	}
+	public String getPlace() {
+		return place;
+	}
+	public void setPlace(String place) {
+		this.place=place;
 	}
 
 }

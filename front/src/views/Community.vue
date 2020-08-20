@@ -1,6 +1,11 @@
 <template>
   <div class='wrap'>
     <div class='community-toggle-box'>
+      <div class="community-search-box">
+        <i class="fas fa-user community-search-icon"></i>
+        <input class="community-search-user" type="text" placeholder="닉네임" @keypress.enter='onResellUser(resellUserContent)' @input="resellUserContent = $event.target.value" v-model='resellUserContent'>
+        <i @click="onResellUser(resellUserContent)" class="fab fa-sistrix community-search-icon"></i>
+      </div>
       <span>내글보기</span>
       <input @change="onToggle" type="checkbox" id="community-toggle" name="" value=""/> 
         <div class='community-toggle-inner'>
@@ -16,14 +21,19 @@
           <p class='community-content-body'>·가격: {{ myarticle.recellPrice }}원</p>
           <p class='community-content-body'>·사이즈: {{ myarticle.recellSize }}</p>
           <div class="community-content-footer">
-            <div @click="goDM(myarticle.roomname, myarticle.recellUser)" class="community-content-btn dm-btn">DM</div>
+            <div v-show="myarticle.place!=''" class="map-zone" @click="onModal(myarticle.place)">직거래위치 
+              <i class="fas fa-map-marker-alt map"></i>
+            </div>
+          </div>
+          <div class="community-content-footer">
+            <div @click="goDM(myarticle.roomname, myarticle.recellUser, myarticle.category)" class="community-content-btn dm-btn">DM</div>
             <div v-show="!myarticle.salecheck" @click="soldItem(myarticle.recellNo)" class="community-content-btn del-btn">판매완료</div>
             <div v-show="myarticle.salecheck" class="community-content-btn non-del-btn">완료됨</div>
           </div>
         </div>
       </div>
     </div>
-    <div v-show="!isMyCommu" class='wrap-container community-container'>
+    <div v-show="isOtherCommu" class='wrap-container community-container'>
       <div class="community-inner-box" v-for="(article,index) in recellList" :key="`recell-${index}`">
         <img :src="article.imgurl" alt="">
         <div class="community-content">
@@ -32,11 +42,39 @@
           <p class='community-content-body'>·가격: {{ article.price }}원</p>
           <p class='community-content-body'>·사이즈: {{ article.size }}</p>
           <div class="community-content-footer">
-            <div @click="goDM(article.roomname, article.user)" class="community-content-btn dm-btn other-btn">DM보내기</div>
+            <div v-show="article.place!=''" class="map-zone" @click="onModal(article.place)">직거래위치 
+              <i class="fas fa-map-marker-alt map"></i>
+            </div>
+          </div>
+          <div class="community-content-footer">
+            <div @click="goDM(article.roomname, article.user, article.category)" class="community-content-btn dm-btn other-btn">DM보내기</div>
           </div>
         </div>
       </div>
     </div>
+    <div v-show="isSearchCommu" class="community-search-usernick">{{ tempNickName }}님에 대한 검색결과입니다.</div>
+    <div v-show="isSearchCommu" class='wrap-container community-container community-search-container'>
+      <div class="community-inner-box" v-for="(userarticle,index) in resellUserList" :key="`recelluser-${index}`">
+        <img v-show="!userarticle.salecheck" :src="userarticle.recellImage" alt="">
+        <img v-show="userarticle.salecheck" :src="userarticle.recellImage" alt="">
+        <div v-show="userarticle.salecheck" class="community-sold-item">SOLD OUT</div>
+        <div class="community-content">
+          <p class='community-content-head'>{{ userarticle.recellContent }}</p>
+          <p class='community-content-body'>·판매자: {{ userarticle.recellUser }}</p>
+          <p class='community-content-body'>·가격: {{ userarticle.recellPrice }}원</p>
+          <p class='community-content-body'>·사이즈: {{ userarticle.recellSize }}</p>
+          <div v-show="!userarticle.salecheck" class="community-content-footer">
+            <div v-show="userarticle.place!=''" class="map-zone" @click="onModal(userarticle.place)">직거래위치 
+              <i class="fas fa-map-marker-alt map"></i>
+            </div>
+          </div>
+          <div v-show="!userarticle.salecheck" class="community-content-footer">
+            <div @click="goDM(userarticle.roomname, userarticle.recellUser, userarticle.category)" class="community-content-btn dm-btn other-btn">DM보내기</div>
+          </div>
+        </div>
+      </div>
+    </div>
+     <MapModal v-if="mapModal" @close="mapModal= false" :placeAddrress="placeAddrress"/>
   </div>
 </template>
 
@@ -45,8 +83,12 @@ import { mapState, mapMutations } from 'vuex'
 import "../components/css/community.css"
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import MapModal from '../components/MapModal.vue'
 export default {
   name: 'Community',
+  components:{
+    MapModal,
+  },
   computed: {
     ...mapState(['flag'])
   },
@@ -63,6 +105,14 @@ export default {
       nickName:[],
       limit:'1',
       isMyCommu: false,
+      isSearchCommu: false,
+      isOtherCommu: true,
+      mapModal:false,
+      placeAddrress:'',
+      mapFlag:false,
+      resellUserContent: '',
+      resellUserList: [],
+      tempNickName: '',
     }
   },
   methods: {
@@ -82,12 +132,16 @@ export default {
     onToggle() {
       if(event.target.checked) {
         this.isMyCommu = true
+        this.isOtherCommu = false
+        this.isSearchCommu = false
       } else {
+        this.isOtherCommu = true
         this.isMyCommu = false
+        this.isSearchCommu = false
       }
     },
-    goDM(room, name) {
-      this.$router.push(`/resellmessage/${room}/${name}`)
+    goDM(room, name, category) {
+      this.$router.push(`/resellmessage/${room}/${name}/${category}`)
     },
     infiniteHandler($state){
       let ref=this;
@@ -105,7 +159,9 @@ export default {
               date:ref.tempList[index].recellDate,
               size:ref.tempList[index].recellSize,
               roomname:ref.tempList[index].roomname,
-              user:ref.tempList[index].recellUser
+              user:ref.tempList[index].recellUser,
+              place:ref.tempList[index].place,
+              category:ref.tempList[index].category
               }
             this.recellList.push(feeddata);
             }
@@ -126,6 +182,9 @@ export default {
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.wrap')
       const INPUT = document.querySelectorAll('input')
+      const SPAN = document.querySelectorAll('span')
+      const COMMUICON = document.querySelectorAll('.community-search-icon')
+      const USERNICK = document.querySelector('.community-search-usernick')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -134,14 +193,28 @@ export default {
       if (Dark === 'off') {
         HTML.classList.add('black')
         wrap.classList.add('wrap-dark')
+        USERNICK.classList.add('font-dark')
+        for (let i=0; i<COMMUICON.length ; i++) {
+          COMMUICON[i].classList.add('font-dark')
+        }
         for (let i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.add('input-dark')
+        }
+        for (let i=0; i<SPAN.length ; i++) {
+          SPAN[i].classList.add('font-dark')
         }
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
+        USERNICK.classList.remove('font-dark')
+        for (let i=0; i<COMMUICON.length ; i++) {
+          COMMUICON[i].classList.remove('font-dark')  
+        }
         for (let i=0; i<INPUT.length ; i++) {
           INPUT[i].classList.remove('input-dark')
+        }
+        for (let i=0; i<SPAN.length ; i++) {
+          SPAN[i].classList.remove('font-dark')
         }
       }
     },
@@ -152,9 +225,7 @@ export default {
       this.nickName = decodeURIComponent(uri_enc);
     },
     getAllList() {
-      axios.post("http://localhost:8080/api/recell/newsfeed/0").then((data)=>{
-      console.log("success")
-      console.log(data)
+      axios.post("https://i3b304.p.ssafy.io/api/recell/newsfeed/0").then((data)=>{
       this.tempList=data.data;
       for (let index = 0; index < this.tempList.length; index++) {
         if (this.tempList[index].recellUser !== this.nickName) {
@@ -166,7 +237,9 @@ export default {
             date:this.tempList[index].recellDate,
             size:this.tempList[index].recellSize,
             roomname:this.tempList[index].roomname,
-            user:this.tempList[index].recellUser
+            user:this.tempList[index].recellUser,
+            place:this.tempList[index].place,
+            category:this.tempList[index].category
             }
           this.recellList.push(feeddata);
         }
@@ -175,13 +248,12 @@ export default {
       })
     },
     getMyList() {
-      axios.get("http://localhost:8080/api/recell/myContents",{
+      axios.get("https://i3b304.p.ssafy.io/api/recell/myContents",{
         params: {
           username: this.nickName
         },
       }).then((data) => {
         this.myList = data.data.object
-        console.log(this.myList, '내글')
       }).catch()
     },
     soldItem(roomNo) {
@@ -197,8 +269,8 @@ export default {
         if (result.value) {
           const frm = new FormData();
           frm.append("num",roomNo);
-          axios.post('http://localhost:8080/api/recell/soldout', frm)
-          .then(console.log("팔았다"))
+          axios.post('https://i3b304.p.ssafy.io/api/recell/soldout', frm)
+          .then()
           .catch()
           Swal.fire(
             '완료되었습니다.',
@@ -209,7 +281,25 @@ export default {
           })
         }
       }
-    )}
+    )},
+    onModal(place){
+      this.placeAddrress=place
+      this.mapModal=true;
+    },
+    onResellUser(nick) {
+      axios.get("https://i3b304.p.ssafy.io/api/recell/myContents",{
+        params: {
+          username: nick
+        },
+      }).then((data) => {
+        this.resellUserList = data.data.object
+        this.isOtherCommu = false
+        this.isMyCommu = false
+        this.isSearchCommu = true
+        this.tempNickName = nick
+        this.resellUserContent = ''
+      }).catch()
+    },
   },
   mounted() {
     this.setIsSelectBar(true)
@@ -218,7 +308,8 @@ export default {
     this.getNickName()
     this.getMyList()
     this.getAllList()
-    },
+
+  },
   beforeDestroy() { 
     this.setIsSelectBar(false)
   }

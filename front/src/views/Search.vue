@@ -32,20 +32,20 @@
           </div>
           <div class="search-user-content">
             <div class="search-user-name">{{ user.nickname }}</div>
-            <div v-show="!user.selfintroduce" class="search-user-nonuserintro">{{ user.selfintroduce }}</div>
-            <div v-show="user.selfintroduce" class="search-user-intro">{{ user.selfintroduce }}</div>
+            <div v-if="user.selfintroduce" class="search-user-intro">
+              <span v-if="user.selfintroduce.length>10">{{ user.selfintroduce.substring(0, 10)+'...' }}</span>
+              <span v-else>{{ user.selfintroduce }}</span>
+            </div>
+            <div v-else class="search-user-nonuserintro">{{ user.selfintroduce }}</div>
           </div>
         </div>
         <div v-show="userListLength > 0" @click="onUserResult" class='search-user-more' key='0'>{{ userListLength }}개 더보기</div>
       </transition-group>
     </div>
     <div v-if="isDefault" class='search-container'>
-
-      <div class="search-box" v-for="(feed,index) in feedList" :key="`feed-${index}`">
-        <div class="search-inner-box" v-for="article in feedList[index]" :key="article.articleno">
-          <div @click="onModal(article.articleNo)" class="search-inner-btn">자세히</div>
-          <img v-if='article.imageUrl' :src="article.imageUrl" :id="index">
-        </div>
+      <div @click="onModal(article.articleNo)" class="search-inner-box" v-for="article in articleList" :key="article.articleNo">
+        <!-- <div @click="onModal(article.articleNo)" class="search-inner-btn">자세히</div> -->
+        <img v-if='article.imageUrl' :src="article.imageUrl" :id="article.imageNo">
       </div>
       <infinite-loading @infinite="infiniteHandler" spinner="spinner" force-use-infinite-wrapper=".search-container">
         <div slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</div>
@@ -114,8 +114,9 @@ export default {
       this.defaultDark()
     },
     userContent() {
-      this.inUserSearch()
-      console.log(this.userList)
+      if (this.userContent) {
+        this.inUserSearch()
+      }
     }
   },
   methods: {
@@ -175,18 +176,15 @@ export default {
       this.hashList.splice(index, 1)
     },
     onHashResult() {
-      if (this.hashContent || this.hashList.length>0) {
+      if (this.hashContent) {
         this.hashList.push(this.hashContent)
-        this.setHashSearch(this.hashList);
-        if(this.isHashResult) {
-          this.isHashResult = false
-          this.isHashResult = true
-        } else {
-          this.isDefault = false
-          this.isUserResult = false
-          this.isHashResult = true
-        }
         this.hashContent = ''
+      }
+      if (this.hashList.length>0) {
+        this.setHashSearch(this.hashList);
+        this.isDefault = false
+        this.isHashResult = true
+        this.isUserResult = false
         this.hashList = []
       }
     },
@@ -266,13 +264,16 @@ export default {
         username: this.userContent
       },
       }).then((data) => {
-        console.log(data, '실시간유저')
-        if(data.data.object.length>5) {
-          this.userList = data.data.object.splice(0,5)
-          this.userListLength = data.data.object.length - 5
+        if(data.data.object) {
+          if(data.data.object.length>5) {
+            this.userList = data.data.object.splice(0,5)
+            this.userListLength = data.data.object.length - 5
+          } else {
+            this.userList = data.data.object
+            this.userListLength = 0
+          }
         } else {
-          this.userList = data.data.object
-          this.userListLength = 0
+          this.userList = []
         }
       }).catch()
     },
@@ -285,9 +286,9 @@ export default {
       .then((data)=>{
         setTimeout(() => {
           if(data.data.object.length){
-            ref.articleList=data.data.object;
-            ref.setList();
-            ref.articleList=[];
+            for(let i=0;i<data.data.object.length;i++){
+              ref.articleList.push(data.data.object[i]);
+            }
 
             $state.loaded();
             ref.limit+=1;
@@ -310,9 +311,6 @@ export default {
 
     axios.post("https://i3b304.p.ssafy.io/api/search/all/0").then((data)=>{
       this.articleList=data.data.object;
-      console.log(this.articleList)
-      this.setList();
-      this.articleList=[];
     })
   },
   beforeDestroy() { 

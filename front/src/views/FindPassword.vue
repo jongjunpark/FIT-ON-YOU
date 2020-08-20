@@ -67,11 +67,10 @@ export default {
           pTime: this.birth
         }
       }).then(data => {
-        console.log("성공")
-        console.log(data.data.certifNum)
         if (data.data.certifNum) {
           this.confirmPwd(data.data.certifNum)
           this.findUserPWd(data.data.userInfo)
+          this.$cookies.set('agree', 'true')
           this.$router.push("/find/password/ok").catch(()=>{})
         } else {
           Swal.fire({
@@ -81,9 +80,7 @@ export default {
         })
         }
       })
-      .catch(data => {
-        console.log(data)
-      });
+      .catch();
     },
     // checkInput() {
     //   // this.errMsg = true
@@ -91,8 +88,8 @@ export default {
     // },
     checkEmailValidate() {
       if (this.email.length >= 0 && !EmailValidator.validate(this.email))
-        { console.log('올바르지 않습니다.'); this.emailVaild = false;}
-      else { console.log('올바릅니다.'); this.emailVaild = true;}
+        { this.emailVaild = false;}
+      else { this.emailVaild = true;}
     },
     activeInput() {
       event.path[1].style.border = '2px solid black'

@@ -1,5 +1,5 @@
 <template>
-  <div class='wrap-container'>
+  <div class='wrap-container user-search-container'>
     <div v-show="userResultList" class="user-search-box" v-for="user in userResultList" :key="user.nickname">
       <div class="user-search-icon-area">
         <img v-show="user.profile_img" @click="goProfile(user.nickname)" :src="user.profile_img" :alt="user.nickname">
@@ -9,7 +9,10 @@
       <div class="user-search-text-area">
         <div @click="goProfile(user.nickname)" class="user-search-username">{{ user.nickname }}</div>
         <div v-show="!user.selfintroduce" class="user-search-nonuserintro"></div>
-        <div v-show="user.selfintroduce" class="user-search-userintro">{{ user.selfintroduce }}</div>
+        <div v-if="user.selfintroduce" class="user-search-userintro">
+          <span v-if="user.selfintroduce.length>18">{{ user.selfintroduce.substring(0,18)+'...' }}</span>
+          <span v-else>{{ user.selfintroduce }}</span>
+        </div>
       </div>
     </div>
     <div v-show="!userResultList" class='user-search-not-result'>
@@ -40,11 +43,16 @@ export default {
       this.getUserSearch()
     }
   },
+  updated() {
+    this.defaultDark();
+  },
   methods: {
     defaultDark() {
       const Dark = this.$cookies.get('dark')
       const HTML = document.querySelector('html')
       const wrap = document.querySelector('.wrap')
+      const PTAGI = document.querySelector('p')
+      const USERNAME = document.querySelectorAll('.user-search-username')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -53,9 +61,21 @@ export default {
       if (Dark === 'off') {
         HTML.classList.add('black')
         wrap.classList.add('wrap-dark')
+        for (let i=0; i<USERNAME.length; i++) {
+          USERNAME[i].classList.add('font-dark')
+        }
+        if (PTAGI) {
+          PTAGI.classList.add('dark-onon')
+        }
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
+        for (let i=0; i<USERNAME.length; i++) {
+          USERNAME[i].classList.remove('font-dark')
+        }
+        if (PTAGI) {
+          PTAGI.classList.remove('dark-onon')
+        }
       }
     },
     getUserSearch() {
@@ -64,9 +84,7 @@ export default {
         username: this.userSearch
       },
       }).then((data) => {
-        console.log(data, 2)
         this.userResultList = data.data.object
-        console.log(this.userResultList)
       }).catch()
     },
     goProfile(name) {
@@ -81,15 +99,15 @@ export default {
 </script>
 
 <style scoped>
-/* .user-search-container {
+.user-search-container {
   width: 100%;
-  height: 70vh;
+  height: 80vh;
   overflow-y: auto;
 }
 .user-search-container::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background-color: transparent; }
 ::-webkit-scrollbar-thumb { background: silver;}
-::-webkit-scrollbar-button { display: none; } */
+::-webkit-scrollbar-button { display: none; }
 
 .user-search-box {
   width: 100%;
@@ -166,5 +184,9 @@ export default {
   padding-top: 20vh;
   font-size: 2.5vh;
   font-weight: 700;
+}
+
+.dark-onon {
+  color: white;
 }
 </style>

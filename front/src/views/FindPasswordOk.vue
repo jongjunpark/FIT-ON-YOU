@@ -70,7 +70,6 @@ export default {
     }, 1000);
     },
     retry() {
-      console.log(this.pwdUser.birth.substring(0, 4) + this.pwdUser.birth.substring(5, 7) + this.pwdUser.birth.substring(8, 10) )
       clearInterval(this.reTime);
       var fiveMinutes = 60 * 3,
       display = document.querySelector('#time');
@@ -82,19 +81,14 @@ export default {
           pTime: this.pwdUser.birth.substring(0, 4) + this.pwdUser.birth.substring(5, 7) + this.pwdUser.birth.substring(8, 10) 
         }
       }).then(data => {
-        console.log("성공")
-        console.dir(data)
         this.confirmPwd(data.data.certifNum)
         this.findUserPWd(data.data.userInfo)
       })
-      .catch(data => {
-        console.log(data)
-      });
+      .catch();
     },
     changePwd() {
-      console.log(1)
       if (this.uuid == this.certifNum && !this.remaintime) {
-        console.log(2)
+        this.$cookies.set('agree', 'true')
         this.$router.push("/find/password/passwordchange").catch(()=>{})
       } else {
         Swal.fire({

@@ -24,7 +24,7 @@
     <CommentModal v-if="showModal" @close="showModal= false" :modalArticleNo="modalArticleNo" :modalArticleUser="modalArticleUser"/>
 
     <div class='wrap feed-wrap'>
-      <div class='wrap-container' v-for="(feed,index) in mainfeed" :key="index">
+      <div class='wrap-container feed-wrap-container' v-for="(feed,index) in mainfeed" :key="index">
         <header class="feed-user-data">
           <div class="feed-user-profile" @click="goToUserPage(feed.articleUser)">
             <img v-show="feed.userProfile" :src="feed.userProfile">
@@ -60,7 +60,7 @@
             </div>
           </div>
           <div class="feed-like-cnt">
-            <p v-show="likeStates[index]">{{ myName }}님 외 {{feed.favoriteCnt}}명이 좋아합니다</p>
+            <p v-show="likeStates[index]">{{ myName }}님 외 {{feed.favoriteCnt - 1}}명이 좋아합니다</p>
             <p v-show="!likeStates[index]">{{feed.favoriteCnt}}명이 좋아합니다</p>
           </div>
           <header class='feed-content-head'>{{feed.content}}</header>
@@ -72,9 +72,9 @@
           </aside>
         </section>
       </div>
-      <div class="margin-box"></div>
       <infinite-loading @infinite="infiniteHandler" spinner="spinner">
         <div slot="no-more" style="color: rgb(102, 102, 102); font-size: 14px; padding: 10px 0px;">목록의 끝입니다 :)</div>
+        <div slot="no-results" class="no-result" v-show="mainfeed.length==0"><h1>현재<br> 팔로우가 없거나<br> 친구들의 <br> 게시글이 없어요 <br>팔로우하여<br>피드를 받아보세요</h1></div>
       </infinite-loading>
     </div>
   </div>
@@ -108,6 +108,7 @@ function timeForToday(value) {
         }
         return `${Math.floor(betweenTimeDay / 365)}년전`;
  }
+
 
 export default {
   name: 'Feed',
@@ -163,7 +164,11 @@ export default {
   },
   created() {
     this.getInflu()
+    window.addEventListener("scroll", this.defaultDark)
   },
+  destroyed() {
+		window.removeEventListener("srcoll", this.defaultDark)
+	},
   methods: {
     ...mapActions(['sendUserInfo', 'setLoggedIn', 'setToken']),
     ...mapMutations(['setIsSelectBar']),
@@ -182,11 +187,10 @@ export default {
     getInflu() {
       axios.get("https://i3b304.p.ssafy.io/api/board/influencer").then((data)=>{
         this.influencer=data.data;
+        this.defaultDark()
       });
     },
     clickLike(articleNo,flag,index,e) {
-      let ref=this
-
       let data = this.$cookies.get('auth-nickname');
       let uri = data;
       let uri_enc = encodeURIComponent(uri);
@@ -212,7 +216,7 @@ export default {
             articleNo:articleNo,
             nickname:res
           })
-          .then(console.log("좋아요"))
+          .then()
           .catch()
       }
       else if(flag==1){
@@ -227,7 +231,7 @@ export default {
             nickname:res
           }
         })
-        .then(console.log(ref.likeStates[index],"좋아요 취소"))
+        .then()
         .catch()
       }
       
@@ -238,7 +242,7 @@ export default {
       this.showModal = true
     },
     clickBookMark(articleNo,flag,index,e) {
-      let ref=this
+
 
       let data = this.$cookies.get('auth-nickname');
       let uri = data;
@@ -253,7 +257,7 @@ export default {
             bookedArticle:articleNo,
             bookUser:res
           })
-          .then(console.log("북마크 등록"))
+          .then()
           .catch()
       }
       else if(flag==1){
@@ -265,7 +269,7 @@ export default {
             bookUser:res
           }
         })
-        .then(console.log(ref.bookmarkStates[index],"북마크 취소"))
+        .then()
         .catch()
       }
 
@@ -279,6 +283,7 @@ export default {
       } else {
         INFLUBTN.innerHTML = '∧'
       }
+      this.defaultDark();
     },
     goProfile(name) {
       this.$router.push(`/otheruser/${name}`)
@@ -289,6 +294,9 @@ export default {
       const wrap = document.querySelector('.wrap')
       const INFLUNAVBTN = document.querySelector('.open-influ-nav')
       const INFLUNAV = document.querySelector('.influ-nav')
+      const H1tag = document.querySelector('.no-result')
+      const PTAG = document.querySelectorAll('p')
+      const FEED_HEAD = document.querySelectorAll('header')
 
       if (Dark === null) {
         this.$cookies.set('dark', 'on')
@@ -297,19 +305,35 @@ export default {
       if (Dark === 'off') {
         HTML.classList.add('black')
         wrap.classList.add('wrap-dark')
-        INFLUNAVBTN.classList.add('nav-influ-btn-dark')
-        INFLUNAV.classList.add('nav-influ-dark')
+        if (INFLUNAVBTN && INFLUNAV && H1tag && PTAG && FEED_HEAD ) {
+          INFLUNAVBTN.classList.add('nav-influ-btn-dark')
+          INFLUNAV.classList.add('nav-influ-dark')
+          H1tag.classList.add('no-result-dark')
+          for (let i=0; i<FEED_HEAD.length ; i++) {
+            FEED_HEAD[i].classList.add('font-dark')
+          }
+          for (let i=0; i<PTAG.length ; i++) {
+            PTAG[i].classList.add('font-dark')
+          }
+        }
       } else {
         HTML.classList.remove('black')
         wrap.classList.remove('wrap-dark')
-        INFLUNAVBTN.classList.remove('nav-influ-btn-dark')
-        INFLUNAV.classList.remove('nav-influ-dark')
+        if (INFLUNAVBTN && INFLUNAV && H1tag && PTAG && FEED_HEAD) {
+          INFLUNAVBTN.classList.remove('nav-influ-btn-dark')
+          INFLUNAV.classList.remove('nav-influ-dark')
+          H1tag.classList.remove('no-result-dark')
+          for (let i=0; i<FEED_HEAD.length ; i++) {
+            FEED_HEAD[i].classList.remove('font-dark')
+          }
+          for (let i=0; i<PTAG.length ; i++) {
+            PTAG[i].classList.remove('font-dark')
+          }
+        }
       }
     },
     infiniteHandler($state){
-      let ref=this;
-      console.log("바닥에 닿음",ref.limit);
-
+      let ref = this
       let nickdata = this.$cookies.get('auth-nickname')
       let uri = nickdata;
       let uri_enc = encodeURIComponent(uri);
@@ -324,11 +348,7 @@ export default {
       .then((data)=>{
         setTimeout(() => {
           if(data.data.length){
-            
-            console.log("success")
-            console.log(data)
             this.feedlist=data.data;
-            console.log(typeof(this.feedlist))
             for (let index = 0; index < this.feedlist.length; index++) {
               let feeddata={tags:[],
                             images:[],
@@ -391,7 +411,6 @@ export default {
 
             $state.loaded();
             ref.limit+=1;
-            console.log(ref.limit)
             if(ref.mainfeed.length/10==0){
               $state.loaded();
             }
@@ -413,7 +432,6 @@ export default {
   mounted() {
     this.setIsSelectBar(true)
     this.onNewsFeed()
-    this.defaultDark()
     let ref=this;
     let nickdata = this.$cookies.get('auth-nickname')
     let uri = nickdata;
@@ -441,6 +459,7 @@ export default {
         
         axios.post("https://i3b304.p.ssafy.io/api/board/profileimg",follow).then((proff)=>{
           feeddata.userProfile=proff.data.profile_img;
+          this.defaultDark()
         });
 
         const articleNo = new FormData();
@@ -467,6 +486,7 @@ export default {
             feeddata.articleNo=this.feedlist[index].articleNo;
           }
           feeddata.favoriteCnt=this.feedlist[index].favoriteCnt;
+          this.defaultDark()
         });
         axios.post("https://i3b304.p.ssafy.io/api/board/tags",articleNo).then((tag)=>{
         const tags = tag.data;
@@ -476,17 +496,16 @@ export default {
             taglist.push({tagname:el2.tagName});  
           }
             feeddata.tags=taglist;
+        this.defaultDark()
         });
         
         this.mainfeed.push(feeddata)
         ref.likeStates.push(this.feedlist[index].likechk);
         ref.bookmarkStates.push(this.feedlist[index].markchk);
+        this.defaultDark()
       }
     });
-    
-    console.log(this.mainfeed, '메인피드')
-    console.log(this.likeStates,'좋아요리스트');
-    console.log(this.bookmarkStates,'북마크리스트');
+    this.defaultDark()
   },
   beforeDestroy() { 
     this.setIsSelectBar(false)

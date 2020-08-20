@@ -299,6 +299,11 @@ public class BoardController {
 		return result;
 
 	}
+	@DeleteMapping(value = "/{articleNo}")
+	public void deleteArticle(@PathVariable int articleNo) {
+		System.out.println(articleNo);
+		boardDao.delBoardArticle(articleNo);
+	}
 
 	@PostMapping(value = "/upload")
 	public void addArticle(@RequestParam("imgdata") MultipartFile[] imgs, @RequestParam("nickname") String nickname,
@@ -313,6 +318,7 @@ public class BoardController {
 		board.setArticleUser(nickname);
 		board.setContent(content);
 		boardDao.save(board);
+		System.out.println(board.toString());
 
 		int articleNo = boardDao.getCountBoard().get(0);
 		for (String string : tags) {
@@ -324,7 +330,9 @@ public class BoardController {
 			articletag.setArticleNo(articleNo);
 			articletag.setTagName(string);
 			articletagDao.save(articletag);
+			System.out.println(articletag.toString());
 		}
+		
 		for (int i = 0; i < imgs.length; i++) {
 			ImageStore img = new ImageStore();
 			names[i] = uuid.toString() + "_" + imgs[i].getOriginalFilename();
@@ -335,6 +343,7 @@ public class BoardController {
 //	            String storePath="i3b304.p.ssafy.io/img/"+names[0];
 				String storePath = "../images/board/" + names[i];
 				img.setImageUrl(storePath);
+				System.out.println(storePath);
 				imageDao.save(img);
 			} catch (Exception e) {
 				e.printStackTrace();
