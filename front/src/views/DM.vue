@@ -85,18 +85,28 @@ export default {
         searchIMGDM.classList.remove('search-img-dm-dark')
       }
     },
+    
     getLastMessage() {
       axios.get('https://i3b304.p.ssafy.io/api/chat/allChatList',{
         params:{
         username: this.nickname,
         }
         }).then((data)=>{
-          let ARRAY = data.data.object
+          console.log("data.data.object=>",data.data.object[0].lasttime)
+          let ARRAY = data.data.object.sort((a,b)=>{
+            console.log("a=>",a)
+            console.log("a.lasttime=>",a.lasttime)
+            console.log("b.lasttime=>",b.lasttime)
+            return a.lasttime>b.lasttime ?-1 : a.lasttime<b.lasttime ?1:0;
+          })
+
           console.log('ARRAY')
           console.dir(ARRAY)
           ARRAY.forEach(element => {
             console.log(element.roomname)
             db.collection(element.roomname).orderBy('createdAt','desc').limit(1).onSnapshot((querySnapshot)=>{
+
+            
 
             let allMessages = {};
               querySnapshot.forEach(doc=>{

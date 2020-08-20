@@ -78,7 +78,7 @@ public class RecellController {
 	@PostMapping(value = "/upload")
 	public void addRecell(@RequestParam("recellimg") MultipartFile recellimg, @RequestParam("nickname") String nickname,
 			@RequestParam("content") String content, @RequestParam("price") String price,
-			@RequestParam("size") String size) {
+			@RequestParam("size") String size, @RequestParam("category") String category) {
 		String path = "/var/www/html/dist/images/board/";
 		// String path ="https://i3b304.p.ssafy.io/dist/images/board/";
 		UUID uuid = UUID.randomUUID();
@@ -88,6 +88,7 @@ public class RecellController {
 		recell.setRecellPrice(price);
 		recell.setRecellSize(size);
 		recell.setRoomname(uuid.toString());
+		recell.setCategory(category);
 		String name = uuid.toString() + "_recell_" + recellimg.getOriginalFilename();
 		String storePath = "../images/board/" + name;
 		recell.setRecellImage(storePath);
