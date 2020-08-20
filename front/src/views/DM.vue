@@ -92,13 +92,18 @@ export default {
         // searchIMGDM.classList.remove('search-img-dm-dark')
       }
     },
+    arraySort(compareA,compareB){
+      console.log('compareA=>',compareA)
+      console.log('compareB=>',compareB)
+      return compareA.data.object.createdAt - compareB.data.object.createdAt;
+    },
     getLastMessage() {
       axios.get('https://i3b304.p.ssafy.io/api/chat/allChatList',{
         params:{
         username: this.nickname,
         }
         }).then((data)=>{
-          let ARRAY = data.data.object
+          let ARRAY = data.data.object.sort(this.arraySort(data))
           ARRAY.forEach(element => {
             db.collection(element.roomname).orderBy('createdAt','desc').limit(1).onSnapshot((querySnapshot)=>{
 
