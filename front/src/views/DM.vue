@@ -92,18 +92,15 @@ export default {
         // searchIMGDM.classList.remove('search-img-dm-dark')
       }
     },
-    arraySort(compareA,compareB){
-      console.log('compareA=>',compareA)
-      console.log('compareB=>',compareB)
-      return compareA.data.object.createdAt - compareB.data.object.createdAt;
-    },
+   
     getLastMessage() {
       axios.get('https://i3b304.p.ssafy.io/api/chat/allChatList',{
         params:{
         username: this.nickname,
         }
         }).then((data)=>{
-          let ARRAY = data.data.object.sort(this.arraySort(data))
+          let ARRAY = data.data.object
+          
           ARRAY.forEach(element => {
             db.collection(element.roomname).orderBy('createdAt','desc').limit(1).onSnapshot((querySnapshot)=>{
 
@@ -111,9 +108,7 @@ export default {
               querySnapshot.forEach(doc=>{
                 allMessages = doc.data();
               })
-
               this.lastMessage=allMessages;
-              
               const CONTENT_BOX = document.createElement('div')
               const H3 = document.createElement('h3')
               const H5message = document.createElement('h5')
@@ -135,7 +130,7 @@ export default {
                   H5message.innerHTML = this.lastMessage.message.substring(0, 30) + '..'
                 }
               }
-              if (this.lastMessage.createdAt.seconds) {
+              if (this.lastMessage.createdAt) {
                 const Time = ((new Date() - new Date(this.lastMessage.createdAt.seconds*1000)) / (1000 * 60))
   
                 if (Time < 60) {
