@@ -157,10 +157,16 @@ export default {
         for (let i=0; i<PTAG.length ; i++) {
           PTAG[i].classList.add('font-dark')
         }
+        if (MessageDM) {
 
-        MessageDM.classList.add('input-message-in-dark')
-        for (let i=0; i<MessageMe.length ; i++) {
-          MessageMe[i].classList.add('user-me-content-dark')
+          MessageDM.classList.add('input-message-in-dark')
+        }
+
+        if (MessageMe) {
+          for (let i=0; i<MessageMe.length ; i++) {
+            MessageMe[i].classList.add('user-me-content-dark')
+          }
+
         }
 
       } else {
@@ -173,9 +179,15 @@ export default {
           PTAG[i].classList.remove('font-dark')
         }
 
-        MessageDM.classList.remove('input-message-in-dark')
-        for (let i=0; i<MessageMe.length ; i++) {
-          MessageMe[i].classList.remove('user-me-content-dark')
+        if (MessageDM) {
+
+          MessageDM.classList.remove('input-message-in-dark')
+        }
+        if (MessageMe) {
+          for (let i=0; i<MessageMe.length ; i++) {
+            MessageMe[i].classList.remove('user-me-content-dark')
+          }
+
         }
       }
     },
