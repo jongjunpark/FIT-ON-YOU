@@ -32,9 +32,11 @@
           </div>
           <div class="search-user-content">
             <div class="search-user-name">{{ user.nickname }}</div>
-            <div v-show="!user.selfintroduce" class="search-user-nonuserintro">{{ user.selfintroduce }}</div>
-            <div v-show="user.selfintroduce[10]" class="search-user-intro">{{ user.selfintroduce.substring(0, 10)+'...' }}</div>
-            <div v-show="user.selfintroduce&&user.selfintroduce.length<10" class="search-user-intro">{{ user.selfintroduce }}</div>
+            <div v-if="user.selfintroduce" class="search-user-intro">
+              <span v-if="user.selfintroduce.length>10">{{ user.selfintroduce.substring(0, 10)+'...' }}</span>
+              <span v-else>{{ user.selfintroduce }}</span>
+            </div>
+            <div v-else class="search-user-nonuserintro">{{ user.selfintroduce }}</div>
           </div>
         </div>
         <div v-show="userListLength > 0" @click="onUserResult" class='search-user-more' key='0'>{{ userListLength }}개 더보기</div>
@@ -270,6 +272,8 @@ export default {
             this.userList = data.data.object
             this.userListLength = 0
           }
+        } else {
+          this.userList = []
         }
       }).catch()
     },

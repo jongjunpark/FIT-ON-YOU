@@ -9,8 +9,10 @@
       <div class="user-search-text-area">
         <div @click="goProfile(user.nickname)" class="user-search-username">{{ user.nickname }}</div>
         <div v-show="!user.selfintroduce" class="user-search-nonuserintro"></div>
-        <div v-show="user.selfintroduce[20]" class="user-search-userintro">{{ user.selfintroduce.substring(0,20)+'...' }}</div>
-        <div v-show="user.selfintroduce&&!user.selfintroduce[20]" class="user-search-userintro">{{ user.selfintroduce }}</div>
+        <div v-if="user.selfintroduce" class="user-search-userintro">
+          <span v-if="user.selfintroduce.length>18">{{ user.selfintroduce.substring(0,18)+'...' }}</span>
+          <span v-else>{{ user.selfintroduce }}</span>
+        </div>
       </div>
     </div>
     <div v-show="!userResultList" class='user-search-not-result'>
