@@ -114,7 +114,7 @@ export default {
     let res = uri_dec;
     this.tempNickName=res;
     this.nickname=res;
-    axios.get('https://i3b304.p.ssafy.io/api/mypage/',{
+    axios.get('http://localhost:8080/api/mypage/',{
       params:{nickname:res}
     })
     .then((data)=>{
@@ -141,7 +141,7 @@ export default {
       var photoFile = document.getElementById("profile-img-edit");
       frm.append("profile-img-edit", photoFile.files[0]);
       frm.append("nickname",this.nickname);
-      axios.post('https://i3b304.p.ssafy.io/api/account/addProfileImg',frm)
+      axios.post('http://localhost:8080/api/account/addProfileImg',frm)
       .then((data)=>{
         ref.$cookies.set('auth-token', data.data.auth_token)
         ref.setToken(data.data.auth_token)
@@ -200,7 +200,7 @@ export default {
       let res = uri_dec;
       this.tempNickName=res;
       this.nickname=res;
-      axios.get('https://i3b304.p.ssafy.io/api/mypage/',{
+      axios.get('http://localhost:8080/api/mypage/',{
       params:{nickname:res}
       })
       .then((data)=>{
@@ -228,7 +228,7 @@ export default {
       const formData=new FormData();
       formData.append("prev",this.tempNickName);
       formData.append("cur",this.nickname);
-      axios.post('https://i3b304.p.ssafy.io/api/account/nickchange',formData)
+      axios.post('http://localhost:8080/api/account/nickchange',formData)
       .then((data)=>{
         if(data.data.result.data=="success"){
           ref.$cookies.set('auth-token', data.data.auth_token)
@@ -288,7 +288,7 @@ export default {
       const formData = new FormData();
       formData.append("nickname",this.nickname);
       formData.append("selfintroduce",this.tmpcontent);
-      axios.put('https://i3b304.p.ssafy.io/api/account/selfintro',formData)
+      axios.put('http://localhost:8080/api/account/selfintro',formData)
       .then((data)=>{
         ref.$cookies.set('auth-token', data.data.auth_token)
         ref.setToken(data.data.auth_token)

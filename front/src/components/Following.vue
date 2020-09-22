@@ -27,7 +27,7 @@ export default {
     
     this.name = this.$route.params.name
 
-    axios.get('https://i3b304.p.ssafy.io/api/follow/forFollowing',{
+    axios.get('http://localhost:8080/api/follow/forFollowing',{
       params:{
       userName: this.name,
     }
@@ -83,7 +83,7 @@ export default {
 
 
         DMBTN.addEventListener('click', () => {
-          axios.get('https://i3b304.p.ssafy.io/api/chat/existroom',{
+          axios.get('http://localhost:8080/api/chat/existroom',{
             params:{
               firstuser: element.followeduser,
               seconduser: this.name
@@ -96,7 +96,7 @@ export default {
         })
         let Num = element.followno
 
-        axios.get('https://i3b304.p.ssafy.io/api/isfollowed',{
+        axios.get('http://localhost:8080/api/isfollowed',{
           params:{
           followedUser: element.followeduser,
           followingUser: this.nick
@@ -118,7 +118,7 @@ export default {
         FollowingBtn.addEventListener('click', () => {
           const Action = FollowingBtn.className
           if (Action == 'following-follow-btn') {
-            axios.get('https://i3b304.p.ssafy.io/api/isfollowed',{
+            axios.get('http://localhost:8080/api/isfollowed',{
               params:{
               followedUser: element.followeduser,
               followingUser: this.nick
@@ -130,7 +130,7 @@ export default {
           } else {
             Num = data.data.object.followno
           }
-              axios.get('https://i3b304.p.ssafy.io/api/follow/delete',{
+              axios.get('http://localhost:8080/api/follow/delete',{
               params:{
                 followNo: Num,
               }
@@ -145,7 +145,7 @@ export default {
             )
 
           } else {
-              axios.get('https://i3b304.p.ssafy.io/api/follow/add',{
+              axios.get('http://localhost:8080/api/follow/add',{
                 params:{
                   followedUser: element.followeduser,
                   followingUser: this.nick

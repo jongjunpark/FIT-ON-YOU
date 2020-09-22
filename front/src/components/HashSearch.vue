@@ -65,7 +65,7 @@ export default {
       }
     },
     getHashSearch() {
-      axios.get(`https://i3b304.p.ssafy.io/api/search/hash/${this.scrollDown}`,{
+      axios.get(`http://localhost:8080/api/search/hash/${this.scrollDown}`,{
       params:{
         findContent: this.hashSearchList,
         username: this.loginUserName,

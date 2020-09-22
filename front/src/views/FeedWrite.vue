@@ -395,7 +395,7 @@ export default {
       dataforms.append("content", this.writeContent);
       dataforms.append("tags",this.writeHashList);
      
-      axios.post("https://i3b304.p.ssafy.io/api/board/upload",dataforms).then()
+      axios.post("http://localhost:8080/api/board/upload",dataforms).then()
         Swal.fire({
           icon: 'success',
           title: '작성이 완료됐습니다!',
@@ -416,7 +416,7 @@ export default {
       dataform.append("place",this.commuPlace);
       dataform.append("category",this.commuCategory);
       
-      axios.post("https://i3b304.p.ssafy.io/api/recell/upload", dataform).then()
+      axios.post("http://localhost:8080/api/recell/upload", dataform).then()
         Swal.fire({
           icon: 'success',
           title: '작성이 완료됐습니다!',

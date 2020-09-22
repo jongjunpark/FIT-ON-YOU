@@ -85,7 +85,7 @@ export default {
     let ref=this;
     let uNick = this.$route.params.nickname;
     this.nickname = uNick
-    axios.get('https://i3b304.p.ssafy.io/api/mypage/otheruser',{
+    axios.get('http://localhost:8080/api/mypage/otheruser',{
       params:{
       nickname: uNick,
     }
@@ -107,7 +107,7 @@ export default {
     let res = uri_dec;
     this.nick = res
     
-    axios.get('https://i3b304.p.ssafy.io/api/isfollowed',{
+    axios.get('http://localhost:8080/api/isfollowed',{
       params:{
       followedUser: this.nickname,
       followingUser: this.nick
@@ -172,7 +172,7 @@ export default {
       this.$router.push(`/profileinform/${this.$route.params.nickname}`).catch(()=>{})
     },
     goChatting() {
-      axios.get('https://i3b304.p.ssafy.io/api/chat/existroom',{
+      axios.get('http://localhost:8080/api/chat/existroom',{
       params:{
         firstuser: this.nickname,
         seconduser: this.nick
@@ -184,7 +184,7 @@ export default {
         )
     },
     followAdd() {
-      axios.get('https://i3b304.p.ssafy.io/api/follow/add',{
+      axios.get('http://localhost:8080/api/follow/add',{
       params:{
         followedUser: this.nickname,
         followingUser: this.nick
@@ -198,7 +198,7 @@ export default {
         )
     },
     followDelete() {
-      axios.get('https://i3b304.p.ssafy.io/api/follow/delete',{
+      axios.get('http://localhost:8080/api/follow/delete',{
       params:{
         followNo: this.followNo,
       }

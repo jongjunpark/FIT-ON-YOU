@@ -68,7 +68,7 @@ export default {
     let uri_enc = encodeURIComponent(uri);
     let uri_dec = decodeURIComponent(uri_enc);
     this.nickname = uri_dec;
-    axios.get('https://i3b304.p.ssafy.io/api/comment',{
+    axios.get('http://localhost:8080/api/comment',{
       params:{
         articleNo: this.modalArticleNo,
         nickname:this.nickname,
@@ -117,7 +117,7 @@ export default {
         frm.append("articleUser",this.modalArticleUser);
         let today=new Date();
   
-        axios.post('https://i3b304.p.ssafy.io/api/comment',frm
+        axios.post('http://localhost:8080/api/comment',frm
         )
         .then((data)=>{
           let tmp={
@@ -152,7 +152,7 @@ export default {
         if (result.value) {
           let frm=new FormData();
           frm.append('commentNo',commentNo);
-          axios.post('https://i3b304.p.ssafy.io/api/comment/del',frm)
+          axios.post('http://localhost:8080/api/comment/del',frm)
           .then(()=>{
             this.commentList.splice(index,1);
             this.profileList.splice(index,1);

@@ -177,7 +177,7 @@ export default {
     socialjoin(){
       let ref=this;
       let userData=this.getUser();
-      axios.post('https://i3b304.p.ssafy.io/api/account/social/1',userData)
+      axios.post('http://localhost:8080/api/account/social/1',userData)
       .then((data)=>{
         if(data.data.result.data=='success'){
           ref.$cookies.set('auth-token', data.data.auth_token)

@@ -259,7 +259,7 @@ export default {
       this.hashString += `#${this.hashList[this.hashList.length-1]} `
     },
     inUserSearch() {
-      axios.get(`https://i3b304.p.ssafy.io/api/search/user`,{
+      axios.get(`http://localhost:8080/api/search/user`,{
       params: {
         username: this.userContent
       },
@@ -282,7 +282,7 @@ export default {
     },
     infiniteHandler($state){
       let ref=this;
-      axios.post('https://i3b304.p.ssafy.io/api/search/all/'+ref.limit)
+      axios.post('http://localhost:8080/api/search/all/'+ref.limit)
       .then((data)=>{
         setTimeout(() => {
           if(data.data.object.length){
@@ -309,7 +309,7 @@ export default {
     this.defaultDark()
 
 
-    axios.post("https://i3b304.p.ssafy.io/api/search/all/0").then((data)=>{
+    axios.post("http://localhost:8080/api/search/all/0").then((data)=>{
       this.articleList=data.data.object;
     })
   },

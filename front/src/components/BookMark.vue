@@ -61,7 +61,7 @@ export default {
       // let uri_enc = encodeURIComponent(uri);
       // let uri_dec = decodeURIComponent(uri_enc);
       // let res = uri_dec;
-      axios.get('https://i3b304.p.ssafy.io/api/mypage/bookmark',{
+      axios.get('http://localhost:8080/api/mypage/bookmark',{
         params:{
           nickname:this.name,
         }

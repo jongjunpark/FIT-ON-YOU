@@ -62,7 +62,7 @@ export default {
     },
     getUserFeed() {
       this.username = this.$router.currentRoute.params.name
-      axios.get('https://i3b304.p.ssafy.io/api/mypage/myboard',{
+      axios.get('http://localhost:8080/api/mypage/myboard',{
         params:{
           nickname : this.name,
         }

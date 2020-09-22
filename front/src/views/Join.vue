@@ -261,7 +261,7 @@ export default {
       }
     },
     goConfrim() {
-      axios.get('https://i3b304.p.ssafy.io/api/account/confirmemail',{
+      axios.get('http://localhost:8080/api/account/confirmemail',{
         params:{
           email: this.input.email + '@' + this.input.url
         }
@@ -369,7 +369,7 @@ export default {
       }
     },
     checkNickname() {
-      axios.get('https://i3b304.p.ssafy.io/api/account/checkNickname',{ 
+      axios.get('http://localhost:8080/api/account/checkNickname',{ 
         params: {
           nickname: this.input.nickname
           }
@@ -494,7 +494,7 @@ export default {
         this.profileImg = null
       }
 
-      axios.post('https://i3b304.p.ssafy.io/api/account/signup',{
+      axios.post('http://localhost:8080/api/account/signup',{
 
           email: this.input.email+'@'+this.input.url,
           password: this.input.password,
@@ -521,7 +521,7 @@ export default {
       if (photoFile.files[0]) {
         frm.append("profile-img-edit", photoFile.files[0]);
         frm.append("nickname",this.input.nickname);
-        axios.post('https://i3b304.p.ssafy.io/api/account/addProfileImg',frm,
+        axios.post('http://localhost:8080/api/account/addProfileImg',frm,
         ).then( () =>{
 
 
@@ -570,7 +570,7 @@ export default {
          this.mailErrMsg = false;
          this.finalMail = false;
           if (this.mailSucMsg) {
-            axios.get('https://i3b304.p.ssafy.io/api/account/checkDoubleEmail',{ 
+            axios.get('http://localhost:8080/api/account/checkDoubleEmail',{ 
               params: {
                 email: this.input.email+'@'+this.input.url
                 }

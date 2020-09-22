@@ -145,7 +145,7 @@ export default {
     },
     infiniteHandler($state){
       let ref=this;
-      axios.post('https://i3b304.p.ssafy.io/api/recell/all/'+ref.limit)
+      axios.post('http://localhost:8080/api/recell/all/'+ref.limit)
       .then((data)=>{
         setTimeout(() => {
           if(data.data.object.length){
@@ -225,7 +225,7 @@ export default {
       this.nickName = decodeURIComponent(uri_enc);
     },
     getAllList() {
-      axios.post("https://i3b304.p.ssafy.io/api/recell/newsfeed/0").then((data)=>{
+      axios.post("http://localhost:8080/api/recell/newsfeed/0").then((data)=>{
       this.tempList=data.data;
       for (let index = 0; index < this.tempList.length; index++) {
         if (this.tempList[index].recellUser !== this.nickName) {
@@ -248,7 +248,7 @@ export default {
       })
     },
     getMyList() {
-      axios.get("https://i3b304.p.ssafy.io/api/recell/myContents",{
+      axios.get("http://localhost:8080/api/recell/myContents",{
         params: {
           username: this.nickName
         },
@@ -269,7 +269,7 @@ export default {
         if (result.value) {
           const frm = new FormData();
           frm.append("num",roomNo);
-          axios.post('https://i3b304.p.ssafy.io/api/recell/soldout', frm)
+          axios.post('http://localhost:8080/api/recell/soldout', frm)
           .then()
           .catch()
           Swal.fire(
@@ -287,7 +287,7 @@ export default {
       this.mapModal=true;
     },
     onResellUser(nick) {
-      axios.get("https://i3b304.p.ssafy.io/api/recell/myContents",{
+      axios.get("http://localhost:8080/api/recell/myContents",{
         params: {
           username: nick
         },

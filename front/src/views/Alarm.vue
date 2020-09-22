@@ -95,7 +95,7 @@ export default {
     let resNick = uri_dec;
     this.mynick=resNick;
     
-    axios.get('https://i3b304.p.ssafy.io/api/alarm',{
+    axios.get('http://localhost:8080/api/alarm',{
       params:{
         nickname:resNick,
       }
@@ -118,7 +118,7 @@ export default {
         }
       }
       if(flag){
-        axios.post('https://i3b304.p.ssafy.io/api/alarm',frm)
+        axios.post('http://localhost:8080/api/alarm',frm)
         .then(
 
         )

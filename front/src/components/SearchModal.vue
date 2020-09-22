@@ -139,7 +139,7 @@ export default {
     this.myname = res;
     let frm = new FormData();
     frm.append('nickname',res);
-    axios.post(`https://i3b304.p.ssafy.io/api/search/${articleNo}`,frm)
+    axios.post(`http://localhost:8080/api/search/${articleNo}`,frm)
     .then((response)=>{
       this.username = response.data[0].aarticles.articleUser
       this.time = timeForToday(response.data[0].aarticles.articleDate)
@@ -188,7 +188,7 @@ export default {
         cancelButtonText: '아니오',
       }).then((result) => {
         if (result.value) {
-          axios.delete(`https://i3b304.p.ssafy.io/api/board/${article}`,{
+          axios.delete(`http://localhost:8080/api/board/${article}`,{
             }).then(() => {
             Swal.fire(
             '삭제되었습니다',
@@ -245,7 +245,7 @@ export default {
         e.target.classList.add('heart')
         this.favoriteCnt++;
 
-        axios.post('https://i3b304.p.ssafy.io/api/board/likes',{
+        axios.post('http://localhost:8080/api/board/likes',{
             articleNo:articleNo,
             nickname:res
           })
@@ -256,7 +256,7 @@ export default {
         this.likechk=0
         e.target.classList.remove('heart')
         this.favoriteCnt--;
-        axios.delete('https://i3b304.p.ssafy.io/api/board/likes',{
+        axios.delete('http://localhost:8080/api/board/likes',{
           data:{
             articleNo:articleNo,
             nickname:res
@@ -282,7 +282,7 @@ export default {
       if(flag==0){
         this.markchk=1
         e.target.classList.add('mark')
-        axios.post('https://i3b304.p.ssafy.io/api/board/bookmark',{
+        axios.post('http://localhost:8080/api/board/bookmark',{
             bookedArticle:articleNo,
             bookUser:res
           })
@@ -292,7 +292,7 @@ export default {
       else if(flag==1){
         this.markchk=0
         e.target.classList.remove('mark')
-        axios.delete('https://i3b304.p.ssafy.io/api/board/bookmark',{
+        axios.delete('http://localhost:8080/api/board/bookmark',{
           data:{
             bookedArticle:articleNo,
             bookUser:res

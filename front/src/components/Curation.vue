@@ -61,7 +61,7 @@ export default {
       let uri_enc = encodeURIComponent(uri);
       let uri_dec = decodeURIComponent(uri_enc);
       let res = uri_dec;
-      axios.get('https://i3b304.p.ssafy.io/api/board/api/board/curation',{
+      axios.get('http://localhost:8080/api/board/api/board/curation',{
         params:{
           username:res,
         }

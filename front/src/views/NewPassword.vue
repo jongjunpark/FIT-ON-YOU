@@ -119,7 +119,7 @@ export default {
       formData.append('password',this.passwordConfirm);
 
       if (this.user.password === this.nowPassword) {
-        axios.post('https://i3b304.p.ssafy.io/api/account/changePassword',
+        axios.post('http://localhost:8080/api/account/changePassword',
           formData).then(data => {
           this.$cookies.set('auth-token', data.data.auth_token)
           this.setToken(data.data.auth_token)

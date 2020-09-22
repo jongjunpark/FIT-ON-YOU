@@ -215,7 +215,7 @@ export default {
     let uri_dec = decodeURIComponent(uri_enc);
     let res = uri_dec;
     this.nick = res
-    axios.get('https://i3b304.p.ssafy.io/api/mypage/otheruser',{
+    axios.get('http://localhost:8080/api/mypage/otheruser',{
       params:{
       nickname: this.othername,
     }
@@ -227,7 +227,7 @@ export default {
     })
     .catch(
     )
-    axios.get('https://i3b304.p.ssafy.io/api/mypage/',{
+    axios.get('http://localhost:8080/api/mypage/',{
       params:{nickname:this.nick}
     })
     .then((data)=>{

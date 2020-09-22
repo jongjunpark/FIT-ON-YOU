@@ -153,7 +153,7 @@ export default {
                 email : response.kakao_account.email,
                 gender : response.kakao_account.gender,
               };
-              axios.post('https://i3b304.p.ssafy.io/api/account/social/0',{
+              axios.post('http://localhost:8080/api/account/social/0',{
                 nickname : response.kakao_account.profile.nickname,
                 profile_image : response.kakao_account.profile.profile_image_url,
                 email : response.kakao_account.email,
@@ -210,7 +210,7 @@ export default {
           }
           ref.AC_USER(userData);
         
-          axios.post('https://i3b304.p.ssafy.io/api/account/social/0',{
+          axios.post('http://localhost:8080/api/account/social/0',{
                 nickname : googleUser.getBasicProfile().Ad,
                 profile_image : googleUser.getBasicProfile().jK,
                 email : googleUser.getBasicProfile().bu,
@@ -285,7 +285,7 @@ export default {
 
     loginHandler() { 
     
-      axios.get('https://i3b304.p.ssafy.io/api/account/login',{
+      axios.get('http://localhost:8080/api/account/login',{
         params:{email:this.email,
                   password:this.password},
       }).then( response => {

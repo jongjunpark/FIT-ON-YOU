@@ -79,7 +79,7 @@ export default {
       }
     },
     getUserSearch() {
-      axios.get(`https://i3b304.p.ssafy.io/api/search/user`,{
+      axios.get(`http://localhost:8080/api/search/user`,{
       params: {
         username: this.userSearch
       },

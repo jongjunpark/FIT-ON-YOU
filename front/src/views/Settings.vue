@@ -119,7 +119,7 @@ export default {
       let resNick = uri_dec;
 
       let nickname=resNick;
-      axios.delete(`https://i3b304.p.ssafy.io/api/search/deleteSearchHistory/${nickname}`
+      axios.delete(`http://localhost:8080/api/search/deleteSearchHistory/${nickname}`
       )
       .then(Swal.fire(
         '검색기록이 삭제되었습니다..',
@@ -138,7 +138,7 @@ export default {
       let nickname=resNick;
       const frm = new FormData();
       frm.append('recevier',nickname);
-      axios.post('https://i3b304.p.ssafy.io/api/alarm/del',frm
+      axios.post('http://localhost:8080/api/alarm/del',frm
       )
       .then(Swal.fire(
         '알람기록이 삭제되었습니다..',
@@ -172,7 +172,7 @@ export default {
         cancelButtonText: '아니오',
       }).then((result) => {
         if (result.value) {
-        axios.get('https://i3b304.p.ssafy.io/api/chat/allChatList',{
+        axios.get('http://localhost:8080/api/chat/allChatList',{
         params:{
         username: nickname,
        }
@@ -183,7 +183,7 @@ export default {
         });
        })
        .catch()
-          axios.delete('https://i3b304.p.ssafy.io/api/account/delete',{
+          axios.delete('http://localhost:8080/api/account/delete',{
         data:formData,
       })
       .then((data)=>{
